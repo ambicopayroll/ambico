@@ -711,6 +711,11 @@ class ct_jdw_krj_def_view extends ct_jdw_krj_def {
 		if ($this->AuditTrailOnView) $this->WriteAuditTrailOnView($row);
 		$this->jdw_id->setDbValue($rs->fields('jdw_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
+		if (array_key_exists('EV__pegawai_id', $rs->fields)) {
+			$this->pegawai_id->VirtualValue = $rs->fields('EV__pegawai_id'); // Set up virtual field value
+		} else {
+			$this->pegawai_id->VirtualValue = ""; // Clear value
+		}
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jk_id->setDbValue($rs->fields('jk_id'));
 		if (array_key_exists('EV__jk_id', $rs->fields)) {
@@ -767,12 +772,36 @@ class ct_jdw_krj_def_view extends ct_jdw_krj_def {
 		$this->jdw_id->ViewCustomAttributes = "";
 
 		// pegawai_id
-		$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+		if ($this->pegawai_id->VirtualValue <> "") {
+			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+		} else {
+			$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+		if (strval($this->pegawai_id->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id->ViewValue = NULL;
+		}
+		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// jk_id
@@ -1255,6 +1284,7 @@ ft_jdw_krj_defview.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
+ft_jdw_krj_defview.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
 ft_jdw_krj_defview.Lists["x_jk_id"] = {"LinkField":"x_jk_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_jk_nm","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_jk"};
 ft_jdw_krj_defview.Lists["x_hk_def"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
 ft_jdw_krj_defview.Lists["x_hk_def"].Options = <?php echo json_encode($t_jdw_krj_def->hk_def->Options()) ?>;

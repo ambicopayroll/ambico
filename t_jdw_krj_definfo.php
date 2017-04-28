@@ -52,13 +52,13 @@ class ct_jdw_krj_def extends cTable {
 		$this->fields['jdw_id'] = &$this->jdw_id;
 
 		// pegawai_id
-		$this->pegawai_id = new cField('t_jdw_krj_def', 't_jdw_krj_def', 'x_pegawai_id', 'pegawai_id', '`pegawai_id`', '`pegawai_id`', 3, -1, FALSE, '`pegawai_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->pegawai_id = new cField('t_jdw_krj_def', 't_jdw_krj_def', 'x_pegawai_id', 'pegawai_id', '`pegawai_id`', '`pegawai_id`', 3, -1, FALSE, '`EV__pegawai_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'TEXT');
 		$this->pegawai_id->Sortable = TRUE; // Allow sort
 		$this->pegawai_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['pegawai_id'] = &$this->pegawai_id;
 
 		// tgl
-		$this->tgl = new cField('t_jdw_krj_def', 't_jdw_krj_def', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, 0, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl = new cField('t_jdw_krj_def', 't_jdw_krj_def', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, -1, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tgl->Sortable = TRUE; // Allow sort
 		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['tgl'] = &$this->tgl;
@@ -179,7 +179,7 @@ class ct_jdw_krj_def extends cTable {
 	function getSqlSelectList() { // Select for List page
 		$select = "";
 		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT `jk_nm` FROM `t_jk` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`jk_id` = `t_jdw_krj_def`.`jk_id` LIMIT 1) AS `EV__jk_id` FROM `t_jdw_krj_def`" .
+			"SELECT *, (SELECT `pegawai_nama` FROM `pegawai` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`pegawai_id` = `t_jdw_krj_def`.`pegawai_id` LIMIT 1) AS `EV__pegawai_id`, (SELECT `jk_nm` FROM `t_jk` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`jk_id` = `t_jdw_krj_def`.`jk_id` LIMIT 1) AS `EV__jk_id` FROM `t_jdw_krj_def`" .
 			") `EW_TMP_TABLE`";
 		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
 	}
@@ -236,7 +236,7 @@ class ct_jdw_krj_def extends cTable {
 	var $_SqlOrderBy = "";
 
 	function getSqlOrderBy() { // Order By
-		return ($this->_SqlOrderBy <> "") ? $this->_SqlOrderBy : "";
+		return ($this->_SqlOrderBy <> "") ? $this->_SqlOrderBy : "`pegawai_id` ASC,`tgl` ASC";
 	}
 
 	function SqlOrderBy() { // For backward compatibility
@@ -327,6 +327,12 @@ class ct_jdw_krj_def extends cTable {
 			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
 		if ($sOrderBy <> "")
 			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
+		if ($this->pegawai_id->AdvancedSearch->SearchValue <> "" ||
+			$this->pegawai_id->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->pegawai_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if (strpos($sOrderBy, " " . $this->pegawai_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
 		if ($this->jk_id->AdvancedSearch->SearchValue <> "" ||
 			$this->jk_id->AdvancedSearch->SearchValue2 <> "" ||
 			strpos($sWhere, " " . $this->jk_id->FldVirtualExpression . " ") !== FALSE)
@@ -674,12 +680,36 @@ class ct_jdw_krj_def extends cTable {
 		$this->jdw_id->ViewCustomAttributes = "";
 
 		// pegawai_id
-		$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+		if ($this->pegawai_id->VirtualValue <> "") {
+			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+		} else {
+			$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+		if (strval($this->pegawai_id->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id->ViewValue = NULL;
+		}
+		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// jk_id
@@ -788,7 +818,7 @@ class ct_jdw_krj_def extends cTable {
 		// tgl
 		$this->tgl->EditAttrs["class"] = "form-control";
 		$this->tgl->EditCustomAttributes = "";
-		$this->tgl->EditValue = ew_FormatDateTime($this->tgl->CurrentValue, 8);
+		$this->tgl->EditValue = $this->tgl->CurrentValue;
 		$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 		// jk_id

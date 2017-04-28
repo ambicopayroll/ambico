@@ -1,0 +1,6 @@
+9:00 AM 4/28/2017
+- sampai dengan :: harus ubah format tanggal di tab jadwal kerja per periode di master_pegawai
+
+
+10:18 AM 4/28/2017
+- dicoba untuk membuat view rekonsiliasi lebih ringkas

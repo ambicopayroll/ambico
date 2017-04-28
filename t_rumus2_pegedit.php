@@ -721,10 +721,14 @@ class ct_rumus2_peg_edit extends ct_rumus2_peg {
 
 		// gp
 		$this->gp->ViewValue = $this->gp->CurrentValue;
+		$this->gp->ViewValue = ew_FormatNumber($this->gp->ViewValue, 0, -2, -2, -2);
+		$this->gp->CellCssStyle .= "text-align: right;";
 		$this->gp->ViewCustomAttributes = "";
 
 		// tj
 		$this->tj->ViewValue = $this->tj->CurrentValue;
+		$this->tj->ViewValue = ew_FormatNumber($this->tj->ViewValue, 0, -2, -2, -2);
+		$this->tj->CellCssStyle .= "text-align: right;";
 		$this->tj->ViewCustomAttributes = "";
 
 			// pegawai_id
@@ -790,14 +794,14 @@ class ct_rumus2_peg_edit extends ct_rumus2_peg {
 			$this->gp->EditCustomAttributes = "";
 			$this->gp->EditValue = ew_HtmlEncode($this->gp->CurrentValue);
 			$this->gp->PlaceHolder = ew_RemoveHtml($this->gp->FldCaption());
-			if (strval($this->gp->EditValue) <> "" && is_numeric($this->gp->EditValue)) $this->gp->EditValue = ew_FormatNumber($this->gp->EditValue, -2, -1, -2, 0);
+			if (strval($this->gp->EditValue) <> "" && is_numeric($this->gp->EditValue)) $this->gp->EditValue = ew_FormatNumber($this->gp->EditValue, -2, -2, -2, -2);
 
 			// tj
 			$this->tj->EditAttrs["class"] = "form-control";
 			$this->tj->EditCustomAttributes = "";
 			$this->tj->EditValue = ew_HtmlEncode($this->tj->CurrentValue);
 			$this->tj->PlaceHolder = ew_RemoveHtml($this->tj->FldCaption());
-			if (strval($this->tj->EditValue) <> "" && is_numeric($this->tj->EditValue)) $this->tj->EditValue = ew_FormatNumber($this->tj->EditValue, -2, -1, -2, 0);
+			if (strval($this->tj->EditValue) <> "" && is_numeric($this->tj->EditValue)) $this->tj->EditValue = ew_FormatNumber($this->tj->EditValue, -2, -2, -2, -2);
 
 			// Edit refer script
 			// pegawai_id

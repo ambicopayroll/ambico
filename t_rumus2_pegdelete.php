@@ -559,10 +559,14 @@ class ct_rumus2_peg_delete extends ct_rumus2_peg {
 
 		// gp
 		$this->gp->ViewValue = $this->gp->CurrentValue;
+		$this->gp->ViewValue = ew_FormatNumber($this->gp->ViewValue, 0, -2, -2, -2);
+		$this->gp->CellCssStyle .= "text-align: right;";
 		$this->gp->ViewCustomAttributes = "";
 
 		// tj
 		$this->tj->ViewValue = $this->tj->CurrentValue;
+		$this->tj->ViewValue = ew_FormatNumber($this->tj->ViewValue, 0, -2, -2, -2);
+		$this->tj->CellCssStyle .= "text-align: right;";
 		$this->tj->ViewCustomAttributes = "";
 
 			// pegawai_id
