@@ -350,6 +350,9 @@
   <project>
     <phrase id="bodytitle" value="AMBICO" />
     <phrase id="footertext" value="&amp;copy;2017 AMBICO. All rights reserved." />
+    <menu id="80">
+      <phrase id="menutext" value="Jadwal Kerja (Perincian)" />
+    </menu>
     <menu id="77">
       <phrase id="menutext" value="Scan Finger" />
     </menu>
@@ -2457,6 +2460,39 @@
       </field>
       <field id="pegawai_nip">
         <phrase id="fldcaption" value="pegawai nip" />
+      </field>
+    </table>
+    <table id="r_jdw_krj_def">
+      <phrase id="tblcaption" value="Jadwal Kerja (Perincian)" />
+      <field id="pembagian2_nama">
+        <phrase id="fldcaption" value="Bagian" />
+      </field>
+      <field id="pegawai_nip">
+        <phrase id="fldcaption" value="NIK" />
+      </field>
+      <field id="pegawai_nama">
+        <phrase id="fldcaption" value="Nama Pegawai" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="Tgl." />
+      </field>
+      <field id="hk_def">
+        <phrase id="fldcaption" value="Gol. HK" />
+      </field>
+      <field id="jk_kd">
+        <phrase id="fldcaption" value="Kode JK" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
+      </field>
+      <field id="jk_id">
+        <phrase id="fldcaption" value="jk id" />
+      </field>
+      <field id="scan_masuk">
+        <phrase id="fldcaption" value="scan masuk" />
+      </field>
+      <field id="scan_keluar">
+        <phrase id="fldcaption" value="scan keluar" />
       </field>
     </table>
   </project>

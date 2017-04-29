@@ -28,4 +28,9 @@ att_log       d pin
 
 
 8:19 AM 4/29/2017
-- create procedure p_gen_rekon
+- create procedure p_gen_rekon >> done 1:23 PM 4/29/2017
+
+
+
+1:23 PM 4/29/2017
+- buat laporan jadwal kerja perincian; done 1:36 PM 4/29/2017;

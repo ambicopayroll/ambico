@@ -631,6 +631,9 @@
     <menu id="10225">
       <phrase id="menutext" value="Scan Finger" />
     </menu>
+    <menu id="10080">
+      <phrase id="menutext" value="Jadwal Kerja (Perincian)" />
+    </menu>
     <menu id="10083">
       <phrase id="menutext" value="Rekonsiliasi" />
     </menu>
@@ -816,9 +819,6 @@
     </menu>
     <menu id="76">
       <phrase id="menutext" value="audittrail" />
-    </menu>
-    <menu id="10080">
-      <phrase id="menutext" value="v rekon 3" />
     </menu>
     <menu id="10082">
       <phrase id="menutext" value="v jdw krj def pegawai" />
