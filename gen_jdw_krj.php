@@ -49,6 +49,5 @@ while (!$rs->EOF) {
 $rs->Close();
 $conn->Close();
  
-header("location: ./gen_jdw_krj_.php?ok=1");
-
+header("location: gen_jdw_krj_.php?ok=1");
 ?>
