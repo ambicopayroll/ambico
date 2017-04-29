@@ -34,3 +34,11 @@ att_log       d pin
 
 1:23 PM 4/29/2017
 - buat laporan jadwal kerja perincian; done 1:36 PM 4/29/2017;
+
+
+
+2:01 PM 4/29/2017
+- buat procedure generate jadwal kerja (perincian); ostosmastis saat user selesai input jadwal kerja (per periode);
+
+
+

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <configuration date="2017/04/29" author="e.World Technology Ltd.">
-  <project id="{9712DCF3-D9FD-406D-93E5-FEA5020667C8}" file="D:\xampp\htdocs\ambico\ambico.pmp" name="ambico" product="PHPMaker" version="13.0" datetime="2017/04/29 13:31:36" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+  <project id="{9712DCF3-D9FD-406D-93E5-FEA5020667C8}" file="D:\xampp\htdocs\ambico\ambico.pmp" name="ambico" product="PHPMaker" version="13.0" datetime="2017/04/29 22:38:16" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
     <table id="att_log" name="att_log" caption="att log" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="cuti_normatif" name="cuti_normatif" caption="cuti normatif" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="dev_type" name="dev_type" caption="dev type" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
@@ -75,5 +75,6 @@
     <table id="audittrail" name="audittrail" caption="audittrail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="home_php" name="home.php" caption="Home" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="gen_rekon__php" name="gen_rekon_.php" caption="Rekonsiliasi" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_jdw_krj_def" name="v_jdw_krj_def" caption="v jdw krj def" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
   </project>
 </configuration>

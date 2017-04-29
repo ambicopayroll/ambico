@@ -54,6 +54,9 @@ ft_jdw_krj_peggrid.Validate = function() {
 			if (elm && !ew_CheckDateDef(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_peg->tgl1->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_tgl2");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_jdw_krj_peg->tgl2->FldCaption(), $t_jdw_krj_peg->tgl2->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_tgl2");
 			if (elm && !ew_CheckDateDef(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_peg->tgl2->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_jk_id");
@@ -393,12 +396,22 @@ $t_jdw_krj_peg_grid->ListOptions->Render("body", "left", $t_jdw_krj_peg_grid->Ro
 <?php if ($t_jdw_krj_peg->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $t_jdw_krj_peg_grid->RowCnt ?>_t_jdw_krj_peg_tgl1" class="form-group t_jdw_krj_peg_tgl1">
 <input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl1" name="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1" id="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl1->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl1->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl1->EditAttributes() ?>>
+<?php if (!$t_jdw_krj_peg->tgl1->ReadOnly && !$t_jdw_krj_peg->tgl1->Disabled && !isset($t_jdw_krj_peg->tgl1->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl1->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_jdw_krj_peggrid", "x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1", 0);
+</script>
+<?php } ?>
 </span>
 <input type="hidden" data-table="t_jdw_krj_peg" data-field="x_tgl1" name="o<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1" id="o<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1" value="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl1->OldValue) ?>">
 <?php } ?>
 <?php if ($t_jdw_krj_peg->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $t_jdw_krj_peg_grid->RowCnt ?>_t_jdw_krj_peg_tgl1" class="form-group t_jdw_krj_peg_tgl1">
 <input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl1" name="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1" id="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl1->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl1->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl1->EditAttributes() ?>>
+<?php if (!$t_jdw_krj_peg->tgl1->ReadOnly && !$t_jdw_krj_peg->tgl1->Disabled && !isset($t_jdw_krj_peg->tgl1->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl1->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_jdw_krj_peggrid", "x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1", 0);
+</script>
+<?php } ?>
 </span>
 <?php } ?>
 <?php if ($t_jdw_krj_peg->RowType == EW_ROWTYPE_VIEW) { // View record ?>
@@ -421,12 +434,22 @@ $t_jdw_krj_peg_grid->ListOptions->Render("body", "left", $t_jdw_krj_peg_grid->Ro
 <?php if ($t_jdw_krj_peg->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $t_jdw_krj_peg_grid->RowCnt ?>_t_jdw_krj_peg_tgl2" class="form-group t_jdw_krj_peg_tgl2">
 <input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl2" name="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2" id="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl2->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_jdw_krj_peg->tgl2->ReadOnly && !$t_jdw_krj_peg->tgl2->Disabled && !isset($t_jdw_krj_peg->tgl2->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_jdw_krj_peggrid", "x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2", 0);
+</script>
+<?php } ?>
 </span>
 <input type="hidden" data-table="t_jdw_krj_peg" data-field="x_tgl2" name="o<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2" id="o<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2" value="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl2->OldValue) ?>">
 <?php } ?>
 <?php if ($t_jdw_krj_peg->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $t_jdw_krj_peg_grid->RowCnt ?>_t_jdw_krj_peg_tgl2" class="form-group t_jdw_krj_peg_tgl2">
 <input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl2" name="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2" id="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl2->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_jdw_krj_peg->tgl2->ReadOnly && !$t_jdw_krj_peg->tgl2->Disabled && !isset($t_jdw_krj_peg->tgl2->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_jdw_krj_peggrid", "x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2", 0);
+</script>
+<?php } ?>
 </span>
 <?php } ?>
 <?php if ($t_jdw_krj_peg->RowType == EW_ROWTYPE_VIEW) { // View record ?>
@@ -587,6 +610,11 @@ $t_jdw_krj_peg_grid->ListOptions->Render("body", "left", $t_jdw_krj_peg_grid->Ro
 <?php if ($t_jdw_krj_peg->CurrentAction <> "F") { ?>
 <span id="el$rowindex$_t_jdw_krj_peg_tgl1" class="form-group t_jdw_krj_peg_tgl1">
 <input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl1" name="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1" id="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl1->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl1->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl1->EditAttributes() ?>>
+<?php if (!$t_jdw_krj_peg->tgl1->ReadOnly && !$t_jdw_krj_peg->tgl1->Disabled && !isset($t_jdw_krj_peg->tgl1->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl1->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_jdw_krj_peggrid", "x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl1", 0);
+</script>
+<?php } ?>
 </span>
 <?php } else { ?>
 <span id="el$rowindex$_t_jdw_krj_peg_tgl1" class="form-group t_jdw_krj_peg_tgl1">
@@ -603,6 +631,11 @@ $t_jdw_krj_peg_grid->ListOptions->Render("body", "left", $t_jdw_krj_peg_grid->Ro
 <?php if ($t_jdw_krj_peg->CurrentAction <> "F") { ?>
 <span id="el$rowindex$_t_jdw_krj_peg_tgl2" class="form-group t_jdw_krj_peg_tgl2">
 <input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl2" name="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2" id="x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl2->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_jdw_krj_peg->tgl2->ReadOnly && !$t_jdw_krj_peg->tgl2->Disabled && !isset($t_jdw_krj_peg->tgl2->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_jdw_krj_peggrid", "x<?php echo $t_jdw_krj_peg_grid->RowIndex ?>_tgl2", 0);
+</script>
+<?php } ?>
 </span>
 <?php } else { ?>
 <span id="el$rowindex$_t_jdw_krj_peg_tgl2" class="form-group t_jdw_krj_peg_tgl2">

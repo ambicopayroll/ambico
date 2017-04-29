@@ -1622,6 +1622,9 @@ class ct_jdw_krj_peg_grid extends ct_jdw_krj_peg {
 		if (!ew_CheckDateDef($this->tgl1->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl1->FldErrMsg());
 		}
+		if (!$this->tgl2->FldIsDetailKey && !is_null($this->tgl2->FormValue) && $this->tgl2->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl2->FldCaption(), $this->tgl2->ReqErrMsg));
+		}
 		if (!ew_CheckDateDef($this->tgl2->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl2->FldErrMsg());
 		}

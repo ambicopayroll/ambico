@@ -815,6 +815,9 @@ class ct_jdw_krj_peg_add extends ct_jdw_krj_peg {
 		if (!ew_CheckDateDef($this->tgl1->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl1->FldErrMsg());
 		}
+		if (!$this->tgl2->FldIsDetailKey && !is_null($this->tgl2->FormValue) && $this->tgl2->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl2->FldCaption(), $this->tgl2->ReqErrMsg));
+		}
 		if (!ew_CheckDateDef($this->tgl2->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl2->FldErrMsg());
 		}
@@ -1112,6 +1115,9 @@ ft_jdw_krj_pegadd.Validate = function() {
 			if (elm && !ew_CheckDateDef(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_peg->tgl1->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_tgl2");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_jdw_krj_peg->tgl2->FldCaption(), $t_jdw_krj_peg->tgl2->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_tgl2");
 			if (elm && !ew_CheckDateDef(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_peg->tgl2->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_jk_id");
@@ -1212,16 +1218,26 @@ $t_jdw_krj_peg_add->ShowMessage();
 		<div class="col-sm-10"><div<?php echo $t_jdw_krj_peg->tgl1->CellAttributes() ?>>
 <span id="el_t_jdw_krj_peg_tgl1">
 <input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl1" name="x_tgl1" id="x_tgl1" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl1->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl1->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl1->EditAttributes() ?>>
+<?php if (!$t_jdw_krj_peg->tgl1->ReadOnly && !$t_jdw_krj_peg->tgl1->Disabled && !isset($t_jdw_krj_peg->tgl1->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl1->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_jdw_krj_pegadd", "x_tgl1", 0);
+</script>
+<?php } ?>
 </span>
 <?php echo $t_jdw_krj_peg->tgl1->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($t_jdw_krj_peg->tgl2->Visible) { // tgl2 ?>
 	<div id="r_tgl2" class="form-group">
-		<label id="elh_t_jdw_krj_peg_tgl2" for="x_tgl2" class="col-sm-2 control-label ewLabel"><?php echo $t_jdw_krj_peg->tgl2->FldCaption() ?></label>
+		<label id="elh_t_jdw_krj_peg_tgl2" for="x_tgl2" class="col-sm-2 control-label ewLabel"><?php echo $t_jdw_krj_peg->tgl2->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $t_jdw_krj_peg->tgl2->CellAttributes() ?>>
 <span id="el_t_jdw_krj_peg_tgl2">
 <input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl2" name="x_tgl2" id="x_tgl2" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl2->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_jdw_krj_peg->tgl2->ReadOnly && !$t_jdw_krj_peg->tgl2->Disabled && !isset($t_jdw_krj_peg->tgl2->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_jdw_krj_pegadd", "x_tgl2", 0);
+</script>
+<?php } ?>
 </span>
 <?php echo $t_jdw_krj_peg->tgl2->CustomMsg ?></div></div>
 	</div>
