@@ -586,11 +586,11 @@
     <menu id="10226">
       <phrase id="menutext" value="v jdw krj def" />
     </menu>
-    <menu id="1">
-      <phrase id="menutext" value="att log" />
-    </menu>
     <menu id="77">
       <phrase id="menutext" value="Home" />
+    </menu>
+    <menu id="1">
+      <phrase id="menutext" value="att log" />
     </menu>
     <menu id="78">
       <phrase id="menutext" value="Setup" />
@@ -627,6 +627,9 @@
     </menu>
     <menu id="10224">
       <phrase id="menutext" value="Proses" />
+    </menu>
+    <menu id="10227">
+      <phrase id="menutext" value="Generate Jadwal Kerja" />
     </menu>
     <menu id="10077">
       <phrase id="menutext" value="Laporan" />
@@ -2905,6 +2908,9 @@
       <field id="pembagian2_nama">
         <phrase id="fldcaption" value="pembagian 2 nama" />
       </field>
+    </table>
+    <table id="gen_jdw_krj__php">
+      <phrase id="tblcaption" value="Generate Jadwal Kerja" />
     </table>
   </project>
 </ew-language>
