@@ -41,12 +41,6 @@ class ct_jdw_krj_def_add extends ct_jdw_krj_def {
 		if ($this->UseTokenInUrl) $PageUrl .= "t=" . $this->TableVar . "&"; // Add page token
 		return $PageUrl;
 	}
-	var $AuditTrailOnAdd = TRUE;
-	var $AuditTrailOnEdit = FALSE;
-	var $AuditTrailOnDelete = FALSE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -888,10 +882,6 @@ class ct_jdw_krj_def_add extends ct_jdw_krj_def {
 			$AddRow = $this->Insert($rsnew);
 			$conn->raiseErrorFn = '';
 			if ($AddRow) {
-
-				// Get insert id if necessary
-				$this->jdw_id->setDbValue($conn->Insert_ID());
-				$rsnew['jdw_id'] = $this->jdw_id->DbValue;
 			}
 		} else {
 			if ($this->getSuccessMessage() <> "" || $this->getFailureMessage() <> "") {
@@ -910,7 +900,6 @@ class ct_jdw_krj_def_add extends ct_jdw_krj_def {
 			// Call Row Inserted event
 			$rs = ($rsold == NULL) ? NULL : $rsold->fields;
 			$this->Row_Inserted($rs, $rsnew);
-			$this->WriteAuditTrailOnAdd($rsnew);
 		}
 		return $AddRow;
 	}
@@ -975,47 +964,6 @@ class ct_jdw_krj_def_add extends ct_jdw_krj_def {
 			if ($sSqlWrk <> "")
 				$fld->LookupFilters["s"] .= $sSqlWrk;
 			break;
-		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 't_jdw_krj_def';
-		$usr = CurrentUserID();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
-	}
-
-	// Write Audit Trail (add page)
-	function WriteAuditTrailOnAdd(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnAdd) return;
-		$table = 't_jdw_krj_def';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['jdw_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserID();
-		foreach (array_keys($rs) as $fldname) {
-			if ($this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$newvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$newvalue = $rs[$fldname];
-					else
-						$newvalue = "[MEMO]"; // Memo Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$newvalue = "[XML]"; // XML Field
-				} else {
-					$newvalue = $rs[$fldname];
-				}
-				ew_WriteAuditTrail("log", $dt, $id, $usr, "A", $table, $fldname, $key, "", $newvalue);
-			}
 		}
 	}
 

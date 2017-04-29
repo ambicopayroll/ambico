@@ -84,12 +84,6 @@ class cpegawai_list extends cpegawai {
 	var $GridEditUrl;
 	var $MultiDeleteUrl;
 	var $MultiUpdateUrl;
-	var $AuditTrailOnAdd = TRUE;
-	var $AuditTrailOnEdit = TRUE;
-	var $AuditTrailOnDelete = TRUE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -1557,6 +1551,7 @@ class cpegawai_list extends cpegawai {
 
 	// Build basic search SQL
 	function BuildBasicSearchSQL(&$Where, &$Fld, $arKeywords, $type) {
+		global $EW_BASIC_SEARCH_IGNORE_PATTERN;
 		$sDefCond = ($type == "OR") ? "OR" : "AND";
 		$arSQL = array(); // Array for SQL parts
 		$arCond = array(); // Array for search conditions
@@ -1565,8 +1560,8 @@ class cpegawai_list extends cpegawai {
 		for ($i = 0; $i < $cnt; $i++) {
 			$Keyword = $arKeywords[$i];
 			$Keyword = trim($Keyword);
-			if (EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
-				$Keyword = preg_replace(EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
+			if ($EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
+				$Keyword = preg_replace($EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
 				$ar = explode("\\", $Keyword);
 			} else {
 				$ar = array($Keyword);
@@ -3223,10 +3218,6 @@ class cpegawai_list extends cpegawai {
 			}
 		}
 		if ($DeleteRows) {
-			if ($DeleteRows) {
-				foreach ($rsold as $row)
-					$this->WriteAuditTrailOnDelete($row);
-			}
 			if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteSuccess")); // Batch delete success
 		} else {
 		}
@@ -3328,9 +3319,6 @@ class cpegawai_list extends cpegawai {
 		// Call Row_Updated event
 		if ($EditRow)
 			$this->Row_Updated($rsold, $rsnew);
-		if ($EditRow) {
-			$this->WriteAuditTrailOnEdit($rsold, $rsnew);
-		}
 		$rs->Close();
 		return $EditRow;
 	}
@@ -3383,10 +3371,6 @@ class cpegawai_list extends cpegawai {
 			$AddRow = $this->Insert($rsnew);
 			$conn->raiseErrorFn = '';
 			if ($AddRow) {
-
-				// Get insert id if necessary
-				$this->pegawai_id->setDbValue($conn->Insert_ID());
-				$rsnew['pegawai_id'] = $this->pegawai_id->DbValue;
 			}
 		} else {
 			if ($this->getSuccessMessage() <> "" || $this->getFailureMessage() <> "") {
@@ -3405,7 +3389,6 @@ class cpegawai_list extends cpegawai {
 			// Call Row Inserted event
 			$rs = ($rsold == NULL) ? NULL : $rsold->fields;
 			$this->Row_Inserted($rs, $rsnew);
-			$this->WriteAuditTrailOnAdd($rsnew);
 		}
 		return $AddRow;
 	}
@@ -3742,129 +3725,6 @@ class cpegawai_list extends cpegawai {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 'pegawai';
-		$usr = CurrentUserID();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
-	}
-
-	// Write Audit Trail (add page)
-	function WriteAuditTrailOnAdd(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnAdd) return;
-		$table = 'pegawai';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['pegawai_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserID();
-		foreach (array_keys($rs) as $fldname) {
-			if ($this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$newvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$newvalue = $rs[$fldname];
-					else
-						$newvalue = "[MEMO]"; // Memo Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$newvalue = "[XML]"; // XML Field
-				} else {
-					$newvalue = $rs[$fldname];
-				}
-				ew_WriteAuditTrail("log", $dt, $id, $usr, "A", $table, $fldname, $key, "", $newvalue);
-			}
-		}
-	}
-
-	// Write Audit Trail (edit page)
-	function WriteAuditTrailOnEdit(&$rsold, &$rsnew) {
-		global $Language;
-		if (!$this->AuditTrailOnEdit) return;
-		$table = 'pegawai';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rsold['pegawai_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserID();
-		foreach (array_keys($rsnew) as $fldname) {
-			if ($this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldDataType == EW_DATATYPE_DATE) { // DateTime field
-					$modified = (ew_FormatDateTime($rsold[$fldname], 0) <> ew_FormatDateTime($rsnew[$fldname], 0));
-				} else {
-					$modified = !ew_CompareValue($rsold[$fldname], $rsnew[$fldname]);
-				}
-				if ($modified) {
-					if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") { // Password Field
-						$oldvalue = $Language->Phrase("PasswordMask");
-						$newvalue = $Language->Phrase("PasswordMask");
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) { // Memo field
-						if (EW_AUDIT_TRAIL_TO_DATABASE) {
-							$oldvalue = $rsold[$fldname];
-							$newvalue = $rsnew[$fldname];
-						} else {
-							$oldvalue = "[MEMO]";
-							$newvalue = "[MEMO]";
-						}
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) { // XML field
-						$oldvalue = "[XML]";
-						$newvalue = "[XML]";
-					} else {
-						$oldvalue = $rsold[$fldname];
-						$newvalue = $rsnew[$fldname];
-					}
-					ew_WriteAuditTrail("log", $dt, $id, $usr, "U", $table, $fldname, $key, $oldvalue, $newvalue);
-				}
-			}
-		}
-	}
-
-	// Write Audit Trail (delete page)
-	function WriteAuditTrailOnDelete(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnDelete) return;
-		$table = 'pegawai';
-
-		// Get key value
-		$key = "";
-		if ($key <> "")
-			$key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['pegawai_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$curUser = CurrentUserID();
-		foreach (array_keys($rs) as $fldname) {
-			if (array_key_exists($fldname, $this->fields) && $this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$oldvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$oldvalue = $rs[$fldname];
-					else
-						$oldvalue = "[MEMO]"; // Memo field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$oldvalue = "[XML]"; // XML field
-				} else {
-					$oldvalue = $rs[$fldname];
-				}
-				ew_WriteAuditTrail("log", $dt, $id, $curUser, "D", $table, $fldname, $key, $oldvalue, "");
-			}
 		}
 	}
 
@@ -4237,7 +4097,7 @@ $pegawai_list->ShowMessage();
 	<span><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $pegawai_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $pegawai_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $pegawai_list->Pager->RecordCount ?></span>
 </div>
 <?php } ?>
-<?php if ($pegawai_list->TotalRecs > 0) { ?>
+<?php if ($pegawai_list->TotalRecs > 0 && (!EW_AUTO_HIDE_PAGE_SIZE_SELECTOR || $pegawai_list->Pager->Visible)) { ?>
 <div class="ewPager">
 <input type="hidden" name="t" value="pegawai">
 <select name="<?php echo EW_TABLE_REC_PER_PAGE ?>" class="form-control input-sm ewTooltip" title="<?php echo $Language->Phrase("RecordsPerPage") ?>" onchange="this.form.submit();">
@@ -4267,7 +4127,7 @@ $pegawai_list->ShowMessage();
 <?php } ?>
 <input type="hidden" name="t" value="pegawai">
 <div id="gmp_pegawai" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
-<?php if ($pegawai_list->TotalRecs > 0 || $pegawai->CurrentAction == "add" || $pegawai->CurrentAction == "copy") { ?>
+<?php if ($pegawai_list->TotalRecs > 0 || $pegawai->CurrentAction == "add" || $pegawai->CurrentAction == "copy" || $pegawai->CurrentAction == "gridedit") { ?>
 <table id="tbl_pegawailist" class="table ewTable">
 <?php echo $pegawai->TableCustomInnerHtml ?>
 <thead><!-- Table header -->
@@ -4919,7 +4779,7 @@ if ($pegawai_list->Recordset)
 	<span><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $pegawai_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $pegawai_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $pegawai_list->Pager->RecordCount ?></span>
 </div>
 <?php } ?>
-<?php if ($pegawai_list->TotalRecs > 0) { ?>
+<?php if ($pegawai_list->TotalRecs > 0 && (!EW_AUTO_HIDE_PAGE_SIZE_SELECTOR || $pegawai_list->Pager->Visible)) { ?>
 <div class="ewPager">
 <input type="hidden" name="t" value="pegawai">
 <select name="<?php echo EW_TABLE_REC_PER_PAGE ?>" class="form-control input-sm ewTooltip" title="<?php echo $Language->Phrase("RecordsPerPage") ?>" onchange="this.form.submit();">

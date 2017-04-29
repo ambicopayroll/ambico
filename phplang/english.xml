@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/4/28" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/4/29" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -622,6 +622,18 @@
     <menu id="50">
       <phrase id="menutext" value="User" />
     </menu>
+    <menu id="10224">
+      <phrase id="menutext" value="Proses" />
+    </menu>
+    <menu id="10077">
+      <phrase id="menutext" value="Laporan" />
+    </menu>
+    <menu id="10225">
+      <phrase id="menutext" value="Scan Finger" />
+    </menu>
+    <menu id="10083">
+      <phrase id="menutext" value="Rekonsiliasi" />
+    </menu>
     <menu id="3">
       <phrase id="menutext" value="cuti normatif" />
     </menu>
@@ -760,15 +772,6 @@
     <menu id="58">
       <phrase id="menutext" value="v att log" />
     </menu>
-    <menu id="59">
-      <phrase id="menutext" value="v jdw krj def" />
-    </menu>
-    <menu id="60">
-      <phrase id="menutext" value="v rekon" />
-    </menu>
-    <menu id="61">
-      <phrase id="menutext" value="v rekon 2" />
-    </menu>
     <menu id="62">
       <phrase id="menutext" value="versi db" />
     </menu>
@@ -813,6 +816,240 @@
     </menu>
     <menu id="76">
       <phrase id="menutext" value="audittrail" />
+    </menu>
+    <menu id="10080">
+      <phrase id="menutext" value="v rekon 3" />
+    </menu>
+    <menu id="10082">
+      <phrase id="menutext" value="v jdw krj def pegawai" />
+    </menu>
+    <menu id="10060">
+      <phrase id="menutext" value="v rekon" />
+    </menu>
+    <menu id="10061">
+      <phrase id="menutext" value="v rekon 2" />
+    </menu>
+    <menu id="10078">
+      <phrase id="menutext" value="v jdw krj def" />
+    </menu>
+    <menu id="10079">
+      <phrase id="menutext" value="Rekonsiliasi" />
+    </menu>
+    <menu id="10001">
+      <phrase id="menutext" value="att log" />
+    </menu>
+    <menu id="10002">
+      <phrase id="menutext" value="audittrail" />
+    </menu>
+    <menu id="10003">
+      <phrase id="menutext" value="cuti normatif" />
+    </menu>
+    <menu id="10004">
+      <phrase id="menutext" value="dev type" />
+    </menu>
+    <menu id="10005">
+      <phrase id="menutext" value="device" />
+    </menu>
+    <menu id="10006">
+      <phrase id="menutext" value="ganti jdw d" />
+    </menu>
+    <menu id="10007">
+      <phrase id="menutext" value="ganti jdw jk" />
+    </menu>
+    <menu id="10008">
+      <phrase id="menutext" value="ganti jdw pegawai" />
+    </menu>
+    <menu id="10009">
+      <phrase id="menutext" value="ganti jdw pembagian" />
+    </menu>
+    <menu id="10010">
+      <phrase id="menutext" value="ganti jk" />
+    </menu>
+    <menu id="10011">
+      <phrase id="menutext" value="ganti jk d" />
+    </menu>
+    <menu id="10012">
+      <phrase id="menutext" value="ganti jk pegawai" />
+    </menu>
+    <menu id="10013">
+      <phrase id="menutext" value="ganti jk pembagian" />
+    </menu>
+    <menu id="10014">
+      <phrase id="menutext" value="grp user d" />
+    </menu>
+    <menu id="10015">
+      <phrase id="menutext" value="grp user m" />
+    </menu>
+    <menu id="10016">
+      <phrase id="menutext" value="index ot" />
+    </menu>
+    <menu id="10017">
+      <phrase id="menutext" value="index type" />
+    </menu>
+    <menu id="10018">
+      <phrase id="menutext" value="izin" />
+    </menu>
+    <menu id="10019">
+      <phrase id="menutext" value="jam kerja" />
+    </menu>
+    <menu id="10020">
+      <phrase id="menutext" value="jam kerja extra" />
+    </menu>
+    <menu id="10021">
+      <phrase id="menutext" value="jatah cuti" />
+    </menu>
+    <menu id="10022">
+      <phrase id="menutext" value="jdw kerja d" />
+    </menu>
+    <menu id="10023">
+      <phrase id="menutext" value="jdw kerja m" />
+    </menu>
+    <menu id="10024">
+      <phrase id="menutext" value="jdw kerja pegawai" />
+    </menu>
+    <menu id="10025">
+      <phrase id="menutext" value="jns izin" />
+    </menu>
+    <menu id="10026">
+      <phrase id="menutext" value="kategori izin" />
+    </menu>
+    <menu id="10027">
+      <phrase id="menutext" value="kontrak kerja" />
+    </menu>
+    <menu id="10028">
+      <phrase id="menutext" value="lembur" />
+    </menu>
+    <menu id="10029">
+      <phrase id="menutext" value="libur" />
+    </menu>
+    <menu id="10030">
+      <phrase id="menutext" value="pegawai" />
+    </menu>
+    <menu id="10031">
+      <phrase id="menutext" value="pegawai d" />
+    </menu>
+    <menu id="10032">
+      <phrase id="menutext" value="pembagian 1" />
+    </menu>
+    <menu id="10033">
+      <phrase id="menutext" value="pembagian 2" />
+    </menu>
+    <menu id="10034">
+      <phrase id="menutext" value="pembagian 3" />
+    </menu>
+    <menu id="10035">
+      <phrase id="menutext" value="pendidikan" />
+    </menu>
+    <menu id="10036">
+      <phrase id="menutext" value="setting" />
+    </menu>
+    <menu id="10037">
+      <phrase id="menutext" value="shift result" />
+    </menu>
+    <menu id="10038">
+      <phrase id="menutext" value="sms group" />
+    </menu>
+    <menu id="10039">
+      <phrase id="menutext" value="sms group member" />
+    </menu>
+    <menu id="10040">
+      <phrase id="menutext" value="sms recipient" />
+    </menu>
+    <menu id="10041">
+      <phrase id="menutext" value="t jdw krj def" />
+    </menu>
+    <menu id="10042">
+      <phrase id="menutext" value="t jdw krj peg" />
+    </menu>
+    <menu id="10043">
+      <phrase id="menutext" value="t jk" />
+    </menu>
+    <menu id="10044">
+      <phrase id="menutext" value="t lapgroup" />
+    </menu>
+    <menu id="10045">
+      <phrase id="menutext" value="t lapsubgroup" />
+    </menu>
+    <menu id="10046">
+      <phrase id="menutext" value="t rumus" />
+    </menu>
+    <menu id="10047">
+      <phrase id="menutext" value="t rumus 2" />
+    </menu>
+    <menu id="10048">
+      <phrase id="menutext" value="t rumus 2 peg" />
+    </menu>
+    <menu id="10049">
+      <phrase id="menutext" value="t rumus peg" />
+    </menu>
+    <menu id="10050">
+      <phrase id="menutext" value="t user" />
+    </menu>
+    <menu id="10051">
+      <phrase id="menutext" value="temp pegawai" />
+    </menu>
+    <menu id="10052">
+      <phrase id="menutext" value="tmp" />
+    </menu>
+    <menu id="10053">
+      <phrase id="menutext" value="tmp uareu" />
+    </menu>
+    <menu id="10054">
+      <phrase id="menutext" value="tukar jam" />
+    </menu>
+    <menu id="10055">
+      <phrase id="menutext" value="uareu device" />
+    </menu>
+    <menu id="10056">
+      <phrase id="menutext" value="user log" />
+    </menu>
+    <menu id="10057">
+      <phrase id="menutext" value="user login" />
+    </menu>
+    <menu id="10058">
+      <phrase id="menutext" value="v att log" />
+    </menu>
+    <menu id="10062">
+      <phrase id="menutext" value="versi db" />
+    </menu>
+    <menu id="10063">
+      <phrase id="menutext" value="z pay com" />
+    </menu>
+    <menu id="10064">
+      <phrase id="menutext" value="z pay grp" />
+    </menu>
+    <menu id="10065">
+      <phrase id="menutext" value="z pay grp com" />
+    </menu>
+    <menu id="10066">
+      <phrase id="menutext" value="z pay grp emp" />
+    </menu>
+    <menu id="10067">
+      <phrase id="menutext" value="z pay money" />
+    </menu>
+    <menu id="10068">
+      <phrase id="menutext" value="z pay process d" />
+    </menu>
+    <menu id="10069">
+      <phrase id="menutext" value="z pay process m" />
+    </menu>
+    <menu id="10070">
+      <phrase id="menutext" value="z pay process sd" />
+    </menu>
+    <menu id="10071">
+      <phrase id="menutext" value="z pay report" />
+    </menu>
+    <menu id="10072">
+      <phrase id="menutext" value="zx bayar kredit" />
+    </menu>
+    <menu id="10073">
+      <phrase id="menutext" value="zx jns krd" />
+    </menu>
+    <menu id="10074">
+      <phrase id="menutext" value="zx kredit d" />
+    </menu>
+    <menu id="10075">
+      <phrase id="menutext" value="zx kredit m" />
     </menu>
     <table id="att_log">
       <phrase id="tblcaption" value="att log" />
@@ -2159,108 +2396,6 @@
         <phrase id="fldcaption" value="pegawai nama" />
       </field>
     </table>
-    <table id="v_jdw_krj_def">
-      <phrase id="tblcaption" value="v jdw krj def" />
-      <field id="pegawai_nama">
-        <phrase id="fldcaption" value="pegawai nama" />
-      </field>
-      <field id="tgl_indo">
-        <phrase id="fldcaption" value="tgl indo" />
-      </field>
-      <field id="jk_kd">
-        <phrase id="fldcaption" value="jk kd" />
-      </field>
-      <field id="hk_def">
-        <phrase id="fldcaption" value="hk def" />
-      </field>
-      <field id="tgl">
-        <phrase id="fldcaption" value="tgl" />
-      </field>
-    </table>
-    <table id="v_rekon">
-      <phrase id="tblcaption" value="v rekon" />
-      <field id="jdw_id">
-        <phrase id="fldcaption" value="jdw id" />
-      </field>
-      <field id="pegawai_id">
-        <phrase id="fldcaption" value="pegawai id" />
-      </field>
-      <field id="tgl">
-        <phrase id="fldcaption" value="tgl" />
-      </field>
-      <field id="jk_id">
-        <phrase id="fldcaption" value="jk id" />
-      </field>
-      <field id="scan_masuk">
-        <phrase id="fldcaption" value="scan masuk" />
-      </field>
-      <field id="scan_keluar">
-        <phrase id="fldcaption" value="scan keluar" />
-      </field>
-      <field id="pegawai_nama">
-        <phrase id="fldcaption" value="pegawai nama" />
-      </field>
-      <field id="pegawai_pin">
-        <phrase id="fldcaption" value="pegawai pin" />
-      </field>
-      <field id="pegawai_nip">
-        <phrase id="fldcaption" value="pegawai nip" />
-      </field>
-      <field id="jk_nm">
-        <phrase id="fldcaption" value="jk nm" />
-      </field>
-      <field id="jk_kd">
-        <phrase id="fldcaption" value="jk kd" />
-      </field>
-      <field id="gol_hk">
-        <phrase id="fldcaption" value="gol hk" />
-      </field>
-    </table>
-    <table id="v_rekon2">
-      <phrase id="tblcaption" value="v rekon 2" />
-      <field id="jdw_id">
-        <phrase id="fldcaption" value="jdw id" />
-      </field>
-      <field id="pegawai_id">
-        <phrase id="fldcaption" value="pegawai id" />
-      </field>
-      <field id="tgl">
-        <phrase id="fldcaption" value="tgl" />
-      </field>
-      <field id="jk_id">
-        <phrase id="fldcaption" value="jk id" />
-      </field>
-      <field id="hk_def">
-        <phrase id="fldcaption" value="hk def" />
-      </field>
-      <field id="pegawai_pin">
-        <phrase id="fldcaption" value="pegawai pin" />
-      </field>
-      <field id="pegawai_nama">
-        <phrase id="fldcaption" value="pegawai nama" />
-      </field>
-      <field id="jk_nm">
-        <phrase id="fldcaption" value="jk nm" />
-      </field>
-      <field id="jk_kd">
-        <phrase id="fldcaption" value="jk kd" />
-      </field>
-      <field id="jk_m">
-        <phrase id="fldcaption" value="jk m" />
-      </field>
-      <field id="jk_k">
-        <phrase id="fldcaption" value="jk k" />
-      </field>
-      <field id="scan_masuk">
-        <phrase id="fldcaption" value="scan masuk" />
-      </field>
-      <field id="scan_keluar">
-        <phrase id="fldcaption" value="scan keluar" />
-      </field>
-      <field id="pembagian2_nama">
-        <phrase id="fldcaption" value="pembagian 2 nama" />
-      </field>
-    </table>
     <table id="versi_db">
       <phrase id="tblcaption" value="versi db" />
       <field id="no_id">
@@ -2731,6 +2866,9 @@
     </table>
     <table id="home_php">
       <phrase id="tblcaption" value="Home" />
+    </table>
+    <table id="gen_rekon__php">
+      <phrase id="tblcaption" value="Rekonsiliasi" />
     </table>
   </project>
 </ew-language>

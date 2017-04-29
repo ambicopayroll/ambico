@@ -42,12 +42,6 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		if ($this->UseTokenInUrl) $PageUrl .= "t=" . $this->TableVar . "&"; // Add page token
 		return $PageUrl;
 	}
-	var $AuditTrailOnAdd = FALSE;
-	var $AuditTrailOnEdit = TRUE;
-	var $AuditTrailOnDelete = FALSE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -963,9 +957,6 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		// Call Row_Updated event
 		if ($EditRow)
 			$this->Row_Updated($rsold, $rsnew);
-		if ($EditRow) {
-			$this->WriteAuditTrailOnEdit($rsold, $rsnew);
-		}
 		$rs->Close();
 		return $EditRow;
 	}
@@ -1066,60 +1057,6 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 't_jdw_krj_peg';
-		$usr = CurrentUserID();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
-	}
-
-	// Write Audit Trail (edit page)
-	function WriteAuditTrailOnEdit(&$rsold, &$rsnew) {
-		global $Language;
-		if (!$this->AuditTrailOnEdit) return;
-		$table = 't_jdw_krj_peg';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rsold['jdw_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserID();
-		foreach (array_keys($rsnew) as $fldname) {
-			if ($this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldDataType == EW_DATATYPE_DATE) { // DateTime field
-					$modified = (ew_FormatDateTime($rsold[$fldname], 0) <> ew_FormatDateTime($rsnew[$fldname], 0));
-				} else {
-					$modified = !ew_CompareValue($rsold[$fldname], $rsnew[$fldname]);
-				}
-				if ($modified) {
-					if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") { // Password Field
-						$oldvalue = $Language->Phrase("PasswordMask");
-						$newvalue = $Language->Phrase("PasswordMask");
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) { // Memo field
-						if (EW_AUDIT_TRAIL_TO_DATABASE) {
-							$oldvalue = $rsold[$fldname];
-							$newvalue = $rsnew[$fldname];
-						} else {
-							$oldvalue = "[MEMO]";
-							$newvalue = "[MEMO]";
-						}
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) { // XML field
-						$oldvalue = "[XML]";
-						$newvalue = "[XML]";
-					} else {
-						$oldvalue = $rsold[$fldname];
-						$newvalue = $rsnew[$fldname];
-					}
-					ew_WriteAuditTrail("log", $dt, $id, $usr, "U", $table, $fldname, $key, $oldvalue, $newvalue);
-				}
-			}
 		}
 	}
 

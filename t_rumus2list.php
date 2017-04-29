@@ -81,12 +81,6 @@ class ct_rumus2_list extends ct_rumus2 {
 	var $GridEditUrl;
 	var $MultiDeleteUrl;
 	var $MultiUpdateUrl;
-	var $AuditTrailOnAdd = TRUE;
-	var $AuditTrailOnEdit = TRUE;
-	var $AuditTrailOnDelete = TRUE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -1417,6 +1411,7 @@ class ct_rumus2_list extends ct_rumus2 {
 
 	// Build basic search SQL
 	function BuildBasicSearchSQL(&$Where, &$Fld, $arKeywords, $type) {
+		global $EW_BASIC_SEARCH_IGNORE_PATTERN;
 		$sDefCond = ($type == "OR") ? "OR" : "AND";
 		$arSQL = array(); // Array for SQL parts
 		$arCond = array(); // Array for search conditions
@@ -1425,8 +1420,8 @@ class ct_rumus2_list extends ct_rumus2 {
 		for ($i = 0; $i < $cnt; $i++) {
 			$Keyword = $arKeywords[$i];
 			$Keyword = trim($Keyword);
-			if (EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
-				$Keyword = preg_replace(EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
+			if ($EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
+				$Keyword = preg_replace($EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
 				$ar = explode("\\", $Keyword);
 			} else {
 				$ar = array($Keyword);
@@ -2898,10 +2893,6 @@ class ct_rumus2_list extends ct_rumus2 {
 			}
 		}
 		if ($DeleteRows) {
-			if ($DeleteRows) {
-				foreach ($rsold as $row)
-					$this->WriteAuditTrailOnDelete($row);
-			}
 			if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteSuccess")); // Batch delete success
 		} else {
 		}
@@ -2993,9 +2984,6 @@ class ct_rumus2_list extends ct_rumus2 {
 		// Call Row_Updated event
 		if ($EditRow)
 			$this->Row_Updated($rsold, $rsnew);
-		if ($EditRow) {
-			$this->WriteAuditTrailOnEdit($rsold, $rsnew);
-		}
 		$rs->Close();
 		return $EditRow;
 	}
@@ -3046,10 +3034,6 @@ class ct_rumus2_list extends ct_rumus2 {
 			$AddRow = $this->Insert($rsnew);
 			$conn->raiseErrorFn = '';
 			if ($AddRow) {
-
-				// Get insert id if necessary
-				$this->rumus2_id->setDbValue($conn->Insert_ID());
-				$rsnew['rumus2_id'] = $this->rumus2_id->DbValue;
 			}
 		} else {
 			if ($this->getSuccessMessage() <> "" || $this->getFailureMessage() <> "") {
@@ -3068,7 +3052,6 @@ class ct_rumus2_list extends ct_rumus2 {
 			// Call Row Inserted event
 			$rs = ($rsold == NULL) ? NULL : $rsold->fields;
 			$this->Row_Inserted($rs, $rsnew);
-			$this->WriteAuditTrailOnAdd($rsnew);
 		}
 		return $AddRow;
 	}
@@ -3369,129 +3352,6 @@ class ct_rumus2_list extends ct_rumus2 {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 't_rumus2';
-		$usr = CurrentUserID();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
-	}
-
-	// Write Audit Trail (add page)
-	function WriteAuditTrailOnAdd(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnAdd) return;
-		$table = 't_rumus2';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['rumus2_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserID();
-		foreach (array_keys($rs) as $fldname) {
-			if ($this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$newvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$newvalue = $rs[$fldname];
-					else
-						$newvalue = "[MEMO]"; // Memo Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$newvalue = "[XML]"; // XML Field
-				} else {
-					$newvalue = $rs[$fldname];
-				}
-				ew_WriteAuditTrail("log", $dt, $id, $usr, "A", $table, $fldname, $key, "", $newvalue);
-			}
-		}
-	}
-
-	// Write Audit Trail (edit page)
-	function WriteAuditTrailOnEdit(&$rsold, &$rsnew) {
-		global $Language;
-		if (!$this->AuditTrailOnEdit) return;
-		$table = 't_rumus2';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rsold['rumus2_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserID();
-		foreach (array_keys($rsnew) as $fldname) {
-			if ($this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldDataType == EW_DATATYPE_DATE) { // DateTime field
-					$modified = (ew_FormatDateTime($rsold[$fldname], 0) <> ew_FormatDateTime($rsnew[$fldname], 0));
-				} else {
-					$modified = !ew_CompareValue($rsold[$fldname], $rsnew[$fldname]);
-				}
-				if ($modified) {
-					if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") { // Password Field
-						$oldvalue = $Language->Phrase("PasswordMask");
-						$newvalue = $Language->Phrase("PasswordMask");
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) { // Memo field
-						if (EW_AUDIT_TRAIL_TO_DATABASE) {
-							$oldvalue = $rsold[$fldname];
-							$newvalue = $rsnew[$fldname];
-						} else {
-							$oldvalue = "[MEMO]";
-							$newvalue = "[MEMO]";
-						}
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) { // XML field
-						$oldvalue = "[XML]";
-						$newvalue = "[XML]";
-					} else {
-						$oldvalue = $rsold[$fldname];
-						$newvalue = $rsnew[$fldname];
-					}
-					ew_WriteAuditTrail("log", $dt, $id, $usr, "U", $table, $fldname, $key, $oldvalue, $newvalue);
-				}
-			}
-		}
-	}
-
-	// Write Audit Trail (delete page)
-	function WriteAuditTrailOnDelete(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnDelete) return;
-		$table = 't_rumus2';
-
-		// Get key value
-		$key = "";
-		if ($key <> "")
-			$key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['rumus2_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$curUser = CurrentUserID();
-		foreach (array_keys($rs) as $fldname) {
-			if (array_key_exists($fldname, $this->fields) && $this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$oldvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$oldvalue = $rs[$fldname];
-					else
-						$oldvalue = "[MEMO]"; // Memo field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$oldvalue = "[XML]"; // XML field
-				} else {
-					$oldvalue = $rs[$fldname];
-				}
-				ew_WriteAuditTrail("log", $dt, $id, $curUser, "D", $table, $fldname, $key, $oldvalue, "");
-			}
 		}
 	}
 
@@ -3908,7 +3768,7 @@ $t_rumus2_list->ShowMessage();
 	<span><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $t_rumus2_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $t_rumus2_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $t_rumus2_list->Pager->RecordCount ?></span>
 </div>
 <?php } ?>
-<?php if ($t_rumus2_list->TotalRecs > 0) { ?>
+<?php if ($t_rumus2_list->TotalRecs > 0 && (!EW_AUTO_HIDE_PAGE_SIZE_SELECTOR || $t_rumus2_list->Pager->Visible)) { ?>
 <div class="ewPager">
 <input type="hidden" name="t" value="t_rumus2">
 <select name="<?php echo EW_TABLE_REC_PER_PAGE ?>" class="form-control input-sm ewTooltip" title="<?php echo $Language->Phrase("RecordsPerPage") ?>" onchange="this.form.submit();">
@@ -3938,7 +3798,7 @@ $t_rumus2_list->ShowMessage();
 <?php } ?>
 <input type="hidden" name="t" value="t_rumus2">
 <div id="gmp_t_rumus2" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
-<?php if ($t_rumus2_list->TotalRecs > 0 || $t_rumus2->CurrentAction == "add" || $t_rumus2->CurrentAction == "copy") { ?>
+<?php if ($t_rumus2_list->TotalRecs > 0 || $t_rumus2->CurrentAction == "add" || $t_rumus2->CurrentAction == "copy" || $t_rumus2->CurrentAction == "gridedit") { ?>
 <table id="tbl_t_rumus2list" class="table ewTable">
 <?php echo $t_rumus2->TableCustomInnerHtml ?>
 <thead><!-- Table header -->
@@ -4680,7 +4540,7 @@ if ($t_rumus2_list->Recordset)
 	<span><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $t_rumus2_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $t_rumus2_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $t_rumus2_list->Pager->RecordCount ?></span>
 </div>
 <?php } ?>
-<?php if ($t_rumus2_list->TotalRecs > 0) { ?>
+<?php if ($t_rumus2_list->TotalRecs > 0 && (!EW_AUTO_HIDE_PAGE_SIZE_SELECTOR || $t_rumus2_list->Pager->Visible)) { ?>
 <div class="ewPager">
 <input type="hidden" name="t" value="t_rumus2">
 <select name="<?php echo EW_TABLE_REC_PER_PAGE ?>" class="form-control input-sm ewTooltip" title="<?php echo $Language->Phrase("RecordsPerPage") ?>" onchange="this.form.submit();">

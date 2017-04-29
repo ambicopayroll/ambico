@@ -25,7 +25,7 @@ define("EW_CONFIG_FILE_FOLDER", EW_PROJECT_NAME, TRUE); // Config file name
 define("EW_PROJECT_ID", "{9712DCF3-D9FD-406D-93E5-FEA5020667C8}", TRUE); // Project ID (GUID)
 $EW_RELATED_PROJECT_ID = "";
 $EW_RELATED_LANGUAGE_FOLDER = "";
-define("EW_RANDOM_KEY", '433BuUY4QjZdEzuK', TRUE); // Random key for encryption
+define("EW_RANDOM_KEY", 't2FQ0NclLIUII66A', TRUE); // Random key for encryption
 define("EW_PROJECT_STYLESHEET_FILENAME", "phpcss/ambico.css", TRUE); // Project stylesheet file name
 define("EW_CHARSET", "", TRUE); // Project charset
 define("EW_EMAIL_CHARSET", EW_CHARSET, TRUE); // Email charset
@@ -205,7 +205,7 @@ define("EW_TABLE_GRID_ADD_ROW_COUNT", "gridaddcnt", TRUE); // Grid add row count
 // Audit Trail
 define("EW_AUDIT_TRAIL_TO_DATABASE", TRUE, TRUE); // Write audit trail to DB
 define("EW_AUDIT_TRAIL_DBID", "DB", TRUE); // Audit trail DBID
-define("EW_AUDIT_TRAIL_TABLE_NAME", "`audittrail`", TRUE); // Audit trail table name
+define("EW_AUDIT_TRAIL_TABLE_NAME", "audittrail", TRUE); // Audit trail table name
 define("EW_AUDIT_TRAIL_TABLE_VAR", "audittrail", TRUE); // Audit trail table var
 define("EW_AUDIT_TRAIL_FIELD_NAME_DATETIME", "datetime", TRUE); // Audit trail DateTime field name
 define("EW_AUDIT_TRAIL_FIELD_NAME_SCRIPT", "script", TRUE); // Audit trail Script field name
@@ -274,6 +274,7 @@ define("EW_SEARCH_FILTER_OPTION", "Client", TRUE);
 
 // Auto hide pager
 define("EW_AUTO_HIDE_PAGER", TRUE, TRUE);
+define("EW_AUTO_HIDE_PAGE_SIZE_SELECTOR", FALSE, TRUE);
 
 // Email
 define("EW_SMTP_SERVER", "localhost", TRUE); // SMTP server
@@ -761,7 +762,7 @@ define("EW_NOT_NULL_VALUE", "##notnull##", TRUE);
 define("EW_SEARCH_MULTI_VALUE_OPTION", 3, TRUE);
 
 // Quick search
-define("EW_BASIC_SEARCH_IGNORE_PATTERN", "/[\?,\.\^\*\(\)\[\]\\\"]/", TRUE); // Ignore special characters
+$EW_BASIC_SEARCH_IGNORE_PATTERN = "/[\?,\.\^\*\(\)\[\]\\\"]/"; // Ignore special characters
 define("EW_BASIC_SEARCH_ANY_FIELDS", FALSE, TRUE); // Search "All keywords" in any selected fields
 
 // Validate option

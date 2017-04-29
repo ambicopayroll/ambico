@@ -72,12 +72,6 @@ class ct_user_view extends ct_user {
 	var $GridEditUrl;
 	var $MultiDeleteUrl;
 	var $MultiUpdateUrl;
-	var $AuditTrailOnAdd = FALSE;
-	var $AuditTrailOnEdit = FALSE;
-	var $AuditTrailOnDelete = FALSE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -1078,13 +1072,6 @@ class ct_user_view extends ct_user {
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
 		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 't_user';
-		$usr = CurrentUserID();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
 
 	// Page Load event

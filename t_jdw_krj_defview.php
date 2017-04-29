@@ -73,12 +73,6 @@ class ct_jdw_krj_def_view extends ct_jdw_krj_def {
 	var $GridEditUrl;
 	var $MultiDeleteUrl;
 	var $MultiUpdateUrl;
-	var $AuditTrailOnAdd = FALSE;
-	var $AuditTrailOnEdit = FALSE;
-	var $AuditTrailOnDelete = FALSE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
 
 	// Message
 	function getMessage() {
@@ -1146,13 +1140,6 @@ class ct_jdw_krj_def_view extends ct_jdw_krj_def {
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
 		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 't_jdw_krj_def';
-		$usr = CurrentUserID();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
 
 	// Page Load event

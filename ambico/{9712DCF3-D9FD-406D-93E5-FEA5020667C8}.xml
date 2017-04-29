@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<configuration date="2017/04/28" author="e.World Technology Ltd.">
-  <project id="{9712DCF3-D9FD-406D-93E5-FEA5020667C8}" file="D:\xampp\htdocs\ambico\ambico.pmp" name="ambico" product="PHPMaker" version="13.0" datetime="2017/04/28 09:55:16" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+<configuration date="2017/04/29" author="e.World Technology Ltd.">
+  <project id="{9712DCF3-D9FD-406D-93E5-FEA5020667C8}" file="D:\xampp\htdocs\ambico\ambico.pmp" name="ambico" product="PHPMaker" version="13.0" datetime="2017/04/29 12:40:00" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
     <table id="att_log" name="att_log" caption="att log" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="cuti_normatif" name="cuti_normatif" caption="cuti normatif" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="dev_type" name="dev_type" caption="dev type" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
@@ -58,9 +58,6 @@
     <table id="user_log" name="user_log" caption="user log" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="user_login" name="user_login" caption="user login" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="v_att_log" name="v_att_log" caption="v att log" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="v_jdw_krj_def" name="v_jdw_krj_def" caption="v jdw krj def" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="v_rekon" name="v_rekon" caption="v rekon" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="v_rekon2" name="v_rekon2" caption="v rekon 2" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="versi_db" name="versi_db" caption="versi db" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="z_pay_com" name="z_pay_com" caption="z pay com" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="z_pay_grp" name="z_pay_grp" caption="z pay grp" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
@@ -77,5 +74,6 @@
     <table id="zx_kredit_m" name="zx_kredit_m" caption="zx kredit m" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="audittrail" name="audittrail" caption="audittrail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="home_php" name="home.php" caption="Home" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="gen_rekon__php" name="gen_rekon_.php" caption="Rekonsiliasi" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
   </project>
 </configuration>

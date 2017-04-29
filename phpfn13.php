@@ -2427,7 +2427,7 @@ class cField {
 		$v = ew_StripSlashes($v);
 		if (is_array($v))
 			$v = implode(",", $v);
-		if ($this->FldDataType == EW_DATATYPE_NUMBER && !ew_IsNumeric($v)) // Check data type
+		if ($this->FldDataType == EW_DATATYPE_NUMBER && !ew_IsNumeric($v) && !ew_Empty($v)) // Check data type
 			$this->FormValue = NULL;
 		else
 			$this->FormValue = $v;
@@ -2440,7 +2440,7 @@ class cField {
 		$v = ew_StripSlashes($v);
 		if (is_array($v))
 			$v = implode(",", $v);
-		if ($this->FldDataType == EW_DATATYPE_NUMBER && !ew_IsNumeric($v)) // Check data type
+		if ($this->FldDataType == EW_DATATYPE_NUMBER && !ew_IsNumeric($v) && !ew_Empty($v)) // Check data type
 			$this->OldValue = NULL;
 		else
 			$this->OldValue = $v;
@@ -2451,7 +2451,7 @@ class cField {
 		$v = ew_StripSlashes($v);
 		if (is_array($v))
 			$v = implode(",", $v);
-		if ($this->FldDataType == EW_DATATYPE_NUMBER && !ew_IsNumeric($v)) // Check data type
+		if ($this->FldDataType == EW_DATATYPE_NUMBER && !ew_IsNumeric($v) && !ew_Empty($v)) // Check data type
 			$this->QueryStringValue = NULL;
 		else
 			$this->QueryStringValue = $v;
@@ -4002,6 +4002,8 @@ class cAdvancedSecurity {
 						$this->setSessionUserID($usr); // User name as User ID
 						$this->setSessionUserLevelID(-2); // Anonymous User Level
 						$this->SetUpUserLevel();
+						$row = NULL;
+						$customValidateUser = $this->User_Validated($row) !== FALSE;
 					}
 				}
 				$rs->Close();
@@ -5189,9 +5191,9 @@ function ew_GetSearchSql(&$Fld, $FldVal, $FldOpr, $FldCond, $FldVal2, $FldOpr2, 
 
 // Return search string
 function ew_SearchString($FldOpr, $FldVal, $FldType, $dbid) {
-	if ($FldVal == EW_NULL_VALUE || $FldOpr == "IS NULL") {
+	if (strval($FldVal) == EW_NULL_VALUE || $FldOpr == "IS NULL") {
 		return " IS NULL";
-	} elseif ($FldVal == EW_NOT_NULL_VALUE || $FldOpr == "IS NOT NULL") {
+	} elseif (strval($FldVal) == EW_NOT_NULL_VALUE || $FldOpr == "IS NOT NULL") {
 		return " IS NOT NULL";
 	} elseif ($FldOpr == "LIKE") {
 		return ew_Like(ew_QuotedValue("%$FldVal%", $FldType, $dbid), $dbid);
@@ -5486,6 +5488,8 @@ function ew_ExecuteJsonArray($SQL, $c = NULL) {
 
 // Write audit trail
 function ew_WriteAuditTrail($pfx, $dt, $script, $usr, $action, $table, $field, $keyvalue, $oldvalue, $newvalue) {
+	if ($table === EW_AUDIT_TRAIL_TABLE_NAME)
+		return;
 	$usrwrk = $usr;
 	if ($usrwrk == "") $usrwrk = "-1"; // Assume Administrator if no user
 	if (EW_AUDIT_TRAIL_TO_DATABASE)
@@ -6432,7 +6436,7 @@ function ew_ExtractScript(&$html, $class = "") {
 }
 
 // Include PHPMailer class
-include_once($EW_RELATIVE_PATH . "phpmailer5221/PHPMailerAutoload.php");
+include_once($EW_RELATIVE_PATH . "phpmailer5223/PHPMailerAutoload.php");
 
 // Function to send email
 function ew_SendEmail($sFrEmail, $sToEmail, $sCcEmail, $sBccEmail, $sSubject, $sMail, $sFormat, $sCharset, $sSmtpSecure = "", $arAttachments = array(), $arImages = array(), $arProperties = NULL) {

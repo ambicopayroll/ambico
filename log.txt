@@ -2,5 +2,30 @@
 - sampai dengan :: harus ubah format tanggal di tab jadwal kerja per periode di master_pegawai
 
 
+
 10:18 AM 4/28/2017
 - dicoba untuk membuat view rekonsiliasi lebih ringkas
+
+
+
+11:28 AM 4/28/2017
+- laporan rekonsiliasi masih terlalu lambat
+
+
+
+10:03 PM 4/28/2017
+
+t_jdw_krj_def a
+pegawai       b
+t_jk          c jk_m
+att_log       d pin
+
+  Left Join att_log d On b.pegawai_pin = d.pin And Cast(d.scan_date As date) =
+    Cast(a.tgl As date) And
+    Cast(d.scan_date As time) Between Cast((Concat('1974-12-24 ', c.jk_m) -
+    Interval '60' Minute) As time) And Cast(c.jk_m As time))
+
+
+
+8:19 AM 4/29/2017
+- create procedure p_gen_rekon

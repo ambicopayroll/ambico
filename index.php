@@ -292,6 +292,8 @@ class cdefault {
 			$this->Page_Terminate("t_rumus_peglist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_user'))
 			$this->Page_Terminate("t_userlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 'gen_rekon_.php'))
+			$this->Page_Terminate("gen_rekon_.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {
