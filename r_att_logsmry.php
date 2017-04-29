@@ -1087,7 +1087,7 @@ class crr_att_log_summary extends crr_att_log {
 
 			// scan_date_tgl
 			$this->scan_date_tgl->ViewValue = $this->scan_date_tgl->CurrentValue;
-			$this->scan_date_tgl->ViewValue = ewr_FormatDateTime($this->scan_date_tgl->ViewValue, 0);
+			$this->scan_date_tgl->ViewValue = tgl_indo($this->scan_date_tgl->ViewValue);
 			$this->scan_date_tgl->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
 
 			// pin
