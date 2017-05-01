@@ -106,7 +106,7 @@ $html .= '
 	  <td>Jumlah Bruto</td>
 	  <td>Pot. Astek + Pensiun</td>
 	  <td>Pot. BPJS</td>
-	  <td>Total</td>
+	  <td>Total Terima</td>
 	</tr>
 	';
 
@@ -162,7 +162,7 @@ while (!$rs->EOF) {
 					and tgl between '".$_POST['start']."' and '".$_POST['end']."'
 				order by
 					tgl
-				";
+				"; //echo $msql; exit;
 			$rs2 = $conn->Execute($msql);
 			$mbagian = $rs2->fields["pembagian2_nama"];
 			$mpegawai_nama = $rs2->fields["pegawai_nama"];
@@ -178,13 +178,14 @@ while (!$rs->EOF) {
 				}
 				
 				// hitung premi hadir & pot. absen
+				// echo substr($rs2->fields["jk_kd"], -1); exit;
 				if (!$data_valid and substr($rs2->fields["jk_kd"], -1) != "L") {
 					$mpremi_hadir = 0;
 					if ($rs2->fields["hk_def"] == 5) {
-						$mpot_absen += $rs->gp / 25;
+						$mpot_absen += $rs->fields["gp"] / 25;
 					}
 					else {
-						$mpot_absen += $rs->gp / 30;
+						$mpot_absen += $rs->fields["gp"] / 30;
 					}
 				}
 				
@@ -242,7 +243,7 @@ while (!$rs->EOF) {
 		'<tr>
 			<td align="right">'."".'&nbsp;</td>
 			<td align="center">'."".'&nbsp;</td>
-			<td align="center" colspan="3">Total Sub-Golongan '.$mpembagian2_nama.'</td>
+			<td align="right" colspan="3">Total Sub-Golongan '.$mpembagian2_nama.'</td>
 			<td align="right">'.number_format($mtotal2).'</td>
 			<td align="right">'.number_format(0).'</td>
 			<td align="right">'.number_format(0).'</td>
@@ -260,7 +261,7 @@ while (!$rs->EOF) {
 	$html .= 
 	'<tr>
 		<td align="right">'."".'&nbsp;</td>
-		<td align="center" colspan="4">Total Golongan '.$mlapgroup_nama.'&nbsp;</td>
+		<td align="right" colspan="4">Total Golongan '.$mlapgroup_nama.'&nbsp;</td>
 		<td align="right">'.number_format($mtotal1).'</td>
 		<td align="right">'.number_format(0).'</td>
 		<td align="right">'.number_format(0).'</td>
@@ -277,7 +278,7 @@ while (!$rs->EOF) {
 }
 $html .= 
 '<tr>
-	<td align="center" colspan="5">Grand Total</td>
+	<td align="right" colspan="5">Grand Total</td>
 	<td align="right">'.number_format($mgrand_total).'</td>
 	<td align="right">'.number_format(0).'</td>
 	<td align="right">'.number_format(0).'</td>
