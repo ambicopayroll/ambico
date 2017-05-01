@@ -296,6 +296,8 @@ class cdefault {
 			$this->Page_Terminate("gen_rekon_.php");
 		if ($Security->AllowList(CurrentProjectID() . 'gen_jdw_krj_.php'))
 			$this->Page_Terminate("gen_jdw_krj_.php");
+		if ($Security->AllowList(CurrentProjectID() . 'lap_gaji_.php'))
+			$this->Page_Terminate("lap_gaji_.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

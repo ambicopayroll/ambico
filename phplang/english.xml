@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/4/30" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/1" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -589,9 +589,6 @@
     <menu id="77">
       <phrase id="menutext" value="Home" />
     </menu>
-    <menu id="1">
-      <phrase id="menutext" value="att log" />
-    </menu>
     <menu id="78">
       <phrase id="menutext" value="Setup" />
     </menu>
@@ -625,6 +622,9 @@
     <menu id="50">
       <phrase id="menutext" value="User" />
     </menu>
+    <menu id="1">
+      <phrase id="menutext" value="att log" />
+    </menu>
     <menu id="10224">
       <phrase id="menutext" value="Proses" />
     </menu>
@@ -642,6 +642,9 @@
     </menu>
     <menu id="10083">
       <phrase id="menutext" value="Rekonsiliasi" />
+    </menu>
+    <menu id="10228">
+      <phrase id="menutext" value="Gaji (Harian)" />
     </menu>
     <menu id="3">
       <phrase id="menutext" value="cuti normatif" />
@@ -2911,6 +2914,9 @@
     </table>
     <table id="gen_jdw_krj__php">
       <phrase id="tblcaption" value="Generate Jadwal Kerja" />
+    </table>
+    <table id="lap_gaji__php">
+      <phrase id="tblcaption" value="Gaji (Harian)" />
     </table>
   </project>
 </ew-language>
