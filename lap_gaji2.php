@@ -76,7 +76,7 @@ $conn = ADONewConnection('mysql');
 
 if ($_SERVER["HTTP_HOST"] == "localhost" ) { // testing on local PC
 	$conn->Connect('localhost','root','admin','fin_pro');
-} elseif ($_SERVER["HTTP_HOST"] == "ambico3.nma-indonesia.com") { // setting koneksi database untuk komputer server
+} elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") { // setting koneksi database untuk komputer server
 	$conn->Connect('mysql.idhostinger.com','u945388674_ambic','M457r1P 81','u945388674_ambic');
 }
 
