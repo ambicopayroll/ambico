@@ -686,6 +686,7 @@
     </Table>
     <Table TblSchema="" TblName="gen_jdw_krj_.php" TblType="REPORT" TblGen="1" TblGenList="custom=1" TblList="1" TblView="0" TblInlineEdit="0" TblGridEdit="0" TblEdit="0" TblEditConfirm="0" TblEditCaptcha="0" TblGridAdd="0" TblAdd="0" TblAddReturnPage="" TblAddOpt="0" TblAddConfirm="0" TblAddCaptcha="0" TblInlineAdd="0" TblInlineCopy="0" TblMultiUpdate="0" TblMultiUpdateConfirm="0" TblAnonymous="0" TblIsMaster="0" TblIsDetail="0" TblDelete="0" TblCaption="Generate Jadwal Kerja" TblUpdatable="0" TblSQL="" TblError="" TblSrchType="NONE" TblSearchHighlight="0" TblSearchColor="" TblSearch="0" TblBasicSearch="1" TblExtendedBasicSearch="1" TblBasicSearchDefault="" TblBasicSearchTypeDefault="" TblExtSearchFldPerRow="0" TblDefault="0" TblCopy="0" TblFilter="" TblUserIDFld="" TblSecurity="0,&quot;Default&quot;,0" TblUserIDAllow="0" TblExpanded="0" TblLoaded="1" TblRptShowDetails="0" TblRptShowGrandTotal="0" OutputFolder="" IncludeFiles="1" TblReportType="custom" TblCustomSQL="" TblCustomError="" TblRptSrc="" TblRptIndent="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="" TblPrinterFriendly="0" TblExportHtml="0" TblExportWord="0" TblExportExcel="0" TblExportXml="0" TblExportCsv="0" TblExportEmail="0" TblExportPDF="0" TblExportType="" TblRecPerRow="0" TblMultiDelete="0" TblSortType="0" TblPagerStyle="2" TblTopPageLink="0" TblBottomPageLink="1" TblViewExport="0" TblListExport="0" TblLinkOnLeft="0" TblInlineDelete="0" TblDetailViewPaging="0" TblDetailEditPaging="0" TblModalSearch="0" TblModalAdd="0" TblModalEdit="0" TblModalUpdate="0" TblModalView="0" TblAuditTrail="0" TblSendMailOnAdd="0" TblSendMailOnEdit="0" TblSendMailOnDelete="0" TblShowBlankListPage="0" TblDetailShowCount="0" TblDetailAdd="0" TblDetailEdit="0" TblDetailView="0" TblShowMultipleDetails="0" TblEditReturnPage="" TblMultiPageAdd="0" TblMultiPageEdit="0" TblMultiPageView="0" TblMultiPageSearch="0" TblCheckConcurrentUpdate="0" TblUserLevelPriv="1" TblDisplayRowCount="0" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblMultiPageType="" TblUseDropDownForExport="1" LinkDBID="" LinkTableName="" LinkTableType="" TblPageCaptions="" />
     <Table TblSchema="" TblName="lap_gaji_.php" TblType="REPORT" TblGen="1" TblGenList="custom=1" TblList="1" TblView="0" TblInlineEdit="0" TblGridEdit="0" TblEdit="0" TblEditConfirm="0" TblEditCaptcha="0" TblGridAdd="0" TblAdd="0" TblAddReturnPage="" TblAddOpt="0" TblAddConfirm="0" TblAddCaptcha="0" TblInlineAdd="0" TblInlineCopy="0" TblMultiUpdate="0" TblMultiUpdateConfirm="0" TblAnonymous="0" TblIsMaster="0" TblIsDetail="0" TblDelete="0" TblCaption="Gaji (Harian)" TblUpdatable="0" TblSQL="" TblError="" TblSrchType="NONE" TblSearchHighlight="0" TblSearchColor="" TblSearch="0" TblBasicSearch="1" TblExtendedBasicSearch="1" TblBasicSearchDefault="" TblBasicSearchTypeDefault="" TblExtSearchFldPerRow="0" TblDefault="0" TblCopy="0" TblFilter="" TblUserIDFld="" TblSecurity="0,&quot;Default&quot;,0" TblUserIDAllow="0" TblExpanded="0" TblLoaded="1" TblRptShowDetails="0" TblRptShowGrandTotal="0" OutputFolder="" IncludeFiles="1" TblReportType="custom" TblCustomSQL="" TblCustomError="" TblRptSrc="" TblRptIndent="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="" TblPrinterFriendly="0" TblExportHtml="0" TblExportWord="0" TblExportExcel="0" TblExportXml="0" TblExportCsv="0" TblExportEmail="0" TblExportPDF="0" TblExportType="" TblRecPerRow="0" TblMultiDelete="0" TblSortType="0" TblPagerStyle="2" TblTopPageLink="0" TblBottomPageLink="1" TblViewExport="0" TblListExport="0" TblLinkOnLeft="0" TblInlineDelete="0" TblDetailViewPaging="0" TblDetailEditPaging="0" TblModalSearch="0" TblModalAdd="0" TblModalEdit="0" TblModalUpdate="0" TblModalView="0" TblAuditTrail="0" TblSendMailOnAdd="0" TblSendMailOnEdit="0" TblSendMailOnDelete="0" TblShowBlankListPage="0" TblDetailShowCount="0" TblDetailAdd="0" TblDetailEdit="0" TblDetailView="0" TblShowMultipleDetails="0" TblEditReturnPage="" TblMultiPageAdd="0" TblMultiPageEdit="0" TblMultiPageView="0" TblMultiPageSearch="0" TblCheckConcurrentUpdate="0" TblUserLevelPriv="1" TblDisplayRowCount="0" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblMultiPageType="" TblUseDropDownForExport="1" LinkDBID="" LinkTableName="" LinkTableType="" TblPageCaptions="" />
+    <Table TblSchema="" TblName="lap_gaji2_.php" TblType="REPORT" TblGen="1" TblGenList="custom=1" TblList="1" TblView="0" TblInlineEdit="0" TblGridEdit="0" TblEdit="0" TblEditConfirm="0" TblEditCaptcha="0" TblGridAdd="0" TblAdd="0" TblAddReturnPage="" TblAddOpt="0" TblAddConfirm="0" TblAddCaptcha="0" TblInlineAdd="0" TblInlineCopy="0" TblMultiUpdate="0" TblMultiUpdateConfirm="0" TblAnonymous="0" TblIsMaster="0" TblIsDetail="0" TblDelete="0" TblCaption="Gaji (Bulanan)" TblUpdatable="0" TblSQL="" TblError="" TblSrchType="NONE" TblSearchHighlight="0" TblSearchColor="" TblSearch="0" TblBasicSearch="1" TblExtendedBasicSearch="1" TblBasicSearchDefault="" TblBasicSearchTypeDefault="" TblExtSearchFldPerRow="0" TblDefault="0" TblCopy="0" TblFilter="" TblUserIDFld="" TblSecurity="0,&quot;Default&quot;,0" TblUserIDAllow="0" TblExpanded="0" TblLoaded="1" TblRptShowDetails="0" TblRptShowGrandTotal="0" OutputFolder="" IncludeFiles="1" TblReportType="custom" TblCustomSQL="" TblCustomError="" TblRptSrc="" TblRptIndent="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="" TblPrinterFriendly="0" TblExportHtml="0" TblExportWord="0" TblExportExcel="0" TblExportXml="0" TblExportCsv="0" TblExportEmail="0" TblExportPDF="0" TblExportType="" TblRecPerRow="0" TblMultiDelete="0" TblSortType="0" TblPagerStyle="2" TblTopPageLink="0" TblBottomPageLink="1" TblViewExport="0" TblListExport="0" TblLinkOnLeft="0" TblInlineDelete="0" TblDetailViewPaging="0" TblDetailEditPaging="0" TblModalSearch="0" TblModalAdd="0" TblModalEdit="0" TblModalUpdate="0" TblModalView="0" TblAuditTrail="0" TblSendMailOnAdd="0" TblSendMailOnEdit="0" TblSendMailOnDelete="0" TblShowBlankListPage="0" TblDetailShowCount="0" TblDetailAdd="0" TblDetailEdit="0" TblDetailView="0" TblShowMultipleDetails="0" TblEditReturnPage="" TblMultiPageAdd="0" TblMultiPageEdit="0" TblMultiPageView="0" TblMultiPageSearch="0" TblCheckConcurrentUpdate="0" TblUserLevelPriv="1" TblDisplayRowCount="0" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblMultiPageType="" TblUseDropDownForExport="1" LinkDBID="" LinkTableName="" LinkTableType="" TblPageCaptions="" />
   </Database>
   <Extension Name="Audit Trail" Template="" XmlFile="audittrail.xml" Enabled="1">
     <ExtProject>
@@ -700,6 +701,9 @@
           <Properties><![CDATA[[{"Id":"Add","Type":"Boolean","Value":"1"},{"Id":"Edit","Type":"Boolean","Value":"1"},{"Id":"Delete","Type":"Boolean","Value":"1"},{"Id":"View","Type":"Boolean","Value":"0"},{"Id":"ViewData","Type":"Boolean","Value":"0"},{"Id":"Search","Type":"Boolean","Value":"0"}]]]></Properties>
         </ExtTable>
         <ExtTable TblName="lap_gaji_.php">
+          <Properties><![CDATA[[{"Id":"Add","Type":"Boolean","Value":"1"},{"Id":"Edit","Type":"Boolean","Value":"1"},{"Id":"Delete","Type":"Boolean","Value":"1"},{"Id":"View","Type":"Boolean","Value":"0"},{"Id":"ViewData","Type":"Boolean","Value":"0"},{"Id":"Search","Type":"Boolean","Value":"0"}]]]></Properties>
+        </ExtTable>
+        <ExtTable TblName="lap_gaji2_.php">
           <Properties><![CDATA[[{"Id":"Add","Type":"Boolean","Value":"1"},{"Id":"Edit","Type":"Boolean","Value":"1"},{"Id":"Delete","Type":"Boolean","Value":"1"},{"Id":"View","Type":"Boolean","Value":"0"},{"Id":"ViewData","Type":"Boolean","Value":"0"},{"Id":"Search","Type":"Boolean","Value":"0"}]]]></Properties>
         </ExtTable>
         <Properties><![CDATA[[]]]></Properties>
@@ -943,6 +947,9 @@
         <ExtTable TblName="lap_gaji_.php">
           <Properties><![CDATA[[{"Id":"ExportList","Type":"Boolean","Value":"0"},{"Id":"ExportView","Type":"Boolean","Value":"1"},{"Id":"PageBreakRecordCount","Type":"Integer","Value":0},{"Id":"PageOrientation","Type":"String","Value":"portrait"},{"Id":"PageSize","Type":"String","Value":"a4"}]]]></Properties>
         </ExtTable>
+        <ExtTable TblName="lap_gaji2_.php">
+          <Properties><![CDATA[[{"Id":"ExportList","Type":"Boolean","Value":"0"},{"Id":"ExportView","Type":"Boolean","Value":"1"},{"Id":"PageBreakRecordCount","Type":"Integer","Value":0},{"Id":"PageOrientation","Type":"String","Value":"portrait"},{"Id":"PageSize","Type":"String","Value":"a4"}]]]></Properties>
+        </ExtTable>
         <Properties><![CDATA[[]]]></Properties>
       </ExtDatabase>
       <Properties><![CDATA[[{"Id":"PdfBackend","Type":"String","Value":"CPDF"},{"Id":"PdfFont","Type":"String","Value":"Helvetica"},{"Id":"MemoryLimit","Type":"String","Value":"128M"},{"Id":"TimeLimit","Type":"Integer","Value":120}]]]></Properties>
@@ -1116,6 +1123,41 @@ else {
 }
 ?>
 ]]></CustomScript>
+  <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="lap_gaji2_.php" ScriptL2Key=""><![CDATA[<?php
+if ($_GET["ok"] == "1") {
+	echo "Selesai";
+}
+else {
+?>
+<form id="myform" name="myform" class="form-horizontal" method="post" action="lap_gaji2.php" target="_blank">
+	<div id="r_start" class="form-group">
+		<label for="start" class="col-sm-2 control-label ewLabel">Date Start</label>
+		<div class="col-sm-10">
+		  <span id="el_calendar_start">
+		  <input type="text" name="start" data-field="start" data-format="5" size="20" class="form-control" id="start">
+		  <script type="text/javascript">
+			ew_CreateCalendar("myform", "start", 5);
+		  </script>
+		  </span>
+		</div>
+	</div>
+	<div id="r_end" class="form-group">
+		<label for="end" class="col-sm-2 control-label ewLabel">Date End</label>
+		<div class="col-sm-10">
+		  <span id="el_calendar_end">
+		  <input type="text" name="end" data-field="end" data-format="5" size="20" class="form-control" id="end">
+		  <script type="text/javascript">
+			ew_CreateCalendar("myform", "end", 5);
+		  </script>
+		  </span>
+		</div>
+	</div>
+	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit">Submit</button>
+</form>
+<?php
+}
+?>
+]]></CustomScript>
   <Menu MenuID="10226" MenuText="v jdw krj def" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="v_jdw_krj_def" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="100" />
   <Menu MenuID="77" MenuText="Home" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="home.php" MenuCustomUrl="0" MenuLevel="0" MenuShow="1" MenuDisplayOrder="200" />
   <Menu MenuID="78" MenuText="Setup" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="8" MenuSecurity="" MenuUrl="" MenuCustomUrl="1" MenuLevel="0" MenuShow="1" MenuDisplayOrder="300" />
@@ -1129,14 +1171,15 @@ else {
   <Menu MenuID="30" MenuText="Pegawai" MenuParentID="78" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="pegawai" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="800" />
   <Menu MenuID="41" MenuText="Jadwal Kerja (Perincian)" MenuParentID="78" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="t_jdw_krj_def" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="900" />
   <Menu MenuID="50" MenuText="User" MenuParentID="78" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="t_user" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="1000" />
-  <Menu MenuID="1" MenuText="att log" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="att_log" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="400" />
-  <Menu MenuID="10224" MenuText="Proses" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="8" MenuSecurity="" MenuUrl="" MenuCustomUrl="1" MenuLevel="0" MenuShow="1" MenuDisplayOrder="500" />
+  <Menu MenuID="10224" MenuText="Proses" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="8" MenuSecurity="" MenuUrl="" MenuCustomUrl="1" MenuLevel="0" MenuShow="1" MenuDisplayOrder="400" />
   <Menu MenuID="10227" MenuText="Generate Jadwal Kerja" MenuParentID="10224" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="gen_jdw_krj_.php" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="100" />
+  <Menu MenuID="1" MenuText="att log" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="att_log" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="500" />
   <Menu MenuID="10077" MenuText="Laporan" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="8" MenuSecurity="" MenuUrl="" MenuCustomUrl="1" MenuLevel="0" MenuShow="1" MenuDisplayOrder="600" />
   <Menu MenuID="10225" MenuText="Scan Finger" MenuParentID="10077" MenuGroup="0" MenuSource="{6A79AFFA-AA3A-4CBB-8572-5F6C56B1E5B1}" MenuExtUrl="r_att_logsmry.php" MenuAnonymous="0" MenuSecurity="" MenuUrl="r_att_log" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="100" />
   <Menu MenuID="10080" MenuText="Jadwal Kerja (Perincian)" MenuParentID="10077" MenuGroup="0" MenuSource="{6A79AFFA-AA3A-4CBB-8572-5F6C56B1E5B1}" MenuExtUrl="r_jdw_krj_defsmry.php" MenuAnonymous="0" MenuSecurity="" MenuUrl="r_jdw_krj_def" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="200" />
   <Menu MenuID="10083" MenuText="Rekonsiliasi" MenuParentID="10077" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="gen_rekon_.php" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="300" />
-  <Menu MenuID="10228" MenuText="Gaji (Harian)" MenuParentID="10077" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="lap_gaji_.php" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="400" />
+  <Menu MenuID="10229" MenuText="Gaji (Bulanan)" MenuParentID="10077" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="lap_gaji2_.php" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="400" />
+  <Menu MenuID="10228" MenuText="Gaji (Harian)" MenuParentID="10077" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="lap_gaji_.php" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="500" />
   <Menu MenuID="3" MenuText="cuti normatif" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="cuti_normatif" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="700" />
   <Menu MenuID="4" MenuText="dev type" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="dev_type" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="800" />
   <Menu MenuID="42" MenuText="Jadwal Kerja (per Periode)" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="t_jdw_krj_peg" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="900" />

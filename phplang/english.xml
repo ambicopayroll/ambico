@@ -622,14 +622,14 @@
     <menu id="50">
       <phrase id="menutext" value="User" />
     </menu>
-    <menu id="1">
-      <phrase id="menutext" value="att log" />
-    </menu>
     <menu id="10224">
       <phrase id="menutext" value="Proses" />
     </menu>
     <menu id="10227">
       <phrase id="menutext" value="Generate Jadwal Kerja" />
+    </menu>
+    <menu id="1">
+      <phrase id="menutext" value="att log" />
     </menu>
     <menu id="10077">
       <phrase id="menutext" value="Laporan" />
@@ -642,6 +642,9 @@
     </menu>
     <menu id="10083">
       <phrase id="menutext" value="Rekonsiliasi" />
+    </menu>
+    <menu id="10229">
+      <phrase id="menutext" value="Gaji (Bulanan)" />
     </menu>
     <menu id="10228">
       <phrase id="menutext" value="Gaji (Harian)" />
@@ -2917,6 +2920,9 @@
     </table>
     <table id="lap_gaji__php">
       <phrase id="tblcaption" value="Gaji (Harian)" />
+    </table>
+    <table id="lap_gaji2__php">
+      <phrase id="tblcaption" value="Gaji (Bulanan)" />
     </table>
   </project>
 </ew-language>
