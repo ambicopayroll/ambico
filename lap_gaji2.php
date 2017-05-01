@@ -72,8 +72,6 @@ $pdf->SetFont('times', '', 10);
 include "adodb5/adodb.inc.php";
 
 $conn = ADONewConnection('mysql');
-//$conn->Connect('localhost','root','admin','fin_pro');
-
 if ($_SERVER["HTTP_HOST"] == "localhost" ) { // testing on local PC
 	$conn->Connect('localhost','root','admin','fin_pro');
 } elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") { // setting koneksi database untuk komputer server
@@ -87,8 +85,6 @@ $html .= '<tr><td>Periode '.$_POST["start"].' s.d. '.$_POST["end"].'</td></tr>';
 $html .= '</table>';
 
 $html .= '<table border="1" width="100%">';
-//$html .= '<tr><th rowspan="2" align="center"width="35">No.</th><th rowspan="2" align="center" width="150">Nama / Bagian</th><th rowspan="2" align="center" width="50">NP</th><th rowspan="2" align="center">Total Upah</th><th colspan="2" align="center">Premi</th><th rowspan="2" align="center">Absen</th><th rowspan="2" align="center">Jumlah Terima</th></tr>';
-//$html .= '<tr><th align="center">Malam</th><th align="center">Hadir</th></tr>';
 $html .= '
 	<tr>
 	  <td>No.</td>
@@ -181,11 +177,18 @@ while (!$rs->EOF) {
 				// echo substr($rs2->fields["jk_kd"], -1); exit;
 				if (!$data_valid and substr($rs2->fields["jk_kd"], -1) != "L") {
 					$mpremi_hadir = 0;
-					if ($rs2->fields["hk_def"] == 5) {
-						$mpot_absen += $rs->fields["gp"] / 25;
+					$msql = "select f_cari_pengecualian(".$mpegawai_id.", '".$rs2->fields["tgl"]."') as ada";
+					$rs3 = $conn->Execute($msql); // echo $msql; exit;
+					if ($rs3->fields["ada"]) {
+						
 					}
 					else {
-						$mpot_absen += $rs->fields["gp"] / 30;
+						if ($rs2->fields["hk_def"] == 5) {
+							$mpot_absen += $rs->fields["gp"] / 25;
+						}
+						else {
+							$mpot_absen += $rs->fields["gp"] / 30;
+						}
 					}
 				}
 				
@@ -243,7 +246,7 @@ while (!$rs->EOF) {
 		'<tr>
 			<td align="right">'."".'&nbsp;</td>
 			<td align="center">'."".'&nbsp;</td>
-			<td align="right" colspan="3">Total Sub-Golongan '.$mpembagian2_nama.'</td>
+			<td align="right" colspan="3">Total Bagian '.$mpembagian2_nama.'</td>
 			<td align="right">'.number_format($mtotal2).'</td>
 			<td align="right">'.number_format(0).'</td>
 			<td align="right">'.number_format(0).'</td>

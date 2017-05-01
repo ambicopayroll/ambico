@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/5/1" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/2" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -619,6 +619,9 @@
     <menu id="41">
       <phrase id="menutext" value="Jadwal Kerja (Perincian)" />
     </menu>
+    <menu id="10230">
+      <phrase id="menutext" value="Pengecualian" />
+    </menu>
     <menu id="50">
       <phrase id="menutext" value="User" />
     </menu>
@@ -627,9 +630,6 @@
     </menu>
     <menu id="10227">
       <phrase id="menutext" value="Generate Jadwal Kerja" />
-    </menu>
-    <menu id="1">
-      <phrase id="menutext" value="att log" />
     </menu>
     <menu id="10077">
       <phrase id="menutext" value="Laporan" />
@@ -648,6 +648,9 @@
     </menu>
     <menu id="10228">
       <phrase id="menutext" value="Gaji (Harian)" />
+    </menu>
+    <menu id="1">
+      <phrase id="menutext" value="att log" />
     </menu>
     <menu id="3">
       <phrase id="menutext" value="cuti normatif" />
@@ -2923,6 +2926,25 @@
     </table>
     <table id="lap_gaji2__php">
       <phrase id="tblcaption" value="Gaji (Bulanan)" />
+    </table>
+    <table id="t_pengecualian">
+      <phrase id="tblcaption" value="Pengecualian" />
+      <field id="pengecualian_id">
+        <phrase id="fldcaption" value="ID" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="Nama" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="Tgl." />
+      </field>
+      <field id="tipe">
+        <phrase id="fldcaption" value="Tipe" />
+        <phrase id="fldtagvalue1" value="1" />
+        <phrase id="fldtagcaption1" value="S1" />
+        <phrase id="fldtagvalue2" value="2" />
+        <phrase id="fldtagcaption2" value="P4" />
+      </field>
     </table>
   </project>
 </ew-language>
