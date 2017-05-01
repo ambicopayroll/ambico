@@ -125,6 +125,7 @@ $msql = "
 		left join pembagian2 d on c.pembagian2_id = d.pembagian2_id
 	order by
 		c.pembagian2_id
+		, c.pegawai_nip
 	";
 $rs = $conn->Execute($msql);
 

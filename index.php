@@ -282,6 +282,10 @@ class cdefault {
 			$this->Page_Terminate("t_jdw_krj_peglist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_jk'))
 			$this->Page_Terminate("t_jklist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_lapgroup'))
+			$this->Page_Terminate("t_lapgrouplist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_lapsubgroup'))
+			$this->Page_Terminate("t_lapsubgrouplist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_rumus'))
 			$this->Page_Terminate("t_rumuslist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_rumus2'))
