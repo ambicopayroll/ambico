@@ -33,8 +33,8 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Ambico');
-$pdf->SetTitle('Upah');
-$pdf->SetSubject('Upah');
+$pdf->SetTitle('Bulanan');
+$pdf->SetSubject('Bulanan');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // remove default header/footer
@@ -111,7 +111,21 @@ $html .= '
 
 $mno = 1;
 
-$msql = "select * from t_rumus2_peg a left join t_rumus2 b on a.rumus2_id = b.rumus2_id";
+//$msql = "select * from t_rumus2_peg a left join t_rumus2 b on a.rumus2_id = b.rumus2_id";
+$msql = "
+	select
+		a.*
+		, b.*
+		, d.pembagian2_nama
+		, c.pegawai_nama
+	from
+		t_rumus2_peg a
+		left join t_rumus2 b on a.rumus2_id = b.rumus2_id
+		left join pegawai c on a.pegawai_id = c.pegawai_id
+		left join pembagian2 d on c.pembagian2_id = d.pembagian2_id
+	order by
+		c.pembagian2_id
+	";
 $rs = $conn->Execute($msql);
 
 while (!$rs->EOF) {
