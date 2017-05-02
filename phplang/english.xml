@@ -611,7 +611,7 @@
       <phrase id="menutext" value="Gol. Gaji Harian" />
     </menu>
     <menu id="44">
-      <phrase id="menutext" value="Gol. Lap. Gaji (Bulanan)" />
+      <phrase id="menutext" value="Laporan Gaji" />
     </menu>
     <menu id="30">
       <phrase id="menutext" value="Pegawai" />
@@ -2125,7 +2125,7 @@
       </field>
     </table>
     <table id="t_lapgroup">
-      <phrase id="tblcaption" value="Gol. Lap. Gaji (Bulanan)" />
+      <phrase id="tblcaption" value="Laporan Gaji" />
       <field id="lapgroup_id">
         <phrase id="fldcaption" value="ID" />
       </field>
