@@ -1,7 +1,9 @@
+<?php include_once "phpfn13.php" ?>
 <?php
-include "adodb5/adodb.inc.php";
+$conn =& DbHelper(); 
+//include "adodb5/adodb.inc.php";
 
-$conn = ADONewConnection('mysql');
+//$conn = ADONewConnection('mysql');
 //$conn->Connect('localhost','root','admin','fin_pro');
 
 if ($_SERVER["HTTP_HOST"] == "localhost" ) { // testing on local PC
@@ -47,7 +49,7 @@ while (!$rs->EOF) {
 	}
 }
 $rs->Close();
-$conn->Close();
+//$conn->Close();
  
 header("location: gen_jdw_krj_.php?ok=1");
 ?>
