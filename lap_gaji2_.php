@@ -311,7 +311,13 @@ Page_Rendering();
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<form id="myform" name="myform" class="form-horizontal" method="post" action="gen_rekon.php">
+<?php
+if ($_GET["ok"] == "1") {
+	echo "Selesai";
+}
+else {
+?>
+<form id="myform" name="myform" class="form-horizontal" method="post" action="lap_gaji2.php" target="_blank">
 	<div id="r_start" class="form-group">
 		<label for="start" class="col-sm-2 control-label ewLabel">Date Start</label>
 		<div class="col-sm-10">
@@ -334,21 +340,11 @@ Page_Rendering();
 		  </span>
 		</div>
 	</div>
-	<div id="cmb_proses" class="form-group">
-		<label for="cmb_proses" class="col-sm-2 control-label ewLabel">Proses Generate</label>
-		<div class="col-sm-10">
-		  <!--<span id="el_calendar_end">-->
-		  <!--<input type="text" name="end" data-field="end" data-format="5" size="20" class="form-control" id="end">-->
-		  <label class="radio-inline"><input type="radio" name="radio_proses" id="x1_hk_0" value="1">Ya</label>
-		  <label class="radio-inline"><input type="radio" name="radio_proses" id="x1_hk_1" value="0" selected="selected">Tidak</label>
-		  <!--<script type="text/javascript">
-			ew_CreateCalendar("myform", "end", 5);
-		  </script>-->
-		  <!--</span>-->
-		</div>
-	</div>
 	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit">Submit</button>
 </form>
+<?php
+}
+?>
 <?php if (EW_DEBUG_ENABLED) echo ew_DebugMsg(); ?>
 <?php include_once "footer.php" ?>
 <?php
