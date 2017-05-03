@@ -4,7 +4,7 @@ BEGIN
 declare ada int;
 select count(*) into ada from t_pengecualian where pegawai_id = p_pegawai_id and tgl = p_tgl;
 RETURN ada;
-END
+END//
 
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `p_gen_rekon`(in mstart date, in mend date)
@@ -41,4 +41,4 @@ set
 where
     a.tgl between mstart and mend;
 
-END
+END//
