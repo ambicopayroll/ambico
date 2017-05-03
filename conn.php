@@ -6,6 +6,11 @@ if ($_SERVER["HTTP_HOST"] == "localhost" ) {
 	$database_conn = "fin_pro"; //$database_conn = "zecorind_mitra2";
 	$username_conn = "root"; //$username_conn = "zecorind_root";
 	$password_conn = "admin";
+} elseif ($_SERVER["HTTP_HOST"] == "36.80.56.64") { // setting koneksi database untuk komputer server
+	$hostname_conn = "36.80.56.64";  // sesuaikan dengan ip address atau hostname komputer server
+	$username_conn = "root"; // sesuaikan dengan username database di komputer server
+	$password_conn = "admin"; // sesuaikan deengan password database di komputer server
+	$database_conn = "fin_pro"; // sesuaikan dengan nama database di komputer server
 } elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") { // setting koneksi database untuk komputer server
 	$hostname_conn = "mysql.idhostinger.com";  // sesuaikan dengan ip address atau hostname komputer server
 	$username_conn = "u945388674_ambic"; // sesuaikan dengan username database di komputer server
