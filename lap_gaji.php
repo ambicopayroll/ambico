@@ -127,7 +127,8 @@ while (!$rs->EOF) {
 			//}
 		}
 		$mpremi_hadir = $rs->fields["premi_hadir"];
-		if (is_null($rs->fields["gol_hk"])) {
+		//if (is_null($rs->fields["gol_hk"])) {
+		if (is_null($rs->fields["scan_masuk"]) or is_null($rs->fields["scan_keluar"])) {
 			$mtidak_masuk = 1;
 			$mpot_absen += $rs->fields["pot_absen"];
 		}
