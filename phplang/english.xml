@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/5/3" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/7" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -611,7 +611,7 @@
       <phrase id="menutext" value="Gol. Gaji Harian" />
     </menu>
     <menu id="44">
-      <phrase id="menutext" value="Laporan Gaji" />
+      <phrase id="menutext" value="Grouping Laporan Gaji" />
     </menu>
     <menu id="30">
       <phrase id="menutext" value="Pegawai" />
@@ -662,7 +662,7 @@
       <phrase id="menutext" value="Jadwal Kerja (per Periode)" />
     </menu>
     <menu id="45">
-      <phrase id="menutext" value="Sub-Golongan" />
+      <phrase id="menutext" value="Divisi" />
     </menu>
     <menu id="5">
       <phrase id="menutext" value="device" />
@@ -2125,30 +2125,30 @@
       </field>
     </table>
     <table id="t_lapgroup">
-      <phrase id="tblcaption" value="Laporan Gaji" />
+      <phrase id="tblcaption" value="Grouping Laporan Gaji" />
       <field id="lapgroup_id">
         <phrase id="fldcaption" value="ID" />
       </field>
       <field id="lapgroup_nama">
-        <phrase id="fldcaption" value="Golongan" />
+        <phrase id="fldcaption" value="Bagian" />
       </field>
       <field id="lapgroup_index">
         <phrase id="fldcaption" value="Nomor Urut" />
       </field>
     </table>
     <table id="t_lapsubgroup">
-      <phrase id="tblcaption" value="Sub-Golongan" />
+      <phrase id="tblcaption" value="Divisi" />
       <field id="lapsubgroup_id">
         <phrase id="fldcaption" value="ID" />
       </field>
       <field id="pembagian2_id">
-        <phrase id="fldcaption" value="Nama Bagian" />
+        <phrase id="fldcaption" value="Divisi" />
       </field>
       <field id="lapsubgroup_index">
         <phrase id="fldcaption" value="Nomor Urut" />
       </field>
       <field id="lapgroup_id">
-        <phrase id="fldcaption" value="Master Group" />
+        <phrase id="fldcaption" value="Bagian" />
       </field>
     </table>
     <table id="t_rumus">

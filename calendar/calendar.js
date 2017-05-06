@@ -99,18 +99,20 @@ Calendar.is_khtml = /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
 //        library, at some point.
 
 Calendar.getAbsolutePos = function(el) {
-	var SL = 0, ST = 0;
-	var is_div = /^div$/i.test(el.tagName);
-	if (is_div && el.scrollLeft)
-		SL = el.scrollLeft;
-	if (is_div && el.scrollTop)
-		ST = el.scrollTop;
-	var r = { x: el.offsetLeft - SL, y: el.offsetTop - ST };
-	if (el.offsetParent) {
-		var tmp = this.getAbsolutePos(el.offsetParent);
-		r.x += tmp.x;
-		r.y += tmp.y;
-	}
+	//var SL = 0, ST = 0;
+	//var is_div = /^div$/i.test(el.tagName);
+	//if (is_div && el.scrollLeft)
+	//	SL = el.scrollLeft;
+	//if (is_div && el.scrollTop)
+	//	ST = el.scrollTop;
+	//var r = { x: el.offsetLeft - SL, y: el.offsetTop - ST };
+	//if (el.offsetParent) {
+	//	var tmp = this.getAbsolutePos(el.offsetParent);
+	//	r.x += tmp.x;
+	//	r.y += tmp.y;
+	//}
+	var offset = jQuery(el).offset();
+	var r = { x: offset.left, y: offset.top };
 	return r;
 };
 
