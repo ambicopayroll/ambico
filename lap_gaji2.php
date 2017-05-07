@@ -8,9 +8,6 @@ elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") {
 	$conn = ADONewConnection('mysql');
 	$conn->Connect('mysql.idhostinger.com','u945388674_ambi2','M457r1P 81','u945388674_ambi2');
 }
-?>
-
-<?php
 //============================================================+
 // File name   : example_002.php
 // Begin       : 2008-03-04
@@ -345,7 +342,7 @@ $pdf->Output('Bulanan.pdf', 'I');
 //echo $html;
 
 $rs->Close();
-$conn->Close();
+//$conn->Close();
 
 // header("location: ./payroll_.php?ok=1");
 
