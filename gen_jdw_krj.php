@@ -15,6 +15,7 @@ $conn =& DbHelper();
 $rs = $conn->Execute('select * from t_jdw_krj_peg order by pegawai_id, tgl1');
 
 while (!$rs->EOF) {
+	echo "1"; exit;
 	$mpegawai_id = $rs->fields["pegawai_id"];
 	$mtanggal_hari_ini = date("Y-m-d");
 	//$msql = "delete from t_jdw_krj_def where pegawai_id = ".$mpegawai_id." and tgl > '".$mtanggal_hari_ini."'"; //echo $msql; exit;
