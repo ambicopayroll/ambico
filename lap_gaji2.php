@@ -288,7 +288,7 @@ while (!$rs->EOF) {
 		'<tr>
 			<td align="right">'."".'&nbsp;</td>
 			<td align="center">'."".'&nbsp;</td>
-			<td align="right" colspan="3">Total Bagian '.$mpembagian2_nama.'</td>
+			<td colspan="3">Total Divisi '.$mpembagian2_nama.'</td>
 			<td align="right">'.number_format($mtotal2).'</td>
 			<td align="right">'.number_format(0).'</td>
 			<td align="right">'.number_format(0).'</td>
@@ -306,7 +306,7 @@ while (!$rs->EOF) {
 	$html .= 
 	'<tr>
 		<td align="right">'."".'&nbsp;</td>
-		<td align="right" colspan="4">Total Golongan '.$mlapgroup_nama.'&nbsp;</td>
+		<td colspan="4">Total Bagian '.$mlapgroup_nama.'&nbsp;</td>
 		<td align="right">'.number_format($mtotal1).'</td>
 		<td align="right">'.number_format(0).'</td>
 		<td align="right">'.number_format(0).'</td>
@@ -323,7 +323,7 @@ while (!$rs->EOF) {
 }
 $html .= 
 '<tr>
-	<td align="right" colspan="5">Grand Total</td>
+	<td colspan="5">Grand Total</td>
 	<td align="right">'.number_format($mgrand_total).'</td>
 	<td align="right">'.number_format(0).'</td>
 	<td align="right">'.number_format(0).'</td>
