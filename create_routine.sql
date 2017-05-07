@@ -1,13 +1,13 @@
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `f_cari_pengecualian`(p_pegawai_id int, p_tgl date) RETURNS int(11)
+CREATE FUNCTION `f_cari_pengecualian`(p_pegawai_id int, p_tgl date) RETURNS int(11)
 BEGIN
 declare ada int;
-select count(*) into ada from t_pengecualian where pegawai_id = p_pegawai_id and tgl = p_tgl;
+select count(*) into ada from t_pengecualian_peg where pegawai_id = p_pegawai_id and tgl = p_tgl;
 RETURN ada;
 END//
 
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `p_gen_rekon`(in mstart date, in mend date)
+CREATE PROCEDURE `p_gen_rekon`(in mstart date, in mend date)
 BEGIN
 
 update
