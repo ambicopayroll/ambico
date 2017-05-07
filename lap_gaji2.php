@@ -90,8 +90,8 @@ $html .= '<table border="1" width="100%">';
 $html .= '
 	<tr>
 	  <td>No.</td>
-	  <td>Golongan</td>
 	  <td>Bagian</td>
+	  <td>Divisi</td>
 	  <td>NIP</td>
 	  <td>Nama</td>
 	  <td>Gaji</td>
@@ -138,10 +138,50 @@ while (!$rs->EOF) {
 	$mlapgroup_id = $rs->fields["lapgroup_id"];
 	$mlapgroup_nama = $rs->fields["lapgroup_nama"];
 	$mtotal1 = 0;
+	$html .= '
+		<tr>
+		  <td>&nbsp;</td>
+		  <td>'.$mlapgroup_nama.'</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		</tr>
+		';
 	while ($rs->fields["lapgroup_id"] == $mlapgroup_id and !$rs->EOF) {
 		$mpembagian2_id = $rs->fields["pembagian2_id"];
 		$mpembagian2_nama = $rs->fields["pembagian2_nama"];
 		$mtotal2 = 0;
+		$html .= '
+			<tr>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>'.$mpembagian2_nama.'</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			  <td>&nbsp;</td>
+			</tr>
+			';
 		while ($rs->fields["pembagian2_id"] == $mpembagian2_id and !$rs->EOF) {
 			$mpegawai_id = $rs->fields["pegawai_id"];
 			//$mgp = $rs->fields["gp"];
@@ -224,8 +264,8 @@ while (!$rs->EOF) {
 			$html .= 
 			'<tr>
 				<td align="right">'.$mno.'&nbsp;</td>
-				<td align="center">'.$mlapgroup_nama.'&nbsp;</td>
-				<td align="center">'.$mbagian.'</td>
+				<td align="center">&nbsp;</td>
+				<td align="center">&nbsp;</td>
 				<td align="center">'.$mpegawai_nip.'</td>
 				<td>&nbsp;'.$mpegawai_nama.'</td>
 				<td align="right">'.number_format($rs->fields["gp"]).'</td>
