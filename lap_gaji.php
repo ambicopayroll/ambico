@@ -268,9 +268,9 @@ $html .= '
 
 $html .= '</table>';
 //$html .= $msql;
-//$pdf->writeHTML($html, true, false, true, false, '');
-//$pdf->Output('Upah.pdf', 'I');
-echo $html;
+$pdf->writeHTML($html, true, false, true, false, '');
+$pdf->Output('Upah.pdf', 'I');
+//echo $html;
 
 $rs->Close();
 //$conn->Close();
