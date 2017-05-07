@@ -188,9 +188,9 @@ while (!$rs->EOF) {
 			while ($mpegawai_id == $rs->fields["pegawai_id"] and !$rs->EOF) {
 				
 				// check data valid
-				$data_valid = false;
+				$data_valid = false; echo "tgl. ".$rs->fields["tgl"].$rs->fields["scan_masuk"];
 				if (!is_null($rs->fields["scan_masuk"]) and !is_null($rs->fields["scan_keluar"])) {
-					$data_valid = true;
+					$data_valid = true; echo "valid";
 				}
 				
 				// hitung premi hadir & pot. absen
@@ -268,9 +268,9 @@ $html .= '
 
 $html .= '</table>';
 //$html .= $msql;
-$pdf->writeHTML($html, true, false, true, false, '');
-$pdf->Output('Upah.pdf', 'I');
-//echo $html;
+//$pdf->writeHTML($html, true, false, true, false, '');
+//$pdf->Output('Upah.pdf', 'I');
+echo $html;
 
 $rs->Close();
 //$conn->Close();
