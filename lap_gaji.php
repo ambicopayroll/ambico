@@ -143,7 +143,7 @@ $msql = "
 		, d.lapsubgroup_index
 		, a.pegawai_id
 		, a.tgl
-	"; //echo $msql; exit;
+	"; echo $msql; exit;
 $rs = $conn->Execute($msql);
 while (!$rs->EOF) {
 	$mlapgroup_id = $rs->fields["lapgroup_id"];
@@ -191,6 +191,7 @@ while (!$rs->EOF) {
 				$data_valid = false; //echo "tgl. ".$rs->fields["tgl"].$rs->fields["scan_masuk"];
 				if (!is_null($rs->fields["scan_masuk"]) and !is_null($rs->fields["scan_keluar"])) {
 					$data_valid = true; //echo "valid";
+					$mupah += $rs->fields["upah"];
 				}
 				
 				// hitung premi hadir & pot. absen
@@ -207,7 +208,7 @@ while (!$rs->EOF) {
 					}
 				}
 				
-				$mupah += $rs->fields["upah"];
+				//$mupah += $rs->fields["upah"];
 				if (substr($rs->fields["jk_kd"], 0, 2) == "S3") {
 					//$mjml_premi_malam++;
 					//if ($mjml_premi_malam <= 5) {
