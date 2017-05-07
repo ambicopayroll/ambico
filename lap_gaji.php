@@ -188,9 +188,9 @@ while (!$rs->EOF) {
 			while ($mpegawai_id == $rs->fields["pegawai_id"] and !$rs->EOF) {
 				
 				// check data valid
-				$data_valid = false; echo "tgl. ".$rs->fields["tgl"].$rs->fields["scan_masuk"];
+				$data_valid = false; //echo "tgl. ".$rs->fields["tgl"].$rs->fields["scan_masuk"];
 				if (!is_null($rs->fields["scan_masuk"]) and !is_null($rs->fields["scan_keluar"])) {
-					$data_valid = true; echo "valid";
+					$data_valid = true; //echo "valid";
 				}
 				
 				// hitung premi hadir & pot. absen
