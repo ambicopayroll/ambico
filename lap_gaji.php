@@ -143,7 +143,7 @@ $msql = "
 		, d.lapsubgroup_index
 		, a.pegawai_id
 		, a.tgl
-	"; echo $msql; exit;
+	"; //echo $msql; exit;
 $rs = $conn->Execute($msql);
 while (!$rs->EOF) {
 	$mlapgroup_id = $rs->fields["lapgroup_id"];
