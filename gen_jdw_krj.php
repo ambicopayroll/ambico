@@ -13,6 +13,7 @@ $conn =& DbHelper();
 }*/
 
 $rs = $conn->Execute('select * from t_jdw_krj_peg order by pegawai_id, tgl1');
+$msql = 'select * from t_jdw_krj_peg order by pegawai_id, tgl1'; echo $msql; exit;
 
 while (!$rs->EOF) {
 	echo "1"; exit;
