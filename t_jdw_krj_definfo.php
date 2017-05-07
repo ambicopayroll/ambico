@@ -64,9 +64,9 @@ class ct_jdw_krj_def extends cTable {
 		$this->fields['pegawai_id'] = &$this->pegawai_id;
 
 		// tgl
-		$this->tgl = new cField('t_jdw_krj_def', 't_jdw_krj_def', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, -1, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl = new cField('t_jdw_krj_def', 't_jdw_krj_def', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 5, "DB"), 133, 5, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tgl->Sortable = TRUE; // Allow sort
-		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectDateYMD"));
 		$this->fields['tgl'] = &$this->tgl;
 
 		// jk_id
@@ -734,7 +734,7 @@ class ct_jdw_krj_def extends cTable {
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 5);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// jk_id
@@ -843,7 +843,7 @@ class ct_jdw_krj_def extends cTable {
 		// tgl
 		$this->tgl->EditAttrs["class"] = "form-control";
 		$this->tgl->EditCustomAttributes = "";
-		$this->tgl->EditValue = $this->tgl->CurrentValue;
+		$this->tgl->EditValue = ew_FormatDateTime($this->tgl->CurrentValue, 5);
 		$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 		// jk_id

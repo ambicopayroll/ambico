@@ -2132,7 +2132,7 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 		$this->pegawai_id->setOldValue($objForm->GetValue("o_pegawai_id"));
 		if (!$this->tgl->FldIsDetailKey) {
 			$this->tgl->setFormValue($objForm->GetValue("x_tgl"));
-			$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
+			$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 5);
 		}
 		$this->tgl->setOldValue($objForm->GetValue("o_tgl"));
 		if (!$this->jk_id->FldIsDetailKey) {
@@ -2154,7 +2154,7 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 			$this->jdw_id->CurrentValue = $this->jdw_id->FormValue;
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
 		$this->tgl->CurrentValue = $this->tgl->FormValue;
-		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
+		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 5);
 		$this->jk_id->CurrentValue = $this->jk_id->FormValue;
 		$this->hk_def->CurrentValue = $this->hk_def->FormValue;
 	}
@@ -2329,7 +2329,7 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 5);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// jk_id
@@ -2427,7 +2427,7 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 			// tgl
 			$this->tgl->EditAttrs["class"] = "form-control";
 			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
+			$this->tgl->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->tgl->CurrentValue, 5));
 			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 			// jk_id
@@ -2507,7 +2507,7 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 			// tgl
 			$this->tgl->EditAttrs["class"] = "form-control";
 			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
+			$this->tgl->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->tgl->CurrentValue, 5));
 			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 			// jk_id
@@ -2567,11 +2567,11 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 			// tgl
 			$this->tgl->EditAttrs["class"] = "form-control";
 			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode(ew_UnFormatDateTime($this->tgl->AdvancedSearch->SearchValue, 0));
+			$this->tgl->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->tgl->AdvancedSearch->SearchValue, 5), 5));
 			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 			$this->tgl->EditAttrs["class"] = "form-control";
 			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue2 = ew_HtmlEncode(ew_UnFormatDateTime($this->tgl->AdvancedSearch->SearchValue2, 0));
+			$this->tgl->EditValue2 = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->tgl->AdvancedSearch->SearchValue2, 5), 5));
 			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 			// jk_id
@@ -2605,10 +2605,10 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return TRUE;
-		if (!ew_CheckDateDef($this->tgl->AdvancedSearch->SearchValue)) {
+		if (!ew_CheckDate($this->tgl->AdvancedSearch->SearchValue)) {
 			ew_AddMessage($gsSearchError, $this->tgl->FldErrMsg());
 		}
-		if (!ew_CheckDateDef($this->tgl->AdvancedSearch->SearchValue2)) {
+		if (!ew_CheckDate($this->tgl->AdvancedSearch->SearchValue2)) {
 			ew_AddMessage($gsSearchError, $this->tgl->FldErrMsg());
 		}
 
@@ -2640,7 +2640,7 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 		if (!$this->tgl->FldIsDetailKey && !is_null($this->tgl->FormValue) && $this->tgl->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl->FldCaption(), $this->tgl->ReqErrMsg));
 		}
-		if (!ew_CheckDateDef($this->tgl->FormValue)) {
+		if (!ew_CheckDate($this->tgl->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl->FldErrMsg());
 		}
 		if (!$this->jk_id->FldIsDetailKey && !is_null($this->jk_id->FormValue) && $this->jk_id->FormValue == "") {
@@ -2771,7 +2771,7 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 			$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, $this->pegawai_id->ReadOnly);
 
 			// tgl
-			$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), $this->tgl->ReadOnly);
+			$this->tgl->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->tgl->CurrentValue, 5), ew_CurrentDate(), $this->tgl->ReadOnly);
 
 			// jk_id
 			$this->jk_id->SetDbValueDef($rsnew, $this->jk_id->CurrentValue, 0, $this->jk_id->ReadOnly);
@@ -2826,7 +2826,7 @@ class ct_jdw_krj_def_list extends ct_jdw_krj_def {
 		$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, FALSE);
 
 		// tgl
-		$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), FALSE);
+		$this->tgl->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->tgl->CurrentValue, 5), ew_CurrentDate(), FALSE);
 
 		// jk_id
 		$this->jk_id->SetDbValueDef($rsnew, $this->jk_id->CurrentValue, 0, FALSE);
@@ -3422,7 +3422,7 @@ ft_jdw_krj_deflist.Validate = function() {
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_jdw_krj_def->tgl->FldCaption(), $t_jdw_krj_def->tgl->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_tgl");
-			if (elm && !ew_CheckDateDef(elm.value))
+			if (elm && !ew_CheckDate(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_def->tgl->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_jk_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
@@ -3484,7 +3484,7 @@ ft_jdw_krj_deflistsrch.Validate = function(fobj) {
 	fobj = fobj || this.Form;
 	var infix = "";
 	elm = this.GetElements("x" + infix + "_tgl");
-	if (elm && !ew_CheckDateDef(elm.value))
+	if (elm && !ew_CheckDate(elm.value))
 		return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_def->tgl->FldErrMsg()) ?>");
 
 	// Fire Form_CustomValidate event
@@ -3629,19 +3629,19 @@ ft_jdw_krj_deflistsrch.CreateAutoSuggest({"id":"x_pegawai_id","forceSelect":fals
 		<label for="x_tgl" class="ewSearchCaption ewLabel"><?php echo $t_jdw_krj_def->tgl->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("BETWEEN") ?><input type="hidden" name="z_tgl" id="z_tgl" value="BETWEEN"></span>
 		<span class="ewSearchField">
-<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" name="x_tgl" id="x_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
+<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" data-format="5" name="x_tgl" id="x_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
 <?php if (!$t_jdw_krj_def->tgl->ReadOnly && !$t_jdw_krj_def->tgl->Disabled && !isset($t_jdw_krj_def->tgl->EditAttrs["readonly"]) && !isset($t_jdw_krj_def->tgl->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
-ew_CreateCalendar("ft_jdw_krj_deflistsrch", "x_tgl", 0);
+ew_CreateCalendar("ft_jdw_krj_deflistsrch", "x_tgl", 5);
 </script>
 <?php } ?>
 </span>
 		<span class="ewSearchCond btw1_tgl">&nbsp;<?php echo $Language->Phrase("AND") ?>&nbsp;</span>
 		<span class="ewSearchField btw1_tgl">
-<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" name="y_tgl" id="y_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue2 ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
+<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" data-format="5" name="y_tgl" id="y_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue2 ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
 <?php if (!$t_jdw_krj_def->tgl->ReadOnly && !$t_jdw_krj_def->tgl->Disabled && !isset($t_jdw_krj_def->tgl->EditAttrs["readonly"]) && !isset($t_jdw_krj_def->tgl->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
-ew_CreateCalendar("ft_jdw_krj_deflistsrch", "y_tgl", 0);
+ew_CreateCalendar("ft_jdw_krj_deflistsrch", "y_tgl", 5);
 </script>
 <?php } ?>
 </span>
@@ -3853,10 +3853,10 @@ ft_jdw_krj_deflist.CreateAutoSuggest({"id":"x<?php echo $t_jdw_krj_def_list->Row
 	<?php if ($t_jdw_krj_def->tgl->Visible) { // tgl ?>
 		<td data-name="tgl">
 <span id="el<?php echo $t_jdw_krj_def_list->RowCnt ?>_t_jdw_krj_def_tgl" class="form-group t_jdw_krj_def_tgl">
-<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" name="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" id="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
+<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" data-format="5" name="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" id="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
 <?php if (!$t_jdw_krj_def->tgl->ReadOnly && !$t_jdw_krj_def->tgl->Disabled && !isset($t_jdw_krj_def->tgl->EditAttrs["readonly"]) && !isset($t_jdw_krj_def->tgl->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
-ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl", 0);
+ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl", 5);
 </script>
 <?php } ?>
 </span>
@@ -4072,10 +4072,10 @@ ft_jdw_krj_deflist.CreateAutoSuggest({"id":"x<?php echo $t_jdw_krj_def_list->Row
 		<td data-name="tgl"<?php echo $t_jdw_krj_def->tgl->CellAttributes() ?>>
 <?php if ($t_jdw_krj_def->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $t_jdw_krj_def_list->RowCnt ?>_t_jdw_krj_def_tgl" class="form-group t_jdw_krj_def_tgl">
-<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" name="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" id="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
+<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" data-format="5" name="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" id="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
 <?php if (!$t_jdw_krj_def->tgl->ReadOnly && !$t_jdw_krj_def->tgl->Disabled && !isset($t_jdw_krj_def->tgl->EditAttrs["readonly"]) && !isset($t_jdw_krj_def->tgl->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
-ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl", 0);
+ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl", 5);
 </script>
 <?php } ?>
 </span>
@@ -4083,10 +4083,10 @@ ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowInd
 <?php } ?>
 <?php if ($t_jdw_krj_def->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $t_jdw_krj_def_list->RowCnt ?>_t_jdw_krj_def_tgl" class="form-group t_jdw_krj_def_tgl">
-<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" name="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" id="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
+<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" data-format="5" name="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" id="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
 <?php if (!$t_jdw_krj_def->tgl->ReadOnly && !$t_jdw_krj_def->tgl->Disabled && !isset($t_jdw_krj_def->tgl->EditAttrs["readonly"]) && !isset($t_jdw_krj_def->tgl->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
-ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl", 0);
+ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl", 5);
 </script>
 <?php } ?>
 </span>
@@ -4224,10 +4224,10 @@ ft_jdw_krj_deflist.CreateAutoSuggest({"id":"x<?php echo $t_jdw_krj_def_list->Row
 	<?php if ($t_jdw_krj_def->tgl->Visible) { // tgl ?>
 		<td data-name="tgl">
 <span id="el$rowindex$_t_jdw_krj_def_tgl" class="form-group t_jdw_krj_def_tgl">
-<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" name="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" id="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
+<input type="text" data-table="t_jdw_krj_def" data-field="x_tgl" data-format="5" name="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" id="x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_def->tgl->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_def->tgl->EditValue ?>"<?php echo $t_jdw_krj_def->tgl->EditAttributes() ?>>
 <?php if (!$t_jdw_krj_def->tgl->ReadOnly && !$t_jdw_krj_def->tgl->Disabled && !isset($t_jdw_krj_def->tgl->EditAttrs["readonly"]) && !isset($t_jdw_krj_def->tgl->EditAttrs["disabled"])) { ?>
 <script type="text/javascript">
-ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl", 0);
+ew_CreateCalendar("ft_jdw_krj_deflist", "x<?php echo $t_jdw_krj_def_list->RowIndex ?>_tgl", 5);
 </script>
 <?php } ?>
 </span>

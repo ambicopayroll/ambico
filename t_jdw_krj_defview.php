@@ -795,7 +795,7 @@ class ct_jdw_krj_def_view extends ct_jdw_krj_def {
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 5);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// jk_id
