@@ -10,7 +10,7 @@ elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") {
 }
 
 if ($_POST["radio_proses"]) {
-	$db->Execute("CALL p_gen_rekon ('".$_POST["start"]."', '".$_POST["end"]."')");
+	$conn->Execute("CALL p_gen_rekon ('".$_POST["start"]."', '".$_POST["end"]."')");
 }
 
 header("location: ./r_rekonctb.php?cmd=search&so_pegawai_id=%3D&sv_pegawai_id=&so_tgl=BETWEEN&sv_tgl=".$_POST["start"]."&sv2_tgl=".$_POST["end"]."");
