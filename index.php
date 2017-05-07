@@ -304,6 +304,8 @@ class cdefault {
 			$this->Page_Terminate("lap_gaji2_.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_pengecualian_peg'))
 			$this->Page_Terminate("t_pengecualian_peglist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_jns_pengecualian'))
+			$this->Page_Terminate("t_jns_pengecualianlist.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

@@ -1,22 +1,21 @@
 <?php
 
 // Global variable for table object
-$t_pengecualian_peg = NULL;
+$t_jns_pengecualian = NULL;
 
 //
-// Table class for t_pengecualian_peg
+// Table class for t_jns_pengecualian
 //
-class ct_pengecualian_peg extends cTable {
+class ct_jns_pengecualian extends cTable {
 	var $AuditTrailOnAdd = TRUE;
 	var $AuditTrailOnEdit = TRUE;
 	var $AuditTrailOnDelete = TRUE;
 	var $AuditTrailOnView = FALSE;
 	var $AuditTrailOnViewData = FALSE;
 	var $AuditTrailOnSearch = FALSE;
-	var $pengecualian_id;
-	var $pegawai_id;
-	var $tgl;
 	var $jns_id;
+	var $kode;
+	var $ket;
 
 	//
 	// Table class constructor
@@ -26,12 +25,12 @@ class ct_pengecualian_peg extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 't_pengecualian_peg';
-		$this->TableName = 't_pengecualian_peg';
+		$this->TableVar = 't_jns_pengecualian';
+		$this->TableName = 't_jns_pengecualian';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`t_pengecualian_peg`";
+		$this->UpdateTable = "`t_jns_pengecualian`";
 		$this->DBID = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -39,42 +38,30 @@ class ct_pengecualian_peg extends cTable {
 		$this->ExportPageSize = "a4"; // Page size (PDF only)
 		$this->ExportExcelPageOrientation = ""; // Page orientation (PHPExcel only)
 		$this->ExportExcelPageSize = ""; // Page size (PHPExcel only)
-		$this->DetailAdd = TRUE; // Allow detail add
-		$this->DetailEdit = TRUE; // Allow detail edit
-		$this->DetailView = TRUE; // Allow detail view
+		$this->DetailAdd = FALSE; // Allow detail add
+		$this->DetailEdit = FALSE; // Allow detail edit
+		$this->DetailView = FALSE; // Allow detail view
 		$this->ShowMultipleDetails = FALSE; // Show multiple details
 		$this->GridAddRowCount = 5;
 		$this->AllowAddDeleteRow = ew_AllowAddDeleteRow(); // Allow add/delete row
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
-		// pengecualian_id
-		$this->pengecualian_id = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_pengecualian_id', 'pengecualian_id', '`pengecualian_id`', '`pengecualian_id`', 3, -1, FALSE, '`pengecualian_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
-		$this->pengecualian_id->Sortable = TRUE; // Allow sort
-		$this->pengecualian_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['pengecualian_id'] = &$this->pengecualian_id;
-
-		// pegawai_id
-		$this->pegawai_id = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_pegawai_id', 'pegawai_id', '`pegawai_id`', '`pegawai_id`', 3, -1, FALSE, '`EV__pegawai_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
-		$this->pegawai_id->Sortable = TRUE; // Allow sort
-		$this->pegawai_id->UsePleaseSelect = TRUE; // Use PleaseSelect by default
-		$this->pegawai_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
-		$this->pegawai_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['pegawai_id'] = &$this->pegawai_id;
-
-		// tgl
-		$this->tgl = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, -1, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->tgl->Sortable = TRUE; // Allow sort
-		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
-		$this->fields['tgl'] = &$this->tgl;
-
 		// jns_id
-		$this->jns_id = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_jns_id', 'jns_id', '`jns_id`', '`jns_id`', 3, -1, FALSE, '`EV__jns_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
+		$this->jns_id = new cField('t_jns_pengecualian', 't_jns_pengecualian', 'x_jns_id', 'jns_id', '`jns_id`', '`jns_id`', 3, -1, FALSE, '`jns_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
 		$this->jns_id->Sortable = TRUE; // Allow sort
-		$this->jns_id->UsePleaseSelect = TRUE; // Use PleaseSelect by default
-		$this->jns_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
 		$this->jns_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['jns_id'] = &$this->jns_id;
+
+		// kode
+		$this->kode = new cField('t_jns_pengecualian', 't_jns_pengecualian', 'x_kode', 'kode', '`kode`', '`kode`', 200, -1, FALSE, '`kode`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->kode->Sortable = TRUE; // Allow sort
+		$this->fields['kode'] = &$this->kode;
+
+		// ket
+		$this->ket = new cField('t_jns_pengecualian', 't_jns_pengecualian', 'x_ket', 'ket', '`ket`', '`ket`', 200, -1, FALSE, '`ket`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->ket->Sortable = TRUE; // Allow sort
+		$this->fields['ket'] = &$this->ket;
 	}
 
 	// Set Field Visibility
@@ -106,85 +93,16 @@ class ct_pengecualian_peg extends cTable {
 			} else {
 				$this->setSessionOrderBy($sSortField . " " . $sThisSort); // Save to Session
 			}
-			$sSortFieldList = ($ofld->FldVirtualExpression <> "") ? $ofld->FldVirtualExpression : $sSortField;
-			if ($ctrl) {
-				$sOrderByList = $this->getSessionOrderByList();
-				if (strpos($sOrderByList, $sSortFieldList . " " . $sLastSort) !== FALSE) {
-					$sOrderByList = str_replace($sSortFieldList . " " . $sLastSort, $sSortFieldList . " " . $sThisSort, $sOrderByList);
-				} else {
-					if ($sOrderByList <> "") $sOrderByList .= ", ";
-					$sOrderByList .= $sSortFieldList . " " . $sThisSort;
-				}
-				$this->setSessionOrderByList($sOrderByList); // Save to Session
-			} else {
-				$this->setSessionOrderByList($sSortFieldList . " " . $sThisSort); // Save to Session
-			}
 		} else {
 			if (!$ctrl) $ofld->setSort("");
 		}
-	}
-
-	// Session ORDER BY for List page
-	function getSessionOrderByList() {
-		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST];
-	}
-
-	function setSessionOrderByList($v) {
-		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST] = $v;
-	}
-
-	// Current master table name
-	function getCurrentMasterTable() {
-		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_MASTER_TABLE];
-	}
-
-	function setCurrentMasterTable($v) {
-		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_MASTER_TABLE] = $v;
-	}
-
-	// Session master WHERE clause
-	function GetMasterFilter() {
-
-		// Master filter
-		$sMasterFilter = "";
-		if ($this->getCurrentMasterTable() == "pegawai") {
-			if ($this->pegawai_id->getSessionValue() <> "")
-				$sMasterFilter .= "`pegawai_id`=" . ew_QuotedValue($this->pegawai_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		return $sMasterFilter;
-	}
-
-	// Session detail WHERE clause
-	function GetDetailFilter() {
-
-		// Detail filter
-		$sDetailFilter = "";
-		if ($this->getCurrentMasterTable() == "pegawai") {
-			if ($this->pegawai_id->getSessionValue() <> "")
-				$sDetailFilter .= "`pegawai_id`=" . ew_QuotedValue($this->pegawai_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		return $sDetailFilter;
-	}
-
-	// Master filter
-	function SqlMasterFilter_pegawai() {
-		return "`pegawai_id`=@pegawai_id@";
-	}
-
-	// Detail filter
-	function SqlDetailFilter_pegawai() {
-		return "`pegawai_id`=@pegawai_id@";
 	}
 
 	// Table level SQL
 	var $_SqlFrom = "";
 
 	function getSqlFrom() { // From
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`t_pengecualian_peg`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`t_jns_pengecualian`";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -206,23 +124,6 @@ class ct_pengecualian_peg extends cTable {
 
 	function setSqlSelect($v) {
 		$this->_SqlSelect = $v;
-	}
-	var $_SqlSelectList = "";
-
-	function getSqlSelectList() { // Select for List page
-		$select = "";
-		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT `pegawai_nama` FROM `pegawai` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`pegawai_id` = `t_pengecualian_peg`.`pegawai_id` LIMIT 1) AS `EV__pegawai_id`, (SELECT `kode` FROM `t_jns_pengecualian` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`jns_id` = `t_pengecualian_peg`.`jns_id` LIMIT 1) AS `EV__jns_id` FROM `t_pengecualian_peg`" .
-			") `EW_TMP_TABLE`";
-		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
-	}
-
-	function SqlSelectList() { // For backward compatibility
-		return $this->getSqlSelectList();
-	}
-
-	function setSqlSelectList($v) {
-		$this->_SqlSelectList = $v;
 	}
 	var $_SqlWhere = "";
 
@@ -335,44 +236,15 @@ class ct_pengecualian_peg extends cTable {
 		ew_AddFilter($sFilter, $this->CurrentFilter);
 		$sFilter = $this->ApplyUserIDFilters($sFilter);
 		$this->Recordset_Selecting($sFilter);
-		if ($this->UseVirtualFields()) {
-			$sSort = $this->getSessionOrderByList();
-			return ew_BuildSelectSql($this->getSqlSelectList(), $this->getSqlWhere(), $this->getSqlGroupBy(),
-				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
-		} else {
-			$sSort = $this->getSessionOrderBy();
-			return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
-				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
-		}
+		$sSort = $this->getSessionOrderBy();
+		return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
+			$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
 	}
 
 	// Get ORDER BY clause
 	function GetOrderBy() {
-		$sSort = ($this->UseVirtualFields()) ? $this->getSessionOrderByList() : $this->getSessionOrderBy();
+		$sSort = $this->getSessionOrderBy();
 		return ew_BuildSelectSql("", "", "", "", $this->getSqlOrderBy(), "", $sSort);
-	}
-
-	// Check if virtual fields is used in SQL
-	function UseVirtualFields() {
-		$sWhere = $this->getSessionWhere();
-		$sOrderBy = $this->getSessionOrderByList();
-		if ($sWhere <> "")
-			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
-		if ($sOrderBy <> "")
-			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
-		if ($this->pegawai_id->AdvancedSearch->SearchValue <> "" ||
-			$this->pegawai_id->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->pegawai_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if (strpos($sOrderBy, " " . $this->pegawai_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if ($this->jns_id->AdvancedSearch->SearchValue <> "" ||
-			$this->jns_id->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->jns_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if (strpos($sOrderBy, " " . $this->jns_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		return FALSE;
 	}
 
 	// Try to get record count
@@ -453,8 +325,8 @@ class ct_pengecualian_peg extends cTable {
 		if ($bInsert) {
 
 			// Get insert id if necessary
-			$this->pengecualian_id->setDbValue($conn->Insert_ID());
-			$rs['pengecualian_id'] = $this->pengecualian_id->DbValue;
+			$this->jns_id->setDbValue($conn->Insert_ID());
+			$rs['jns_id'] = $this->jns_id->DbValue;
 			if ($this->AuditTrailOnAdd)
 				$this->WriteAuditTrailOnAdd($rs);
 		}
@@ -486,7 +358,7 @@ class ct_pengecualian_peg extends cTable {
 		$bUpdate = $conn->Execute($this->UpdateSQL($rs, $where, $curfilter));
 		if ($bUpdate && $this->AuditTrailOnEdit) {
 			$rsaudit = $rs;
-			$fldname = 'pengecualian_id';
+			$fldname = 'jns_id';
 			if (!array_key_exists($fldname, $rsaudit)) $rsaudit[$fldname] = $rsold[$fldname];
 			$this->WriteAuditTrailOnEdit($rsaudit, $rsold);
 		}
@@ -499,8 +371,8 @@ class ct_pengecualian_peg extends cTable {
 		if (is_array($where))
 			$where = $this->ArrayToFilter($where);
 		if ($rs) {
-			if (array_key_exists('pengecualian_id', $rs))
-				ew_AddFilter($where, ew_QuotedName('pengecualian_id', $this->DBID) . '=' . ew_QuotedValue($rs['pengecualian_id'], $this->pengecualian_id->FldDataType, $this->DBID));
+			if (array_key_exists('jns_id', $rs))
+				ew_AddFilter($where, ew_QuotedName('jns_id', $this->DBID) . '=' . ew_QuotedValue($rs['jns_id'], $this->jns_id->FldDataType, $this->DBID));
 		}
 		$filter = ($curfilter) ? $this->CurrentFilter : "";
 		ew_AddFilter($filter, $where);
@@ -522,15 +394,15 @@ class ct_pengecualian_peg extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "`pengecualian_id` = @pengecualian_id@";
+		return "`jns_id` = @jns_id@";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
-		if (!is_numeric($this->pengecualian_id->CurrentValue))
+		if (!is_numeric($this->jns_id->CurrentValue))
 			$sKeyFilter = "0=1"; // Invalid key
-		$sKeyFilter = str_replace("@pengecualian_id@", ew_AdjustSql($this->pengecualian_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
+		$sKeyFilter = str_replace("@jns_id@", ew_AdjustSql($this->jns_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -544,7 +416,7 @@ class ct_pengecualian_peg extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "t_pengecualian_peglist.php";
+			return "t_jns_pengecualianlist.php";
 		}
 	}
 
@@ -554,30 +426,30 @@ class ct_pengecualian_peg extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "t_pengecualian_peglist.php";
+		return "t_jns_pengecualianlist.php";
 	}
 
 	// View URL
 	function GetViewUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("t_pengecualian_pegview.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("t_jns_pengecualianview.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("t_pengecualian_pegview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("t_jns_pengecualianview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
 	// Add URL
 	function GetAddUrl($parm = "") {
 		if ($parm <> "")
-			$url = "t_pengecualian_pegadd.php?" . $this->UrlParm($parm);
+			$url = "t_jns_pengecualianadd.php?" . $this->UrlParm($parm);
 		else
-			$url = "t_pengecualian_pegadd.php";
+			$url = "t_jns_pengecualianadd.php";
 		return $this->AddMasterUrl($url);
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		$url = $this->KeyUrl("t_pengecualian_pegedit.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("t_jns_pengecualianedit.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -589,7 +461,7 @@ class ct_pengecualian_peg extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		$url = $this->KeyUrl("t_pengecualian_pegadd.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("t_jns_pengecualianadd.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -601,21 +473,17 @@ class ct_pengecualian_peg extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("t_pengecualian_pegdelete.php", $this->UrlParm());
+		return $this->KeyUrl("t_jns_pengecualiandelete.php", $this->UrlParm());
 	}
 
 	// Add master url
 	function AddMasterUrl($url) {
-		if ($this->getCurrentMasterTable() == "pegawai" && strpos($url, EW_TABLE_SHOW_MASTER . "=") === FALSE) {
-			$url .= (strpos($url, "?") !== FALSE ? "&" : "?") . EW_TABLE_SHOW_MASTER . "=" . $this->getCurrentMasterTable();
-			$url .= "&fk_pegawai_id=" . urlencode($this->pegawai_id->CurrentValue);
-		}
 		return $url;
 	}
 
 	function KeyToJson() {
 		$json = "";
-		$json .= "pengecualian_id:" . ew_VarToJson($this->pengecualian_id->CurrentValue, "number", "'");
+		$json .= "jns_id:" . ew_VarToJson($this->jns_id->CurrentValue, "number", "'");
 		return "{" . $json . "}";
 	}
 
@@ -623,8 +491,8 @@ class ct_pengecualian_peg extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
-		if (!is_null($this->pengecualian_id->CurrentValue)) {
-			$sUrl .= "pengecualian_id=" . urlencode($this->pengecualian_id->CurrentValue);
+		if (!is_null($this->jns_id->CurrentValue)) {
+			$sUrl .= "jns_id=" . urlencode($this->jns_id->CurrentValue);
 		} else {
 			return "javascript:ew_Alert(ewLanguage.Phrase('InvalidRecord'));";
 		}
@@ -657,10 +525,10 @@ class ct_pengecualian_peg extends cTable {
 			$cnt = count($arKeys);
 		} elseif (!empty($_GET) || !empty($_POST)) {
 			$isPost = ew_IsHttpPost();
-			if ($isPost && isset($_POST["pengecualian_id"]))
-				$arKeys[] = ew_StripSlashes($_POST["pengecualian_id"]);
-			elseif (isset($_GET["pengecualian_id"]))
-				$arKeys[] = ew_StripSlashes($_GET["pengecualian_id"]);
+			if ($isPost && isset($_POST["jns_id"]))
+				$arKeys[] = ew_StripSlashes($_POST["jns_id"]);
+			elseif (isset($_GET["jns_id"]))
+				$arKeys[] = ew_StripSlashes($_GET["jns_id"]);
 			else
 				$arKeys = NULL; // Do not setup
 
@@ -685,7 +553,7 @@ class ct_pengecualian_peg extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
-			$this->pengecualian_id->CurrentValue = $key;
+			$this->jns_id->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -706,10 +574,9 @@ class ct_pengecualian_peg extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
-		$this->pengecualian_id->setDbValue($rs->fields('pengecualian_id'));
-		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
-		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
+		$this->kode->setDbValue($rs->fields('kode'));
+		$this->ket->setDbValue($rs->fields('ket'));
 	}
 
 	// Render list row values
@@ -720,93 +587,36 @@ class ct_pengecualian_peg extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// pengecualian_id
-		// pegawai_id
-		// tgl
 		// jns_id
-		// pengecualian_id
-
-		$this->pengecualian_id->ViewValue = $this->pengecualian_id->CurrentValue;
-		$this->pengecualian_id->ViewCustomAttributes = "";
-
-		// pegawai_id
-		if ($this->pegawai_id->VirtualValue <> "") {
-			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
-		} else {
-		if (strval($this->pegawai_id->CurrentValue) <> "") {
-			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
-		$sWhereWrk = "";
-		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
-			}
-		} else {
-			$this->pegawai_id->ViewValue = NULL;
-		}
-		}
-		$this->pegawai_id->ViewCustomAttributes = "";
-
-		// tgl
-		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
-		$this->tgl->ViewCustomAttributes = "";
-
+		// kode
+		// ket
 		// jns_id
-		if ($this->jns_id->VirtualValue <> "") {
-			$this->jns_id->ViewValue = $this->jns_id->VirtualValue;
-		} else {
-		if (strval($this->jns_id->CurrentValue) <> "") {
-			$sFilterWrk = "`jns_id`" . ew_SearchString("=", $this->jns_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `jns_id`, `kode` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_jns_pengecualian`";
-		$sWhereWrk = "";
-		$this->jns_id->LookupFilters = array("dx1" => '`kode`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->jns_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->jns_id->ViewValue = $this->jns_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->jns_id->ViewValue = $this->jns_id->CurrentValue;
-			}
-		} else {
-			$this->jns_id->ViewValue = NULL;
-		}
-		}
+
+		$this->jns_id->ViewValue = $this->jns_id->CurrentValue;
 		$this->jns_id->ViewCustomAttributes = "";
 
-		// pengecualian_id
-		$this->pengecualian_id->LinkCustomAttributes = "";
-		$this->pengecualian_id->HrefValue = "";
-		$this->pengecualian_id->TooltipValue = "";
+		// kode
+		$this->kode->ViewValue = $this->kode->CurrentValue;
+		$this->kode->ViewCustomAttributes = "";
 
-		// pegawai_id
-		$this->pegawai_id->LinkCustomAttributes = "";
-		$this->pegawai_id->HrefValue = "";
-		$this->pegawai_id->TooltipValue = "";
-
-		// tgl
-		$this->tgl->LinkCustomAttributes = "";
-		$this->tgl->HrefValue = "";
-		$this->tgl->TooltipValue = "";
+		// ket
+		$this->ket->ViewValue = $this->ket->CurrentValue;
+		$this->ket->ViewCustomAttributes = "";
 
 		// jns_id
 		$this->jns_id->LinkCustomAttributes = "";
 		$this->jns_id->HrefValue = "";
 		$this->jns_id->TooltipValue = "";
+
+		// kode
+		$this->kode->LinkCustomAttributes = "";
+		$this->kode->HrefValue = "";
+		$this->kode->TooltipValue = "";
+
+		// ket
+		$this->ket->LinkCustomAttributes = "";
+		$this->ket->HrefValue = "";
+		$this->ket->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -819,54 +629,23 @@ class ct_pengecualian_peg extends cTable {
 		// Call Row Rendering event
 		$this->Row_Rendering();
 
-		// pengecualian_id
-		$this->pengecualian_id->EditAttrs["class"] = "form-control";
-		$this->pengecualian_id->EditCustomAttributes = "";
-		$this->pengecualian_id->EditValue = $this->pengecualian_id->CurrentValue;
-		$this->pengecualian_id->ViewCustomAttributes = "";
-
-		// pegawai_id
-		$this->pegawai_id->EditAttrs["class"] = "form-control";
-		$this->pegawai_id->EditCustomAttributes = "";
-		if ($this->pegawai_id->getSessionValue() <> "") {
-			$this->pegawai_id->CurrentValue = $this->pegawai_id->getSessionValue();
-		if ($this->pegawai_id->VirtualValue <> "") {
-			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
-		} else {
-		if (strval($this->pegawai_id->CurrentValue) <> "") {
-			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
-		$sWhereWrk = "";
-		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
-			}
-		} else {
-			$this->pegawai_id->ViewValue = NULL;
-		}
-		}
-		$this->pegawai_id->ViewCustomAttributes = "";
-		} else {
-		}
-
-		// tgl
-		$this->tgl->EditAttrs["class"] = "form-control";
-		$this->tgl->EditCustomAttributes = "";
-		$this->tgl->EditValue = $this->tgl->CurrentValue;
-		$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
-
 		// jns_id
 		$this->jns_id->EditAttrs["class"] = "form-control";
 		$this->jns_id->EditCustomAttributes = "";
+		$this->jns_id->EditValue = $this->jns_id->CurrentValue;
+		$this->jns_id->ViewCustomAttributes = "";
+
+		// kode
+		$this->kode->EditAttrs["class"] = "form-control";
+		$this->kode->EditCustomAttributes = "";
+		$this->kode->EditValue = $this->kode->CurrentValue;
+		$this->kode->PlaceHolder = ew_RemoveHtml($this->kode->FldCaption());
+
+		// ket
+		$this->ket->EditAttrs["class"] = "form-control";
+		$this->ket->EditCustomAttributes = "";
+		$this->ket->EditValue = $this->ket->CurrentValue;
+		$this->ket->PlaceHolder = ew_RemoveHtml($this->ket->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -895,14 +674,12 @@ class ct_pengecualian_peg extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
-					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
-					if ($this->jns_id->Exportable) $Doc->ExportCaption($this->jns_id);
+					if ($this->kode->Exportable) $Doc->ExportCaption($this->kode);
+					if ($this->ket->Exportable) $Doc->ExportCaption($this->ket);
 				} else {
-					if ($this->pengecualian_id->Exportable) $Doc->ExportCaption($this->pengecualian_id);
-					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
-					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->jns_id->Exportable) $Doc->ExportCaption($this->jns_id);
+					if ($this->kode->Exportable) $Doc->ExportCaption($this->kode);
+					if ($this->ket->Exportable) $Doc->ExportCaption($this->ket);
 				}
 				$Doc->EndExportRow();
 			}
@@ -934,14 +711,12 @@ class ct_pengecualian_peg extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
-						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
-						if ($this->jns_id->Exportable) $Doc->ExportField($this->jns_id);
+						if ($this->kode->Exportable) $Doc->ExportField($this->kode);
+						if ($this->ket->Exportable) $Doc->ExportField($this->ket);
 					} else {
-						if ($this->pengecualian_id->Exportable) $Doc->ExportField($this->pengecualian_id);
-						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
-						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->jns_id->Exportable) $Doc->ExportField($this->jns_id);
+						if ($this->kode->Exportable) $Doc->ExportField($this->kode);
+						if ($this->ket->Exportable) $Doc->ExportField($this->ket);
 					}
 					$Doc->EndExportRow();
 				}
@@ -985,7 +760,7 @@ class ct_pengecualian_peg extends cTable {
 
 	// Write Audit Trail start/end for grid update
 	function WriteAuditTrailDummy($typ) {
-		$table = 't_pengecualian_peg';
+		$table = 't_jns_pengecualian';
 		$usr = CurrentUserID();
 		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
@@ -994,12 +769,12 @@ class ct_pengecualian_peg extends cTable {
 	function WriteAuditTrailOnAdd(&$rs) {
 		global $Language;
 		if (!$this->AuditTrailOnAdd) return;
-		$table = 't_pengecualian_peg';
+		$table = 't_jns_pengecualian';
 
 		// Get key value
 		$key = "";
 		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['pengecualian_id'];
+		$key .= $rs['jns_id'];
 
 		// Write Audit Trail
 		$dt = ew_StdCurrentDateTime();
@@ -1028,12 +803,12 @@ class ct_pengecualian_peg extends cTable {
 	function WriteAuditTrailOnEdit(&$rsold, &$rsnew) {
 		global $Language;
 		if (!$this->AuditTrailOnEdit) return;
-		$table = 't_pengecualian_peg';
+		$table = 't_jns_pengecualian';
 
 		// Get key value
 		$key = "";
 		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rsold['pengecualian_id'];
+		$key .= $rsold['jns_id'];
 
 		// Write Audit Trail
 		$dt = ew_StdCurrentDateTime();
@@ -1075,13 +850,13 @@ class ct_pengecualian_peg extends cTable {
 	function WriteAuditTrailOnDelete(&$rs) {
 		global $Language;
 		if (!$this->AuditTrailOnDelete) return;
-		$table = 't_pengecualian_peg';
+		$table = 't_jns_pengecualian';
 
 		// Get key value
 		$key = "";
 		if ($key <> "")
 			$key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['pengecualian_id'];
+		$key .= $rs['jns_id'];
 
 		// Write Audit Trail
 		$dt = ew_StdCurrentDateTime();

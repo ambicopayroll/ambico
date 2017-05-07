@@ -5,8 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "t_pengecualian_peginfo.php" ?>
-<?php include_once "pegawaiinfo.php" ?>
+<?php include_once "t_jns_pengecualianinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -15,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$t_pengecualian_peg_delete = NULL; // Initialize page object first
+$t_jns_pengecualian_delete = NULL; // Initialize page object first
 
-class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
+class ct_jns_pengecualian_delete extends ct_jns_pengecualian {
 
 	// Page ID
 	var $PageID = 'delete';
@@ -26,10 +25,10 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 	var $ProjectID = "{9712DCF3-D9FD-406D-93E5-FEA5020667C8}";
 
 	// Table name
-	var $TableName = 't_pengecualian_peg';
+	var $TableName = 't_jns_pengecualian';
 
 	// Page object name
-	var $PageObjName = 't_pengecualian_peg_delete';
+	var $PageObjName = 't_jns_pengecualian_delete';
 
 	// Page name
 	function PageName() {
@@ -227,14 +226,11 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t_pengecualian_peg)
-		if (!isset($GLOBALS["t_pengecualian_peg"]) || get_class($GLOBALS["t_pengecualian_peg"]) == "ct_pengecualian_peg") {
-			$GLOBALS["t_pengecualian_peg"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t_pengecualian_peg"];
+		// Table object (t_jns_pengecualian)
+		if (!isset($GLOBALS["t_jns_pengecualian"]) || get_class($GLOBALS["t_jns_pengecualian"]) == "ct_jns_pengecualian") {
+			$GLOBALS["t_jns_pengecualian"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t_jns_pengecualian"];
 		}
-
-		// Table object (pegawai)
-		if (!isset($GLOBALS['pegawai'])) $GLOBALS['pegawai'] = new cpegawai();
 
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
@@ -245,7 +241,7 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 't_pengecualian_peg', TRUE);
+			define("EW_TABLE_NAME", 't_jns_pengecualian', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -276,7 +272,7 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("t_pengecualian_peglist.php"));
+				$this->Page_Terminate(ew_GetUrl("t_jns_pengecualianlist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -286,9 +282,8 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 			$Security->UserID_Loaded();
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->pegawai_id->SetVisibility();
-		$this->tgl->SetVisibility();
-		$this->jns_id->SetVisibility();
+		$this->kode->SetVisibility();
+		$this->ket->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -320,13 +315,13 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $t_pengecualian_peg;
+		global $EW_EXPORT, $t_jns_pengecualian;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($t_pengecualian_peg);
+				$doc = new $class($t_jns_pengecualian);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -365,9 +360,6 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 	function Page_Main() {
 		global $Language;
 
-		// Set up master/detail parameters
-		$this->SetUpMasterParms();
-
 		// Set up Breadcrumb
 		$this->SetupBreadcrumb();
 
@@ -375,10 +367,10 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		$this->RecKeys = $this->GetRecordKeys(); // Load record keys
 		$sFilter = $this->GetKeyFilter();
 		if ($sFilter == "")
-			$this->Page_Terminate("t_pengecualian_peglist.php"); // Prevent SQL injection, return to list
+			$this->Page_Terminate("t_jns_pengecualianlist.php"); // Prevent SQL injection, return to list
 
 		// Set up filter (SQL WHHERE clause) and get return SQL
-		// SQL constructor in t_pengecualian_peg class, t_pengecualian_peginfo.php
+		// SQL constructor in t_jns_pengecualian class, t_jns_pengecualianinfo.php
 
 		$this->CurrentFilter = $sFilter;
 
@@ -406,7 +398,7 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 			if ($this->TotalRecs <= 0) { // No record found, exit
 				if ($this->Recordset)
 					$this->Recordset->Close();
-				$this->Page_Terminate("t_pengecualian_peglist.php"); // Return to list
+				$this->Page_Terminate("t_jns_pengecualianlist.php"); // Return to list
 			}
 		}
 	}
@@ -423,7 +415,7 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -466,30 +458,18 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->pengecualian_id->setDbValue($rs->fields('pengecualian_id'));
-		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
-		if (array_key_exists('EV__pegawai_id', $rs->fields)) {
-			$this->pegawai_id->VirtualValue = $rs->fields('EV__pegawai_id'); // Set up virtual field value
-		} else {
-			$this->pegawai_id->VirtualValue = ""; // Clear value
-		}
-		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
-		if (array_key_exists('EV__jns_id', $rs->fields)) {
-			$this->jns_id->VirtualValue = $rs->fields('EV__jns_id'); // Set up virtual field value
-		} else {
-			$this->jns_id->VirtualValue = ""; // Clear value
-		}
+		$this->kode->setDbValue($rs->fields('kode'));
+		$this->ket->setDbValue($rs->fields('ket'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->pengecualian_id->DbValue = $row['pengecualian_id'];
-		$this->pegawai_id->DbValue = $row['pegawai_id'];
-		$this->tgl->DbValue = $row['tgl'];
 		$this->jns_id->DbValue = $row['jns_id'];
+		$this->kode->DbValue = $row['kode'];
+		$this->ket->DbValue = $row['ket'];
 	}
 
 	// Render row values based on field settings
@@ -502,90 +482,33 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// pengecualian_id
-		// pegawai_id
-		// tgl
 		// jns_id
+		// kode
+		// ket
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// pengecualian_id
-		$this->pengecualian_id->ViewValue = $this->pengecualian_id->CurrentValue;
-		$this->pengecualian_id->ViewCustomAttributes = "";
-
-		// pegawai_id
-		if ($this->pegawai_id->VirtualValue <> "") {
-			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
-		} else {
-		if (strval($this->pegawai_id->CurrentValue) <> "") {
-			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
-		$sWhereWrk = "";
-		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
-			}
-		} else {
-			$this->pegawai_id->ViewValue = NULL;
-		}
-		}
-		$this->pegawai_id->ViewCustomAttributes = "";
-
-		// tgl
-		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
-		$this->tgl->ViewCustomAttributes = "";
-
 		// jns_id
-		if ($this->jns_id->VirtualValue <> "") {
-			$this->jns_id->ViewValue = $this->jns_id->VirtualValue;
-		} else {
-		if (strval($this->jns_id->CurrentValue) <> "") {
-			$sFilterWrk = "`jns_id`" . ew_SearchString("=", $this->jns_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `jns_id`, `kode` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_jns_pengecualian`";
-		$sWhereWrk = "";
-		$this->jns_id->LookupFilters = array("dx1" => '`kode`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->jns_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->jns_id->ViewValue = $this->jns_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->jns_id->ViewValue = $this->jns_id->CurrentValue;
-			}
-		} else {
-			$this->jns_id->ViewValue = NULL;
-		}
-		}
+		$this->jns_id->ViewValue = $this->jns_id->CurrentValue;
 		$this->jns_id->ViewCustomAttributes = "";
 
-			// pegawai_id
-			$this->pegawai_id->LinkCustomAttributes = "";
-			$this->pegawai_id->HrefValue = "";
-			$this->pegawai_id->TooltipValue = "";
+		// kode
+		$this->kode->ViewValue = $this->kode->CurrentValue;
+		$this->kode->ViewCustomAttributes = "";
 
-			// tgl
-			$this->tgl->LinkCustomAttributes = "";
-			$this->tgl->HrefValue = "";
-			$this->tgl->TooltipValue = "";
+		// ket
+		$this->ket->ViewValue = $this->ket->CurrentValue;
+		$this->ket->ViewCustomAttributes = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
-			$this->jns_id->TooltipValue = "";
+			// kode
+			$this->kode->LinkCustomAttributes = "";
+			$this->kode->HrefValue = "";
+			$this->kode->TooltipValue = "";
+
+			// ket
+			$this->ket->LinkCustomAttributes = "";
+			$this->ket->HrefValue = "";
+			$this->ket->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -640,7 +563,7 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 			foreach ($rsold as $row) {
 				$sThisKey = "";
 				if ($sThisKey <> "") $sThisKey .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-				$sThisKey .= $row['pengecualian_id'];
+				$sThisKey .= $row['jns_id'];
 				$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 				$DeleteRows = $this->Delete($row); // Delete
 				$conn->raiseErrorFn = '';
@@ -679,72 +602,12 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		return $DeleteRows;
 	}
 
-	// Set up master/detail based on QueryString
-	function SetUpMasterParms() {
-		$bValidMaster = FALSE;
-
-		// Get the keys for master table
-		if (isset($_GET[EW_TABLE_SHOW_MASTER])) {
-			$sMasterTblVar = $_GET[EW_TABLE_SHOW_MASTER];
-			if ($sMasterTblVar == "") {
-				$bValidMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($sMasterTblVar == "pegawai") {
-				$bValidMaster = TRUE;
-				if (@$_GET["fk_pegawai_id"] <> "") {
-					$GLOBALS["pegawai"]->pegawai_id->setQueryStringValue($_GET["fk_pegawai_id"]);
-					$this->pegawai_id->setQueryStringValue($GLOBALS["pegawai"]->pegawai_id->QueryStringValue);
-					$this->pegawai_id->setSessionValue($this->pegawai_id->QueryStringValue);
-					if (!is_numeric($GLOBALS["pegawai"]->pegawai_id->QueryStringValue)) $bValidMaster = FALSE;
-				} else {
-					$bValidMaster = FALSE;
-				}
-			}
-		} elseif (isset($_POST[EW_TABLE_SHOW_MASTER])) {
-			$sMasterTblVar = $_POST[EW_TABLE_SHOW_MASTER];
-			if ($sMasterTblVar == "") {
-				$bValidMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($sMasterTblVar == "pegawai") {
-				$bValidMaster = TRUE;
-				if (@$_POST["fk_pegawai_id"] <> "") {
-					$GLOBALS["pegawai"]->pegawai_id->setFormValue($_POST["fk_pegawai_id"]);
-					$this->pegawai_id->setFormValue($GLOBALS["pegawai"]->pegawai_id->FormValue);
-					$this->pegawai_id->setSessionValue($this->pegawai_id->FormValue);
-					if (!is_numeric($GLOBALS["pegawai"]->pegawai_id->FormValue)) $bValidMaster = FALSE;
-				} else {
-					$bValidMaster = FALSE;
-				}
-			}
-		}
-		if ($bValidMaster) {
-
-			// Save current master table
-			$this->setCurrentMasterTable($sMasterTblVar);
-
-			// Reset start record counter (new master key)
-			$this->StartRec = 1;
-			$this->setStartRecordNumber($this->StartRec);
-
-			// Clear previous master key from Session
-			if ($sMasterTblVar <> "pegawai") {
-				if ($this->pegawai_id->CurrentValue == "") $this->pegawai_id->setSessionValue("");
-			}
-		}
-		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
-		$this->DbDetailFilter = $this->GetDetailFilter(); // Get detail filter
-	}
-
 	// Set up Breadcrumb
 	function SetupBreadcrumb() {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("t_pengecualian_peglist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("t_jns_pengecualianlist.php"), "", $this->TableVar, TRUE);
 		$PageId = "delete";
 		$Breadcrumb->Add("delete", $PageId, $url);
 	}
@@ -830,29 +693,29 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 <?php
 
 // Create page object
-if (!isset($t_pengecualian_peg_delete)) $t_pengecualian_peg_delete = new ct_pengecualian_peg_delete();
+if (!isset($t_jns_pengecualian_delete)) $t_jns_pengecualian_delete = new ct_jns_pengecualian_delete();
 
 // Page init
-$t_pengecualian_peg_delete->Page_Init();
+$t_jns_pengecualian_delete->Page_Init();
 
 // Page main
-$t_pengecualian_peg_delete->Page_Main();
+$t_jns_pengecualian_delete->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$t_pengecualian_peg_delete->Page_Render();
+$t_jns_pengecualian_delete->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "delete";
-var CurrentForm = ft_pengecualian_pegdelete = new ew_Form("ft_pengecualian_pegdelete", "delete");
+var CurrentForm = ft_jns_pengecualiandelete = new ew_Form("ft_jns_pengecualiandelete", "delete");
 
 // Form_CustomValidate event
-ft_pengecualian_pegdelete.Form_CustomValidate = 
+ft_jns_pengecualiandelete.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -861,16 +724,14 @@ ft_pengecualian_pegdelete.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ft_pengecualian_pegdelete.ValidateRequired = true;
+ft_jns_pengecualiandelete.ValidateRequired = true;
 <?php } else { ?>
-ft_pengecualian_pegdelete.ValidateRequired = false; 
+ft_jns_pengecualiandelete.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ft_pengecualian_pegdelete.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
-ft_pengecualian_pegdelete.Lists["x_jns_id"] = {"LinkField":"x_jns_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_kode","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_jns_pengecualian"};
-
 // Form object for search
+
 </script>
 <script type="text/javascript">
 
@@ -881,85 +742,74 @@ ft_pengecualian_pegdelete.Lists["x_jns_id"] = {"LinkField":"x_jns_id","Ajax":tru
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
-<?php $t_pengecualian_peg_delete->ShowPageHeader(); ?>
+<?php $t_jns_pengecualian_delete->ShowPageHeader(); ?>
 <?php
-$t_pengecualian_peg_delete->ShowMessage();
+$t_jns_pengecualian_delete->ShowMessage();
 ?>
-<form name="ft_pengecualian_pegdelete" id="ft_pengecualian_pegdelete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($t_pengecualian_peg_delete->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_pengecualian_peg_delete->Token ?>">
+<form name="ft_jns_pengecualiandelete" id="ft_jns_pengecualiandelete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($t_jns_pengecualian_delete->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_jns_pengecualian_delete->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="t_pengecualian_peg">
+<input type="hidden" name="t" value="t_jns_pengecualian">
 <input type="hidden" name="a_delete" id="a_delete" value="D">
-<?php foreach ($t_pengecualian_peg_delete->RecKeys as $key) { ?>
+<?php foreach ($t_jns_pengecualian_delete->RecKeys as $key) { ?>
 <?php $keyvalue = is_array($key) ? implode($EW_COMPOSITE_KEY_SEPARATOR, $key) : $key; ?>
 <input type="hidden" name="key_m[]" value="<?php echo ew_HtmlEncode($keyvalue) ?>">
 <?php } ?>
 <div class="ewGrid">
 <div class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <table class="table ewTable">
-<?php echo $t_pengecualian_peg->TableCustomInnerHtml ?>
+<?php echo $t_jns_pengecualian->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($t_pengecualian_peg->pegawai_id->Visible) { // pegawai_id ?>
-		<th><span id="elh_t_pengecualian_peg_pegawai_id" class="t_pengecualian_peg_pegawai_id"><?php echo $t_pengecualian_peg->pegawai_id->FldCaption() ?></span></th>
+<?php if ($t_jns_pengecualian->kode->Visible) { // kode ?>
+		<th><span id="elh_t_jns_pengecualian_kode" class="t_jns_pengecualian_kode"><?php echo $t_jns_pengecualian->kode->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
-		<th><span id="elh_t_pengecualian_peg_tgl" class="t_pengecualian_peg_tgl"><?php echo $t_pengecualian_peg->tgl->FldCaption() ?></span></th>
-<?php } ?>
-<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-		<th><span id="elh_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></span></th>
+<?php if ($t_jns_pengecualian->ket->Visible) { // ket ?>
+		<th><span id="elh_t_jns_pengecualian_ket" class="t_jns_pengecualian_ket"><?php echo $t_jns_pengecualian->ket->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
 	<tbody>
 <?php
-$t_pengecualian_peg_delete->RecCnt = 0;
+$t_jns_pengecualian_delete->RecCnt = 0;
 $i = 0;
-while (!$t_pengecualian_peg_delete->Recordset->EOF) {
-	$t_pengecualian_peg_delete->RecCnt++;
-	$t_pengecualian_peg_delete->RowCnt++;
+while (!$t_jns_pengecualian_delete->Recordset->EOF) {
+	$t_jns_pengecualian_delete->RecCnt++;
+	$t_jns_pengecualian_delete->RowCnt++;
 
 	// Set row properties
-	$t_pengecualian_peg->ResetAttrs();
-	$t_pengecualian_peg->RowType = EW_ROWTYPE_VIEW; // View
+	$t_jns_pengecualian->ResetAttrs();
+	$t_jns_pengecualian->RowType = EW_ROWTYPE_VIEW; // View
 
 	// Get the field contents
-	$t_pengecualian_peg_delete->LoadRowValues($t_pengecualian_peg_delete->Recordset);
+	$t_jns_pengecualian_delete->LoadRowValues($t_jns_pengecualian_delete->Recordset);
 
 	// Render row
-	$t_pengecualian_peg_delete->RenderRow();
+	$t_jns_pengecualian_delete->RenderRow();
 ?>
-	<tr<?php echo $t_pengecualian_peg->RowAttributes() ?>>
-<?php if ($t_pengecualian_peg->pegawai_id->Visible) { // pegawai_id ?>
-		<td<?php echo $t_pengecualian_peg->pegawai_id->CellAttributes() ?>>
-<span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_pegawai_id" class="t_pengecualian_peg_pegawai_id">
-<span<?php echo $t_pengecualian_peg->pegawai_id->ViewAttributes() ?>>
-<?php echo $t_pengecualian_peg->pegawai_id->ListViewValue() ?></span>
+	<tr<?php echo $t_jns_pengecualian->RowAttributes() ?>>
+<?php if ($t_jns_pengecualian->kode->Visible) { // kode ?>
+		<td<?php echo $t_jns_pengecualian->kode->CellAttributes() ?>>
+<span id="el<?php echo $t_jns_pengecualian_delete->RowCnt ?>_t_jns_pengecualian_kode" class="t_jns_pengecualian_kode">
+<span<?php echo $t_jns_pengecualian->kode->ViewAttributes() ?>>
+<?php echo $t_jns_pengecualian->kode->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
-		<td<?php echo $t_pengecualian_peg->tgl->CellAttributes() ?>>
-<span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_tgl" class="t_pengecualian_peg_tgl">
-<span<?php echo $t_pengecualian_peg->tgl->ViewAttributes() ?>>
-<?php echo $t_pengecualian_peg->tgl->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-		<td<?php echo $t_pengecualian_peg->jns_id->CellAttributes() ?>>
-<span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id">
-<span<?php echo $t_pengecualian_peg->jns_id->ViewAttributes() ?>>
-<?php echo $t_pengecualian_peg->jns_id->ListViewValue() ?></span>
+<?php if ($t_jns_pengecualian->ket->Visible) { // ket ?>
+		<td<?php echo $t_jns_pengecualian->ket->CellAttributes() ?>>
+<span id="el<?php echo $t_jns_pengecualian_delete->RowCnt ?>_t_jns_pengecualian_ket" class="t_jns_pengecualian_ket">
+<span<?php echo $t_jns_pengecualian->ket->ViewAttributes() ?>>
+<?php echo $t_jns_pengecualian->ket->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
 	</tr>
 <?php
-	$t_pengecualian_peg_delete->Recordset->MoveNext();
+	$t_jns_pengecualian_delete->Recordset->MoveNext();
 }
-$t_pengecualian_peg_delete->Recordset->Close();
+$t_jns_pengecualian_delete->Recordset->Close();
 ?>
 </tbody>
 </table>
@@ -967,14 +817,14 @@ $t_pengecualian_peg_delete->Recordset->Close();
 </div>
 <div>
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("DeleteBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $t_pengecualian_peg_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $t_jns_pengecualian_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 </div>
 </form>
 <script type="text/javascript">
-ft_pengecualian_pegdelete.Init();
+ft_jns_pengecualiandelete.Init();
 </script>
 <?php
-$t_pengecualian_peg_delete->ShowPageFooter();
+$t_jns_pengecualian_delete->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -986,5 +836,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$t_pengecualian_peg_delete->Page_Terminate();
+$t_jns_pengecualian_delete->Page_Terminate();
 ?>

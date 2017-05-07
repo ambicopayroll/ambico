@@ -619,6 +619,9 @@
     <menu id="41">
       <phrase id="menutext" value="Jadwal Kerja (Perincian)" />
     </menu>
+    <menu id="10231">
+      <phrase id="menutext" value="Jenis Pengecualian" />
+    </menu>
     <menu id="10230">
       <phrase id="menutext" value="Pengecualian" />
     </menu>
@@ -2941,12 +2944,24 @@
       <field id="tgl">
         <phrase id="fldcaption" value="Tgl." />
       </field>
-      <field id="tipe">
-        <phrase id="fldcaption" value="Tipe" />
+      <field id="jns_id">
+        <phrase id="fldcaption" value="Jenis" />
         <phrase id="fldtagvalue1" value="1" />
         <phrase id="fldtagcaption1" value="S1" />
         <phrase id="fldtagvalue2" value="2" />
         <phrase id="fldtagcaption2" value="P4" />
+      </field>
+    </table>
+    <table id="t_jns_pengecualian">
+      <phrase id="tblcaption" value="Jenis Pengecualian" />
+      <field id="jns_id">
+        <phrase id="fldcaption" value="ID" />
+      </field>
+      <field id="kode">
+        <phrase id="fldcaption" value="Kode" />
+      </field>
+      <field id="ket">
+        <phrase id="fldcaption" value="Keterangan" />
       </field>
     </table>
   </project>
