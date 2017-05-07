@@ -595,8 +595,11 @@
     <menu id="32">
       <phrase id="menutext" value="Jabatan" />
     </menu>
-    <menu id="33">
+    <menu id="44">
       <phrase id="menutext" value="Bagian" />
+    </menu>
+    <menu id="33">
+      <phrase id="menutext" value="Divisi" />
     </menu>
     <menu id="34">
       <phrase id="menutext" value="Status Pegawai" />
@@ -609,9 +612,6 @@
     </menu>
     <menu id="46">
       <phrase id="menutext" value="Gol. Gaji Harian" />
-    </menu>
-    <menu id="44">
-      <phrase id="menutext" value="Bagian" />
     </menu>
     <menu id="30">
       <phrase id="menutext" value="Pegawai" />
@@ -1777,7 +1777,7 @@
         <phrase id="fldcaption" value="Jabatan" />
       </field>
       <field id="pembagian2_id">
-        <phrase id="fldcaption" value="Bagian" />
+        <phrase id="fldcaption" value="Divisi" />
       </field>
       <field id="pembagian3_id">
         <phrase id="fldcaption" value="Status Peg." />
@@ -1856,7 +1856,7 @@
       </field>
     </table>
     <table id="pembagian2">
-      <phrase id="tblcaption" value="Bagian" />
+      <phrase id="tblcaption" value="Divisi" />
       <field id="pembagian2_id">
         <phrase id="fldcaption" value="ID" />
       </field>
@@ -2916,6 +2916,9 @@
       </field>
       <field id="pembagian2_nama">
         <phrase id="fldcaption" value="pembagian 2 nama" />
+      </field>
+      <field id="pembagian2_id">
+        <phrase id="fldcaption" value="pembagian 2 id" />
       </field>
     </table>
     <table id="gen_jdw_krj__php">

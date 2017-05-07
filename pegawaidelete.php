@@ -287,7 +287,6 @@ class cpegawai_delete extends cpegawai {
 		$this->pegawai_nama->SetVisibility();
 		$this->pembagian1_id->SetVisibility();
 		$this->pembagian2_id->SetVisibility();
-		$this->pembagian3_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -637,33 +636,6 @@ class cpegawai_delete extends cpegawai {
 		}
 		$this->pembagian2_id->ViewCustomAttributes = "";
 
-		// pembagian3_id
-		if ($this->pembagian3_id->VirtualValue <> "") {
-			$this->pembagian3_id->ViewValue = $this->pembagian3_id->VirtualValue;
-		} else {
-		if (strval($this->pembagian3_id->CurrentValue) <> "") {
-			$sFilterWrk = "`pembagian3_id`" . ew_SearchString("=", $this->pembagian3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `pembagian3_id`, `pembagian3_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pembagian3`";
-		$sWhereWrk = "";
-		$this->pembagian3_id->LookupFilters = array("dx1" => '`pembagian3_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->pembagian3_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->pembagian3_id->ViewValue = $this->pembagian3_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->pembagian3_id->ViewValue = $this->pembagian3_id->CurrentValue;
-			}
-		} else {
-			$this->pembagian3_id->ViewValue = NULL;
-		}
-		}
-		$this->pembagian3_id->ViewCustomAttributes = "";
-
 			// pegawai_pin
 			$this->pegawai_pin->LinkCustomAttributes = "";
 			$this->pegawai_pin->HrefValue = "";
@@ -688,11 +660,6 @@ class cpegawai_delete extends cpegawai {
 			$this->pembagian2_id->LinkCustomAttributes = "";
 			$this->pembagian2_id->HrefValue = "";
 			$this->pembagian2_id->TooltipValue = "";
-
-			// pembagian3_id
-			$this->pembagian3_id->LinkCustomAttributes = "";
-			$this->pembagian3_id->HrefValue = "";
-			$this->pembagian3_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -916,7 +883,6 @@ fpegawaidelete.ValidateRequired = false;
 // Dynamic selection lists
 fpegawaidelete.Lists["x_pembagian1_id"] = {"LinkField":"x_pembagian1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pembagian1_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pembagian1"};
 fpegawaidelete.Lists["x_pembagian2_id"] = {"LinkField":"x_pembagian2_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pembagian2_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pembagian2"};
-fpegawaidelete.Lists["x_pembagian3_id"] = {"LinkField":"x_pembagian3_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pembagian3_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pembagian3"};
 
 // Form object for search
 </script>
@@ -963,9 +929,6 @@ $pegawai_delete->ShowMessage();
 <?php } ?>
 <?php if ($pegawai->pembagian2_id->Visible) { // pembagian2_id ?>
 		<th><span id="elh_pegawai_pembagian2_id" class="pegawai_pembagian2_id"><?php echo $pegawai->pembagian2_id->FldCaption() ?></span></th>
-<?php } ?>
-<?php if ($pegawai->pembagian3_id->Visible) { // pembagian3_id ?>
-		<th><span id="elh_pegawai_pembagian3_id" class="pegawai_pembagian3_id"><?php echo $pegawai->pembagian3_id->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -1025,14 +988,6 @@ while (!$pegawai_delete->Recordset->EOF) {
 <span id="el<?php echo $pegawai_delete->RowCnt ?>_pegawai_pembagian2_id" class="pegawai_pembagian2_id">
 <span<?php echo $pegawai->pembagian2_id->ViewAttributes() ?>>
 <?php echo $pegawai->pembagian2_id->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($pegawai->pembagian3_id->Visible) { // pembagian3_id ?>
-		<td<?php echo $pegawai->pembagian3_id->CellAttributes() ?>>
-<span id="el<?php echo $pegawai_delete->RowCnt ?>_pegawai_pembagian3_id" class="pegawai_pembagian3_id">
-<span<?php echo $pegawai->pembagian3_id->ViewAttributes() ?>>
-<?php echo $pegawai->pembagian3_id->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

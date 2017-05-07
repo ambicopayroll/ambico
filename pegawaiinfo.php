@@ -143,7 +143,7 @@ class cpegawai extends cTable {
 
 		// pembagian3_id
 		$this->pembagian3_id = new cField('pegawai', 'pegawai', 'x_pembagian3_id', 'pembagian3_id', '`pembagian3_id`', '`pembagian3_id`', 3, -1, FALSE, '`EV__pembagian3_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
-		$this->pembagian3_id->Sortable = TRUE; // Allow sort
+		$this->pembagian3_id->Sortable = FALSE; // Allow sort
 		$this->pembagian3_id->UsePleaseSelect = TRUE; // Use PleaseSelect by default
 		$this->pembagian3_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
 		$this->pembagian3_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
@@ -1341,7 +1341,6 @@ class cpegawai extends cTable {
 					if ($this->pegawai_nama->Exportable) $Doc->ExportCaption($this->pegawai_nama);
 					if ($this->pembagian1_id->Exportable) $Doc->ExportCaption($this->pembagian1_id);
 					if ($this->pembagian2_id->Exportable) $Doc->ExportCaption($this->pembagian2_id);
-					if ($this->pembagian3_id->Exportable) $Doc->ExportCaption($this->pembagian3_id);
 				}
 				$Doc->EndExportRow();
 			}
@@ -1386,7 +1385,6 @@ class cpegawai extends cTable {
 						if ($this->pegawai_nama->Exportable) $Doc->ExportField($this->pegawai_nama);
 						if ($this->pembagian1_id->Exportable) $Doc->ExportField($this->pembagian1_id);
 						if ($this->pembagian2_id->Exportable) $Doc->ExportField($this->pembagian2_id);
-						if ($this->pembagian3_id->Exportable) $Doc->ExportField($this->pembagian3_id);
 					}
 					$Doc->EndExportRow();
 				}

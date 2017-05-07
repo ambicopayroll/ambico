@@ -5,7 +5,6 @@
 // pegawai_nama
 // pembagian1_id
 // pembagian2_id
-// pembagian3_id
 
 ?>
 <?php if ($pegawai->Visible) { ?>
@@ -64,17 +63,6 @@
 <span id="el_pegawai_pembagian2_id">
 <span<?php echo $pegawai->pembagian2_id->ViewAttributes() ?>>
 <?php echo $pegawai->pembagian2_id->ListViewValue() ?></span>
-</span>
-</td>
-		</tr>
-<?php } ?>
-<?php if ($pegawai->pembagian3_id->Visible) { // pembagian3_id ?>
-		<tr id="r_pembagian3_id">
-			<td><?php echo $pegawai->pembagian3_id->FldCaption() ?></td>
-			<td<?php echo $pegawai->pembagian3_id->CellAttributes() ?>>
-<span id="el_pegawai_pembagian3_id">
-<span<?php echo $pegawai->pembagian3_id->ViewAttributes() ?>>
-<?php echo $pegawai->pembagian3_id->ListViewValue() ?></span>
 </span>
 </td>
 		</tr>

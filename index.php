@@ -274,8 +274,6 @@ class cdefault {
 			$this->Page_Terminate("pembagian1list.php");
 		if ($Security->AllowList(CurrentProjectID() . 'pembagian2'))
 			$this->Page_Terminate("pembagian2list.php");
-		if ($Security->AllowList(CurrentProjectID() . 'pembagian3'))
-			$this->Page_Terminate("pembagian3list.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_jdw_krj_def'))
 			$this->Page_Terminate("t_jdw_krj_deflist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_jdw_krj_peg'))
