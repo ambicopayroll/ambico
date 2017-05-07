@@ -1,6 +1,13 @@
-<?php include_once "phpfn13.php" ?>
 <?php
-$conn =& DbHelper(); 
+if ($_SERVER["HTTP_HOST"] == "localhost" or $_SERVER["HTTP_HOST"] == "36.80.56.64") {
+	include_once "phpfn13.php";
+	$conn =& DbHelper();
+}
+elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") {
+	include "adodb5/adodb.inc.php";
+	$conn = ADONewConnection('mysql');
+	$conn->Connect('mysql.idhostinger.com','u945388674_ambi2','M457r1P 81','u945388674_ambi2');
+}
 //============================================================+
 // File name   : example_002.php
 // Begin       : 2008-03-04
@@ -70,17 +77,6 @@ if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
 //$pdf->AddPage("L", "A4");
 $pdf->AddPage();
 $pdf->SetFont('times', '', 10);
-
-/*include "adodb5/adodb.inc.php";
-
-$conn = ADONewConnection('mysql');
-//$conn->Connect('localhost','root','admin','fin_pro');
-
-if ($_SERVER["HTTP_HOST"] == "localhost" ) { // testing on local PC
-	$conn->Connect('localhost','root','admin','fin_pro');
-} elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") { // setting koneksi database untuk komputer server
-	$conn->Connect('mysql.idhostinger.com','u945388674_ambi2','M457r1P 81','u945388674_ambi2');
-}*/
 
 $html  = '<table border="0" width="300">';
 $html .= '<tr><td>DAFTAR UPAH HARIAN LEPAS</td></tr>';

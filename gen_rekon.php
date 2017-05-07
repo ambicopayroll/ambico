@@ -1,14 +1,15 @@
-<?php include_once "phpfn13.php" ?>
 <?php
-//include "conn.php";
-$db =& DbHelper(); 
-
-//mysql_connect($hostname_conn, $username_conn, $password_conn) or die ("Tidak bisa terkoneksi ke Database server");
-//mysql_select_db($database_conn) or die ("Database tidak ditemukan");
+if ($_SERVER["HTTP_HOST"] == "localhost" or $_SERVER["HTTP_HOST"] == "36.80.56.64") {
+	include_once "phpfn13.php";
+	$conn =& DbHelper();
+}
+elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") {
+	include "adodb5/adodb.inc.php";
+	$conn = ADONewConnection('mysql');
+	$conn->Connect('mysql.idhostinger.com','u945388674_ambi2','M457r1P 81','u945388674_ambi2');
+}
 
 if ($_POST["radio_proses"]) {
-	//$msql = "call p_gen_rekon ('".$_POST["start"]."', '".$_POST["end"]."')"; //echo $msql; exit;
-	//mysql_query($msql);
 	$db->Execute("CALL p_gen_rekon ('".$_POST["start"]."', '".$_POST["end"]."')");
 }
 

@@ -8,9 +8,6 @@ elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") {
 	$conn = ADONewConnection('mysql');
 	$conn->Connect('mysql.idhostinger.com','u945388674_ambi2','M457r1P 81','u945388674_ambi2');
 }
-?>
-
-<?php
 
 $rs = $conn->Execute('select * from t_jdw_krj_peg order by pegawai_id, tgl1');
 //$msql = 'select * from t_jdw_krj_peg order by pegawai_id, tgl1'; echo $msql; exit;
