@@ -733,6 +733,26 @@ class ct_rumus_peg_add extends ct_rumus_peg {
 	// Add record
 	function AddRow($rsold = NULL) {
 		global $Language, $Security;
+
+		// Check referential integrity for master table 'pegawai'
+		$bValidMasterRecord = TRUE;
+		$sMasterFilter = $this->SqlMasterFilter_pegawai();
+		if (strval($this->pegawai_id->CurrentValue) <> "") {
+			$sMasterFilter = str_replace("@pegawai_id@", ew_AdjustSql($this->pegawai_id->CurrentValue, "DB"), $sMasterFilter);
+		} else {
+			$bValidMasterRecord = FALSE;
+		}
+		if ($bValidMasterRecord) {
+			if (!isset($GLOBALS["pegawai"])) $GLOBALS["pegawai"] = new cpegawai();
+			$rsmaster = $GLOBALS["pegawai"]->LoadRs($sMasterFilter);
+			$bValidMasterRecord = ($rsmaster && !$rsmaster->EOF);
+			$rsmaster->Close();
+		}
+		if (!$bValidMasterRecord) {
+			$sRelatedRecordMsg = str_replace("%t", "pegawai", $Language->Phrase("RelatedRecordRequired"));
+			$this->setFailureMessage($sRelatedRecordMsg);
+			return FALSE;
+		}
 		$conn = &$this->Connection();
 
 		// Load db values from rsold

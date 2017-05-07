@@ -2930,7 +2930,7 @@
     <table id="lap_gaji2__php">
       <phrase id="tblcaption" value="Gaji (Bulanan)" />
     </table>
-    <table id="t_pengecualian">
+    <table id="t_pengecualian_peg">
       <phrase id="tblcaption" value="Pengecualian" />
       <field id="pengecualian_id">
         <phrase id="fldcaption" value="ID" />

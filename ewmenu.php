@@ -14,7 +14,7 @@ $RootMenu->AddMenuItem(47, "mi_t_rumus2", $Language->MenuPhrase("47", "MenuText"
 $RootMenu->AddMenuItem(46, "mi_t_rumus", $Language->MenuPhrase("46", "MenuText"), "t_rumuslist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_rumus'), FALSE, FALSE);
 $RootMenu->AddMenuItem(30, "mi_pegawai", $Language->MenuPhrase("30", "MenuText"), "pegawailist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}pegawai'), FALSE, FALSE);
 $RootMenu->AddMenuItem(41, "mi_t_jdw_krj_def", $Language->MenuPhrase("41", "MenuText"), "t_jdw_krj_deflist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_jdw_krj_def'), FALSE, FALSE);
-$RootMenu->AddMenuItem(10230, "mi_t_pengecualian", $Language->MenuPhrase("10230", "MenuText"), "t_pengecualianlist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_pengecualian'), FALSE, FALSE);
+$RootMenu->AddMenuItem(10230, "mi_t_pengecualian_peg", $Language->MenuPhrase("10230", "MenuText"), "t_pengecualian_peglist.php?cmd=resetall", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_pengecualian_peg'), FALSE, FALSE);
 $RootMenu->AddMenuItem(50, "mi_t_user", $Language->MenuPhrase("50", "MenuText"), "t_userlist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_user'), FALSE, FALSE);
 $RootMenu->AddMenuItem(10224, "mci_Proses", $Language->MenuPhrase("10224", "MenuText"), "", -1, "", TRUE, FALSE, TRUE);
 $RootMenu->AddMenuItem(10227, "mi_gen_jdw_krj__php", $Language->MenuPhrase("10227", "MenuText"), "gen_jdw_krj_.php", 10224, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}gen_jdw_krj_.php'), FALSE, TRUE);

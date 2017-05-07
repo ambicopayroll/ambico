@@ -5,7 +5,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "t_jdw_krj_peginfo.php" ?>
+<?php include_once "t_pengecualian_peginfo.php" ?>
 <?php include_once "pegawaiinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
@@ -15,9 +15,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$t_jdw_krj_peg_edit = NULL; // Initialize page object first
+$t_pengecualian_peg_edit = NULL; // Initialize page object first
 
-class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
+class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 
 	// Page ID
 	var $PageID = 'edit';
@@ -26,10 +26,10 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 	var $ProjectID = "{9712DCF3-D9FD-406D-93E5-FEA5020667C8}";
 
 	// Table name
-	var $TableName = 't_jdw_krj_peg';
+	var $TableName = 't_pengecualian_peg';
 
 	// Page object name
-	var $PageObjName = 't_jdw_krj_peg_edit';
+	var $PageObjName = 't_pengecualian_peg_edit';
 
 	// Page name
 	function PageName() {
@@ -227,10 +227,10 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t_jdw_krj_peg)
-		if (!isset($GLOBALS["t_jdw_krj_peg"]) || get_class($GLOBALS["t_jdw_krj_peg"]) == "ct_jdw_krj_peg") {
-			$GLOBALS["t_jdw_krj_peg"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t_jdw_krj_peg"];
+		// Table object (t_pengecualian_peg)
+		if (!isset($GLOBALS["t_pengecualian_peg"]) || get_class($GLOBALS["t_pengecualian_peg"]) == "ct_pengecualian_peg") {
+			$GLOBALS["t_pengecualian_peg"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t_pengecualian_peg"];
 		}
 
 		// Table object (pegawai)
@@ -245,7 +245,7 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 't_jdw_krj_peg', TRUE);
+			define("EW_TABLE_NAME", 't_pengecualian_peg', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -276,7 +276,7 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("t_jdw_krj_peglist.php"));
+				$this->Page_Terminate(ew_GetUrl("t_pengecualian_peglist.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -290,10 +290,8 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->pegawai_id->SetVisibility();
-		$this->tgl1->SetVisibility();
-		$this->tgl2->SetVisibility();
-		$this->jk_id->SetVisibility();
-		$this->hk->SetVisibility();
+		$this->tgl->SetVisibility();
+		$this->tipe->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -339,13 +337,13 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $t_jdw_krj_peg;
+		global $EW_EXPORT, $t_pengecualian_peg;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($t_jdw_krj_peg);
+				$doc = new $class($t_pengecualian_peg);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -408,9 +406,9 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		$bMatchRecord = FALSE;
 
 		// Load key from QueryString
-		if (@$_GET["jdw_id"] <> "") {
-			$this->jdw_id->setQueryStringValue($_GET["jdw_id"]);
-			$this->RecKey["jdw_id"] = $this->jdw_id->QueryStringValue;
+		if (@$_GET["pengecualian_id"] <> "") {
+			$this->pengecualian_id->setQueryStringValue($_GET["pengecualian_id"]);
+			$this->RecKey["pengecualian_id"] = $this->pengecualian_id->QueryStringValue;
 		} else {
 			$bLoadCurrentRecord = TRUE;
 		}
@@ -425,7 +423,7 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		if ($this->TotalRecs <= 0) { // No record found
 			if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 				$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record message
-			$this->Page_Terminate("t_jdw_krj_peglist.php"); // Return to list page
+			$this->Page_Terminate("t_pengecualian_peglist.php"); // Return to list page
 		} elseif ($bLoadCurrentRecord) { // Load current record position
 			$this->SetUpStartRec(); // Set up start record position
 
@@ -436,7 +434,7 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 			}
 		} else { // Match key values
 			while (!$this->Recordset->EOF) {
-				if (strval($this->jdw_id->CurrentValue) == strval($this->Recordset->fields('jdw_id'))) {
+				if (strval($this->pengecualian_id->CurrentValue) == strval($this->Recordset->fields('pengecualian_id'))) {
 					$this->setStartRecordNumber($this->StartRec); // Save record position
 					$bMatchRecord = TRUE;
 					break;
@@ -469,14 +467,14 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 				if (!$bMatchRecord) {
 					if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 						$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record message
-					$this->Page_Terminate("t_jdw_krj_peglist.php"); // Return to list page
+					$this->Page_Terminate("t_pengecualian_peglist.php"); // Return to list page
 				} else {
 					$this->LoadRowValues($this->Recordset); // Load row values
 				}
 				break;
 			Case "U": // Update
 				$sReturnUrl = $this->getReturnUrl();
-				if (ew_GetPageName($sReturnUrl) == "t_jdw_krj_peglist.php")
+				if (ew_GetPageName($sReturnUrl) == "t_pengecualian_peglist.php")
 					$sReturnUrl = $this->AddMasterUrl($sReturnUrl); // List page, return to list page with correct master key if necessary
 				$this->SendEmail = TRUE; // Send email on update success
 				if ($this->EditRow()) { // Update record based on key
@@ -551,36 +549,26 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		if (!$this->pegawai_id->FldIsDetailKey) {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
-		if (!$this->tgl1->FldIsDetailKey) {
-			$this->tgl1->setFormValue($objForm->GetValue("x_tgl1"));
-			$this->tgl1->CurrentValue = ew_UnFormatDateTime($this->tgl1->CurrentValue, 0);
+		if (!$this->tgl->FldIsDetailKey) {
+			$this->tgl->setFormValue($objForm->GetValue("x_tgl"));
+			$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
 		}
-		if (!$this->tgl2->FldIsDetailKey) {
-			$this->tgl2->setFormValue($objForm->GetValue("x_tgl2"));
-			$this->tgl2->CurrentValue = ew_UnFormatDateTime($this->tgl2->CurrentValue, 0);
+		if (!$this->tipe->FldIsDetailKey) {
+			$this->tipe->setFormValue($objForm->GetValue("x_tipe"));
 		}
-		if (!$this->jk_id->FldIsDetailKey) {
-			$this->jk_id->setFormValue($objForm->GetValue("x_jk_id"));
-		}
-		if (!$this->hk->FldIsDetailKey) {
-			$this->hk->setFormValue($objForm->GetValue("x_hk"));
-		}
-		if (!$this->jdw_id->FldIsDetailKey)
-			$this->jdw_id->setFormValue($objForm->GetValue("x_jdw_id"));
+		if (!$this->pengecualian_id->FldIsDetailKey)
+			$this->pengecualian_id->setFormValue($objForm->GetValue("x_pengecualian_id"));
 	}
 
 	// Restore form values
 	function RestoreFormValues() {
 		global $objForm;
 		$this->LoadRow();
-		$this->jdw_id->CurrentValue = $this->jdw_id->FormValue;
+		$this->pengecualian_id->CurrentValue = $this->pengecualian_id->FormValue;
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
-		$this->tgl1->CurrentValue = $this->tgl1->FormValue;
-		$this->tgl1->CurrentValue = ew_UnFormatDateTime($this->tgl1->CurrentValue, 0);
-		$this->tgl2->CurrentValue = $this->tgl2->FormValue;
-		$this->tgl2->CurrentValue = ew_UnFormatDateTime($this->tgl2->CurrentValue, 0);
-		$this->jk_id->CurrentValue = $this->jk_id->FormValue;
-		$this->hk->CurrentValue = $this->hk->FormValue;
+		$this->tgl->CurrentValue = $this->tgl->FormValue;
+		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
+		$this->tipe->CurrentValue = $this->tipe->FormValue;
 	}
 
 	// Load recordset
@@ -638,29 +626,25 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->jdw_id->setDbValue($rs->fields('jdw_id'));
+		$this->pengecualian_id->setDbValue($rs->fields('pengecualian_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
-		$this->tgl1->setDbValue($rs->fields('tgl1'));
-		$this->tgl2->setDbValue($rs->fields('tgl2'));
-		$this->jk_id->setDbValue($rs->fields('jk_id'));
-		if (array_key_exists('EV__jk_id', $rs->fields)) {
-			$this->jk_id->VirtualValue = $rs->fields('EV__jk_id'); // Set up virtual field value
+		if (array_key_exists('EV__pegawai_id', $rs->fields)) {
+			$this->pegawai_id->VirtualValue = $rs->fields('EV__pegawai_id'); // Set up virtual field value
 		} else {
-			$this->jk_id->VirtualValue = ""; // Clear value
+			$this->pegawai_id->VirtualValue = ""; // Clear value
 		}
-		$this->hk->setDbValue($rs->fields('hk'));
+		$this->tgl->setDbValue($rs->fields('tgl'));
+		$this->tipe->setDbValue($rs->fields('tipe'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->jdw_id->DbValue = $row['jdw_id'];
+		$this->pengecualian_id->DbValue = $row['pengecualian_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
-		$this->tgl1->DbValue = $row['tgl1'];
-		$this->tgl2->DbValue = $row['tgl2'];
-		$this->jk_id->DbValue = $row['jk_id'];
-		$this->hk->DbValue = $row['hk'];
+		$this->tgl->DbValue = $row['tgl'];
+		$this->tipe->DbValue = $row['tipe'];
 	}
 
 	// Render row values based on field settings
@@ -673,146 +657,136 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// jdw_id
+		// pengecualian_id
 		// pegawai_id
-		// tgl1
-		// tgl2
-		// jk_id
-		// hk
+		// tgl
+		// tipe
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// jdw_id
-		$this->jdw_id->ViewValue = $this->jdw_id->CurrentValue;
-		$this->jdw_id->ViewCustomAttributes = "";
+		// pengecualian_id
+		$this->pengecualian_id->ViewValue = $this->pengecualian_id->CurrentValue;
+		$this->pengecualian_id->ViewCustomAttributes = "";
 
 		// pegawai_id
-		$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
-		$this->pegawai_id->ViewCustomAttributes = "";
-
-		// tgl1
-		$this->tgl1->ViewValue = $this->tgl1->CurrentValue;
-		$this->tgl1->ViewValue = ew_FormatDateTime($this->tgl1->ViewValue, 0);
-		$this->tgl1->ViewCustomAttributes = "";
-
-		// tgl2
-		$this->tgl2->ViewValue = $this->tgl2->CurrentValue;
-		$this->tgl2->ViewValue = ew_FormatDateTime($this->tgl2->ViewValue, 0);
-		$this->tgl2->ViewCustomAttributes = "";
-
-		// jk_id
-		if ($this->jk_id->VirtualValue <> "") {
-			$this->jk_id->ViewValue = $this->jk_id->VirtualValue;
+		if ($this->pegawai_id->VirtualValue <> "") {
+			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
 		} else {
-		if (strval($this->jk_id->CurrentValue) <> "") {
-			$sFilterWrk = "`jk_id`" . ew_SearchString("=", $this->jk_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `jk_id`, `jk_nm` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_jk`";
+		if (strval($this->pegawai_id->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
 		$sWhereWrk = "";
-		$this->jk_id->LookupFilters = array("dx1" => '`jk_nm`');
+		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->jk_id, $sWhereWrk); // Call Lookup selecting
+		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
 			$rswrk = Conn()->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->jk_id->ViewValue = $this->jk_id->DisplayValue($arwrk);
+				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
-				$this->jk_id->ViewValue = $this->jk_id->CurrentValue;
+				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
 			}
 		} else {
-			$this->jk_id->ViewValue = NULL;
+			$this->pegawai_id->ViewValue = NULL;
 		}
 		}
-		$this->jk_id->ViewCustomAttributes = "";
+		$this->pegawai_id->ViewCustomAttributes = "";
 
-		// hk
-		if (strval($this->hk->CurrentValue) <> "") {
-			$this->hk->ViewValue = $this->hk->OptionCaption($this->hk->CurrentValue);
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewCustomAttributes = "";
+
+		// tipe
+		if (strval($this->tipe->CurrentValue) <> "") {
+			$this->tipe->ViewValue = $this->tipe->OptionCaption($this->tipe->CurrentValue);
 		} else {
-			$this->hk->ViewValue = NULL;
+			$this->tipe->ViewValue = NULL;
 		}
-		$this->hk->ViewCustomAttributes = "";
+		$this->tipe->ViewCustomAttributes = "";
 
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
 
-			// tgl1
-			$this->tgl1->LinkCustomAttributes = "";
-			$this->tgl1->HrefValue = "";
-			$this->tgl1->TooltipValue = "";
+			// tgl
+			$this->tgl->LinkCustomAttributes = "";
+			$this->tgl->HrefValue = "";
+			$this->tgl->TooltipValue = "";
 
-			// tgl2
-			$this->tgl2->LinkCustomAttributes = "";
-			$this->tgl2->HrefValue = "";
-			$this->tgl2->TooltipValue = "";
-
-			// jk_id
-			$this->jk_id->LinkCustomAttributes = "";
-			$this->jk_id->HrefValue = "";
-			$this->jk_id->TooltipValue = "";
-
-			// hk
-			$this->hk->LinkCustomAttributes = "";
-			$this->hk->HrefValue = "";
-			$this->hk->TooltipValue = "";
+			// tipe
+			$this->tipe->LinkCustomAttributes = "";
+			$this->tipe->HrefValue = "";
+			$this->tipe->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// pegawai_id
-			$this->pegawai_id->EditAttrs["class"] = "form-control";
 			$this->pegawai_id->EditCustomAttributes = "";
 			if ($this->pegawai_id->getSessionValue() <> "") {
 				$this->pegawai_id->CurrentValue = $this->pegawai_id->getSessionValue();
-			$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+			if ($this->pegawai_id->VirtualValue <> "") {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+			} else {
+			if (strval($this->pegawai_id->CurrentValue) <> "") {
+				$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+			$sWhereWrk = "";
+			$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = $rswrk->fields('DispFld');
+					$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+				}
+			} else {
+				$this->pegawai_id->ViewValue = NULL;
+			}
+			}
 			$this->pegawai_id->ViewCustomAttributes = "";
 			} else {
-			$this->pegawai_id->EditValue = ew_HtmlEncode($this->pegawai_id->CurrentValue);
-			$this->pegawai_id->PlaceHolder = ew_RemoveHtml($this->pegawai_id->FldCaption());
-			}
-
-			// tgl1
-			$this->tgl1->EditAttrs["class"] = "form-control";
-			$this->tgl1->EditCustomAttributes = "";
-			$this->tgl1->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->tgl1->CurrentValue, 8));
-			$this->tgl1->PlaceHolder = ew_RemoveHtml($this->tgl1->FldCaption());
-
-			// tgl2
-			$this->tgl2->EditAttrs["class"] = "form-control";
-			$this->tgl2->EditCustomAttributes = "";
-			$this->tgl2->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->tgl2->CurrentValue, 8));
-			$this->tgl2->PlaceHolder = ew_RemoveHtml($this->tgl2->FldCaption());
-
-			// jk_id
-			$this->jk_id->EditCustomAttributes = "";
-			if (trim(strval($this->jk_id->CurrentValue)) == "") {
+			if (trim(strval($this->pegawai_id->CurrentValue)) == "") {
 				$sFilterWrk = "0=1";
 			} else {
-				$sFilterWrk = "`jk_id`" . ew_SearchString("=", $this->jk_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+				$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
 			}
-			$sSqlWrk = "SELECT `jk_id`, `jk_nm` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `t_jk`";
+			$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `pegawai`";
 			$sWhereWrk = "";
-			$this->jk_id->LookupFilters = array("dx1" => '`jk_nm`');
+			$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
 			ew_AddFilter($sWhereWrk, $sFilterWrk);
-			$this->Lookup_Selecting($this->jk_id, $sWhereWrk); // Call Lookup selecting
+			$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
 			$rswrk = Conn()->Execute($sSqlWrk);
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
-				$this->jk_id->ViewValue = $this->jk_id->DisplayValue($arwrk);
+				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
 			} else {
-				$this->jk_id->ViewValue = $Language->Phrase("PleaseSelect");
+				$this->pegawai_id->ViewValue = $Language->Phrase("PleaseSelect");
 			}
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
-			$this->jk_id->EditValue = $arwrk;
+			$this->pegawai_id->EditValue = $arwrk;
+			}
 
-			// hk
-			$this->hk->EditCustomAttributes = "";
-			$this->hk->EditValue = $this->hk->Options(FALSE);
+			// tgl
+			$this->tgl->EditAttrs["class"] = "form-control";
+			$this->tgl->EditCustomAttributes = "";
+			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
+			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
+
+			// tipe
+			$this->tipe->EditCustomAttributes = "";
+			$this->tipe->EditValue = $this->tipe->Options(FALSE);
 
 			// Edit refer script
 			// pegawai_id
@@ -820,21 +794,13 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
-			// tgl1
-			$this->tgl1->LinkCustomAttributes = "";
-			$this->tgl1->HrefValue = "";
+			// tgl
+			$this->tgl->LinkCustomAttributes = "";
+			$this->tgl->HrefValue = "";
 
-			// tgl2
-			$this->tgl2->LinkCustomAttributes = "";
-			$this->tgl2->HrefValue = "";
-
-			// jk_id
-			$this->jk_id->LinkCustomAttributes = "";
-			$this->jk_id->HrefValue = "";
-
-			// hk
-			$this->hk->LinkCustomAttributes = "";
-			$this->hk->HrefValue = "";
+			// tipe
+			$this->tipe->LinkCustomAttributes = "";
+			$this->tipe->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -860,26 +826,14 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
 		}
-		if (!ew_CheckInteger($this->pegawai_id->FormValue)) {
-			ew_AddMessage($gsFormError, $this->pegawai_id->FldErrMsg());
+		if (!$this->tgl->FldIsDetailKey && !is_null($this->tgl->FormValue) && $this->tgl->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl->FldCaption(), $this->tgl->ReqErrMsg));
 		}
-		if (!$this->tgl1->FldIsDetailKey && !is_null($this->tgl1->FormValue) && $this->tgl1->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl1->FldCaption(), $this->tgl1->ReqErrMsg));
+		if (!ew_CheckDateDef($this->tgl->FormValue)) {
+			ew_AddMessage($gsFormError, $this->tgl->FldErrMsg());
 		}
-		if (!ew_CheckDateDef($this->tgl1->FormValue)) {
-			ew_AddMessage($gsFormError, $this->tgl1->FldErrMsg());
-		}
-		if (!$this->tgl2->FldIsDetailKey && !is_null($this->tgl2->FormValue) && $this->tgl2->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl2->FldCaption(), $this->tgl2->ReqErrMsg));
-		}
-		if (!ew_CheckDateDef($this->tgl2->FormValue)) {
-			ew_AddMessage($gsFormError, $this->tgl2->FldErrMsg());
-		}
-		if (!$this->jk_id->FldIsDetailKey && !is_null($this->jk_id->FormValue) && $this->jk_id->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->jk_id->FldCaption(), $this->jk_id->ReqErrMsg));
-		}
-		if ($this->hk->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->hk->FldCaption(), $this->hk->ReqErrMsg));
+		if ($this->tipe->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->tipe->FldCaption(), $this->tipe->ReqErrMsg));
 		}
 
 		// Return validate result
@@ -920,39 +874,11 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 			// pegawai_id
 			$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, $this->pegawai_id->ReadOnly);
 
-			// tgl1
-			$this->tgl1->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->tgl1->CurrentValue, 0), ew_CurrentDate(), $this->tgl1->ReadOnly);
+			// tgl
+			$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), $this->tgl->ReadOnly);
 
-			// tgl2
-			$this->tgl2->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->tgl2->CurrentValue, 0), NULL, $this->tgl2->ReadOnly);
-
-			// jk_id
-			$this->jk_id->SetDbValueDef($rsnew, $this->jk_id->CurrentValue, 0, $this->jk_id->ReadOnly);
-
-			// hk
-			$this->hk->SetDbValueDef($rsnew, $this->hk->CurrentValue, 0, $this->hk->ReadOnly);
-
-			// Check referential integrity for master table 'pegawai'
-			$bValidMasterRecord = TRUE;
-			$sMasterFilter = $this->SqlMasterFilter_pegawai();
-			$KeyValue = isset($rsnew['pegawai_id']) ? $rsnew['pegawai_id'] : $rsold['pegawai_id'];
-			if (strval($KeyValue) <> "") {
-				$sMasterFilter = str_replace("@pegawai_id@", ew_AdjustSql($KeyValue), $sMasterFilter);
-			} else {
-				$bValidMasterRecord = FALSE;
-			}
-			if ($bValidMasterRecord) {
-				if (!isset($GLOBALS["pegawai"])) $GLOBALS["pegawai"] = new cpegawai();
-				$rsmaster = $GLOBALS["pegawai"]->LoadRs($sMasterFilter);
-				$bValidMasterRecord = ($rsmaster && !$rsmaster->EOF);
-				$rsmaster->Close();
-			}
-			if (!$bValidMasterRecord) {
-				$sRelatedRecordMsg = str_replace("%t", "pegawai", $Language->Phrase("RelatedRecordRequired"));
-				$this->setFailureMessage($sRelatedRecordMsg);
-				$rs->Close();
-				return FALSE;
-			}
+			// tipe
+			$this->tipe->SetDbValueDef($rsnew, $this->tipe->CurrentValue, 0, $this->tipe->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -1052,7 +978,7 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("t_jdw_krj_peglist.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("t_pengecualian_peglist.php"), "", $this->TableVar, TRUE);
 		$PageId = "edit";
 		$Breadcrumb->Add("edit", $PageId, $url);
 	}
@@ -1062,14 +988,14 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
-		case "x_jk_id":
+		case "x_pegawai_id":
 			$sSqlWrk = "";
-			$sSqlWrk = "SELECT `jk_id` AS `LinkFld`, `jk_nm` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_jk`";
+			$sSqlWrk = "SELECT `pegawai_id` AS `LinkFld`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
 			$sWhereWrk = "{filter}";
-			$this->jk_id->LookupFilters = array("dx1" => '`jk_nm`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`jk_id` = {filter_value}', "t0" => "3", "fn0" => "");
+			$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`pegawai_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
-			$this->Lookup_Selecting($this->jk_id, $sWhereWrk); // Call Lookup selecting
+			$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
 			if ($sSqlWrk <> "")
 				$fld->LookupFilters["s"] .= $sSqlWrk;
@@ -1157,29 +1083,29 @@ class ct_jdw_krj_peg_edit extends ct_jdw_krj_peg {
 <?php
 
 // Create page object
-if (!isset($t_jdw_krj_peg_edit)) $t_jdw_krj_peg_edit = new ct_jdw_krj_peg_edit();
+if (!isset($t_pengecualian_peg_edit)) $t_pengecualian_peg_edit = new ct_pengecualian_peg_edit();
 
 // Page init
-$t_jdw_krj_peg_edit->Page_Init();
+$t_pengecualian_peg_edit->Page_Init();
 
 // Page main
-$t_jdw_krj_peg_edit->Page_Main();
+$t_pengecualian_peg_edit->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$t_jdw_krj_peg_edit->Page_Render();
+$t_pengecualian_peg_edit->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "edit";
-var CurrentForm = ft_jdw_krj_pegedit = new ew_Form("ft_jdw_krj_pegedit", "edit");
+var CurrentForm = ft_pengecualian_pegedit = new ew_Form("ft_pengecualian_pegedit", "edit");
 
 // Validate form
-ft_jdw_krj_pegedit.Validate = function() {
+ft_pengecualian_pegedit.Validate = function() {
 	if (!this.ValidateRequired)
 		return true; // Ignore validation
 	var $ = jQuery, fobj = this.GetForm(), $fobj = $(fobj);
@@ -1195,28 +1121,16 @@ ft_jdw_krj_pegedit.Validate = function() {
 		$fobj.data("rowindex", infix);
 			elm = this.GetElements("x" + infix + "_pegawai_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_jdw_krj_peg->pegawai_id->FldCaption(), $t_jdw_krj_peg->pegawai_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_pegawai_id");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_peg->pegawai_id->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_tgl1");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->pegawai_id->FldCaption(), $t_pengecualian_peg->pegawai_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_tgl");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_jdw_krj_peg->tgl1->FldCaption(), $t_jdw_krj_peg->tgl1->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_tgl1");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->tgl->FldCaption(), $t_pengecualian_peg->tgl->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_tgl");
 			if (elm && !ew_CheckDateDef(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_peg->tgl1->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_tgl2");
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_pengecualian_peg->tgl->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_tipe");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_jdw_krj_peg->tgl2->FldCaption(), $t_jdw_krj_peg->tgl2->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_tgl2");
-			if (elm && !ew_CheckDateDef(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_jdw_krj_peg->tgl2->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_jk_id");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_jdw_krj_peg->jk_id->FldCaption(), $t_jdw_krj_peg->jk_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_hk");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_jdw_krj_peg->hk->FldCaption(), $t_jdw_krj_peg->hk->ReqErrMsg)) ?>");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->tipe->FldCaption(), $t_pengecualian_peg->tipe->ReqErrMsg)) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -1235,7 +1149,7 @@ ft_jdw_krj_pegedit.Validate = function() {
 }
 
 // Form_CustomValidate event
-ft_jdw_krj_pegedit.Form_CustomValidate = 
+ft_pengecualian_pegedit.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -1244,15 +1158,15 @@ ft_jdw_krj_pegedit.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ft_jdw_krj_pegedit.ValidateRequired = true;
+ft_pengecualian_pegedit.ValidateRequired = true;
 <?php } else { ?>
-ft_jdw_krj_pegedit.ValidateRequired = false; 
+ft_pengecualian_pegedit.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ft_jdw_krj_pegedit.Lists["x_jk_id"] = {"LinkField":"x_jk_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_jk_nm","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_jk"};
-ft_jdw_krj_pegedit.Lists["x_hk"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
-ft_jdw_krj_pegedit.Lists["x_hk"].Options = <?php echo json_encode($t_jdw_krj_peg->hk->Options()) ?>;
+ft_pengecualian_pegedit.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
+ft_pengecualian_pegedit.Lists["x_tipe"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ft_pengecualian_pegedit.Lists["x_tipe"].Options = <?php echo json_encode($t_pengecualian_peg->tipe->Options()) ?>;
 
 // Form object for search
 </script>
@@ -1260,209 +1174,184 @@ ft_jdw_krj_pegedit.Lists["x_hk"].Options = <?php echo json_encode($t_jdw_krj_peg
 
 // Write your client script here, no need to add script tags.
 </script>
-<?php if (!$t_jdw_krj_peg_edit->IsModal) { ?>
+<?php if (!$t_pengecualian_peg_edit->IsModal) { ?>
 <div class="ewToolbar">
 <?php $Breadcrumb->Render(); ?>
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php $t_jdw_krj_peg_edit->ShowPageHeader(); ?>
+<?php $t_pengecualian_peg_edit->ShowPageHeader(); ?>
 <?php
-$t_jdw_krj_peg_edit->ShowMessage();
+$t_pengecualian_peg_edit->ShowMessage();
 ?>
-<?php if (!$t_jdw_krj_peg_edit->IsModal) { ?>
+<?php if (!$t_pengecualian_peg_edit->IsModal) { ?>
 <form name="ewPagerForm" class="form-horizontal ewForm ewPagerForm" action="<?php echo ew_CurrentPage() ?>">
-<?php if (!isset($t_jdw_krj_peg_edit->Pager)) $t_jdw_krj_peg_edit->Pager = new cPrevNextPager($t_jdw_krj_peg_edit->StartRec, $t_jdw_krj_peg_edit->DisplayRecs, $t_jdw_krj_peg_edit->TotalRecs) ?>
-<?php if ($t_jdw_krj_peg_edit->Pager->RecordCount > 0 && $t_jdw_krj_peg_edit->Pager->Visible) { ?>
+<?php if (!isset($t_pengecualian_peg_edit->Pager)) $t_pengecualian_peg_edit->Pager = new cPrevNextPager($t_pengecualian_peg_edit->StartRec, $t_pengecualian_peg_edit->DisplayRecs, $t_pengecualian_peg_edit->TotalRecs) ?>
+<?php if ($t_pengecualian_peg_edit->Pager->RecordCount > 0 && $t_pengecualian_peg_edit->Pager->Visible) { ?>
 <div class="ewPager">
 <span><?php echo $Language->Phrase("Page") ?>&nbsp;</span>
 <div class="ewPrevNext"><div class="input-group">
 <div class="input-group-btn">
 <!--first page button-->
-	<?php if ($t_jdw_krj_peg_edit->Pager->FirstButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_jdw_krj_peg_edit->PageUrl() ?>start=<?php echo $t_jdw_krj_peg_edit->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
+	<?php if ($t_pengecualian_peg_edit->Pager->FirstButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_pengecualian_peg_edit->PageUrl() ?>start=<?php echo $t_pengecualian_peg_edit->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerFirst") ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } ?>
 <!--previous page button-->
-	<?php if ($t_jdw_krj_peg_edit->Pager->PrevButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_jdw_krj_peg_edit->PageUrl() ?>start=<?php echo $t_jdw_krj_peg_edit->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
+	<?php if ($t_pengecualian_peg_edit->Pager->PrevButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_pengecualian_peg_edit->PageUrl() ?>start=<?php echo $t_pengecualian_peg_edit->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerPrevious") ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } ?>
 </div>
 <!--current page number-->
-	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_jdw_krj_peg_edit->Pager->CurrentPage ?>">
+	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_pengecualian_peg_edit->Pager->CurrentPage ?>">
 <div class="input-group-btn">
 <!--next page button-->
-	<?php if ($t_jdw_krj_peg_edit->Pager->NextButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_jdw_krj_peg_edit->PageUrl() ?>start=<?php echo $t_jdw_krj_peg_edit->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
+	<?php if ($t_pengecualian_peg_edit->Pager->NextButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_pengecualian_peg_edit->PageUrl() ?>start=<?php echo $t_pengecualian_peg_edit->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerNext") ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } ?>
 <!--last page button-->
-	<?php if ($t_jdw_krj_peg_edit->Pager->LastButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_jdw_krj_peg_edit->PageUrl() ?>start=<?php echo $t_jdw_krj_peg_edit->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
+	<?php if ($t_pengecualian_peg_edit->Pager->LastButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_pengecualian_peg_edit->PageUrl() ?>start=<?php echo $t_pengecualian_peg_edit->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerLast") ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } ?>
 </div>
 </div>
 </div>
-<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_jdw_krj_peg_edit->Pager->PageCount ?></span>
+<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_pengecualian_peg_edit->Pager->PageCount ?></span>
 </div>
 <?php } ?>
 <div class="clearfix"></div>
 </form>
 <?php } ?>
-<form name="ft_jdw_krj_pegedit" id="ft_jdw_krj_pegedit" class="<?php echo $t_jdw_krj_peg_edit->FormClassName ?>" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($t_jdw_krj_peg_edit->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_jdw_krj_peg_edit->Token ?>">
+<form name="ft_pengecualian_pegedit" id="ft_pengecualian_pegedit" class="<?php echo $t_pengecualian_peg_edit->FormClassName ?>" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($t_pengecualian_peg_edit->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_pengecualian_peg_edit->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="t_jdw_krj_peg">
+<input type="hidden" name="t" value="t_pengecualian_peg">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
-<?php if ($t_jdw_krj_peg_edit->IsModal) { ?>
+<?php if ($t_pengecualian_peg_edit->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
-<?php if ($t_jdw_krj_peg->getCurrentMasterTable() == "pegawai") { ?>
+<?php if ($t_pengecualian_peg->getCurrentMasterTable() == "pegawai") { ?>
 <input type="hidden" name="<?php echo EW_TABLE_SHOW_MASTER ?>" value="pegawai">
-<input type="hidden" name="fk_pegawai_id" value="<?php echo $t_jdw_krj_peg->pegawai_id->getSessionValue() ?>">
+<input type="hidden" name="fk_pegawai_id" value="<?php echo $t_pengecualian_peg->pegawai_id->getSessionValue() ?>">
 <?php } ?>
 <div>
-<?php if ($t_jdw_krj_peg->pegawai_id->Visible) { // pegawai_id ?>
+<?php if ($t_pengecualian_peg->pegawai_id->Visible) { // pegawai_id ?>
 	<div id="r_pegawai_id" class="form-group">
-		<label id="elh_t_jdw_krj_peg_pegawai_id" for="x_pegawai_id" class="col-sm-2 control-label ewLabel"><?php echo $t_jdw_krj_peg->pegawai_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_jdw_krj_peg->pegawai_id->CellAttributes() ?>>
-<?php if ($t_jdw_krj_peg->pegawai_id->getSessionValue() <> "") { ?>
-<span id="el_t_jdw_krj_peg_pegawai_id">
-<span<?php echo $t_jdw_krj_peg->pegawai_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_jdw_krj_peg->pegawai_id->ViewValue ?></p></span>
+		<label id="elh_t_pengecualian_peg_pegawai_id" for="x_pegawai_id" class="col-sm-2 control-label ewLabel"><?php echo $t_pengecualian_peg->pegawai_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_pengecualian_peg->pegawai_id->CellAttributes() ?>>
+<?php if ($t_pengecualian_peg->pegawai_id->getSessionValue() <> "") { ?>
+<span id="el_t_pengecualian_peg_pegawai_id">
+<span<?php echo $t_pengecualian_peg->pegawai_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_pengecualian_peg->pegawai_id->ViewValue ?></p></span>
 </span>
-<input type="hidden" id="x_pegawai_id" name="x_pegawai_id" value="<?php echo ew_HtmlEncode($t_jdw_krj_peg->pegawai_id->CurrentValue) ?>">
+<input type="hidden" id="x_pegawai_id" name="x_pegawai_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id->CurrentValue) ?>">
 <?php } else { ?>
-<span id="el_t_jdw_krj_peg_pegawai_id">
-<input type="text" data-table="t_jdw_krj_peg" data-field="x_pegawai_id" name="x_pegawai_id" id="x_pegawai_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->pegawai_id->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->pegawai_id->EditValue ?>"<?php echo $t_jdw_krj_peg->pegawai_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php echo $t_jdw_krj_peg->pegawai_id->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
-<?php if ($t_jdw_krj_peg->tgl1->Visible) { // tgl1 ?>
-	<div id="r_tgl1" class="form-group">
-		<label id="elh_t_jdw_krj_peg_tgl1" for="x_tgl1" class="col-sm-2 control-label ewLabel"><?php echo $t_jdw_krj_peg->tgl1->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_jdw_krj_peg->tgl1->CellAttributes() ?>>
-<span id="el_t_jdw_krj_peg_tgl1">
-<input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl1" name="x_tgl1" id="x_tgl1" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl1->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl1->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl1->EditAttributes() ?>>
-<?php if (!$t_jdw_krj_peg->tgl1->ReadOnly && !$t_jdw_krj_peg->tgl1->Disabled && !isset($t_jdw_krj_peg->tgl1->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl1->EditAttrs["disabled"])) { ?>
-<script type="text/javascript">
-ew_CreateCalendar("ft_jdw_krj_pegedit", "x_tgl1", 0);
-</script>
-<?php } ?>
-</span>
-<?php echo $t_jdw_krj_peg->tgl1->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
-<?php if ($t_jdw_krj_peg->tgl2->Visible) { // tgl2 ?>
-	<div id="r_tgl2" class="form-group">
-		<label id="elh_t_jdw_krj_peg_tgl2" for="x_tgl2" class="col-sm-2 control-label ewLabel"><?php echo $t_jdw_krj_peg->tgl2->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_jdw_krj_peg->tgl2->CellAttributes() ?>>
-<span id="el_t_jdw_krj_peg_tgl2">
-<input type="text" data-table="t_jdw_krj_peg" data-field="x_tgl2" name="x_tgl2" id="x_tgl2" placeholder="<?php echo ew_HtmlEncode($t_jdw_krj_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_jdw_krj_peg->tgl2->EditValue ?>"<?php echo $t_jdw_krj_peg->tgl2->EditAttributes() ?>>
-<?php if (!$t_jdw_krj_peg->tgl2->ReadOnly && !$t_jdw_krj_peg->tgl2->Disabled && !isset($t_jdw_krj_peg->tgl2->EditAttrs["readonly"]) && !isset($t_jdw_krj_peg->tgl2->EditAttrs["disabled"])) { ?>
-<script type="text/javascript">
-ew_CreateCalendar("ft_jdw_krj_pegedit", "x_tgl2", 0);
-</script>
-<?php } ?>
-</span>
-<?php echo $t_jdw_krj_peg->tgl2->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
-<?php if ($t_jdw_krj_peg->jk_id->Visible) { // jk_id ?>
-	<div id="r_jk_id" class="form-group">
-		<label id="elh_t_jdw_krj_peg_jk_id" for="x_jk_id" class="col-sm-2 control-label ewLabel"><?php echo $t_jdw_krj_peg->jk_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_jdw_krj_peg->jk_id->CellAttributes() ?>>
-<span id="el_t_jdw_krj_peg_jk_id">
+<span id="el_t_pengecualian_peg_pegawai_id">
 <span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_jk_id"><?php echo (strval($t_jdw_krj_peg->jk_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_jdw_krj_peg->jk_id->ViewValue); ?></span>
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_pegawai_id"><?php echo (strval($t_pengecualian_peg->pegawai_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->pegawai_id->ViewValue); ?></span>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_jdw_krj_peg->jk_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_jk_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="t_jdw_krj_peg" data-field="x_jk_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_jdw_krj_peg->jk_id->DisplayValueSeparatorAttribute() ?>" name="x_jk_id" id="x_jk_id" value="<?php echo $t_jdw_krj_peg->jk_id->CurrentValue ?>"<?php echo $t_jdw_krj_peg->jk_id->EditAttributes() ?>>
-<input type="hidden" name="s_x_jk_id" id="s_x_jk_id" value="<?php echo $t_jdw_krj_peg->jk_id->LookupFilterQuery() ?>">
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->pegawai_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_pegawai_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->pegawai_id->DisplayValueSeparatorAttribute() ?>" name="x_pegawai_id" id="x_pegawai_id" value="<?php echo $t_pengecualian_peg->pegawai_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->pegawai_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_pegawai_id" id="s_x_pegawai_id" value="<?php echo $t_pengecualian_peg->pegawai_id->LookupFilterQuery() ?>">
 </span>
-<?php echo $t_jdw_krj_peg->jk_id->CustomMsg ?></div></div>
+<?php } ?>
+<?php echo $t_pengecualian_peg->pegawai_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($t_jdw_krj_peg->hk->Visible) { // hk ?>
-	<div id="r_hk" class="form-group">
-		<label id="elh_t_jdw_krj_peg_hk" class="col-sm-2 control-label ewLabel"><?php echo $t_jdw_krj_peg->hk->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_jdw_krj_peg->hk->CellAttributes() ?>>
-<span id="el_t_jdw_krj_peg_hk">
-<div id="tp_x_hk" class="ewTemplate"><input type="radio" data-table="t_jdw_krj_peg" data-field="x_hk" data-value-separator="<?php echo $t_jdw_krj_peg->hk->DisplayValueSeparatorAttribute() ?>" name="x_hk" id="x_hk" value="{value}"<?php echo $t_jdw_krj_peg->hk->EditAttributes() ?>></div>
-<div id="dsl_x_hk" data-repeatcolumn="5" class="ewItemList" style="display: none;"><div>
-<?php echo $t_jdw_krj_peg->hk->RadioButtonListHtml(FALSE, "x_hk") ?>
+<?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
+	<div id="r_tgl" class="form-group">
+		<label id="elh_t_pengecualian_peg_tgl" for="x_tgl" class="col-sm-2 control-label ewLabel"><?php echo $t_pengecualian_peg->tgl->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_pengecualian_peg->tgl->CellAttributes() ?>>
+<span id="el_t_pengecualian_peg_tgl">
+<input type="text" data-table="t_pengecualian_peg" data-field="x_tgl" name="x_tgl" id="x_tgl" placeholder="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl->getPlaceHolder()) ?>" value="<?php echo $t_pengecualian_peg->tgl->EditValue ?>"<?php echo $t_pengecualian_peg->tgl->EditAttributes() ?>>
+<?php if (!$t_pengecualian_peg->tgl->ReadOnly && !$t_pengecualian_peg->tgl->Disabled && !isset($t_pengecualian_peg->tgl->EditAttrs["readonly"]) && !isset($t_pengecualian_peg->tgl->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_pengecualian_pegedit", "x_tgl", 0);
+</script>
+<?php } ?>
+</span>
+<?php echo $t_pengecualian_peg->tgl->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($t_pengecualian_peg->tipe->Visible) { // tipe ?>
+	<div id="r_tipe" class="form-group">
+		<label id="elh_t_pengecualian_peg_tipe" class="col-sm-2 control-label ewLabel"><?php echo $t_pengecualian_peg->tipe->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_pengecualian_peg->tipe->CellAttributes() ?>>
+<span id="el_t_pengecualian_peg_tipe">
+<div id="tp_x_tipe" class="ewTemplate"><input type="radio" data-table="t_pengecualian_peg" data-field="x_tipe" data-value-separator="<?php echo $t_pengecualian_peg->tipe->DisplayValueSeparatorAttribute() ?>" name="x_tipe" id="x_tipe" value="{value}"<?php echo $t_pengecualian_peg->tipe->EditAttributes() ?>></div>
+<div id="dsl_x_tipe" data-repeatcolumn="5" class="ewItemList" style="display: none;"><div>
+<?php echo $t_pengecualian_peg->tipe->RadioButtonListHtml(FALSE, "x_tipe") ?>
 </div></div>
 </span>
-<?php echo $t_jdw_krj_peg->hk->CustomMsg ?></div></div>
+<?php echo $t_pengecualian_peg->tipe->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>
-<input type="hidden" data-table="t_jdw_krj_peg" data-field="x_jdw_id" name="x_jdw_id" id="x_jdw_id" value="<?php echo ew_HtmlEncode($t_jdw_krj_peg->jdw_id->CurrentValue) ?>">
-<?php if (!$t_jdw_krj_peg_edit->IsModal) { ?>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pengecualian_id" name="x_pengecualian_id" id="x_pengecualian_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pengecualian_id->CurrentValue) ?>">
+<?php if (!$t_pengecualian_peg_edit->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("SaveBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $t_jdw_krj_peg_edit->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $t_pengecualian_peg_edit->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 	</div>
 </div>
-<?php if (!isset($t_jdw_krj_peg_edit->Pager)) $t_jdw_krj_peg_edit->Pager = new cPrevNextPager($t_jdw_krj_peg_edit->StartRec, $t_jdw_krj_peg_edit->DisplayRecs, $t_jdw_krj_peg_edit->TotalRecs) ?>
-<?php if ($t_jdw_krj_peg_edit->Pager->RecordCount > 0 && $t_jdw_krj_peg_edit->Pager->Visible) { ?>
+<?php if (!isset($t_pengecualian_peg_edit->Pager)) $t_pengecualian_peg_edit->Pager = new cPrevNextPager($t_pengecualian_peg_edit->StartRec, $t_pengecualian_peg_edit->DisplayRecs, $t_pengecualian_peg_edit->TotalRecs) ?>
+<?php if ($t_pengecualian_peg_edit->Pager->RecordCount > 0 && $t_pengecualian_peg_edit->Pager->Visible) { ?>
 <div class="ewPager">
 <span><?php echo $Language->Phrase("Page") ?>&nbsp;</span>
 <div class="ewPrevNext"><div class="input-group">
 <div class="input-group-btn">
 <!--first page button-->
-	<?php if ($t_jdw_krj_peg_edit->Pager->FirstButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_jdw_krj_peg_edit->PageUrl() ?>start=<?php echo $t_jdw_krj_peg_edit->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
+	<?php if ($t_pengecualian_peg_edit->Pager->FirstButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_pengecualian_peg_edit->PageUrl() ?>start=<?php echo $t_pengecualian_peg_edit->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerFirst") ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } ?>
 <!--previous page button-->
-	<?php if ($t_jdw_krj_peg_edit->Pager->PrevButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_jdw_krj_peg_edit->PageUrl() ?>start=<?php echo $t_jdw_krj_peg_edit->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
+	<?php if ($t_pengecualian_peg_edit->Pager->PrevButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_pengecualian_peg_edit->PageUrl() ?>start=<?php echo $t_pengecualian_peg_edit->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerPrevious") ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } ?>
 </div>
 <!--current page number-->
-	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_jdw_krj_peg_edit->Pager->CurrentPage ?>">
+	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_pengecualian_peg_edit->Pager->CurrentPage ?>">
 <div class="input-group-btn">
 <!--next page button-->
-	<?php if ($t_jdw_krj_peg_edit->Pager->NextButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_jdw_krj_peg_edit->PageUrl() ?>start=<?php echo $t_jdw_krj_peg_edit->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
+	<?php if ($t_pengecualian_peg_edit->Pager->NextButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_pengecualian_peg_edit->PageUrl() ?>start=<?php echo $t_pengecualian_peg_edit->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerNext") ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } ?>
 <!--last page button-->
-	<?php if ($t_jdw_krj_peg_edit->Pager->LastButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_jdw_krj_peg_edit->PageUrl() ?>start=<?php echo $t_jdw_krj_peg_edit->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
+	<?php if ($t_pengecualian_peg_edit->Pager->LastButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_pengecualian_peg_edit->PageUrl() ?>start=<?php echo $t_pengecualian_peg_edit->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerLast") ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } ?>
 </div>
 </div>
 </div>
-<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_jdw_krj_peg_edit->Pager->PageCount ?></span>
+<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_pengecualian_peg_edit->Pager->PageCount ?></span>
 </div>
 <?php } ?>
 <div class="clearfix"></div>
 <?php } ?>
 </form>
 <script type="text/javascript">
-ft_jdw_krj_pegedit.Init();
+ft_pengecualian_pegedit.Init();
 </script>
 <?php
-$t_jdw_krj_peg_edit->ShowPageFooter();
+$t_pengecualian_peg_edit->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -1474,5 +1363,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$t_jdw_krj_peg_edit->Page_Terminate();
+$t_pengecualian_peg_edit->Page_Terminate();
 ?>
