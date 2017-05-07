@@ -3,8 +3,8 @@
 include "conn.php";
 //$db =& DbHelper(); 
 
-//mysql_connect($hostname_conn, $username_conn, $password_conn) or die ("Tidak bisa terkoneksi ke Database server");
-//mysql_select_db($database_conn) or die ("Database tidak ditemukan");
+mysql_connect($hostname_conn, $username_conn, $password_conn) or die ("Tidak bisa terkoneksi ke Database server");
+mysql_select_db($database_conn) or die ("Database tidak ditemukan");
 
 if ($_POST["radio_proses"]) {
 	$msql = "call p_gen_rekon ('".$_POST["start"]."', '".$_POST["end"]."')"; //echo $msql; exit;
