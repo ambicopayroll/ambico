@@ -1,6 +1,6 @@
-<?php include_once "phpfn13.php" ?>
+<?php //include_once "phpfn13.php" ?>
 <?php
-$conn =& DbHelper(); 
+//$conn =& DbHelper(); 
 //============================================================+
 // File name   : example_002.php
 // Begin       : 2008-03-04
@@ -71,14 +71,14 @@ $pdf->AddPage("L", "A4");
 //$pdf->AddPage();
 $pdf->SetFont('times', '', 10);
 
-/*include "adodb5/adodb.inc.php";
+include "adodb5/adodb.inc.php";
 
 $conn = ADONewConnection('mysql');
 if ($_SERVER["HTTP_HOST"] == "localhost" ) { // testing on local PC
 	$conn->Connect('localhost','root','admin','fin_pro');
 } elseif ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") { // setting koneksi database untuk komputer server
 	$conn->Connect('mysql.idhostinger.com','u945388674_ambic','M457r1P 81','u945388674_ambic');
-}*/
+}
 
 $html  = '<table border="0" width="300">';
 $html .= '<tr><td>DAFTAR GAJI BULANAN</td></tr>';
