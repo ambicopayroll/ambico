@@ -652,6 +652,9 @@
     <menu id="10228">
       <phrase id="menutext" value="Gaji (Harian)" />
     </menu>
+    <menu id="10084">
+      <phrase id="menutext" value="Gaji (Harian #2)" />
+    </menu>
     <menu id="1">
       <phrase id="menutext" value="att log" />
     </menu>
@@ -838,14 +841,20 @@
     <menu id="76">
       <phrase id="menutext" value="audittrail" />
     </menu>
-    <menu id="10082">
-      <phrase id="menutext" value="v jdw krj def pegawai" />
-    </menu>
     <menu id="10060">
       <phrase id="menutext" value="v rekon" />
     </menu>
     <menu id="10061">
       <phrase id="menutext" value="v rekon 2" />
+    </menu>
+    <menu id="10081">
+      <phrase id="menutext" value="t pengecualian" />
+    </menu>
+    <menu id="10232">
+      <phrase id="menutext" value="v lapgjhrn" />
+    </menu>
+    <menu id="10082">
+      <phrase id="menutext" value="t jns pengecualian" />
     </menu>
     <menu id="10078">
       <phrase id="menutext" value="v jdw krj def" />
