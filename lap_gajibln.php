@@ -88,10 +88,10 @@ while (!$rs->EOF) {
 					}
 					else {
 						if ($rs2->fields["hk_def"] == 5) {
-							$mpot_absen += $rs->fields["gp"] / 25;
+							$mpot_absen += $rs->fields["gp"] / 25; //echo $rs2->fields["tgl"]."-".$mpot_absen.";";
 						}
 						else {
-							$mpot_absen += $rs->fields["gp"] / 30;
+							$mpot_absen += $rs->fields["gp"] / 30; //echo $rs2->fields["tgl"]."-".$mpot_absen.";";
 						}
 					}
 				}
