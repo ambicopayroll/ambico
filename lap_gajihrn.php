@@ -109,6 +109,5 @@ while (!$rs->EOF) {
 	$mgrand_total += $mtotal1;
 }
 $rs->Close();
-// header("location: ./payroll_.php?ok=1");
 header("location: r_lapgjhrnsmry.php");
 ?>
