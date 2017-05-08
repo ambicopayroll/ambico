@@ -25,4 +25,51 @@ SELECT t_jdw_krj_def.pegawai_id AS pegawai_id,
 FROM ((t_jdw_krj_def
   JOIN pegawai ON t_jdw_krj_def.pegawai_id = pegawai.pegawai_id)
   JOIN t_jk ON t_jdw_krj_def.jk_id = t_jk.jk_id)
-  JOIN pembagian2 ON pegawai.pembagian2_id = pembagian2.pembagian2_id
+  JOIN pembagian2 ON pegawai.pembagian2_id = pembagian2.pembagian2_id;
+
+create view v_lapgjhrn as  
+SELECT e.lapgroup_id AS lapgroup_id,
+  e.lapgroup_nama AS lapgroup_nama,
+  e.lapgroup_index AS lapgroup_index,
+  d.lapsubgroup_index AS lapsubgroup_index,
+  a.pegawai_id AS pegawai_id,
+  a.tgl AS tgl,
+  a.jk_id AS jk_id,
+  a.scan_masuk AS scan_masuk,
+  a.scan_keluar AS scan_keluar,
+  a.hk_def AS hk_def,
+  a.pegawai_nip AS pegawai_nip,
+  a.pegawai_nama AS pegawai_nama,
+  a.jk_kd AS jk_kd,
+  a.pembagian2_nama AS pembagian2_nama,
+  a.pembagian2_id AS pembagian2_id,
+  c.rumus_id AS rumus_id,
+  c.rumus_nama AS rumus_nama,
+  c.hk_gol AS hk_gol,
+  c.umr AS umr,
+  c.hk_jml AS hk_jml,
+  c.upah AS upah,
+  c.premi_hadir AS premi_hadir,
+  c.premi_malam AS premi_malam,
+  c.pot_absen AS pot_absen,
+  c.lembur AS lembur,
+  (CASE WHEN (isnull(a.scan_masuk) AND isnull(a.scan_keluar)) THEN 0 ELSE c.upah
+  END) AS upah2,
+  (CASE WHEN (Right(a.jk_kd, 2) = 'S3') THEN c.premi_malam ELSE 0
+  END) AS premi_malam2,
+  (CASE
+    WHEN (Count((isnull(a.scan_masuk) AND isnull(a.scan_keluar) AND
+    (Right(a.jk_kd, 1) <> 'L'))) > 1) THEN 0 ELSE c.premi_hadir
+  END) AS premi_hadir2
+FROM (((v_jdw_krj_def a
+  LEFT JOIN t_rumus_peg b ON a.pegawai_id = b.pegawai_id)
+  LEFT JOIN t_rumus c ON b.rumus_id = c.rumus_id)
+  LEFT JOIN t_lapsubgroup d ON a.pembagian2_id = d.pembagian2_id)
+  LEFT JOIN t_lapgroup e ON d.lapgroup_id = e.lapgroup_id
+WHERE (c.hk_gol = a.hk_def) AND
+  NOT (a.pegawai_id IN (SELECT t_rumus2_peg.pegawai_id AS pegawai_id
+  FROM t_rumus2_peg))
+ORDER BY lapgroup_index,
+  lapsubgroup_index,
+  pegawai_id,
+  tgl;
