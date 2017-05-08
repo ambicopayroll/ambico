@@ -14,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$lap_gaji__php = NULL; // Initialize page object first
+$r_lapgjhrn4_php = NULL; // Initialize page object first
 
-class clap_gaji__php {
+class cr_lapgjhrn4_php {
 
 	// Page ID
 	var $PageID = 'custom';
@@ -25,10 +25,10 @@ class clap_gaji__php {
 	var $ProjectID = "{9712DCF3-D9FD-406D-93E5-FEA5020667C8}";
 
 	// Table name
-	var $TableName = 'lap_gaji_.php';
+	var $TableName = 'r_lapgjhrn4.php';
 
 	// Page object name
-	var $PageObjName = 'lap_gaji__php';
+	var $PageObjName = 'r_lapgjhrn4_php';
 
 	// Page name
 	function PageName() {
@@ -195,7 +195,7 @@ class clap_gaji__php {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 'lap_gaji_.php', TRUE);
+			define("EW_TABLE_NAME", 'r_lapgjhrn4.php', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -284,7 +284,7 @@ class clap_gaji__php {
 		global $Breadcrumb;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("custom", "lap_gaji__php", $url, "", "lap_gaji__php", TRUE);
+		$Breadcrumb->Add("custom", "r_lapgjhrn4_php", $url, "", "r_lapgjhrn4_php", TRUE);
 	}
 }
 ?>
@@ -292,13 +292,13 @@ class clap_gaji__php {
 <?php
 
 // Create page object
-if (!isset($lap_gaji__php)) $lap_gaji__php = new clap_gaji__php();
+if (!isset($r_lapgjhrn4_php)) $r_lapgjhrn4_php = new cr_lapgjhrn4_php();
 
 // Page init
-$lap_gaji__php->Page_Init();
+$r_lapgjhrn4_php->Page_Init();
 
 // Page main
-$lap_gaji__php->Page_Main();
+$r_lapgjhrn4_php->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
@@ -312,41 +312,41 @@ Page_Rendering();
 </div>
 <?php } ?>
 <?php
-if ($_GET["ok"] == "1") {
-	echo "Selesai";
-}
-else {
-?>
-<form id="myform" name="myform" class="form-horizontal" method="post" action="lap_gajihrn.php">
-	<div id="r_start" class="form-group">
-		<label for="start" class="col-sm-2 control-label ewLabel">Date Start</label>
-		<div class="col-sm-10">
-		  <span id="el_calendar_start">
-		  <input type="text" name="start" data-field="start" data-format="5" size="20" class="form-control" id="start">
-		  <script type="text/javascript">
-			ew_CreateCalendar("myform", "start", 5);
-		  </script>
-		  </span>
-		</div>
-	</div>
-	<div id="r_end" class="form-group">
-		<label for="end" class="col-sm-2 control-label ewLabel">Date End</label>
-		<div class="col-sm-10">
-		  <span id="el_calendar_end">
-		  <input type="text" name="end" data-field="end" data-format="5" size="20" class="form-control" id="end">
-		  <script type="text/javascript">
-			ew_CreateCalendar("myform", "end", 5);
-		  </script>
-		  </span>
-		</div>
-	</div>
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit">Submit</button>
-</form>
-<?php
+
+require('fpdf/fpdf.php');
+ob_end_clean();
+$pdf = new FPDF();
+ 
+// Add first page
+$pdf->AddPage();
+ 
+// Set initial x and y position per page
+$y_axis_initial = 15;
+$x_axis_initial = 25;
+ 
+// Set Font Name and Size
+$pdf->SetFont('Arial','',9);
+ 
+// Set Y and X initial position
+$pdf->SetY($y_axis_initial);
+$pdf->SetX($x_axis_initial);
+ 
+// Print it out now ...
+$pdf->Cell(170, 4, "Halo, ini untuk mencoba FPDF di Custom File...", 0, 0, 'L', 0); // left-align, width: 170
+$pdf->Output("CustomFile2.pdf", "D");
+
+$conn =& DbHelper();
+
+$msql = "select * from pegawai";
+$rs = $conn->Execute($msql);
+
+while (!$rs->EOF) {
+	echo $rs->fields["pegawai_nama"];
+	$rs->MoveNext();
 }
 ?>
 <?php if (EW_DEBUG_ENABLED) echo ew_DebugMsg(); ?>
 <?php include_once "footer.php" ?>
 <?php
-$lap_gaji__php->Page_Terminate();
+$r_lapgjhrn4_php->Page_Terminate();
 ?>

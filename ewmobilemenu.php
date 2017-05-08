@@ -23,7 +23,6 @@ $RootMenu->AddMenuItem(10080, "mmri_r5fjdw5fkrj5fdef", $Language->MenuPhrase("10
 $RootMenu->AddMenuItem(10083, "mmi_gen_rekon__php", $Language->MenuPhrase("10083", "MenuText"), "gen_rekon_.php", 10077, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}gen_rekon_.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(10229, "mmi_lap_gaji2__php", $Language->MenuPhrase("10229", "MenuText"), "lap_gaji2_.php", 10077, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}lap_gaji2_.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(10228, "mmi_lap_gaji__php", $Language->MenuPhrase("10228", "MenuText"), "lap_gaji_.php", 10077, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}lap_gaji_.php'), FALSE, TRUE);
-$RootMenu->AddMenuItem(10084, "mmri_r5flapgjhrn", $Language->MenuPhrase("10084", "MenuText"), "r_lapgjhrnsmry.php", 10077, "{6A79AFFA-AA3A-4CBB-8572-5F6C56B1E5B1}", AllowListMenu('{6A79AFFA-AA3A-4CBB-8572-5F6C56B1E5B1}r_lapgjhrn'), FALSE, FALSE);
 $RootMenu->AddMenuItem(-2, "mmi_changepwd", $Language->Phrase("ChangePwd"), "changepwd.php", -1, "", IsLoggedIn() && !IsSysAdmin());
 $RootMenu->AddMenuItem(-1, "mmi_logout", $Language->Phrase("Logout"), "logout.php", -1, "", IsLoggedIn());
 $RootMenu->AddMenuItem(-1, "mmi_login", $Language->Phrase("Login"), "login.php", -1, "", !IsLoggedIn() && substr(@$_SERVER["URL"], -1 * strlen("login.php")) <> "login.php");

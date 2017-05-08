@@ -42,3 +42,5 @@ att_log       d pin
 
 
 
+10:50 AM 5/8/2017
+- tambah tabel t_gjhrn; untuk temporary tampung data gaji harian;
