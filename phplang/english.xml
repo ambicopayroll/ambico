@@ -583,6 +583,12 @@
   <project>
     <phrase id="bodytitle" value="AMBICO" />
     <phrase id="footertext" value="&amp;copy;2017 AMBICO. All rights reserved." />
+    <menu id="10234">
+      <phrase id="menutext" value="t gjhrn" />
+    </menu>
+    <menu id="10235">
+      <phrase id="menutext" value="t gjbln" />
+    </menu>
     <menu id="10233">
       <phrase id="menutext" value="v lapgjhrn" />
     </menu>
@@ -651,9 +657,6 @@
     </menu>
     <menu id="10228">
       <phrase id="menutext" value="Gaji (Harian)" />
-    </menu>
-    <menu id="10085">
-      <phrase id="menutext" value="Gaji (Harian #2)" />
     </menu>
     <menu id="10226">
       <phrase id="menutext" value="v jdw krj def" />
@@ -850,8 +853,17 @@
     <menu id="10061">
       <phrase id="menutext" value="v rekon 2" />
     </menu>
+    <menu id="10086">
+      <phrase id="menutext" value="t gjbln" />
+    </menu>
+    <menu id="10087">
+      <phrase id="menutext" value="Gaji (Bulanan)" />
+    </menu>
     <menu id="10084">
       <phrase id="menutext" value="t gjhrn" />
+    </menu>
+    <menu id="10085">
+      <phrase id="menutext" value="Gaji (Harian)" />
     </menu>
     <menu id="10081">
       <phrase id="menutext" value="t pengecualian" />
@@ -3061,6 +3073,90 @@
       </field>
       <field id="premi_malam2">
         <phrase id="fldcaption" value="premi malam 2" />
+      </field>
+    </table>
+    <table id="t_gjhrn">
+      <phrase id="tblcaption" value="t gjhrn" />
+      <field id="gjhrn_id">
+        <phrase id="fldcaption" value="gjhrn id" />
+      </field>
+      <field id="bagian">
+        <phrase id="fldcaption" value="bagian" />
+      </field>
+      <field id="divisi">
+        <phrase id="fldcaption" value="divisi" />
+      </field>
+      <field id="nama">
+        <phrase id="fldcaption" value="nama" />
+      </field>
+      <field id="nip">
+        <phrase id="fldcaption" value="nip" />
+      </field>
+      <field id="upah">
+        <phrase id="fldcaption" value="upah" />
+      </field>
+      <field id="premi_malam">
+        <phrase id="fldcaption" value="premi malam" />
+      </field>
+      <field id="premi_hadir">
+        <phrase id="fldcaption" value="premi hadir" />
+      </field>
+      <field id="pot_absen">
+        <phrase id="fldcaption" value="pot absen" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="total" />
+      </field>
+    </table>
+    <table id="t_gjbln">
+      <phrase id="tblcaption" value="t gjbln" />
+      <field id="gjbln_id">
+        <phrase id="fldcaption" value="gjbln id" />
+      </field>
+      <field id="bagian">
+        <phrase id="fldcaption" value="bagian" />
+      </field>
+      <field id="divisi">
+        <phrase id="fldcaption" value="divisi" />
+      </field>
+      <field id="nama">
+        <phrase id="fldcaption" value="nama" />
+      </field>
+      <field id="nip">
+        <phrase id="fldcaption" value="nip" />
+      </field>
+      <field id="gp">
+        <phrase id="fldcaption" value="gp" />
+      </field>
+      <field id="t_jbtn">
+        <phrase id="fldcaption" value="t jbtn" />
+      </field>
+      <field id="p_absen">
+        <phrase id="fldcaption" value="p absen" />
+      </field>
+      <field id="t_malam">
+        <phrase id="fldcaption" value="t malam" />
+      </field>
+      <field id="t_lembur">
+        <phrase id="fldcaption" value="t lembur" />
+      </field>
+      <field id="t_hadir">
+        <phrase id="fldcaption" value="t hadir" />
+      </field>
+      <field id="t_um">
+        <phrase id="fldcaption" value="t um" />
+      </field>
+      <field id="j_bruto">
+        <phrase id="fldcaption" value="j bruto" />
+      </field>
+      <field id="p_aspen">
+        <phrase id="fldcaption" value="p aspen" />
+      </field>
+      <field id="p_bpjs">
+        <phrase id="fldcaption" value="p bpjs" />
+      </field>
+      <field id="j_netto">
+        <phrase id="fldcaption" value="j netto" />
       </field>
     </table>
   </project>
