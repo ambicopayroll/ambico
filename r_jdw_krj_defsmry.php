@@ -544,13 +544,12 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 		$this->tgl->SetVisibility();
 		$this->hk_def->SetVisibility();
 		$this->jk_kd->SetVisibility();
-		$this->pembagian2_id->SetVisibility();
 
 		// Aggregate variables
 		// 1st dimension = no of groups (level 0 used for grand total)
 		// 2nd dimension = no of fields
 
-		$nDtls = 8;
+		$nDtls = 7;
 		$nGrps = 1;
 		$this->Val = &ewr_InitArray($nDtls, 0);
 		$this->Cnt = &ewr_Init2DArray($nGrps, $nDtls, 0);
@@ -563,7 +562,7 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 		$this->GrandMx = &ewr_InitArray($nDtls, NULL);
 
 		// Set up array if accumulation required: array(Accum, SkipNullOrZero)
-		$this->Col = array(array(FALSE, FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE));
+		$this->Col = array(array(FALSE, FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE));
 
 		// Set up groups per page dynamically
 		$this->SetUpDisplayGrps();
@@ -816,7 +815,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$this->Val[4] = $this->tgl->CurrentValue;
 			$this->Val[5] = $this->hk_def->CurrentValue;
 			$this->Val[6] = $this->jk_kd->CurrentValue;
-			$this->Val[7] = $this->pembagian2_id->CurrentValue;
 		} else {
 			$this->pembagian2_nama->setDbValue("");
 			$this->pegawai_nip->setDbValue("");
@@ -1080,9 +1078,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 
 			// jk_kd
 			$this->jk_kd->HrefValue = "";
-
-			// pembagian2_id
-			$this->pembagian2_id->HrefValue = "";
 		} else {
 			if ($this->RowTotalType == EWR_ROWTOTAL_GROUP && $this->RowTotalSubType == EWR_ROWTOTAL_HEADER) {
 			} else {
@@ -1113,10 +1108,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$this->jk_kd->ViewValue = $this->jk_kd->CurrentValue;
 			$this->jk_kd->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
 
-			// pembagian2_id
-			$this->pembagian2_id->ViewValue = $this->pembagian2_id->CurrentValue;
-			$this->pembagian2_id->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
-
 			// pembagian2_nama
 			$this->pembagian2_nama->HrefValue = "";
 
@@ -1134,9 +1125,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 
 			// jk_kd
 			$this->jk_kd->HrefValue = "";
-
-			// pembagian2_id
-			$this->pembagian2_id->HrefValue = "";
 		}
 
 		// Call Cell_Rendered event
@@ -1196,15 +1184,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$HrefValue = &$this->jk_kd->HrefValue;
 			$LinkAttrs = &$this->jk_kd->LinkAttrs;
 			$this->Cell_Rendered($this->jk_kd, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
-
-			// pembagian2_id
-			$CurrentValue = $this->pembagian2_id->CurrentValue;
-			$ViewValue = &$this->pembagian2_id->ViewValue;
-			$ViewAttrs = &$this->pembagian2_id->ViewAttrs;
-			$CellAttrs = &$this->pembagian2_id->CellAttrs;
-			$HrefValue = &$this->pembagian2_id->HrefValue;
-			$LinkAttrs = &$this->pembagian2_id->LinkAttrs;
-			$this->Cell_Rendered($this->pembagian2_id, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
 		}
 
 		// Call Row_Rendered event
@@ -1223,7 +1202,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 		if ($this->tgl->Visible) $this->DtlColumnCount += 1;
 		if ($this->hk_def->Visible) $this->DtlColumnCount += 1;
 		if ($this->jk_kd->Visible) $this->DtlColumnCount += 1;
-		if ($this->pembagian2_id->Visible) $this->DtlColumnCount += 1;
 	}
 
 	// Set up Breadcrumb
@@ -1925,7 +1903,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$this->tgl->setSort("");
 			$this->hk_def->setSort("");
 			$this->jk_kd->setSort("");
-			$this->pembagian2_id->setSort("");
 
 		// Check for an Order parameter
 		} elseif ($orderBy <> "") {
@@ -1937,7 +1914,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$this->UpdateSort($this->tgl, $bCtrl); // tgl
 			$this->UpdateSort($this->hk_def, $bCtrl); // hk_def
 			$this->UpdateSort($this->jk_kd, $bCtrl); // jk_kd
-			$this->UpdateSort($this->pembagian2_id, $bCtrl); // pembagian2_id
 			$sSortSql = $this->SortSql();
 			$this->setOrderBy($sSortSql);
 			$this->setStartGroup(1);
@@ -2582,24 +2558,6 @@ while ($rs && !$rs->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page->ShowH
 	</td>
 <?php } ?>
 <?php } ?>
-<?php if ($Page->pembagian2_id->Visible) { ?>
-<?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="pembagian2_id"><div class="r_jdw_krj_def_pembagian2_id"><span class="ewTableHeaderCaption"><?php echo $Page->pembagian2_id->FldCaption() ?></span></div></td>
-<?php } else { ?>
-	<td data-field="pembagian2_id">
-<?php if ($Page->SortUrl($Page->pembagian2_id) == "") { ?>
-		<div class="ewTableHeaderBtn r_jdw_krj_def_pembagian2_id">
-			<span class="ewTableHeaderCaption"><?php echo $Page->pembagian2_id->FldCaption() ?></span>
-		</div>
-<?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_jdw_krj_def_pembagian2_id" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->pembagian2_id) ?>',2);">
-			<span class="ewTableHeaderCaption"><?php echo $Page->pembagian2_id->FldCaption() ?></span>
-			<span class="ewTableHeaderSort"><?php if ($Page->pembagian2_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->pembagian2_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
-		</div>
-<?php } ?>
-	</td>
-<?php } ?>
-<?php } ?>
 	</tr>
 </thead>
 <tbody>
@@ -2641,10 +2599,6 @@ while ($rs && !$rs->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page->ShowH
 <?php if ($Page->jk_kd->Visible) { ?>
 		<td data-field="jk_kd"<?php echo $Page->jk_kd->CellAttributes() ?>>
 <span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_jdw_krj_def_jk_kd"<?php echo $Page->jk_kd->ViewAttributes() ?>><?php echo $Page->jk_kd->ListViewValue() ?></span></td>
-<?php } ?>
-<?php if ($Page->pembagian2_id->Visible) { ?>
-		<td data-field="pembagian2_id"<?php echo $Page->pembagian2_id->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_jdw_krj_def_pembagian2_id"<?php echo $Page->pembagian2_id->ViewAttributes() ?>><?php echo $Page->pembagian2_id->ListViewValue() ?></span></td>
 <?php } ?>
 	</tr>
 <?php
