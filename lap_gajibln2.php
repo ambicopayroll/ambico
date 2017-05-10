@@ -132,8 +132,14 @@ while (!$rs->EOF) {
 					}
 					else {
 						// ada data pengecualian
-						$mdata_valid = 0;
-						if ($kode_pengecualian == "TL") $mterlambat = 1; // untuk acuan perhitungan tunjangan hadir
+						if ($kode_pengecualian == "TL") {
+							$mterlambat = 1; // untuk acuan perhitungan tunjangan hadir
+							$mdata_valid = 0;
+						}
+						if ($kode_pengecualian == "HD") {
+							$lama_kerja = f_carilamakerja();
+							$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6) / 2;
+						}
 					}
 				}
 				
