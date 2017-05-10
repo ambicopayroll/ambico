@@ -1,8 +1,9 @@
 <?php
 if ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") {
-	include "adodb5/adodb.inc.php";
-	$conn = ADONewConnection('mysql');
-	$conn->Connect('mysql.idhostinger.com','u945388674_ambi2','M457r1P 81','u945388674_ambi2');
+	//include "adodb5/adodb.inc.php";
+	//$conn = ADONewConnection('mysql');
+	//$conn->Connect('mysql.idhostinger.com','u945388674_ambi2','M457r1P 81','u945388674_ambi2');
+	include "conn_adodb.php";
 }
 else {
 	include_once "phpfn13.php";
@@ -67,6 +68,7 @@ while (!$rs->EOF) {
 			$mbagian = $rs2->fields["pembagian2_nama"];
 			$mpegawai_nama = $rs2->fields["pegawai_nama"];
 			$mpegawai_nip = $rs2->fields["pegawai_nip"];
+			$mpegawai_pin = $rs2->fields["pegawai_pin"];
 			//$mjml_absen = 0;
 			
 			while (!$rs2->EOF) {
@@ -78,20 +80,34 @@ while (!$rs->EOF) {
 				}
 				
 				// hitung premi hadir & pot. absen
-				// echo substr($rs2->fields["jk_kd"], -1); exit;
 				if (!$data_valid and substr($rs2->fields["jk_kd"], -1) != "L") {
 					$mpremi_hadir = 0;
-					$msql = "select f_cari_pengecualian(".$mpegawai_id.", '".$rs2->fields["tgl"]."') as ada";
-					$rs3 = $conn->Execute($msql); // echo $msql; exit;
-					if ($rs3->fields["ada"]) {
-						
-					}
-					else {
-						if ($rs2->fields["hk_def"] == 5) {
-							$mpot_absen += $rs->fields["gp"] / 25; //echo $rs2->fields["tgl"]."-".$mpot_absen.";";
+					$msql = "select f_cari_pengecualian(".$mpegawai_id.", '".$rs2->fields["tgl"]."') as r_kode"; //echo $msql; exit;
+					$rs3 = $conn->Execute($msql);
+					if (!$rs3->EOF) {
+						if ($rs3->fields["r_kode"] == "HD") {
+							// cek jam masuk dulu
+							$mjam_masuk_valid = false; $mjam_keluar_valid = false;
+							if (!is_null($rs2->fields["scan_masuk"])) {
+								$mjam_masuk_valid = true;
+								$mjam_masuk = $rs2->fields["scan_masuk"];
+								// cari data jam keluar di att_log
+								$msql = "select f_cari_jamkeluar(".$mpegawai_pin.", '".$rs2->fields["tgl"]."') as r_jam";
+								$rs4 = $conn->Execute();
+								if (!$rs4->EOF) {
+									$mjam_keluar_valid = true;
+									$mjam_keluar = $rs4->fields["r_jam"];
+									
+								}
+							}
 						}
 						else {
-							$mpot_absen += $rs->fields["gp"] / 30; //echo $rs2->fields["tgl"]."-".$mpot_absen.";";
+							if ($rs2->fields["hk_def"] == 5) {
+								$mpot_absen += $rs->fields["gp"] / 25; //echo $rs2->fields["tgl"]."-".$mpot_absen.";";
+							}
+							else {
+								$mpot_absen += $rs->fields["gp"] / 30; //echo $rs2->fields["tgl"]."-".$mpot_absen.";";
+							}
 						}
 					}
 				}

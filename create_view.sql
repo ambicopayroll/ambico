@@ -21,7 +21,8 @@ SELECT t_jdw_krj_def.pegawai_id AS pegawai_id,
   pegawai.pegawai_nama AS pegawai_nama,
   t_jk.jk_kd AS jk_kd,
   pembagian2.pembagian2_nama AS pembagian2_nama,
-  pegawai.pembagian2_id
+  pegawai.pembagian2_id,
+  pegawai.pegawai_pin As pegawai_pin
 FROM ((t_jdw_krj_def
   JOIN pegawai ON t_jdw_krj_def.pegawai_id = pegawai.pegawai_id)
   JOIN t_jk ON t_jdw_krj_def.jk_id = t_jk.jk_id)
