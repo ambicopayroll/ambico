@@ -141,7 +141,7 @@ while (!$rs->EOF) {
 					// data valid
 					
 					// hitung tunjangan malam
-					if (substr($kd_jk, 0, 2) == "S3") {
+					if (substr($jk_kd, 0, 2) == "S3") {
 						$mt_malam += $t_malam;
 					}
 					
