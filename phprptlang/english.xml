@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/5/9" version="10.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/10" version="10.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -1774,6 +1774,9 @@
       <field id="pot_bpjs">
         <phrase id="fldcaption" value="pot bpjs" />
       </field>
+      <field id="lembur">
+        <phrase id="fldcaption" value="lembur" />
+      </field>
     </table>
     <table id="t_rumus2_peg">
       <phrase id="tblcaption" value="t rumus 2 peg" />
@@ -2452,6 +2455,9 @@
       <field id="pembagian2_id">
         <phrase id="fldcaption" value="pembagian 2 id" />
       </field>
+      <field id="pegawai_pin">
+        <phrase id="fldcaption" value="pegawai pin" />
+      </field>
     </table>
     <table id="r_rekon">
       <phrase id="tblcaption" value="Rekonsiliasi" />
@@ -2488,6 +2494,9 @@
       <field id="pembagian2_id">
         <phrase id="fldcaption" value="pembagian 2 id" />
       </field>
+      <field id="pegawai_pin">
+        <phrase id="fldcaption" value="pegawai pin" />
+      </field>
     </table>
     <table id="r_jdw_krj_def">
       <phrase id="tblcaption" value="Jadwal Kerja (Perincian)" />
@@ -2523,6 +2532,9 @@
       </field>
       <field id="pembagian2_id">
         <phrase id="fldcaption" value="pembagian 2 id" />
+      </field>
+      <field id="pegawai_pin">
+        <phrase id="fldcaption" value="pegawai pin" />
       </field>
     </table>
     <table id="t_pengecualian_peg">
@@ -2634,6 +2646,9 @@
       </field>
       <field id="premi_malam2">
         <phrase id="fldcaption" value="premi malam 2" />
+      </field>
+      <field id="premi_hadir2">
+        <phrase id="fldcaption" value="premi hadir 2" />
       </field>
     </table>
     <table id="t_gjhrn">

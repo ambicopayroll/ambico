@@ -317,7 +317,7 @@ if ($_GET["ok"] == "1") {
 }
 else {
 ?>
-<form id="myform" name="myform" class="form-horizontal" method="post" action="lap_gajibln.php">
+<form id="myform" name="myform" class="form-horizontal" method="post" action="lap_gajibln2.php">
 	<div id="r_start" class="form-group">
 		<label for="start" class="col-sm-2 control-label ewLabel">Date Start</label>
 		<div class="col-sm-10">

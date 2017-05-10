@@ -20,6 +20,7 @@ class crr_jdw_krj_def extends crTableBase {
 	var $scan_masuk;
 	var $scan_keluar;
 	var $pembagian2_id;
+	var $pegawai_pin;
 
 	//
 	// Table class constructor
@@ -149,6 +150,14 @@ class crr_jdw_krj_def extends crTableBase {
 		$this->pembagian2_id->DateFilter = "";
 		$this->pembagian2_id->SqlSelect = "";
 		$this->pembagian2_id->SqlOrderBy = "";
+
+		// pegawai_pin
+		$this->pegawai_pin = new crField('r_jdw_krj_def', 'r_jdw_krj_def', 'x_pegawai_pin', 'pegawai_pin', '`pegawai_pin`', 200, EWR_DATATYPE_STRING, -1);
+		$this->pegawai_pin->Sortable = TRUE; // Allow sort
+		$this->fields['pegawai_pin'] = &$this->pegawai_pin;
+		$this->pegawai_pin->DateFilter = "";
+		$this->pegawai_pin->SqlSelect = "";
+		$this->pegawai_pin->SqlOrderBy = "";
 	}
 
 	// Set Field Visibility

@@ -6,6 +6,14 @@ select count(*) into ada from t_pengecualian_peg where pegawai_id = p_pegawai_id
 RETURN ada;
 END//
 
+DROP FUNCTION `f_carikodepengecualian`//
+CREATE DEFINER=`root`@`localhost` FUNCTION `f_carikodepengecualian`(p_pegawai_id int, p_tgl date) RETURNS varchar(10) CHARSET latin1
+BEGIN
+declare r_kode varchar(10);
+select b.kode into r_kode from t_pengecualian_peg a left join t_jns_pengecualian b on a.jns_id = b.jns_id
+where pegawai_id = p_pegawai_id and tgl = p_tgl;
+RETURN r_kode;
+END//
 
 CREATE PROCEDURE `p_gen_rekon`(in mstart date, in mend date)
 BEGIN
