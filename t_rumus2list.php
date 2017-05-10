@@ -419,8 +419,9 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->premi_malam->SetVisibility();
 		$this->lp->SetVisibility();
 		$this->forklift->SetVisibility();
-		$this->pot_absen->SetVisibility();
+		$this->lembur->SetVisibility();
 		$this->pot_aspen->SetVisibility();
+		$this->pot_absen->SetVisibility();
 		$this->pot_bpjs->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
@@ -800,8 +801,9 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->premi_malam->FormValue = ""; // Clear form value
 		$this->lp->FormValue = ""; // Clear form value
 		$this->forklift->FormValue = ""; // Clear form value
-		$this->pot_absen->FormValue = ""; // Clear form value
+		$this->lembur->FormValue = ""; // Clear form value
 		$this->pot_aspen->FormValue = ""; // Clear form value
+		$this->pot_absen->FormValue = ""; // Clear form value
 		$this->pot_bpjs->FormValue = ""; // Clear form value
 		$this->LastAction = $this->CurrentAction; // Save last action
 		$this->CurrentAction = ""; // Clear action
@@ -1175,9 +1177,11 @@ class ct_rumus2_list extends ct_rumus2 {
 			return FALSE;
 		if ($objForm->HasValue("x_forklift") && $objForm->HasValue("o_forklift") && $this->forklift->CurrentValue <> $this->forklift->OldValue)
 			return FALSE;
-		if ($objForm->HasValue("x_pot_absen") && $objForm->HasValue("o_pot_absen") && $this->pot_absen->CurrentValue <> $this->pot_absen->OldValue)
+		if ($objForm->HasValue("x_lembur") && $objForm->HasValue("o_lembur") && $this->lembur->CurrentValue <> $this->lembur->OldValue)
 			return FALSE;
 		if ($objForm->HasValue("x_pot_aspen") && $objForm->HasValue("o_pot_aspen") && $this->pot_aspen->CurrentValue <> $this->pot_aspen->OldValue)
+			return FALSE;
+		if ($objForm->HasValue("x_pot_absen") && $objForm->HasValue("o_pot_absen") && $this->pot_absen->CurrentValue <> $this->pot_absen->OldValue)
 			return FALSE;
 		if ($objForm->HasValue("x_pot_bpjs") && $objForm->HasValue("o_pot_bpjs") && $this->pot_bpjs->CurrentValue <> $this->pot_bpjs->OldValue)
 			return FALSE;
@@ -1272,8 +1276,9 @@ class ct_rumus2_list extends ct_rumus2 {
 		$sFilterList = ew_Concat($sFilterList, $this->premi_malam->AdvancedSearch->ToJSON(), ","); // Field premi_malam
 		$sFilterList = ew_Concat($sFilterList, $this->lp->AdvancedSearch->ToJSON(), ","); // Field lp
 		$sFilterList = ew_Concat($sFilterList, $this->forklift->AdvancedSearch->ToJSON(), ","); // Field forklift
-		$sFilterList = ew_Concat($sFilterList, $this->pot_absen->AdvancedSearch->ToJSON(), ","); // Field pot_absen
+		$sFilterList = ew_Concat($sFilterList, $this->lembur->AdvancedSearch->ToJSON(), ","); // Field lembur
 		$sFilterList = ew_Concat($sFilterList, $this->pot_aspen->AdvancedSearch->ToJSON(), ","); // Field pot_aspen
+		$sFilterList = ew_Concat($sFilterList, $this->pot_absen->AdvancedSearch->ToJSON(), ","); // Field pot_absen
 		$sFilterList = ew_Concat($sFilterList, $this->pot_bpjs->AdvancedSearch->ToJSON(), ","); // Field pot_bpjs
 		if ($this->BasicSearch->Keyword <> "") {
 			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
@@ -1375,13 +1380,13 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->forklift->AdvancedSearch->SearchOperator2 = @$filter["w_forklift"];
 		$this->forklift->AdvancedSearch->Save();
 
-		// Field pot_absen
-		$this->pot_absen->AdvancedSearch->SearchValue = @$filter["x_pot_absen"];
-		$this->pot_absen->AdvancedSearch->SearchOperator = @$filter["z_pot_absen"];
-		$this->pot_absen->AdvancedSearch->SearchCondition = @$filter["v_pot_absen"];
-		$this->pot_absen->AdvancedSearch->SearchValue2 = @$filter["y_pot_absen"];
-		$this->pot_absen->AdvancedSearch->SearchOperator2 = @$filter["w_pot_absen"];
-		$this->pot_absen->AdvancedSearch->Save();
+		// Field lembur
+		$this->lembur->AdvancedSearch->SearchValue = @$filter["x_lembur"];
+		$this->lembur->AdvancedSearch->SearchOperator = @$filter["z_lembur"];
+		$this->lembur->AdvancedSearch->SearchCondition = @$filter["v_lembur"];
+		$this->lembur->AdvancedSearch->SearchValue2 = @$filter["y_lembur"];
+		$this->lembur->AdvancedSearch->SearchOperator2 = @$filter["w_lembur"];
+		$this->lembur->AdvancedSearch->Save();
 
 		// Field pot_aspen
 		$this->pot_aspen->AdvancedSearch->SearchValue = @$filter["x_pot_aspen"];
@@ -1390,6 +1395,14 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->pot_aspen->AdvancedSearch->SearchValue2 = @$filter["y_pot_aspen"];
 		$this->pot_aspen->AdvancedSearch->SearchOperator2 = @$filter["w_pot_aspen"];
 		$this->pot_aspen->AdvancedSearch->Save();
+
+		// Field pot_absen
+		$this->pot_absen->AdvancedSearch->SearchValue = @$filter["x_pot_absen"];
+		$this->pot_absen->AdvancedSearch->SearchOperator = @$filter["z_pot_absen"];
+		$this->pot_absen->AdvancedSearch->SearchCondition = @$filter["v_pot_absen"];
+		$this->pot_absen->AdvancedSearch->SearchValue2 = @$filter["y_pot_absen"];
+		$this->pot_absen->AdvancedSearch->SearchOperator2 = @$filter["w_pot_absen"];
+		$this->pot_absen->AdvancedSearch->Save();
 
 		// Field pot_bpjs
 		$this->pot_bpjs->AdvancedSearch->SearchValue = @$filter["x_pot_bpjs"];
@@ -1580,8 +1593,9 @@ class ct_rumus2_list extends ct_rumus2 {
 			$this->UpdateSort($this->premi_malam, $bCtrl); // premi_malam
 			$this->UpdateSort($this->lp, $bCtrl); // lp
 			$this->UpdateSort($this->forklift, $bCtrl); // forklift
-			$this->UpdateSort($this->pot_absen, $bCtrl); // pot_absen
+			$this->UpdateSort($this->lembur, $bCtrl); // lembur
 			$this->UpdateSort($this->pot_aspen, $bCtrl); // pot_aspen
+			$this->UpdateSort($this->pot_absen, $bCtrl); // pot_absen
 			$this->UpdateSort($this->pot_bpjs, $bCtrl); // pot_bpjs
 			$this->setStartRecordNumber(1); // Reset start position
 		}
@@ -1621,8 +1635,9 @@ class ct_rumus2_list extends ct_rumus2 {
 				$this->premi_malam->setSort("");
 				$this->lp->setSort("");
 				$this->forklift->setSort("");
-				$this->pot_absen->setSort("");
+				$this->lembur->setSort("");
 				$this->pot_aspen->setSort("");
+				$this->pot_absen->setSort("");
 				$this->pot_bpjs->setSort("");
 			}
 
@@ -2162,10 +2177,12 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->lp->OldValue = $this->lp->CurrentValue;
 		$this->forklift->CurrentValue = 0.00;
 		$this->forklift->OldValue = $this->forklift->CurrentValue;
-		$this->pot_absen->CurrentValue = 0.00;
-		$this->pot_absen->OldValue = $this->pot_absen->CurrentValue;
+		$this->lembur->CurrentValue = 0.00;
+		$this->lembur->OldValue = $this->lembur->CurrentValue;
 		$this->pot_aspen->CurrentValue = 0.00;
 		$this->pot_aspen->OldValue = $this->pot_aspen->CurrentValue;
+		$this->pot_absen->CurrentValue = 0.00;
+		$this->pot_absen->OldValue = $this->pot_absen->CurrentValue;
 		$this->pot_bpjs->CurrentValue = 0.00;
 		$this->pot_bpjs->OldValue = $this->pot_bpjs->CurrentValue;
 	}
@@ -2206,14 +2223,18 @@ class ct_rumus2_list extends ct_rumus2 {
 			$this->forklift->setFormValue($objForm->GetValue("x_forklift"));
 		}
 		$this->forklift->setOldValue($objForm->GetValue("o_forklift"));
-		if (!$this->pot_absen->FldIsDetailKey) {
-			$this->pot_absen->setFormValue($objForm->GetValue("x_pot_absen"));
+		if (!$this->lembur->FldIsDetailKey) {
+			$this->lembur->setFormValue($objForm->GetValue("x_lembur"));
 		}
-		$this->pot_absen->setOldValue($objForm->GetValue("o_pot_absen"));
+		$this->lembur->setOldValue($objForm->GetValue("o_lembur"));
 		if (!$this->pot_aspen->FldIsDetailKey) {
 			$this->pot_aspen->setFormValue($objForm->GetValue("x_pot_aspen"));
 		}
 		$this->pot_aspen->setOldValue($objForm->GetValue("o_pot_aspen"));
+		if (!$this->pot_absen->FldIsDetailKey) {
+			$this->pot_absen->setFormValue($objForm->GetValue("x_pot_absen"));
+		}
+		$this->pot_absen->setOldValue($objForm->GetValue("o_pot_absen"));
 		if (!$this->pot_bpjs->FldIsDetailKey) {
 			$this->pot_bpjs->setFormValue($objForm->GetValue("x_pot_bpjs"));
 		}
@@ -2233,8 +2254,9 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->premi_malam->CurrentValue = $this->premi_malam->FormValue;
 		$this->lp->CurrentValue = $this->lp->FormValue;
 		$this->forklift->CurrentValue = $this->forklift->FormValue;
-		$this->pot_absen->CurrentValue = $this->pot_absen->FormValue;
+		$this->lembur->CurrentValue = $this->lembur->FormValue;
 		$this->pot_aspen->CurrentValue = $this->pot_aspen->FormValue;
+		$this->pot_absen->CurrentValue = $this->pot_absen->FormValue;
 		$this->pot_bpjs->CurrentValue = $this->pot_bpjs->FormValue;
 	}
 
@@ -2300,8 +2322,9 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->premi_malam->setDbValue($rs->fields('premi_malam'));
 		$this->lp->setDbValue($rs->fields('lp'));
 		$this->forklift->setDbValue($rs->fields('forklift'));
-		$this->pot_absen->setDbValue($rs->fields('pot_absen'));
+		$this->lembur->setDbValue($rs->fields('lembur'));
 		$this->pot_aspen->setDbValue($rs->fields('pot_aspen'));
+		$this->pot_absen->setDbValue($rs->fields('pot_absen'));
 		$this->pot_bpjs->setDbValue($rs->fields('pot_bpjs'));
 	}
 
@@ -2316,8 +2339,9 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->premi_malam->DbValue = $row['premi_malam'];
 		$this->lp->DbValue = $row['lp'];
 		$this->forklift->DbValue = $row['forklift'];
-		$this->pot_absen->DbValue = $row['pot_absen'];
+		$this->lembur->DbValue = $row['lembur'];
 		$this->pot_aspen->DbValue = $row['pot_aspen'];
+		$this->pot_absen->DbValue = $row['pot_absen'];
 		$this->pot_bpjs->DbValue = $row['pot_bpjs'];
 	}
 
@@ -2373,12 +2397,16 @@ class ct_rumus2_list extends ct_rumus2 {
 			$this->forklift->CurrentValue = ew_StrToFloat($this->forklift->CurrentValue);
 
 		// Convert decimal values if posted back
-		if ($this->pot_absen->FormValue == $this->pot_absen->CurrentValue && is_numeric(ew_StrToFloat($this->pot_absen->CurrentValue)))
-			$this->pot_absen->CurrentValue = ew_StrToFloat($this->pot_absen->CurrentValue);
+		if ($this->lembur->FormValue == $this->lembur->CurrentValue && is_numeric(ew_StrToFloat($this->lembur->CurrentValue)))
+			$this->lembur->CurrentValue = ew_StrToFloat($this->lembur->CurrentValue);
 
 		// Convert decimal values if posted back
 		if ($this->pot_aspen->FormValue == $this->pot_aspen->CurrentValue && is_numeric(ew_StrToFloat($this->pot_aspen->CurrentValue)))
 			$this->pot_aspen->CurrentValue = ew_StrToFloat($this->pot_aspen->CurrentValue);
+
+		// Convert decimal values if posted back
+		if ($this->pot_absen->FormValue == $this->pot_absen->CurrentValue && is_numeric(ew_StrToFloat($this->pot_absen->CurrentValue)))
+			$this->pot_absen->CurrentValue = ew_StrToFloat($this->pot_absen->CurrentValue);
 
 		// Convert decimal values if posted back
 		if ($this->pot_bpjs->FormValue == $this->pot_bpjs->CurrentValue && is_numeric(ew_StrToFloat($this->pot_bpjs->CurrentValue)))
@@ -2395,8 +2423,9 @@ class ct_rumus2_list extends ct_rumus2 {
 		// premi_malam
 		// lp
 		// forklift
-		// pot_absen
+		// lembur
 		// pot_aspen
+		// pot_absen
 		// pot_bpjs
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
@@ -2441,17 +2470,23 @@ class ct_rumus2_list extends ct_rumus2 {
 		$this->forklift->CellCssStyle .= "text-align: right;";
 		$this->forklift->ViewCustomAttributes = "";
 
-		// pot_absen
-		$this->pot_absen->ViewValue = $this->pot_absen->CurrentValue;
-		$this->pot_absen->ViewValue = ew_FormatNumber($this->pot_absen->ViewValue, 0, -2, -2, -2);
-		$this->pot_absen->CellCssStyle .= "text-align: right;";
-		$this->pot_absen->ViewCustomAttributes = "";
+		// lembur
+		$this->lembur->ViewValue = $this->lembur->CurrentValue;
+		$this->lembur->ViewValue = ew_FormatNumber($this->lembur->ViewValue, 0, -2, -2, -2);
+		$this->lembur->CellCssStyle .= "text-align: right;";
+		$this->lembur->ViewCustomAttributes = "";
 
 		// pot_aspen
 		$this->pot_aspen->ViewValue = $this->pot_aspen->CurrentValue;
 		$this->pot_aspen->ViewValue = ew_FormatNumber($this->pot_aspen->ViewValue, 2, -2, -2, -2);
 		$this->pot_aspen->CellCssStyle .= "text-align: right;";
 		$this->pot_aspen->ViewCustomAttributes = "";
+
+		// pot_absen
+		$this->pot_absen->ViewValue = $this->pot_absen->CurrentValue;
+		$this->pot_absen->ViewValue = ew_FormatNumber($this->pot_absen->ViewValue, 0, -2, -2, -2);
+		$this->pot_absen->CellCssStyle .= "text-align: right;";
+		$this->pot_absen->ViewCustomAttributes = "";
 
 		// pot_bpjs
 		$this->pot_bpjs->ViewValue = $this->pot_bpjs->CurrentValue;
@@ -2489,15 +2524,20 @@ class ct_rumus2_list extends ct_rumus2 {
 			$this->forklift->HrefValue = "";
 			$this->forklift->TooltipValue = "";
 
-			// pot_absen
-			$this->pot_absen->LinkCustomAttributes = "";
-			$this->pot_absen->HrefValue = "";
-			$this->pot_absen->TooltipValue = "";
+			// lembur
+			$this->lembur->LinkCustomAttributes = "";
+			$this->lembur->HrefValue = "";
+			$this->lembur->TooltipValue = "";
 
 			// pot_aspen
 			$this->pot_aspen->LinkCustomAttributes = "";
 			$this->pot_aspen->HrefValue = "";
 			$this->pot_aspen->TooltipValue = "";
+
+			// pot_absen
+			$this->pot_absen->LinkCustomAttributes = "";
+			$this->pot_absen->HrefValue = "";
+			$this->pot_absen->TooltipValue = "";
 
 			// pot_bpjs
 			$this->pot_bpjs->LinkCustomAttributes = "";
@@ -2555,14 +2595,14 @@ class ct_rumus2_list extends ct_rumus2 {
 			$this->forklift->OldValue = $this->forklift->EditValue;
 			}
 
-			// pot_absen
-			$this->pot_absen->EditAttrs["class"] = "form-control";
-			$this->pot_absen->EditCustomAttributes = "";
-			$this->pot_absen->EditValue = ew_HtmlEncode($this->pot_absen->CurrentValue);
-			$this->pot_absen->PlaceHolder = ew_RemoveHtml($this->pot_absen->FldCaption());
-			if (strval($this->pot_absen->EditValue) <> "" && is_numeric($this->pot_absen->EditValue)) {
-			$this->pot_absen->EditValue = ew_FormatNumber($this->pot_absen->EditValue, -2, -2, -2, -2);
-			$this->pot_absen->OldValue = $this->pot_absen->EditValue;
+			// lembur
+			$this->lembur->EditAttrs["class"] = "form-control";
+			$this->lembur->EditCustomAttributes = "";
+			$this->lembur->EditValue = ew_HtmlEncode($this->lembur->CurrentValue);
+			$this->lembur->PlaceHolder = ew_RemoveHtml($this->lembur->FldCaption());
+			if (strval($this->lembur->EditValue) <> "" && is_numeric($this->lembur->EditValue)) {
+			$this->lembur->EditValue = ew_FormatNumber($this->lembur->EditValue, -2, -2, -2, -2);
+			$this->lembur->OldValue = $this->lembur->EditValue;
 			}
 
 			// pot_aspen
@@ -2573,6 +2613,16 @@ class ct_rumus2_list extends ct_rumus2 {
 			if (strval($this->pot_aspen->EditValue) <> "" && is_numeric($this->pot_aspen->EditValue)) {
 			$this->pot_aspen->EditValue = ew_FormatNumber($this->pot_aspen->EditValue, -2, -2, -2, -2);
 			$this->pot_aspen->OldValue = $this->pot_aspen->EditValue;
+			}
+
+			// pot_absen
+			$this->pot_absen->EditAttrs["class"] = "form-control";
+			$this->pot_absen->EditCustomAttributes = "";
+			$this->pot_absen->EditValue = ew_HtmlEncode($this->pot_absen->CurrentValue);
+			$this->pot_absen->PlaceHolder = ew_RemoveHtml($this->pot_absen->FldCaption());
+			if (strval($this->pot_absen->EditValue) <> "" && is_numeric($this->pot_absen->EditValue)) {
+			$this->pot_absen->EditValue = ew_FormatNumber($this->pot_absen->EditValue, -2, -2, -2, -2);
+			$this->pot_absen->OldValue = $this->pot_absen->EditValue;
 			}
 
 			// pot_bpjs
@@ -2611,13 +2661,17 @@ class ct_rumus2_list extends ct_rumus2 {
 			$this->forklift->LinkCustomAttributes = "";
 			$this->forklift->HrefValue = "";
 
-			// pot_absen
-			$this->pot_absen->LinkCustomAttributes = "";
-			$this->pot_absen->HrefValue = "";
+			// lembur
+			$this->lembur->LinkCustomAttributes = "";
+			$this->lembur->HrefValue = "";
 
 			// pot_aspen
 			$this->pot_aspen->LinkCustomAttributes = "";
 			$this->pot_aspen->HrefValue = "";
+
+			// pot_absen
+			$this->pot_absen->LinkCustomAttributes = "";
+			$this->pot_absen->HrefValue = "";
 
 			// pot_bpjs
 			$this->pot_bpjs->LinkCustomAttributes = "";
@@ -2674,14 +2728,14 @@ class ct_rumus2_list extends ct_rumus2 {
 			$this->forklift->OldValue = $this->forklift->EditValue;
 			}
 
-			// pot_absen
-			$this->pot_absen->EditAttrs["class"] = "form-control";
-			$this->pot_absen->EditCustomAttributes = "";
-			$this->pot_absen->EditValue = ew_HtmlEncode($this->pot_absen->CurrentValue);
-			$this->pot_absen->PlaceHolder = ew_RemoveHtml($this->pot_absen->FldCaption());
-			if (strval($this->pot_absen->EditValue) <> "" && is_numeric($this->pot_absen->EditValue)) {
-			$this->pot_absen->EditValue = ew_FormatNumber($this->pot_absen->EditValue, -2, -2, -2, -2);
-			$this->pot_absen->OldValue = $this->pot_absen->EditValue;
+			// lembur
+			$this->lembur->EditAttrs["class"] = "form-control";
+			$this->lembur->EditCustomAttributes = "";
+			$this->lembur->EditValue = ew_HtmlEncode($this->lembur->CurrentValue);
+			$this->lembur->PlaceHolder = ew_RemoveHtml($this->lembur->FldCaption());
+			if (strval($this->lembur->EditValue) <> "" && is_numeric($this->lembur->EditValue)) {
+			$this->lembur->EditValue = ew_FormatNumber($this->lembur->EditValue, -2, -2, -2, -2);
+			$this->lembur->OldValue = $this->lembur->EditValue;
 			}
 
 			// pot_aspen
@@ -2692,6 +2746,16 @@ class ct_rumus2_list extends ct_rumus2 {
 			if (strval($this->pot_aspen->EditValue) <> "" && is_numeric($this->pot_aspen->EditValue)) {
 			$this->pot_aspen->EditValue = ew_FormatNumber($this->pot_aspen->EditValue, -2, -2, -2, -2);
 			$this->pot_aspen->OldValue = $this->pot_aspen->EditValue;
+			}
+
+			// pot_absen
+			$this->pot_absen->EditAttrs["class"] = "form-control";
+			$this->pot_absen->EditCustomAttributes = "";
+			$this->pot_absen->EditValue = ew_HtmlEncode($this->pot_absen->CurrentValue);
+			$this->pot_absen->PlaceHolder = ew_RemoveHtml($this->pot_absen->FldCaption());
+			if (strval($this->pot_absen->EditValue) <> "" && is_numeric($this->pot_absen->EditValue)) {
+			$this->pot_absen->EditValue = ew_FormatNumber($this->pot_absen->EditValue, -2, -2, -2, -2);
+			$this->pot_absen->OldValue = $this->pot_absen->EditValue;
 			}
 
 			// pot_bpjs
@@ -2730,13 +2794,17 @@ class ct_rumus2_list extends ct_rumus2 {
 			$this->forklift->LinkCustomAttributes = "";
 			$this->forklift->HrefValue = "";
 
-			// pot_absen
-			$this->pot_absen->LinkCustomAttributes = "";
-			$this->pot_absen->HrefValue = "";
+			// lembur
+			$this->lembur->LinkCustomAttributes = "";
+			$this->lembur->HrefValue = "";
 
 			// pot_aspen
 			$this->pot_aspen->LinkCustomAttributes = "";
 			$this->pot_aspen->HrefValue = "";
+
+			// pot_absen
+			$this->pot_absen->LinkCustomAttributes = "";
+			$this->pot_absen->HrefValue = "";
 
 			// pot_bpjs
 			$this->pot_bpjs->LinkCustomAttributes = "";
@@ -2793,17 +2861,20 @@ class ct_rumus2_list extends ct_rumus2 {
 		if (!ew_CheckNumber($this->forklift->FormValue)) {
 			ew_AddMessage($gsFormError, $this->forklift->FldErrMsg());
 		}
-		if (!$this->pot_absen->FldIsDetailKey && !is_null($this->pot_absen->FormValue) && $this->pot_absen->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->pot_absen->FldCaption(), $this->pot_absen->ReqErrMsg));
-		}
-		if (!ew_CheckNumber($this->pot_absen->FormValue)) {
-			ew_AddMessage($gsFormError, $this->pot_absen->FldErrMsg());
+		if (!ew_CheckNumber($this->lembur->FormValue)) {
+			ew_AddMessage($gsFormError, $this->lembur->FldErrMsg());
 		}
 		if (!$this->pot_aspen->FldIsDetailKey && !is_null($this->pot_aspen->FormValue) && $this->pot_aspen->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pot_aspen->FldCaption(), $this->pot_aspen->ReqErrMsg));
 		}
 		if (!ew_CheckNumber($this->pot_aspen->FormValue)) {
 			ew_AddMessage($gsFormError, $this->pot_aspen->FldErrMsg());
+		}
+		if (!$this->pot_absen->FldIsDetailKey && !is_null($this->pot_absen->FormValue) && $this->pot_absen->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->pot_absen->FldCaption(), $this->pot_absen->ReqErrMsg));
+		}
+		if (!ew_CheckNumber($this->pot_absen->FormValue)) {
+			ew_AddMessage($gsFormError, $this->pot_absen->FldErrMsg());
 		}
 		if (!$this->pot_bpjs->FldIsDetailKey && !is_null($this->pot_bpjs->FormValue) && $this->pot_bpjs->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pot_bpjs->FldCaption(), $this->pot_bpjs->ReqErrMsg));
@@ -2947,11 +3018,14 @@ class ct_rumus2_list extends ct_rumus2 {
 			// forklift
 			$this->forklift->SetDbValueDef($rsnew, $this->forklift->CurrentValue, 0, $this->forklift->ReadOnly);
 
-			// pot_absen
-			$this->pot_absen->SetDbValueDef($rsnew, $this->pot_absen->CurrentValue, 0, $this->pot_absen->ReadOnly);
+			// lembur
+			$this->lembur->SetDbValueDef($rsnew, $this->lembur->CurrentValue, 0, $this->lembur->ReadOnly);
 
 			// pot_aspen
 			$this->pot_aspen->SetDbValueDef($rsnew, $this->pot_aspen->CurrentValue, 0, $this->pot_aspen->ReadOnly);
+
+			// pot_absen
+			$this->pot_absen->SetDbValueDef($rsnew, $this->pot_absen->CurrentValue, 0, $this->pot_absen->ReadOnly);
 
 			// pot_bpjs
 			$this->pot_bpjs->SetDbValueDef($rsnew, $this->pot_bpjs->CurrentValue, 0, $this->pot_bpjs->ReadOnly);
@@ -3017,11 +3091,14 @@ class ct_rumus2_list extends ct_rumus2 {
 		// forklift
 		$this->forklift->SetDbValueDef($rsnew, $this->forklift->CurrentValue, 0, strval($this->forklift->CurrentValue) == "");
 
-		// pot_absen
-		$this->pot_absen->SetDbValueDef($rsnew, $this->pot_absen->CurrentValue, 0, strval($this->pot_absen->CurrentValue) == "");
+		// lembur
+		$this->lembur->SetDbValueDef($rsnew, $this->lembur->CurrentValue, 0, strval($this->lembur->CurrentValue) == "");
 
 		// pot_aspen
 		$this->pot_aspen->SetDbValueDef($rsnew, $this->pot_aspen->CurrentValue, 0, strval($this->pot_aspen->CurrentValue) == "");
+
+		// pot_absen
+		$this->pot_absen->SetDbValueDef($rsnew, $this->pot_absen->CurrentValue, 0, strval($this->pot_absen->CurrentValue) == "");
 
 		// pot_bpjs
 		$this->pot_bpjs->SetDbValueDef($rsnew, $this->pot_bpjs->CurrentValue, 0, strval($this->pot_bpjs->CurrentValue) == "");
@@ -3550,18 +3627,21 @@ ft_rumus2list.Validate = function() {
 			elm = this.GetElements("x" + infix + "_forklift");
 			if (elm && !ew_CheckNumber(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_rumus2->forklift->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_pot_absen");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_rumus2->pot_absen->FldCaption(), $t_rumus2->pot_absen->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_pot_absen");
+			elm = this.GetElements("x" + infix + "_lembur");
 			if (elm && !ew_CheckNumber(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_rumus2->pot_absen->FldErrMsg()) ?>");
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_rumus2->lembur->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_pot_aspen");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_rumus2->pot_aspen->FldCaption(), $t_rumus2->pot_aspen->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_pot_aspen");
 			if (elm && !ew_CheckNumber(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_rumus2->pot_aspen->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_pot_absen");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_rumus2->pot_absen->FldCaption(), $t_rumus2->pot_absen->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_pot_absen");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_rumus2->pot_absen->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_pot_bpjs");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_rumus2->pot_bpjs->FldCaption(), $t_rumus2->pot_bpjs->ReqErrMsg)) ?>");
@@ -3590,8 +3670,9 @@ ft_rumus2list.EmptyRow = function(infix) {
 	if (ew_ValueChanged(fobj, infix, "premi_malam", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "lp", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "forklift", false)) return false;
-	if (ew_ValueChanged(fobj, infix, "pot_absen", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "lembur", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "pot_aspen", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "pot_absen", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "pot_bpjs", false)) return false;
 	return true;
 }
@@ -3868,12 +3949,12 @@ $t_rumus2_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
-	<?php if ($t_rumus2->SortUrl($t_rumus2->pot_absen) == "") { ?>
-		<th data-name="pot_absen"><div id="elh_t_rumus2_pot_absen" class="t_rumus2_pot_absen"><div class="ewTableHeaderCaption"><?php echo $t_rumus2->pot_absen->FldCaption() ?></div></div></th>
+<?php if ($t_rumus2->lembur->Visible) { // lembur ?>
+	<?php if ($t_rumus2->SortUrl($t_rumus2->lembur) == "") { ?>
+		<th data-name="lembur"><div id="elh_t_rumus2_lembur" class="t_rumus2_lembur"><div class="ewTableHeaderCaption"><?php echo $t_rumus2->lembur->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="pot_absen"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_rumus2->SortUrl($t_rumus2->pot_absen) ?>',2);"><div id="elh_t_rumus2_pot_absen" class="t_rumus2_pot_absen">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_rumus2->pot_absen->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_rumus2->pot_absen->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_rumus2->pot_absen->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="lembur"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_rumus2->SortUrl($t_rumus2->lembur) ?>',2);"><div id="elh_t_rumus2_lembur" class="t_rumus2_lembur">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_rumus2->lembur->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_rumus2->lembur->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_rumus2->lembur->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3883,6 +3964,15 @@ $t_rumus2_list->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<th data-name="pot_aspen"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_rumus2->SortUrl($t_rumus2->pot_aspen) ?>',2);"><div id="elh_t_rumus2_pot_aspen" class="t_rumus2_pot_aspen">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_rumus2->pot_aspen->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_rumus2->pot_aspen->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_rumus2->pot_aspen->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
+	<?php if ($t_rumus2->SortUrl($t_rumus2->pot_absen) == "") { ?>
+		<th data-name="pot_absen"><div id="elh_t_rumus2_pot_absen" class="t_rumus2_pot_absen"><div class="ewTableHeaderCaption"><?php echo $t_rumus2->pot_absen->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="pot_absen"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_rumus2->SortUrl($t_rumus2->pot_absen) ?>',2);"><div id="elh_t_rumus2_pot_absen" class="t_rumus2_pot_absen">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_rumus2->pot_absen->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_rumus2->pot_absen->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_rumus2->pot_absen->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3983,12 +4073,12 @@ $t_rumus2_list->ListOptions->Render("body", "left", $t_rumus2_list->RowCnt);
 <input type="hidden" data-table="t_rumus2" data-field="x_forklift" name="o<?php echo $t_rumus2_list->RowIndex ?>_forklift" id="o<?php echo $t_rumus2_list->RowIndex ?>_forklift" value="<?php echo ew_HtmlEncode($t_rumus2->forklift->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
-		<td data-name="pot_absen">
-<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_absen" class="form-group t_rumus2_pot_absen">
-<input type="text" data-table="t_rumus2" data-field="x_pot_absen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_absen->EditValue ?>"<?php echo $t_rumus2->pot_absen->EditAttributes() ?>>
+	<?php if ($t_rumus2->lembur->Visible) { // lembur ?>
+		<td data-name="lembur">
+<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_lembur" class="form-group t_rumus2_lembur">
+<input type="text" data-table="t_rumus2" data-field="x_lembur" name="x<?php echo $t_rumus2_list->RowIndex ?>_lembur" id="x<?php echo $t_rumus2_list->RowIndex ?>_lembur" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->lembur->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->lembur->EditValue ?>"<?php echo $t_rumus2->lembur->EditAttributes() ?>>
 </span>
-<input type="hidden" data-table="t_rumus2" data-field="x_pot_absen" name="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" value="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->OldValue) ?>">
+<input type="hidden" data-table="t_rumus2" data-field="x_lembur" name="o<?php echo $t_rumus2_list->RowIndex ?>_lembur" id="o<?php echo $t_rumus2_list->RowIndex ?>_lembur" value="<?php echo ew_HtmlEncode($t_rumus2->lembur->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($t_rumus2->pot_aspen->Visible) { // pot_aspen ?>
@@ -3997,6 +4087,14 @@ $t_rumus2_list->ListOptions->Render("body", "left", $t_rumus2_list->RowCnt);
 <input type="text" data-table="t_rumus2" data-field="x_pot_aspen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_aspen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_aspen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_aspen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_aspen->EditValue ?>"<?php echo $t_rumus2->pot_aspen->EditAttributes() ?>>
 </span>
 <input type="hidden" data-table="t_rumus2" data-field="x_pot_aspen" name="o<?php echo $t_rumus2_list->RowIndex ?>_pot_aspen" id="o<?php echo $t_rumus2_list->RowIndex ?>_pot_aspen" value="<?php echo ew_HtmlEncode($t_rumus2->pot_aspen->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
+		<td data-name="pot_absen">
+<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_absen" class="form-group t_rumus2_pot_absen">
+<input type="text" data-table="t_rumus2" data-field="x_pot_absen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_absen->EditValue ?>"<?php echo $t_rumus2->pot_absen->EditAttributes() ?>>
+</span>
+<input type="hidden" data-table="t_rumus2" data-field="x_pot_absen" name="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" value="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($t_rumus2->pot_bpjs->Visible) { // pot_bpjs ?>
@@ -4271,23 +4369,23 @@ $t_rumus2_list->ListOptions->Render("body", "left", $t_rumus2_list->RowCnt);
 <?php } ?>
 </td>
 	<?php } ?>
-	<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
-		<td data-name="pot_absen"<?php echo $t_rumus2->pot_absen->CellAttributes() ?>>
+	<?php if ($t_rumus2->lembur->Visible) { // lembur ?>
+		<td data-name="lembur"<?php echo $t_rumus2->lembur->CellAttributes() ?>>
 <?php if ($t_rumus2->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_absen" class="form-group t_rumus2_pot_absen">
-<input type="text" data-table="t_rumus2" data-field="x_pot_absen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_absen->EditValue ?>"<?php echo $t_rumus2->pot_absen->EditAttributes() ?>>
+<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_lembur" class="form-group t_rumus2_lembur">
+<input type="text" data-table="t_rumus2" data-field="x_lembur" name="x<?php echo $t_rumus2_list->RowIndex ?>_lembur" id="x<?php echo $t_rumus2_list->RowIndex ?>_lembur" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->lembur->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->lembur->EditValue ?>"<?php echo $t_rumus2->lembur->EditAttributes() ?>>
 </span>
-<input type="hidden" data-table="t_rumus2" data-field="x_pot_absen" name="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" value="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->OldValue) ?>">
+<input type="hidden" data-table="t_rumus2" data-field="x_lembur" name="o<?php echo $t_rumus2_list->RowIndex ?>_lembur" id="o<?php echo $t_rumus2_list->RowIndex ?>_lembur" value="<?php echo ew_HtmlEncode($t_rumus2->lembur->OldValue) ?>">
 <?php } ?>
 <?php if ($t_rumus2->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_absen" class="form-group t_rumus2_pot_absen">
-<input type="text" data-table="t_rumus2" data-field="x_pot_absen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_absen->EditValue ?>"<?php echo $t_rumus2->pot_absen->EditAttributes() ?>>
+<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_lembur" class="form-group t_rumus2_lembur">
+<input type="text" data-table="t_rumus2" data-field="x_lembur" name="x<?php echo $t_rumus2_list->RowIndex ?>_lembur" id="x<?php echo $t_rumus2_list->RowIndex ?>_lembur" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->lembur->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->lembur->EditValue ?>"<?php echo $t_rumus2->lembur->EditAttributes() ?>>
 </span>
 <?php } ?>
 <?php if ($t_rumus2->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_absen" class="t_rumus2_pot_absen">
-<span<?php echo $t_rumus2->pot_absen->ViewAttributes() ?>>
-<?php echo $t_rumus2->pot_absen->ListViewValue() ?></span>
+<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_lembur" class="t_rumus2_lembur">
+<span<?php echo $t_rumus2->lembur->ViewAttributes() ?>>
+<?php echo $t_rumus2->lembur->ListViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
@@ -4309,6 +4407,27 @@ $t_rumus2_list->ListOptions->Render("body", "left", $t_rumus2_list->RowCnt);
 <span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_aspen" class="t_rumus2_pot_aspen">
 <span<?php echo $t_rumus2->pot_aspen->ViewAttributes() ?>>
 <?php echo $t_rumus2->pot_aspen->ListViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
+		<td data-name="pot_absen"<?php echo $t_rumus2->pot_absen->CellAttributes() ?>>
+<?php if ($t_rumus2->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_absen" class="form-group t_rumus2_pot_absen">
+<input type="text" data-table="t_rumus2" data-field="x_pot_absen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_absen->EditValue ?>"<?php echo $t_rumus2->pot_absen->EditAttributes() ?>>
+</span>
+<input type="hidden" data-table="t_rumus2" data-field="x_pot_absen" name="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" value="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->OldValue) ?>">
+<?php } ?>
+<?php if ($t_rumus2->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_absen" class="form-group t_rumus2_pot_absen">
+<input type="text" data-table="t_rumus2" data-field="x_pot_absen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_absen->EditValue ?>"<?php echo $t_rumus2->pot_absen->EditAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($t_rumus2->RowType == EW_ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $t_rumus2_list->RowCnt ?>_t_rumus2_pot_absen" class="t_rumus2_pot_absen">
+<span<?php echo $t_rumus2->pot_absen->ViewAttributes() ?>>
+<?php echo $t_rumus2->pot_absen->ListViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
@@ -4427,12 +4546,12 @@ $t_rumus2_list->ListOptions->Render("body", "left", $t_rumus2_list->RowIndex);
 <input type="hidden" data-table="t_rumus2" data-field="x_forklift" name="o<?php echo $t_rumus2_list->RowIndex ?>_forklift" id="o<?php echo $t_rumus2_list->RowIndex ?>_forklift" value="<?php echo ew_HtmlEncode($t_rumus2->forklift->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
-		<td data-name="pot_absen">
-<span id="el$rowindex$_t_rumus2_pot_absen" class="form-group t_rumus2_pot_absen">
-<input type="text" data-table="t_rumus2" data-field="x_pot_absen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_absen->EditValue ?>"<?php echo $t_rumus2->pot_absen->EditAttributes() ?>>
+	<?php if ($t_rumus2->lembur->Visible) { // lembur ?>
+		<td data-name="lembur">
+<span id="el$rowindex$_t_rumus2_lembur" class="form-group t_rumus2_lembur">
+<input type="text" data-table="t_rumus2" data-field="x_lembur" name="x<?php echo $t_rumus2_list->RowIndex ?>_lembur" id="x<?php echo $t_rumus2_list->RowIndex ?>_lembur" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->lembur->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->lembur->EditValue ?>"<?php echo $t_rumus2->lembur->EditAttributes() ?>>
 </span>
-<input type="hidden" data-table="t_rumus2" data-field="x_pot_absen" name="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" value="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->OldValue) ?>">
+<input type="hidden" data-table="t_rumus2" data-field="x_lembur" name="o<?php echo $t_rumus2_list->RowIndex ?>_lembur" id="o<?php echo $t_rumus2_list->RowIndex ?>_lembur" value="<?php echo ew_HtmlEncode($t_rumus2->lembur->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($t_rumus2->pot_aspen->Visible) { // pot_aspen ?>
@@ -4441,6 +4560,14 @@ $t_rumus2_list->ListOptions->Render("body", "left", $t_rumus2_list->RowIndex);
 <input type="text" data-table="t_rumus2" data-field="x_pot_aspen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_aspen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_aspen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_aspen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_aspen->EditValue ?>"<?php echo $t_rumus2->pot_aspen->EditAttributes() ?>>
 </span>
 <input type="hidden" data-table="t_rumus2" data-field="x_pot_aspen" name="o<?php echo $t_rumus2_list->RowIndex ?>_pot_aspen" id="o<?php echo $t_rumus2_list->RowIndex ?>_pot_aspen" value="<?php echo ew_HtmlEncode($t_rumus2->pot_aspen->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
+		<td data-name="pot_absen">
+<span id="el$rowindex$_t_rumus2_pot_absen" class="form-group t_rumus2_pot_absen">
+<input type="text" data-table="t_rumus2" data-field="x_pot_absen" name="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="x<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->getPlaceHolder()) ?>" value="<?php echo $t_rumus2->pot_absen->EditValue ?>"<?php echo $t_rumus2->pot_absen->EditAttributes() ?>>
+</span>
+<input type="hidden" data-table="t_rumus2" data-field="x_pot_absen" name="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" id="o<?php echo $t_rumus2_list->RowIndex ?>_pot_absen" value="<?php echo ew_HtmlEncode($t_rumus2->pot_absen->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($t_rumus2->pot_bpjs->Visible) { // pot_bpjs ?>

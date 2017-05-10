@@ -389,8 +389,9 @@ class ct_rumus2_view extends ct_rumus2 {
 		$this->premi_malam->SetVisibility();
 		$this->lp->SetVisibility();
 		$this->forklift->SetVisibility();
-		$this->pot_absen->SetVisibility();
+		$this->lembur->SetVisibility();
 		$this->pot_aspen->SetVisibility();
+		$this->pot_absen->SetVisibility();
 		$this->pot_bpjs->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
@@ -715,8 +716,9 @@ class ct_rumus2_view extends ct_rumus2 {
 		$this->premi_malam->setDbValue($rs->fields('premi_malam'));
 		$this->lp->setDbValue($rs->fields('lp'));
 		$this->forklift->setDbValue($rs->fields('forklift'));
-		$this->pot_absen->setDbValue($rs->fields('pot_absen'));
+		$this->lembur->setDbValue($rs->fields('lembur'));
 		$this->pot_aspen->setDbValue($rs->fields('pot_aspen'));
+		$this->pot_absen->setDbValue($rs->fields('pot_absen'));
 		$this->pot_bpjs->setDbValue($rs->fields('pot_bpjs'));
 	}
 
@@ -731,8 +733,9 @@ class ct_rumus2_view extends ct_rumus2 {
 		$this->premi_malam->DbValue = $row['premi_malam'];
 		$this->lp->DbValue = $row['lp'];
 		$this->forklift->DbValue = $row['forklift'];
-		$this->pot_absen->DbValue = $row['pot_absen'];
+		$this->lembur->DbValue = $row['lembur'];
 		$this->pot_aspen->DbValue = $row['pot_aspen'];
+		$this->pot_absen->DbValue = $row['pot_absen'];
 		$this->pot_bpjs->DbValue = $row['pot_bpjs'];
 	}
 
@@ -765,12 +768,16 @@ class ct_rumus2_view extends ct_rumus2 {
 			$this->forklift->CurrentValue = ew_StrToFloat($this->forklift->CurrentValue);
 
 		// Convert decimal values if posted back
-		if ($this->pot_absen->FormValue == $this->pot_absen->CurrentValue && is_numeric(ew_StrToFloat($this->pot_absen->CurrentValue)))
-			$this->pot_absen->CurrentValue = ew_StrToFloat($this->pot_absen->CurrentValue);
+		if ($this->lembur->FormValue == $this->lembur->CurrentValue && is_numeric(ew_StrToFloat($this->lembur->CurrentValue)))
+			$this->lembur->CurrentValue = ew_StrToFloat($this->lembur->CurrentValue);
 
 		// Convert decimal values if posted back
 		if ($this->pot_aspen->FormValue == $this->pot_aspen->CurrentValue && is_numeric(ew_StrToFloat($this->pot_aspen->CurrentValue)))
 			$this->pot_aspen->CurrentValue = ew_StrToFloat($this->pot_aspen->CurrentValue);
+
+		// Convert decimal values if posted back
+		if ($this->pot_absen->FormValue == $this->pot_absen->CurrentValue && is_numeric(ew_StrToFloat($this->pot_absen->CurrentValue)))
+			$this->pot_absen->CurrentValue = ew_StrToFloat($this->pot_absen->CurrentValue);
 
 		// Convert decimal values if posted back
 		if ($this->pot_bpjs->FormValue == $this->pot_bpjs->CurrentValue && is_numeric(ew_StrToFloat($this->pot_bpjs->CurrentValue)))
@@ -787,8 +794,9 @@ class ct_rumus2_view extends ct_rumus2 {
 		// premi_malam
 		// lp
 		// forklift
-		// pot_absen
+		// lembur
 		// pot_aspen
+		// pot_absen
 		// pot_bpjs
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
@@ -833,17 +841,23 @@ class ct_rumus2_view extends ct_rumus2 {
 		$this->forklift->CellCssStyle .= "text-align: right;";
 		$this->forklift->ViewCustomAttributes = "";
 
-		// pot_absen
-		$this->pot_absen->ViewValue = $this->pot_absen->CurrentValue;
-		$this->pot_absen->ViewValue = ew_FormatNumber($this->pot_absen->ViewValue, 0, -2, -2, -2);
-		$this->pot_absen->CellCssStyle .= "text-align: right;";
-		$this->pot_absen->ViewCustomAttributes = "";
+		// lembur
+		$this->lembur->ViewValue = $this->lembur->CurrentValue;
+		$this->lembur->ViewValue = ew_FormatNumber($this->lembur->ViewValue, 0, -2, -2, -2);
+		$this->lembur->CellCssStyle .= "text-align: right;";
+		$this->lembur->ViewCustomAttributes = "";
 
 		// pot_aspen
 		$this->pot_aspen->ViewValue = $this->pot_aspen->CurrentValue;
 		$this->pot_aspen->ViewValue = ew_FormatNumber($this->pot_aspen->ViewValue, 2, -2, -2, -2);
 		$this->pot_aspen->CellCssStyle .= "text-align: right;";
 		$this->pot_aspen->ViewCustomAttributes = "";
+
+		// pot_absen
+		$this->pot_absen->ViewValue = $this->pot_absen->CurrentValue;
+		$this->pot_absen->ViewValue = ew_FormatNumber($this->pot_absen->ViewValue, 0, -2, -2, -2);
+		$this->pot_absen->CellCssStyle .= "text-align: right;";
+		$this->pot_absen->ViewCustomAttributes = "";
 
 		// pot_bpjs
 		$this->pot_bpjs->ViewValue = $this->pot_bpjs->CurrentValue;
@@ -881,15 +895,20 @@ class ct_rumus2_view extends ct_rumus2 {
 			$this->forklift->HrefValue = "";
 			$this->forklift->TooltipValue = "";
 
-			// pot_absen
-			$this->pot_absen->LinkCustomAttributes = "";
-			$this->pot_absen->HrefValue = "";
-			$this->pot_absen->TooltipValue = "";
+			// lembur
+			$this->lembur->LinkCustomAttributes = "";
+			$this->lembur->HrefValue = "";
+			$this->lembur->TooltipValue = "";
 
 			// pot_aspen
 			$this->pot_aspen->LinkCustomAttributes = "";
 			$this->pot_aspen->HrefValue = "";
 			$this->pot_aspen->TooltipValue = "";
+
+			// pot_absen
+			$this->pot_absen->LinkCustomAttributes = "";
+			$this->pot_absen->HrefValue = "";
+			$this->pot_absen->TooltipValue = "";
 
 			// pot_bpjs
 			$this->pot_bpjs->LinkCustomAttributes = "";
@@ -1460,13 +1479,13 @@ $t_rumus2_view->ShowMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
-	<tr id="r_pot_absen">
-		<td><span id="elh_t_rumus2_pot_absen"><?php echo $t_rumus2->pot_absen->FldCaption() ?></span></td>
-		<td data-name="pot_absen"<?php echo $t_rumus2->pot_absen->CellAttributes() ?>>
-<span id="el_t_rumus2_pot_absen">
-<span<?php echo $t_rumus2->pot_absen->ViewAttributes() ?>>
-<?php echo $t_rumus2->pot_absen->ViewValue ?></span>
+<?php if ($t_rumus2->lembur->Visible) { // lembur ?>
+	<tr id="r_lembur">
+		<td><span id="elh_t_rumus2_lembur"><?php echo $t_rumus2->lembur->FldCaption() ?></span></td>
+		<td data-name="lembur"<?php echo $t_rumus2->lembur->CellAttributes() ?>>
+<span id="el_t_rumus2_lembur">
+<span<?php echo $t_rumus2->lembur->ViewAttributes() ?>>
+<?php echo $t_rumus2->lembur->ViewValue ?></span>
 </span>
 </td>
 	</tr>
@@ -1478,6 +1497,17 @@ $t_rumus2_view->ShowMessage();
 <span id="el_t_rumus2_pot_aspen">
 <span<?php echo $t_rumus2->pot_aspen->ViewAttributes() ?>>
 <?php echo $t_rumus2->pot_aspen->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($t_rumus2->pot_absen->Visible) { // pot_absen ?>
+	<tr id="r_pot_absen">
+		<td><span id="elh_t_rumus2_pot_absen"><?php echo $t_rumus2->pot_absen->FldCaption() ?></span></td>
+		<td data-name="pot_absen"<?php echo $t_rumus2->pot_absen->CellAttributes() ?>>
+<span id="el_t_rumus2_pot_absen">
+<span<?php echo $t_rumus2->pot_absen->ViewAttributes() ?>>
+<?php echo $t_rumus2->pot_absen->ViewValue ?></span>
 </span>
 </td>
 	</tr>

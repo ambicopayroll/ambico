@@ -20,8 +20,9 @@ class ct_rumus2 extends cTable {
 	var $premi_malam;
 	var $lp;
 	var $forklift;
-	var $pot_absen;
+	var $lembur;
 	var $pot_aspen;
+	var $pot_absen;
 	var $pot_bpjs;
 
 	//
@@ -96,17 +97,23 @@ class ct_rumus2 extends cTable {
 		$this->forklift->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
 		$this->fields['forklift'] = &$this->forklift;
 
-		// pot_absen
-		$this->pot_absen = new cField('t_rumus2', 't_rumus2', 'x_pot_absen', 'pot_absen', '`pot_absen`', '`pot_absen`', 4, -1, FALSE, '`pot_absen`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->pot_absen->Sortable = TRUE; // Allow sort
-		$this->pot_absen->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
-		$this->fields['pot_absen'] = &$this->pot_absen;
+		// lembur
+		$this->lembur = new cField('t_rumus2', 't_rumus2', 'x_lembur', 'lembur', '`lembur`', '`lembur`', 4, -1, FALSE, '`lembur`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->lembur->Sortable = TRUE; // Allow sort
+		$this->lembur->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
+		$this->fields['lembur'] = &$this->lembur;
 
 		// pot_aspen
 		$this->pot_aspen = new cField('t_rumus2', 't_rumus2', 'x_pot_aspen', 'pot_aspen', '`pot_aspen`', '`pot_aspen`', 4, -1, FALSE, '`pot_aspen`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->pot_aspen->Sortable = TRUE; // Allow sort
 		$this->pot_aspen->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
 		$this->fields['pot_aspen'] = &$this->pot_aspen;
+
+		// pot_absen
+		$this->pot_absen = new cField('t_rumus2', 't_rumus2', 'x_pot_absen', 'pot_absen', '`pot_absen`', '`pot_absen`', 4, -1, FALSE, '`pot_absen`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->pot_absen->Sortable = TRUE; // Allow sort
+		$this->pot_absen->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
+		$this->fields['pot_absen'] = &$this->pot_absen;
 
 		// pot_bpjs
 		$this->pot_bpjs = new cField('t_rumus2', 't_rumus2', 'x_pot_bpjs', 'pot_bpjs', '`pot_bpjs`', '`pot_bpjs`', 4, -1, FALSE, '`pot_bpjs`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
@@ -632,8 +639,9 @@ class ct_rumus2 extends cTable {
 		$this->premi_malam->setDbValue($rs->fields('premi_malam'));
 		$this->lp->setDbValue($rs->fields('lp'));
 		$this->forklift->setDbValue($rs->fields('forklift'));
-		$this->pot_absen->setDbValue($rs->fields('pot_absen'));
+		$this->lembur->setDbValue($rs->fields('lembur'));
 		$this->pot_aspen->setDbValue($rs->fields('pot_aspen'));
+		$this->pot_absen->setDbValue($rs->fields('pot_absen'));
 		$this->pot_bpjs->setDbValue($rs->fields('pot_bpjs'));
 	}
 
@@ -652,8 +660,9 @@ class ct_rumus2 extends cTable {
 		// premi_malam
 		// lp
 		// forklift
-		// pot_absen
+		// lembur
 		// pot_aspen
+		// pot_absen
 		// pot_bpjs
 		// rumus2_id
 
@@ -696,17 +705,23 @@ class ct_rumus2 extends cTable {
 		$this->forklift->CellCssStyle .= "text-align: right;";
 		$this->forklift->ViewCustomAttributes = "";
 
-		// pot_absen
-		$this->pot_absen->ViewValue = $this->pot_absen->CurrentValue;
-		$this->pot_absen->ViewValue = ew_FormatNumber($this->pot_absen->ViewValue, 0, -2, -2, -2);
-		$this->pot_absen->CellCssStyle .= "text-align: right;";
-		$this->pot_absen->ViewCustomAttributes = "";
+		// lembur
+		$this->lembur->ViewValue = $this->lembur->CurrentValue;
+		$this->lembur->ViewValue = ew_FormatNumber($this->lembur->ViewValue, 0, -2, -2, -2);
+		$this->lembur->CellCssStyle .= "text-align: right;";
+		$this->lembur->ViewCustomAttributes = "";
 
 		// pot_aspen
 		$this->pot_aspen->ViewValue = $this->pot_aspen->CurrentValue;
 		$this->pot_aspen->ViewValue = ew_FormatNumber($this->pot_aspen->ViewValue, 2, -2, -2, -2);
 		$this->pot_aspen->CellCssStyle .= "text-align: right;";
 		$this->pot_aspen->ViewCustomAttributes = "";
+
+		// pot_absen
+		$this->pot_absen->ViewValue = $this->pot_absen->CurrentValue;
+		$this->pot_absen->ViewValue = ew_FormatNumber($this->pot_absen->ViewValue, 0, -2, -2, -2);
+		$this->pot_absen->CellCssStyle .= "text-align: right;";
+		$this->pot_absen->ViewCustomAttributes = "";
 
 		// pot_bpjs
 		$this->pot_bpjs->ViewValue = $this->pot_bpjs->CurrentValue;
@@ -749,15 +764,20 @@ class ct_rumus2 extends cTable {
 		$this->forklift->HrefValue = "";
 		$this->forklift->TooltipValue = "";
 
-		// pot_absen
-		$this->pot_absen->LinkCustomAttributes = "";
-		$this->pot_absen->HrefValue = "";
-		$this->pot_absen->TooltipValue = "";
+		// lembur
+		$this->lembur->LinkCustomAttributes = "";
+		$this->lembur->HrefValue = "";
+		$this->lembur->TooltipValue = "";
 
 		// pot_aspen
 		$this->pot_aspen->LinkCustomAttributes = "";
 		$this->pot_aspen->HrefValue = "";
 		$this->pot_aspen->TooltipValue = "";
+
+		// pot_absen
+		$this->pot_absen->LinkCustomAttributes = "";
+		$this->pot_absen->HrefValue = "";
+		$this->pot_absen->TooltipValue = "";
 
 		// pot_bpjs
 		$this->pot_bpjs->LinkCustomAttributes = "";
@@ -819,12 +839,12 @@ class ct_rumus2 extends cTable {
 		$this->forklift->PlaceHolder = ew_RemoveHtml($this->forklift->FldCaption());
 		if (strval($this->forklift->EditValue) <> "" && is_numeric($this->forklift->EditValue)) $this->forklift->EditValue = ew_FormatNumber($this->forklift->EditValue, -2, -2, -2, -2);
 
-		// pot_absen
-		$this->pot_absen->EditAttrs["class"] = "form-control";
-		$this->pot_absen->EditCustomAttributes = "";
-		$this->pot_absen->EditValue = $this->pot_absen->CurrentValue;
-		$this->pot_absen->PlaceHolder = ew_RemoveHtml($this->pot_absen->FldCaption());
-		if (strval($this->pot_absen->EditValue) <> "" && is_numeric($this->pot_absen->EditValue)) $this->pot_absen->EditValue = ew_FormatNumber($this->pot_absen->EditValue, -2, -2, -2, -2);
+		// lembur
+		$this->lembur->EditAttrs["class"] = "form-control";
+		$this->lembur->EditCustomAttributes = "";
+		$this->lembur->EditValue = $this->lembur->CurrentValue;
+		$this->lembur->PlaceHolder = ew_RemoveHtml($this->lembur->FldCaption());
+		if (strval($this->lembur->EditValue) <> "" && is_numeric($this->lembur->EditValue)) $this->lembur->EditValue = ew_FormatNumber($this->lembur->EditValue, -2, -2, -2, -2);
 
 		// pot_aspen
 		$this->pot_aspen->EditAttrs["class"] = "form-control";
@@ -832,6 +852,13 @@ class ct_rumus2 extends cTable {
 		$this->pot_aspen->EditValue = $this->pot_aspen->CurrentValue;
 		$this->pot_aspen->PlaceHolder = ew_RemoveHtml($this->pot_aspen->FldCaption());
 		if (strval($this->pot_aspen->EditValue) <> "" && is_numeric($this->pot_aspen->EditValue)) $this->pot_aspen->EditValue = ew_FormatNumber($this->pot_aspen->EditValue, -2, -2, -2, -2);
+
+		// pot_absen
+		$this->pot_absen->EditAttrs["class"] = "form-control";
+		$this->pot_absen->EditCustomAttributes = "";
+		$this->pot_absen->EditValue = $this->pot_absen->CurrentValue;
+		$this->pot_absen->PlaceHolder = ew_RemoveHtml($this->pot_absen->FldCaption());
+		if (strval($this->pot_absen->EditValue) <> "" && is_numeric($this->pot_absen->EditValue)) $this->pot_absen->EditValue = ew_FormatNumber($this->pot_absen->EditValue, -2, -2, -2, -2);
 
 		// pot_bpjs
 		$this->pot_bpjs->EditAttrs["class"] = "form-control";
@@ -873,8 +900,9 @@ class ct_rumus2 extends cTable {
 					if ($this->premi_malam->Exportable) $Doc->ExportCaption($this->premi_malam);
 					if ($this->lp->Exportable) $Doc->ExportCaption($this->lp);
 					if ($this->forklift->Exportable) $Doc->ExportCaption($this->forklift);
-					if ($this->pot_absen->Exportable) $Doc->ExportCaption($this->pot_absen);
+					if ($this->lembur->Exportable) $Doc->ExportCaption($this->lembur);
 					if ($this->pot_aspen->Exportable) $Doc->ExportCaption($this->pot_aspen);
+					if ($this->pot_absen->Exportable) $Doc->ExportCaption($this->pot_absen);
 					if ($this->pot_bpjs->Exportable) $Doc->ExportCaption($this->pot_bpjs);
 				} else {
 					if ($this->rumus2_id->Exportable) $Doc->ExportCaption($this->rumus2_id);
@@ -884,8 +912,9 @@ class ct_rumus2 extends cTable {
 					if ($this->premi_malam->Exportable) $Doc->ExportCaption($this->premi_malam);
 					if ($this->lp->Exportable) $Doc->ExportCaption($this->lp);
 					if ($this->forklift->Exportable) $Doc->ExportCaption($this->forklift);
-					if ($this->pot_absen->Exportable) $Doc->ExportCaption($this->pot_absen);
+					if ($this->lembur->Exportable) $Doc->ExportCaption($this->lembur);
 					if ($this->pot_aspen->Exportable) $Doc->ExportCaption($this->pot_aspen);
+					if ($this->pot_absen->Exportable) $Doc->ExportCaption($this->pot_absen);
 					if ($this->pot_bpjs->Exportable) $Doc->ExportCaption($this->pot_bpjs);
 				}
 				$Doc->EndExportRow();
@@ -924,8 +953,9 @@ class ct_rumus2 extends cTable {
 						if ($this->premi_malam->Exportable) $Doc->ExportField($this->premi_malam);
 						if ($this->lp->Exportable) $Doc->ExportField($this->lp);
 						if ($this->forklift->Exportable) $Doc->ExportField($this->forklift);
-						if ($this->pot_absen->Exportable) $Doc->ExportField($this->pot_absen);
+						if ($this->lembur->Exportable) $Doc->ExportField($this->lembur);
 						if ($this->pot_aspen->Exportable) $Doc->ExportField($this->pot_aspen);
+						if ($this->pot_absen->Exportable) $Doc->ExportField($this->pot_absen);
 						if ($this->pot_bpjs->Exportable) $Doc->ExportField($this->pot_bpjs);
 					} else {
 						if ($this->rumus2_id->Exportable) $Doc->ExportField($this->rumus2_id);
@@ -935,8 +965,9 @@ class ct_rumus2 extends cTable {
 						if ($this->premi_malam->Exportable) $Doc->ExportField($this->premi_malam);
 						if ($this->lp->Exportable) $Doc->ExportField($this->lp);
 						if ($this->forklift->Exportable) $Doc->ExportField($this->forklift);
-						if ($this->pot_absen->Exportable) $Doc->ExportField($this->pot_absen);
+						if ($this->lembur->Exportable) $Doc->ExportField($this->lembur);
 						if ($this->pot_aspen->Exportable) $Doc->ExportField($this->pot_aspen);
+						if ($this->pot_absen->Exportable) $Doc->ExportField($this->pot_absen);
 						if ($this->pot_bpjs->Exportable) $Doc->ExportField($this->pot_bpjs);
 					}
 					$Doc->EndExportRow();

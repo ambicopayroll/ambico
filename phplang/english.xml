@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/5/8" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/10" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -2245,11 +2245,14 @@
       <field id="forklift">
         <phrase id="fldcaption" value="Tunj. Forklift" />
       </field>
-      <field id="pot_absen">
-        <phrase id="fldcaption" value="Pot. Absen" />
+      <field id="lembur">
+        <phrase id="fldcaption" value="Lembur" />
       </field>
       <field id="pot_aspen">
         <phrase id="fldcaption" value="Pot. Astek &amp; Pensiun" />
+      </field>
+      <field id="pot_absen">
+        <phrase id="fldcaption" value="Pot. Absen" />
       </field>
       <field id="pot_bpjs">
         <phrase id="fldcaption" value="Pot. BPJS" />
@@ -2950,6 +2953,9 @@
       <field id="pembagian2_id">
         <phrase id="fldcaption" value="pembagian 2 id" />
       </field>
+      <field id="pegawai_pin">
+        <phrase id="fldcaption" value="pegawai pin" />
+      </field>
     </table>
     <table id="gen_jdw_krj__php">
       <phrase id="tblcaption" value="Generate Jadwal Kerja" />
@@ -3073,6 +3079,9 @@
       </field>
       <field id="premi_malam2">
         <phrase id="fldcaption" value="premi malam 2" />
+      </field>
+      <field id="premi_hadir2">
+        <phrase id="fldcaption" value="premi hadir 2" />
       </field>
     </table>
     <table id="t_gjhrn">
