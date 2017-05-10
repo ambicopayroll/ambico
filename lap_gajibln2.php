@@ -133,7 +133,7 @@ while (!$rs->EOF) {
 					else {
 						// ada data pengecualian
 						$mdata_valid = 0;
-						if ($kode_pengecualian == "TL") $mterlambat = 1;
+						if ($kode_pengecualian == "TL") $mterlambat = 1; // untuk acuan perhitungan tunjangan hadir
 					}
 				}
 				
@@ -156,7 +156,7 @@ while (!$rs->EOF) {
 				$rs2->MoveNext(); // go to next record on data rekonsiliasi
 			}
 			
-			if ($mabsen == 0 or $mterlambat == 0) $t_hadir = 0;
+			if ($mabsen == 1 or $mterlambat == 1) $t_hadir = 0;
 			$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $mt_lembur + $t_hadir + $mt_um; //+ $mt_fork;
 			$netto = $bruto - $p_aspen - $p_bpjs;
 			
