@@ -34,6 +34,10 @@ function f_carikodepengecualian($mpegawai_id, $mtgl, $mconn) {
 	}
 }
 
+function f_carilamakerja($p_pegawai_pin, $p_tgl) {
+	
+}
+
 $msql = "delete from t_gjbln";
 $conn->Execute($msql);
 
@@ -137,7 +141,7 @@ while (!$rs->EOF) {
 							$mdata_valid = 0;
 						}
 						if ($kode_pengecualian == "HD") {
-							$lama_kerja = f_carilamakerja();
+							$lama_kerja = f_carilamakerja($pegawai_pin, $tgl);
 							$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6) / 2;
 						}
 					}
