@@ -120,16 +120,19 @@ while (!$rs->EOF) {
 					// cari di tabel pengecualian
 					$kode_pengecualian = f_carikodepengecualian($pegawai_id, $tgl, $conn);
 					if ($kode_pengecualian == null) {
+						// tidak ada data pengecualian
+						
+						// check hari libur
 						if (substr($jk_kd, -1) == "L") {
-							
 						}
 						else {
-							// tidak ada data pengecualian
 							$mabsen = 1; // untuk acuan perhitungan tunjangan hadir
 							$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6);
 						}
 					}
 					else {
+						// ada data pengecualian
+						$mdata_valid = 0;
 						if ($kode_pengecualian == "TL") $mterlambat = 1;
 					}
 				}
