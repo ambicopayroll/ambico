@@ -66,14 +66,17 @@ while (!$rs->EOF) {
 		while ($rs->fields["pembagian2_id"] == $mpembagian2_id and !$rs->EOF) {
 			
 			// prepare data
-			$mgp       = $rs->fields["gp"]; // gaji pokok
-			$mt_jbtn   = $rs->fields["tj"]; // tunjangan jabatan
-			$mp_absen  = 0; // potongan absen
-			$mt_malam  = $rs->fields["premi_malam"]; // tunjangan malam
-			$mt_lembur = 0; // tunjangan lembur
-			$mt_hadir  = $rs->fields["premi_hadir"]; // tunjangan hadir
-			$mt_um     = 0; // tunjangan uang makan
-			$mt_fork   = 0; // tunjangan forklift
+			$gp       = $rs->fields["gp"]; // gaji pokok
+			$t_jbtn   = $rs->fields["tj"]; // tunjangan jabatan
+			$t_hadir  = $rs->fields["premi_hadir"]; // tunjangan hadir
+			$t_malam  = $rs->fields["premi_malam"]; // tunjangan malam
+			$t_um     = $rs->fields["lp"]; // tunjangan uang makan
+			$t_fork   = $rs->fields["forklift"]; // tunjangan forklift
+			$t_lembur = $rs->fields["lembur"]; // tunjangan lembur
+			$p_absen5 = $mgp / 25; // potongan absen 5 hk
+			$p_absen6 = $mgp / 30; // potongan absen 6 hk
+			$p_aspen  = $mgp * $rs->fields["pot_aspen"]; // potongan astek & pensiun
+			$p_bpjs   = ($rs->fields["pot_bpjs"] < 1 ? $mgp * $rs->fields["pot_bpjs"] : $rs->fields["pot_bpjs"]; // potongan bpjs
 			
 			$msql = "
 				select * from v_jdw_krj_def
