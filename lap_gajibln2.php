@@ -196,5 +196,5 @@ while (!$rs->EOF) {
 	}
 }
 $rs->Close();
-header("location: r_lapgjblnsmry.php");
+header("location: r_lapgjblnsmry.php?start=".$_POST["start"]."&end=".$_POST["end"]."");
 ?>
