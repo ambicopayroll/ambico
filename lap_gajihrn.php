@@ -109,5 +109,5 @@ while (!$rs->EOF) {
 	$mgrand_total += $mtotal1;
 }
 $rs->Close();
-header("location: r_lapgjhrnsmry.php");
+header("location: r_lapgjhrnsmry.php?start=".$_POST["start"]."&end=".$_POST["end"]."");
 ?>

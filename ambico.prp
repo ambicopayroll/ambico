@@ -1148,6 +1148,13 @@ function Cell_Rendered(&$Field, $CurrentValue, &$ViewValue, &$ViewAttrs, &$CellA
 	}
 }
 ]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="summary" ScriptL1Key="r_lapgjhrn" ScriptL2Key=""><![CDATA[// Page Data Rendering event
+function Page_DataRendering(&$header) {
+	// Example:
+	//$header = "your header";
+	$header = "Laporan Gaji Harian<br>Periode ".$_GET["start"]." s.d. ".$_GET["end"]."";
+}
+]]></CustomScript>
   <Menu MenuID="86" MenuText="t gjbln" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="t_gjbln" MenuType="Table" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="100" />
   <Menu MenuID="87" MenuText="Gaji (Bulanan)" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="r_lapgjbln" MenuType="Table" MenuCustomUrl="0" MenuLevel="0" MenuShow="1" MenuDisplayOrder="200" />
   <Menu MenuID="84" MenuText="t gjhrn" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="t_gjhrn" MenuType="Table" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="300" />
