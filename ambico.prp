@@ -1191,7 +1191,7 @@ function Page_DataRendering(&$header) {
 function Page_DataRendering(&$header) {
 	// Example:
 	//$header = "your header";
-	$header = "Laporan Gaji Harian<br>Periode ".tgl_indo_header($_GET["start"])." s.d. ".tgl_indo_header($_GET["end"])."<br>&nbsp;";
+	$header = "Laporan Gaji Bulanan<br>Periode ".tgl_indo_header($_GET["start"])." s.d. ".tgl_indo_header($_GET["end"])."<br>&nbsp;";
 }
 ]]></CustomScript>
   <Menu MenuID="86" MenuText="t gjbln" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="t_gjbln" MenuType="Table" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="100" />
