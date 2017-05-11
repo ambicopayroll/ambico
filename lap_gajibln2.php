@@ -34,8 +34,22 @@ function f_carikodepengecualian($mpegawai_id, $mtgl, $mconn) {
 	}
 }
 
-function f_carilamakerja($p_pegawai_pin, $p_tgl, $p_conn) {
-	$query = "select * from att_log where pin = ".$p_pegawai_pin." and cast(scan_date as date) = cast('".$p_tgl."' as date)";
+function f_carilamakerja($p_pegawai_id, $p_tgl, $p_conn) {
+	$query = "select * from t_pengecualian_peg where pegawai_id = ".$p_pegawai_id." and tgl = '".$p_tgl."'";
+	$rs = $p_conn->Execute($query);
+	if (!$rs->EOF) {
+		$lama_kerja = strtotime($rs->fields["jam_keluar"]) - strtotime($rs->fields["jam_masuk"]);
+		$lama_kerja = floor($lama_kerja / (60 * 60));
+		return $lama_kerja;
+		/*$awal  = strtotime('2017-08-10 10:05:25');
+		$akhir = strtotime('2017-08-11 11:07:33');
+		$diff  = $akhir - $awal;
+
+		$jam   = floor($diff / (60 * 60));
+		$menit = $diff - $jam * (60 * 60);
+		echo 'Waktu tinggal: ' . $jam .  ' jam, ' . floor( $menit / 60 ) . ' menit';*/
+		
+	}
 }
 
 $msql = "delete from t_gjbln";
@@ -141,8 +155,13 @@ while (!$rs->EOF) {
 							$mdata_valid = 0;
 						}
 						if ($kode_pengecualian == "HD") {
-							$lama_kerja = f_carilamakerja($pegawai_pin, $tgl, $conn);
-							$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6) / 2;
+							$lama_kerja = f_carilamakerja($pegawai_id, $tgl, $conn);
+							if ($lama_kerja != null and $lama_kerja >= 3) {
+								$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6) / 2;
+							}
+							else {
+								$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6);
+							}
 						}
 					}
 				}
