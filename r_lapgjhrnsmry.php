@@ -1724,7 +1724,7 @@ class crr_lapgjhrn_summary extends crr_lapgjhrn {
 		// Example:
 		//$header = "your header";
 
-		$header = "Laporan Gaji Harian<br>Periode ".$_GET["start"]." s.d. ".$_GET["end"]."";
+		$header = "Laporan Gaji Harian<br>Periode ".tgl_indo_header($_GET["start"])." s.d. ".tgl_indo_header($_GET["end"])."<br>&nbsp;";
 	}
 
 	// Page Data Rendered event
