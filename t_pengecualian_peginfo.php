@@ -17,6 +17,8 @@ class ct_pengecualian_peg extends cTable {
 	var $pegawai_id;
 	var $tgl;
 	var $jns_id;
+	var $jam_masuk;
+	var $jam_keluar;
 
 	//
 	// Table class constructor
@@ -75,6 +77,18 @@ class ct_pengecualian_peg extends cTable {
 		$this->jns_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
 		$this->jns_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['jns_id'] = &$this->jns_id;
+
+		// jam_masuk
+		$this->jam_masuk = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_jam_masuk', 'jam_masuk', '`jam_masuk`', ew_CastDateFieldForLike('`jam_masuk`', 9, "DB"), 135, 9, FALSE, '`jam_masuk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->jam_masuk->Sortable = TRUE; // Allow sort
+		$this->jam_masuk->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectDateYMD"));
+		$this->fields['jam_masuk'] = &$this->jam_masuk;
+
+		// jam_keluar
+		$this->jam_keluar = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_jam_keluar', 'jam_keluar', '`jam_keluar`', ew_CastDateFieldForLike('`jam_keluar`', 9, "DB"), 135, 9, FALSE, '`jam_keluar`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->jam_keluar->Sortable = TRUE; // Allow sort
+		$this->jam_keluar->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectDateYMD"));
+		$this->fields['jam_keluar'] = &$this->jam_keluar;
 	}
 
 	// Set Field Visibility
@@ -710,6 +724,8 @@ class ct_pengecualian_peg extends cTable {
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
+		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
+		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
 	}
 
 	// Render list row values
@@ -724,6 +740,8 @@ class ct_pengecualian_peg extends cTable {
 		// pegawai_id
 		// tgl
 		// jns_id
+		// jam_masuk
+		// jam_keluar
 		// pengecualian_id
 
 		$this->pengecualian_id->ViewValue = $this->pengecualian_id->CurrentValue;
@@ -788,6 +806,16 @@ class ct_pengecualian_peg extends cTable {
 		}
 		$this->jns_id->ViewCustomAttributes = "";
 
+		// jam_masuk
+		$this->jam_masuk->ViewValue = $this->jam_masuk->CurrentValue;
+		$this->jam_masuk->ViewValue = ew_FormatDateTime($this->jam_masuk->ViewValue, 9);
+		$this->jam_masuk->ViewCustomAttributes = "";
+
+		// jam_keluar
+		$this->jam_keluar->ViewValue = $this->jam_keluar->CurrentValue;
+		$this->jam_keluar->ViewValue = ew_FormatDateTime($this->jam_keluar->ViewValue, 9);
+		$this->jam_keluar->ViewCustomAttributes = "";
+
 		// pengecualian_id
 		$this->pengecualian_id->LinkCustomAttributes = "";
 		$this->pengecualian_id->HrefValue = "";
@@ -807,6 +835,16 @@ class ct_pengecualian_peg extends cTable {
 		$this->jns_id->LinkCustomAttributes = "";
 		$this->jns_id->HrefValue = "";
 		$this->jns_id->TooltipValue = "";
+
+		// jam_masuk
+		$this->jam_masuk->LinkCustomAttributes = "";
+		$this->jam_masuk->HrefValue = "";
+		$this->jam_masuk->TooltipValue = "";
+
+		// jam_keluar
+		$this->jam_keluar->LinkCustomAttributes = "";
+		$this->jam_keluar->HrefValue = "";
+		$this->jam_keluar->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -868,6 +906,18 @@ class ct_pengecualian_peg extends cTable {
 		$this->jns_id->EditAttrs["class"] = "form-control";
 		$this->jns_id->EditCustomAttributes = "";
 
+		// jam_masuk
+		$this->jam_masuk->EditAttrs["class"] = "form-control";
+		$this->jam_masuk->EditCustomAttributes = "";
+		$this->jam_masuk->EditValue = ew_FormatDateTime($this->jam_masuk->CurrentValue, 9);
+		$this->jam_masuk->PlaceHolder = ew_RemoveHtml($this->jam_masuk->FldCaption());
+
+		// jam_keluar
+		$this->jam_keluar->EditAttrs["class"] = "form-control";
+		$this->jam_keluar->EditCustomAttributes = "";
+		$this->jam_keluar->EditValue = ew_FormatDateTime($this->jam_keluar->CurrentValue, 9);
+		$this->jam_keluar->PlaceHolder = ew_RemoveHtml($this->jam_keluar->FldCaption());
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -898,11 +948,15 @@ class ct_pengecualian_peg extends cTable {
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
 					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->jns_id->Exportable) $Doc->ExportCaption($this->jns_id);
+					if ($this->jam_masuk->Exportable) $Doc->ExportCaption($this->jam_masuk);
+					if ($this->jam_keluar->Exportable) $Doc->ExportCaption($this->jam_keluar);
 				} else {
 					if ($this->pengecualian_id->Exportable) $Doc->ExportCaption($this->pengecualian_id);
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
 					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->jns_id->Exportable) $Doc->ExportCaption($this->jns_id);
+					if ($this->jam_masuk->Exportable) $Doc->ExportCaption($this->jam_masuk);
+					if ($this->jam_keluar->Exportable) $Doc->ExportCaption($this->jam_keluar);
 				}
 				$Doc->EndExportRow();
 			}
@@ -937,11 +991,15 @@ class ct_pengecualian_peg extends cTable {
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
 						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->jns_id->Exportable) $Doc->ExportField($this->jns_id);
+						if ($this->jam_masuk->Exportable) $Doc->ExportField($this->jam_masuk);
+						if ($this->jam_keluar->Exportable) $Doc->ExportField($this->jam_keluar);
 					} else {
 						if ($this->pengecualian_id->Exportable) $Doc->ExportField($this->pengecualian_id);
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
 						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->jns_id->Exportable) $Doc->ExportField($this->jns_id);
+						if ($this->jam_masuk->Exportable) $Doc->ExportField($this->jam_masuk);
+						if ($this->jam_keluar->Exportable) $Doc->ExportField($this->jam_keluar);
 					}
 					$Doc->EndExportRow();
 				}

@@ -2398,9 +2398,6 @@
       <field id="sn">
         <phrase id="fldcaption" value="sn" />
       </field>
-      <field id="scan_date">
-        <phrase id="fldcaption" value="scan date" />
-      </field>
       <field id="att_id">
         <phrase id="fldcaption" value="att id" />
       </field>
@@ -2413,11 +2410,14 @@
       <field id="pegawai_nama">
         <phrase id="fldcaption" value="Nama" />
       </field>
+      <field id="scan_date_tgl">
+        <phrase id="fldcaption" value="Hari, Tgl." />
+      </field>
       <field id="scan_date_tgl_jam">
         <phrase id="fldcaption" value="Tgl. &amp; Jam" />
       </field>
-      <field id="scan_date_tgl">
-        <phrase id="fldcaption" value="Hari, Tgl." />
+      <field id="scan_date">
+        <phrase id="fldcaption" value="Raw Data" />
       </field>
     </table>
     <table id="v_jdw_krj_def">

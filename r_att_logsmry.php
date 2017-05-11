@@ -541,14 +541,15 @@ class crr_att_log_summary extends crr_att_log {
 		$this->pin->SetVisibility();
 		$this->pegawai_nip->SetVisibility();
 		$this->pegawai_nama->SetVisibility();
-		$this->scan_date_tgl_jam->SetVisibility();
 		$this->scan_date_tgl->SetVisibility();
+		$this->scan_date_tgl_jam->SetVisibility();
+		$this->scan_date->SetVisibility();
 
 		// Aggregate variables
 		// 1st dimension = no of groups (level 0 used for grand total)
 		// 2nd dimension = no of fields
 
-		$nDtls = 6;
+		$nDtls = 7;
 		$nGrps = 1;
 		$this->Val = &ewr_InitArray($nDtls, 0);
 		$this->Cnt = &ewr_Init2DArray($nGrps, $nDtls, 0);
@@ -561,7 +562,7 @@ class crr_att_log_summary extends crr_att_log {
 		$this->GrandMx = &ewr_InitArray($nDtls, NULL);
 
 		// Set up array if accumulation required: array(Accum, SkipNullOrZero)
-		$this->Col = array(array(FALSE, FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE));
+		$this->Col = array(array(FALSE, FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE));
 
 		// Set up groups per page dynamically
 		$this->SetUpDisplayGrps();
@@ -783,39 +784,40 @@ class crr_att_log_summary extends crr_att_log {
 			$rs->MoveFirst(); // Move first
 				$this->FirstRowData = array();
 				$this->FirstRowData['sn'] = ewr_Conv($rs->fields('sn'), 200);
-				$this->FirstRowData['scan_date'] = ewr_Conv($rs->fields('scan_date'), 135);
 				$this->FirstRowData['att_id'] = ewr_Conv($rs->fields('att_id'), 200);
 				$this->FirstRowData['pin'] = ewr_Conv($rs->fields('pin'), 200);
 				$this->FirstRowData['pegawai_nip'] = ewr_Conv($rs->fields('pegawai_nip'), 200);
 				$this->FirstRowData['pegawai_nama'] = ewr_Conv($rs->fields('pegawai_nama'), 200);
-				$this->FirstRowData['scan_date_tgl_jam'] = ewr_Conv($rs->fields('scan_date_tgl_jam'), 200);
 				$this->FirstRowData['scan_date_tgl'] = ewr_Conv($rs->fields('scan_date_tgl'), 133);
+				$this->FirstRowData['scan_date_tgl_jam'] = ewr_Conv($rs->fields('scan_date_tgl_jam'), 200);
+				$this->FirstRowData['scan_date'] = ewr_Conv($rs->fields('scan_date'), 135);
 		} else { // Get next row
 			$rs->MoveNext();
 		}
 		if (!$rs->EOF) {
 			$this->sn->setDbValue($rs->fields('sn'));
-			$this->scan_date->setDbValue($rs->fields('scan_date'));
 			$this->att_id->setDbValue($rs->fields('att_id'));
 			$this->pin->setDbValue($rs->fields('pin'));
 			$this->pegawai_nip->setDbValue($rs->fields('pegawai_nip'));
 			$this->pegawai_nama->setDbValue($rs->fields('pegawai_nama'));
-			$this->scan_date_tgl_jam->setDbValue($rs->fields('scan_date_tgl_jam'));
 			$this->scan_date_tgl->setDbValue($rs->fields('scan_date_tgl'));
+			$this->scan_date_tgl_jam->setDbValue($rs->fields('scan_date_tgl_jam'));
+			$this->scan_date->setDbValue($rs->fields('scan_date'));
 			$this->Val[1] = $this->pin->CurrentValue;
 			$this->Val[2] = $this->pegawai_nip->CurrentValue;
 			$this->Val[3] = $this->pegawai_nama->CurrentValue;
-			$this->Val[4] = $this->scan_date_tgl_jam->CurrentValue;
-			$this->Val[5] = $this->scan_date_tgl->CurrentValue;
+			$this->Val[4] = $this->scan_date_tgl->CurrentValue;
+			$this->Val[5] = $this->scan_date_tgl_jam->CurrentValue;
+			$this->Val[6] = $this->scan_date->CurrentValue;
 		} else {
 			$this->sn->setDbValue("");
-			$this->scan_date->setDbValue("");
 			$this->att_id->setDbValue("");
 			$this->pin->setDbValue("");
 			$this->pegawai_nip->setDbValue("");
 			$this->pegawai_nama->setDbValue("");
-			$this->scan_date_tgl_jam->setDbValue("");
 			$this->scan_date_tgl->setDbValue("");
+			$this->scan_date_tgl_jam->setDbValue("");
+			$this->scan_date->setDbValue("");
 		}
 	}
 
@@ -1059,11 +1061,14 @@ class crr_att_log_summary extends crr_att_log {
 			// pegawai_nama
 			$this->pegawai_nama->HrefValue = "";
 
+			// scan_date_tgl
+			$this->scan_date_tgl->HrefValue = "";
+
 			// scan_date_tgl_jam
 			$this->scan_date_tgl_jam->HrefValue = "";
 
-			// scan_date_tgl
-			$this->scan_date_tgl->HrefValue = "";
+			// scan_date
+			$this->scan_date->HrefValue = "";
 		} else {
 			if ($this->RowTotalType == EWR_ROWTOTAL_GROUP && $this->RowTotalSubType == EWR_ROWTOTAL_HEADER) {
 			} else {
@@ -1081,14 +1086,19 @@ class crr_att_log_summary extends crr_att_log {
 			$this->pegawai_nama->ViewValue = $this->pegawai_nama->CurrentValue;
 			$this->pegawai_nama->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
 
-			// scan_date_tgl_jam
-			$this->scan_date_tgl_jam->ViewValue = $this->scan_date_tgl_jam->CurrentValue;
-			$this->scan_date_tgl_jam->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
-
 			// scan_date_tgl
 			$this->scan_date_tgl->ViewValue = $this->scan_date_tgl->CurrentValue;
 			$this->scan_date_tgl->ViewValue = tgl_indo($this->scan_date_tgl->ViewValue);
 			$this->scan_date_tgl->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
+
+			// scan_date_tgl_jam
+			$this->scan_date_tgl_jam->ViewValue = $this->scan_date_tgl_jam->CurrentValue;
+			$this->scan_date_tgl_jam->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
+
+			// scan_date
+			$this->scan_date->ViewValue = $this->scan_date->CurrentValue;
+			$this->scan_date->ViewValue = ewr_FormatDateTime($this->scan_date->ViewValue, 9);
+			$this->scan_date->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
 
 			// pin
 			$this->pin->HrefValue = "";
@@ -1099,11 +1109,14 @@ class crr_att_log_summary extends crr_att_log {
 			// pegawai_nama
 			$this->pegawai_nama->HrefValue = "";
 
+			// scan_date_tgl
+			$this->scan_date_tgl->HrefValue = "";
+
 			// scan_date_tgl_jam
 			$this->scan_date_tgl_jam->HrefValue = "";
 
-			// scan_date_tgl
-			$this->scan_date_tgl->HrefValue = "";
+			// scan_date
+			$this->scan_date->HrefValue = "";
 		}
 
 		// Call Cell_Rendered event
@@ -1137,6 +1150,15 @@ class crr_att_log_summary extends crr_att_log {
 			$LinkAttrs = &$this->pegawai_nama->LinkAttrs;
 			$this->Cell_Rendered($this->pegawai_nama, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
 
+			// scan_date_tgl
+			$CurrentValue = $this->scan_date_tgl->CurrentValue;
+			$ViewValue = &$this->scan_date_tgl->ViewValue;
+			$ViewAttrs = &$this->scan_date_tgl->ViewAttrs;
+			$CellAttrs = &$this->scan_date_tgl->CellAttrs;
+			$HrefValue = &$this->scan_date_tgl->HrefValue;
+			$LinkAttrs = &$this->scan_date_tgl->LinkAttrs;
+			$this->Cell_Rendered($this->scan_date_tgl, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
+
 			// scan_date_tgl_jam
 			$CurrentValue = $this->scan_date_tgl_jam->CurrentValue;
 			$ViewValue = &$this->scan_date_tgl_jam->ViewValue;
@@ -1146,14 +1168,14 @@ class crr_att_log_summary extends crr_att_log {
 			$LinkAttrs = &$this->scan_date_tgl_jam->LinkAttrs;
 			$this->Cell_Rendered($this->scan_date_tgl_jam, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
 
-			// scan_date_tgl
-			$CurrentValue = $this->scan_date_tgl->CurrentValue;
-			$ViewValue = &$this->scan_date_tgl->ViewValue;
-			$ViewAttrs = &$this->scan_date_tgl->ViewAttrs;
-			$CellAttrs = &$this->scan_date_tgl->CellAttrs;
-			$HrefValue = &$this->scan_date_tgl->HrefValue;
-			$LinkAttrs = &$this->scan_date_tgl->LinkAttrs;
-			$this->Cell_Rendered($this->scan_date_tgl, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
+			// scan_date
+			$CurrentValue = $this->scan_date->CurrentValue;
+			$ViewValue = &$this->scan_date->ViewValue;
+			$ViewAttrs = &$this->scan_date->ViewAttrs;
+			$CellAttrs = &$this->scan_date->CellAttrs;
+			$HrefValue = &$this->scan_date->HrefValue;
+			$LinkAttrs = &$this->scan_date->LinkAttrs;
+			$this->Cell_Rendered($this->scan_date, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
 		}
 
 		// Call Row_Rendered event
@@ -1169,8 +1191,9 @@ class crr_att_log_summary extends crr_att_log {
 		if ($this->pin->Visible) $this->DtlColumnCount += 1;
 		if ($this->pegawai_nip->Visible) $this->DtlColumnCount += 1;
 		if ($this->pegawai_nama->Visible) $this->DtlColumnCount += 1;
-		if ($this->scan_date_tgl_jam->Visible) $this->DtlColumnCount += 1;
 		if ($this->scan_date_tgl->Visible) $this->DtlColumnCount += 1;
+		if ($this->scan_date_tgl_jam->Visible) $this->DtlColumnCount += 1;
+		if ($this->scan_date->Visible) $this->DtlColumnCount += 1;
 	}
 
 	// Set up Breadcrumb
@@ -1869,8 +1892,9 @@ class crr_att_log_summary extends crr_att_log {
 			$this->pin->setSort("");
 			$this->pegawai_nip->setSort("");
 			$this->pegawai_nama->setSort("");
-			$this->scan_date_tgl_jam->setSort("");
 			$this->scan_date_tgl->setSort("");
+			$this->scan_date_tgl_jam->setSort("");
+			$this->scan_date->setSort("");
 
 		// Check for an Order parameter
 		} elseif ($orderBy <> "") {
@@ -1879,8 +1903,9 @@ class crr_att_log_summary extends crr_att_log {
 			$this->UpdateSort($this->pin, $bCtrl); // pin
 			$this->UpdateSort($this->pegawai_nip, $bCtrl); // pegawai_nip
 			$this->UpdateSort($this->pegawai_nama, $bCtrl); // pegawai_nama
-			$this->UpdateSort($this->scan_date_tgl_jam, $bCtrl); // scan_date_tgl_jam
 			$this->UpdateSort($this->scan_date_tgl, $bCtrl); // scan_date_tgl
+			$this->UpdateSort($this->scan_date_tgl_jam, $bCtrl); // scan_date_tgl_jam
+			$this->UpdateSort($this->scan_date, $bCtrl); // scan_date
 			$sSortSql = $this->SortSql();
 			$this->setOrderBy($sSortSql);
 			$this->setStartGroup(1);
@@ -2461,6 +2486,26 @@ while ($rs && !$rs->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page->ShowH
 	</td>
 <?php } ?>
 <?php } ?>
+<?php if ($Page->scan_date_tgl->Visible) { ?>
+<?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
+	<td data-field="scan_date_tgl"><div class="r_att_log_scan_date_tgl"><span class="ewTableHeaderCaption"><?php echo $Page->scan_date_tgl->FldCaption() ?></span></div></td>
+<?php } else { ?>
+	<td data-field="scan_date_tgl">
+<?php if ($Page->SortUrl($Page->scan_date_tgl) == "") { ?>
+		<div class="ewTableHeaderBtn r_att_log_scan_date_tgl">
+			<span class="ewTableHeaderCaption"><?php echo $Page->scan_date_tgl->FldCaption() ?></span>
+			<a class="ewTableHeaderPopup" title="<?php echo $ReportLanguage->Phrase("Filter"); ?>" onclick="ewr_ShowPopup.call(this, event, 'r_att_log_scan_date_tgl', true, '<?php echo $Page->scan_date_tgl->RangeFrom; ?>', '<?php echo $Page->scan_date_tgl->RangeTo; ?>');" id="x_scan_date_tgl<?php echo $Page->Cnt[0][0]; ?>"><span class="icon-filter"></span></a>
+		</div>
+<?php } else { ?>
+		<div class="ewTableHeaderBtn ewPointer r_att_log_scan_date_tgl" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->scan_date_tgl) ?>',2);">
+			<span class="ewTableHeaderCaption"><?php echo $Page->scan_date_tgl->FldCaption() ?></span>
+			<span class="ewTableHeaderSort"><?php if ($Page->scan_date_tgl->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->scan_date_tgl->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
+			<a class="ewTableHeaderPopup" title="<?php echo $ReportLanguage->Phrase("Filter"); ?>" onclick="ewr_ShowPopup.call(this, event, 'r_att_log_scan_date_tgl', true, '<?php echo $Page->scan_date_tgl->RangeFrom; ?>', '<?php echo $Page->scan_date_tgl->RangeTo; ?>');" id="x_scan_date_tgl<?php echo $Page->Cnt[0][0]; ?>"><span class="icon-filter"></span></a>
+		</div>
+<?php } ?>
+	</td>
+<?php } ?>
+<?php } ?>
 <?php if ($Page->scan_date_tgl_jam->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
 	<td data-field="scan_date_tgl_jam"><div class="r_att_log_scan_date_tgl_jam"><span class="ewTableHeaderCaption"><?php echo $Page->scan_date_tgl_jam->FldCaption() ?></span></div></td>
@@ -2479,21 +2524,19 @@ while ($rs && !$rs->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page->ShowH
 	</td>
 <?php } ?>
 <?php } ?>
-<?php if ($Page->scan_date_tgl->Visible) { ?>
+<?php if ($Page->scan_date->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="scan_date_tgl"><div class="r_att_log_scan_date_tgl"><span class="ewTableHeaderCaption"><?php echo $Page->scan_date_tgl->FldCaption() ?></span></div></td>
+	<td data-field="scan_date"><div class="r_att_log_scan_date"><span class="ewTableHeaderCaption"><?php echo $Page->scan_date->FldCaption() ?></span></div></td>
 <?php } else { ?>
-	<td data-field="scan_date_tgl">
-<?php if ($Page->SortUrl($Page->scan_date_tgl) == "") { ?>
-		<div class="ewTableHeaderBtn r_att_log_scan_date_tgl">
-			<span class="ewTableHeaderCaption"><?php echo $Page->scan_date_tgl->FldCaption() ?></span>
-			<a class="ewTableHeaderPopup" title="<?php echo $ReportLanguage->Phrase("Filter"); ?>" onclick="ewr_ShowPopup.call(this, event, 'r_att_log_scan_date_tgl', true, '<?php echo $Page->scan_date_tgl->RangeFrom; ?>', '<?php echo $Page->scan_date_tgl->RangeTo; ?>');" id="x_scan_date_tgl<?php echo $Page->Cnt[0][0]; ?>"><span class="icon-filter"></span></a>
+	<td data-field="scan_date">
+<?php if ($Page->SortUrl($Page->scan_date) == "") { ?>
+		<div class="ewTableHeaderBtn r_att_log_scan_date">
+			<span class="ewTableHeaderCaption"><?php echo $Page->scan_date->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_att_log_scan_date_tgl" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->scan_date_tgl) ?>',2);">
-			<span class="ewTableHeaderCaption"><?php echo $Page->scan_date_tgl->FldCaption() ?></span>
-			<span class="ewTableHeaderSort"><?php if ($Page->scan_date_tgl->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->scan_date_tgl->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
-			<a class="ewTableHeaderPopup" title="<?php echo $ReportLanguage->Phrase("Filter"); ?>" onclick="ewr_ShowPopup.call(this, event, 'r_att_log_scan_date_tgl', true, '<?php echo $Page->scan_date_tgl->RangeFrom; ?>', '<?php echo $Page->scan_date_tgl->RangeTo; ?>');" id="x_scan_date_tgl<?php echo $Page->Cnt[0][0]; ?>"><span class="icon-filter"></span></a>
+		<div class="ewTableHeaderBtn ewPointer r_att_log_scan_date" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->scan_date) ?>',2);">
+			<span class="ewTableHeaderCaption"><?php echo $Page->scan_date->FldCaption() ?></span>
+			<span class="ewTableHeaderSort"><?php if ($Page->scan_date->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->scan_date->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
 <?php } ?>
 	</td>
@@ -2529,13 +2572,17 @@ while ($rs && !$rs->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page->ShowH
 		<td data-field="pegawai_nama"<?php echo $Page->pegawai_nama->CellAttributes() ?>>
 <span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_att_log_pegawai_nama"<?php echo $Page->pegawai_nama->ViewAttributes() ?>><?php echo $Page->pegawai_nama->ListViewValue() ?></span></td>
 <?php } ?>
+<?php if ($Page->scan_date_tgl->Visible) { ?>
+		<td data-field="scan_date_tgl"<?php echo $Page->scan_date_tgl->CellAttributes() ?>>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_att_log_scan_date_tgl"<?php echo $Page->scan_date_tgl->ViewAttributes() ?>><?php echo $Page->scan_date_tgl->ListViewValue() ?></span></td>
+<?php } ?>
 <?php if ($Page->scan_date_tgl_jam->Visible) { ?>
 		<td data-field="scan_date_tgl_jam"<?php echo $Page->scan_date_tgl_jam->CellAttributes() ?>>
 <span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_att_log_scan_date_tgl_jam"<?php echo $Page->scan_date_tgl_jam->ViewAttributes() ?>><?php echo $Page->scan_date_tgl_jam->ListViewValue() ?></span></td>
 <?php } ?>
-<?php if ($Page->scan_date_tgl->Visible) { ?>
-		<td data-field="scan_date_tgl"<?php echo $Page->scan_date_tgl->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_att_log_scan_date_tgl"<?php echo $Page->scan_date_tgl->ViewAttributes() ?>><?php echo $Page->scan_date_tgl->ListViewValue() ?></span></td>
+<?php if ($Page->scan_date->Visible) { ?>
+		<td data-field="scan_date"<?php echo $Page->scan_date->CellAttributes() ?>>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_att_log_scan_date"<?php echo $Page->scan_date->ViewAttributes() ?>><?php echo $Page->scan_date->ListViewValue() ?></span></td>
 <?php } ?>
 	</tr>
 <?php

@@ -10,13 +10,13 @@ class crr_att_log extends crTableBase {
 	var $ShowGroupHeaderAsRow = FALSE;
 	var $ShowCompactSummaryFooter = TRUE;
 	var $sn;
-	var $scan_date;
 	var $att_id;
 	var $pin;
 	var $pegawai_nip;
 	var $pegawai_nama;
-	var $scan_date_tgl_jam;
 	var $scan_date_tgl;
+	var $scan_date_tgl_jam;
+	var $scan_date;
 
 	//
 	// Table class constructor
@@ -37,15 +37,6 @@ class crr_att_log extends crTableBase {
 		$this->sn->DateFilter = "";
 		$this->sn->SqlSelect = "";
 		$this->sn->SqlOrderBy = "";
-
-		// scan_date
-		$this->scan_date = new crField('r_att_log', 'r_att_log', 'x_scan_date', 'scan_date', '`scan_date`', 135, EWR_DATATYPE_DATE, 0);
-		$this->scan_date->Sortable = TRUE; // Allow sort
-		$this->scan_date->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EWR_DATE_FORMAT"], $ReportLanguage->Phrase("IncorrectDate"));
-		$this->fields['scan_date'] = &$this->scan_date;
-		$this->scan_date->DateFilter = "";
-		$this->scan_date->SqlSelect = "";
-		$this->scan_date->SqlOrderBy = "";
 
 		// att_id
 		$this->att_id = new crField('r_att_log', 'r_att_log', 'x_att_id', 'att_id', '`att_id`', 200, EWR_DATATYPE_STRING, -1);
@@ -79,14 +70,6 @@ class crr_att_log extends crTableBase {
 		$this->pegawai_nama->SqlSelect = "";
 		$this->pegawai_nama->SqlOrderBy = "";
 
-		// scan_date_tgl_jam
-		$this->scan_date_tgl_jam = new crField('r_att_log', 'r_att_log', 'x_scan_date_tgl_jam', 'scan_date_tgl_jam', '`scan_date_tgl_jam`', 200, EWR_DATATYPE_STRING, -1);
-		$this->scan_date_tgl_jam->Sortable = TRUE; // Allow sort
-		$this->fields['scan_date_tgl_jam'] = &$this->scan_date_tgl_jam;
-		$this->scan_date_tgl_jam->DateFilter = "";
-		$this->scan_date_tgl_jam->SqlSelect = "";
-		$this->scan_date_tgl_jam->SqlOrderBy = "";
-
 		// scan_date_tgl
 		$this->scan_date_tgl = new crField('r_att_log', 'r_att_log', 'x_scan_date_tgl', 'scan_date_tgl', '`scan_date_tgl`', 133, EWR_DATATYPE_DATE, -1);
 		$this->scan_date_tgl->Sortable = TRUE; // Allow sort
@@ -103,6 +86,22 @@ class crr_att_log extends crTableBase {
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Future", $ReportLanguage->Phrase("Future"), "ewr_IsFuture");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Past", $ReportLanguage->Phrase("Past"), "ewr_IsPast");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Future", $ReportLanguage->Phrase("Future"), "ewr_IsFuture");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Past", $ReportLanguage->Phrase("Past"), "ewr_IsPast");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Future", $ReportLanguage->Phrase("Future"), "ewr_IsFuture");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Past", $ReportLanguage->Phrase("Past"), "ewr_IsPast");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Future", $ReportLanguage->Phrase("Future"), "ewr_IsFuture");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Last30Days", $ReportLanguage->Phrase("Last30Days"), "ewr_IsLast30Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Last14Days", $ReportLanguage->Phrase("Last14Days"), "ewr_IsLast14Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Last7Days", $ReportLanguage->Phrase("Last7Days"), "ewr_IsLast7Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Next7Days", $ReportLanguage->Phrase("Next7Days"), "ewr_IsNext7Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Next14Days", $ReportLanguage->Phrase("Next14Days"), "ewr_IsNext14Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Next30Days", $ReportLanguage->Phrase("Next30Days"), "ewr_IsNext30Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Last30Days", $ReportLanguage->Phrase("Last30Days"), "ewr_IsLast30Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Last14Days", $ReportLanguage->Phrase("Last14Days"), "ewr_IsLast14Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Last7Days", $ReportLanguage->Phrase("Last7Days"), "ewr_IsLast7Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Next7Days", $ReportLanguage->Phrase("Next7Days"), "ewr_IsNext7Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Next14Days", $ReportLanguage->Phrase("Next14Days"), "ewr_IsNext14Days");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Next30Days", $ReportLanguage->Phrase("Next30Days"), "ewr_IsNext30Days");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Last30Days", $ReportLanguage->Phrase("Last30Days"), "ewr_IsLast30Days");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Last14Days", $ReportLanguage->Phrase("Last14Days"), "ewr_IsLast14Days");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Last7Days", $ReportLanguage->Phrase("Last7Days"), "ewr_IsLast7Days");
@@ -139,6 +138,18 @@ class crr_att_log extends crTableBase {
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Yesterday", $ReportLanguage->Phrase("Yesterday"), "ewr_IsYesterday");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Today", $ReportLanguage->Phrase("Today"), "ewr_IsToday");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@Tomorrow", $ReportLanguage->Phrase("Tomorrow"), "ewr_IsTomorrow");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Yesterday", $ReportLanguage->Phrase("Yesterday"), "ewr_IsYesterday");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Today", $ReportLanguage->Phrase("Today"), "ewr_IsToday");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Tomorrow", $ReportLanguage->Phrase("Tomorrow"), "ewr_IsTomorrow");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Yesterday", $ReportLanguage->Phrase("Yesterday"), "ewr_IsYesterday");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Today", $ReportLanguage->Phrase("Today"), "ewr_IsToday");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@Tomorrow", $ReportLanguage->Phrase("Tomorrow"), "ewr_IsTomorrow");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@LastMonth", $ReportLanguage->Phrase("LastMonth"), "ewr_IsLastMonth");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisMonth", $ReportLanguage->Phrase("ThisMonth"), "ewr_IsThisMonth");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@NextMonth", $ReportLanguage->Phrase("NextMonth"), "ewr_IsNextMonth");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@LastMonth", $ReportLanguage->Phrase("LastMonth"), "ewr_IsLastMonth");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisMonth", $ReportLanguage->Phrase("ThisMonth"), "ewr_IsThisMonth");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@NextMonth", $ReportLanguage->Phrase("NextMonth"), "ewr_IsNextMonth");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@LastMonth", $ReportLanguage->Phrase("LastMonth"), "ewr_IsLastMonth");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisMonth", $ReportLanguage->Phrase("ThisMonth"), "ewr_IsThisMonth");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@NextMonth", $ReportLanguage->Phrase("NextMonth"), "ewr_IsNextMonth");
@@ -171,6 +182,16 @@ class crr_att_log extends crTableBase {
 		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisWeek", $ReportLanguage->Phrase("ThisWeek"), "ewr_IsThisWeek");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@NextWeek", $ReportLanguage->Phrase("NextWeek"), "ewr_IsNextWeek");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@NextTwoWeeks", $ReportLanguage->Phrase("NextTwoWeeks"), "ewr_IsNext2Weeks");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@LastTwoWeeks", $ReportLanguage->Phrase("LastTwoWeeks"), "ewr_IsLast2Weeks");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@LastWeek", $ReportLanguage->Phrase("LastWeek"), "ewr_IsLastWeek");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisWeek", $ReportLanguage->Phrase("ThisWeek"), "ewr_IsThisWeek");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@NextWeek", $ReportLanguage->Phrase("NextWeek"), "ewr_IsNextWeek");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@NextTwoWeeks", $ReportLanguage->Phrase("NextTwoWeeks"), "ewr_IsNext2Weeks");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@LastTwoWeeks", $ReportLanguage->Phrase("LastTwoWeeks"), "ewr_IsLast2Weeks");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@LastWeek", $ReportLanguage->Phrase("LastWeek"), "ewr_IsLastWeek");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisWeek", $ReportLanguage->Phrase("ThisWeek"), "ewr_IsThisWeek");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@NextWeek", $ReportLanguage->Phrase("NextWeek"), "ewr_IsNextWeek");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@NextTwoWeeks", $ReportLanguage->Phrase("NextTwoWeeks"), "ewr_IsNext2Weeks");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@LastYear", $ReportLanguage->Phrase("LastYear"), "ewr_IsLastYear");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisYear", $ReportLanguage->Phrase("ThisYear"), "ewr_IsThisYear");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@NextYear", $ReportLanguage->Phrase("NextYear"), "ewr_IsNextYear");
@@ -183,6 +204,29 @@ class crr_att_log extends crTableBase {
 		ewr_RegisterFilter($this->scan_date_tgl, "@@LastYear", $ReportLanguage->Phrase("LastYear"), "ewr_IsLastYear");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisYear", $ReportLanguage->Phrase("ThisYear"), "ewr_IsThisYear");
 		ewr_RegisterFilter($this->scan_date_tgl, "@@NextYear", $ReportLanguage->Phrase("NextYear"), "ewr_IsNextYear");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@LastYear", $ReportLanguage->Phrase("LastYear"), "ewr_IsLastYear");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisYear", $ReportLanguage->Phrase("ThisYear"), "ewr_IsThisYear");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@NextYear", $ReportLanguage->Phrase("NextYear"), "ewr_IsNextYear");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@LastYear", $ReportLanguage->Phrase("LastYear"), "ewr_IsLastYear");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisYear", $ReportLanguage->Phrase("ThisYear"), "ewr_IsThisYear");
+		ewr_RegisterFilter($this->scan_date_tgl, "@@NextYear", $ReportLanguage->Phrase("NextYear"), "ewr_IsNextYear");
+
+		// scan_date_tgl_jam
+		$this->scan_date_tgl_jam = new crField('r_att_log', 'r_att_log', 'x_scan_date_tgl_jam', 'scan_date_tgl_jam', '`scan_date_tgl_jam`', 200, EWR_DATATYPE_STRING, -1);
+		$this->scan_date_tgl_jam->Sortable = TRUE; // Allow sort
+		$this->fields['scan_date_tgl_jam'] = &$this->scan_date_tgl_jam;
+		$this->scan_date_tgl_jam->DateFilter = "";
+		$this->scan_date_tgl_jam->SqlSelect = "";
+		$this->scan_date_tgl_jam->SqlOrderBy = "";
+
+		// scan_date
+		$this->scan_date = new crField('r_att_log', 'r_att_log', 'x_scan_date', 'scan_date', '`scan_date`', 135, EWR_DATATYPE_DATE, 9);
+		$this->scan_date->Sortable = TRUE; // Allow sort
+		$this->scan_date->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EWR_DATE_SEPARATOR"], $ReportLanguage->Phrase("IncorrectDateYMD"));
+		$this->fields['scan_date'] = &$this->scan_date;
+		$this->scan_date->DateFilter = "";
+		$this->scan_date->SqlSelect = "";
+		$this->scan_date->SqlOrderBy = "";
 	}
 
 	// Set Field Visibility

@@ -289,6 +289,8 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		$this->pegawai_id->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->jns_id->SetVisibility();
+		$this->jam_masuk->SetVisibility();
+		$this->jam_keluar->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -480,6 +482,8 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		} else {
 			$this->jns_id->VirtualValue = ""; // Clear value
 		}
+		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
+		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
 	}
 
 	// Load DbValue from recordset
@@ -490,6 +494,8 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
 		$this->tgl->DbValue = $row['tgl'];
 		$this->jns_id->DbValue = $row['jns_id'];
+		$this->jam_masuk->DbValue = $row['jam_masuk'];
+		$this->jam_keluar->DbValue = $row['jam_keluar'];
 	}
 
 	// Render row values based on field settings
@@ -506,6 +512,8 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		// pegawai_id
 		// tgl
 		// jns_id
+		// jam_masuk
+		// jam_keluar
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -572,6 +580,16 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		}
 		$this->jns_id->ViewCustomAttributes = "";
 
+		// jam_masuk
+		$this->jam_masuk->ViewValue = $this->jam_masuk->CurrentValue;
+		$this->jam_masuk->ViewValue = ew_FormatDateTime($this->jam_masuk->ViewValue, 9);
+		$this->jam_masuk->ViewCustomAttributes = "";
+
+		// jam_keluar
+		$this->jam_keluar->ViewValue = $this->jam_keluar->CurrentValue;
+		$this->jam_keluar->ViewValue = ew_FormatDateTime($this->jam_keluar->ViewValue, 9);
+		$this->jam_keluar->ViewCustomAttributes = "";
+
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
@@ -586,6 +604,16 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 			$this->jns_id->LinkCustomAttributes = "";
 			$this->jns_id->HrefValue = "";
 			$this->jns_id->TooltipValue = "";
+
+			// jam_masuk
+			$this->jam_masuk->LinkCustomAttributes = "";
+			$this->jam_masuk->HrefValue = "";
+			$this->jam_masuk->TooltipValue = "";
+
+			// jam_keluar
+			$this->jam_keluar->LinkCustomAttributes = "";
+			$this->jam_keluar->HrefValue = "";
+			$this->jam_keluar->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -910,6 +938,12 @@ $t_pengecualian_peg_delete->ShowMessage();
 <?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
 		<th><span id="elh_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></span></th>
 <?php } ?>
+<?php if ($t_pengecualian_peg->jam_masuk->Visible) { // jam_masuk ?>
+		<th><span id="elh_t_pengecualian_peg_jam_masuk" class="t_pengecualian_peg_jam_masuk"><?php echo $t_pengecualian_peg->jam_masuk->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($t_pengecualian_peg->jam_keluar->Visible) { // jam_keluar ?>
+		<th><span id="elh_t_pengecualian_peg_jam_keluar" class="t_pengecualian_peg_jam_keluar"><?php echo $t_pengecualian_peg->jam_keluar->FldCaption() ?></span></th>
+<?php } ?>
 	</tr>
 	</thead>
 	<tbody>
@@ -952,6 +986,22 @@ while (!$t_pengecualian_peg_delete->Recordset->EOF) {
 <span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id">
 <span<?php echo $t_pengecualian_peg->jns_id->ViewAttributes() ?>>
 <?php echo $t_pengecualian_peg->jns_id->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($t_pengecualian_peg->jam_masuk->Visible) { // jam_masuk ?>
+		<td<?php echo $t_pengecualian_peg->jam_masuk->CellAttributes() ?>>
+<span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_jam_masuk" class="t_pengecualian_peg_jam_masuk">
+<span<?php echo $t_pengecualian_peg->jam_masuk->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->jam_masuk->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($t_pengecualian_peg->jam_keluar->Visible) { // jam_keluar ?>
+		<td<?php echo $t_pengecualian_peg->jam_keluar->CellAttributes() ?>>
+<span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_jam_keluar" class="t_pengecualian_peg_jam_keluar">
+<span<?php echo $t_pengecualian_peg->jam_keluar->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->jam_keluar->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
