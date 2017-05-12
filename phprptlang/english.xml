@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/5/12" version="10.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/13" version="10.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -2455,11 +2455,17 @@
       <field id="pegawai_pin">
         <phrase id="fldcaption" value="pegawai pin" />
       </field>
+      <field id="lapgroup_nama">
+        <phrase id="fldcaption" value="lapgroup nama" />
+      </field>
     </table>
     <table id="r_rekon">
       <phrase id="tblcaption" value="Rekonsiliasi" />
-      <field id="pembagian2_nama">
+      <field id="lapgroup_nama">
         <phrase id="fldcaption" value="Bagian" />
+      </field>
+      <field id="pembagian2_nama">
+        <phrase id="fldcaption" value="Divisi" />
       </field>
       <field id="pegawai_nama">
         <phrase id="fldcaption" value="Nama Pegawai" />
@@ -2532,6 +2538,9 @@
       </field>
       <field id="pegawai_pin">
         <phrase id="fldcaption" value="pegawai pin" />
+      </field>
+      <field id="lapgroup_nama">
+        <phrase id="fldcaption" value="lapgroup nama" />
       </field>
     </table>
     <table id="t_pengecualian_peg">

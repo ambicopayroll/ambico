@@ -708,14 +708,14 @@ class crr_rekon_crosstab extends crr_rekon {
 		if ($opt == 1) { // Get first group
 
 	//		$rsgrp->MoveFirst(); // NOTE: no need to move position
-			$this->pembagian2_nama->setDbValue(""); // Init first value
+			$this->lapgroup_nama->setDbValue(""); // Init first value
 		} else { // Get next group
 			$rsgrp->MoveNext();
 		}
 		if (!$rsgrp->EOF) {
-			$this->pembagian2_nama->setDbValue($rsgrp->fields[0]);
+			$this->lapgroup_nama->setDbValue($rsgrp->fields[0]);
 		} else {
-			$this->pembagian2_nama->setDbValue("");
+			$this->lapgroup_nama->setDbValue("");
 		}
 	}
 
@@ -732,9 +732,10 @@ class crr_rekon_crosstab extends crr_rekon {
 		}
 		if (!$rs->EOF) {
 			if ($opt <> 1)
-				$this->pembagian2_nama->setDbValue($rs->fields('pembagian2_nama'));
+				$this->lapgroup_nama->setDbValue($rs->fields('lapgroup_nama'));
+			$this->pembagian2_nama->setDbValue($rs->fields('pembagian2_nama'));
 			$this->pegawai_nama->setDbValue($rs->fields('pegawai_nama'));
-			$cntbase = 2;
+			$cntbase = 3;
 			$cnt = count($this->SummaryFields);
 			for ($is = 0; $is < $cnt; $is++) {
 				$smry = &$this->SummaryFields[$is];
@@ -750,6 +751,7 @@ class crr_rekon_crosstab extends crr_rekon {
 				$cntbase += ($smry->SummaryType == "AVG") ? 2*($cntval-1) : ($cntval-1);
 			}
 		} else {
+			$this->lapgroup_nama->setDbValue("");
 			$this->pembagian2_nama->setDbValue("");
 			$this->pegawai_nama->setDbValue("");
 		}
@@ -759,13 +761,17 @@ class crr_rekon_crosstab extends crr_rekon {
 	function ChkLvlBreak($lvl) {
 		switch ($lvl) {
 			case 1:
+				return (is_null($this->lapgroup_nama->CurrentValue) && !is_null($this->lapgroup_nama->OldValue)) ||
+					(!is_null($this->lapgroup_nama->CurrentValue) && is_null($this->lapgroup_nama->OldValue)) ||
+					($this->lapgroup_nama->GroupValue() <> $this->lapgroup_nama->GroupOldValue());
+			case 2:
 				return (is_null($this->pembagian2_nama->CurrentValue) && !is_null($this->pembagian2_nama->OldValue)) ||
 					(!is_null($this->pembagian2_nama->CurrentValue) && is_null($this->pembagian2_nama->OldValue)) ||
-					($this->pembagian2_nama->GroupValue() <> $this->pembagian2_nama->GroupOldValue());
-			case 2:
+					($this->pembagian2_nama->GroupValue() <> $this->pembagian2_nama->GroupOldValue()) || $this->ChkLvlBreak(1); // Recurse upper level
+			case 3:
 				return (is_null($this->pegawai_nama->CurrentValue) && !is_null($this->pegawai_nama->OldValue)) ||
 					(!is_null($this->pegawai_nama->CurrentValue) && is_null($this->pegawai_nama->OldValue)) ||
-					($this->pegawai_nama->GroupValue() <> $this->pegawai_nama->GroupOldValue()) || $this->ChkLvlBreak(1); // Recurse upper level
+					($this->pegawai_nama->GroupValue() <> $this->pegawai_nama->GroupOldValue()) || $this->ChkLvlBreak(2); // Recurse upper level
 		}
 	}
 
@@ -1039,13 +1045,17 @@ class crr_rekon_crosstab extends crr_rekon {
 
 		if ($this->RowType == EWR_ROWTYPE_TOTAL) { // Summary row
 
+			// lapgroup_nama
+			$this->lapgroup_nama->GroupViewValue = $this->lapgroup_nama->GroupOldValue();
+			$this->lapgroup_nama->CellAttrs["class"] = ($this->RowGroupLevel == 1) ? "ewRptGrpSummary1" : "ewRptGrpField1";
+
 			// pembagian2_nama
 			$this->pembagian2_nama->GroupViewValue = $this->pembagian2_nama->GroupOldValue();
-			$this->pembagian2_nama->CellAttrs["class"] = ($this->RowGroupLevel == 1) ? "ewRptGrpSummary1" : "ewRptGrpField1";
+			$this->pembagian2_nama->CellAttrs["class"] = ($this->RowGroupLevel == 2) ? "ewRptGrpSummary2" : "ewRptGrpField2";
 
 			// pegawai_nama
 			$this->pegawai_nama->GroupViewValue = $this->pegawai_nama->GroupOldValue();
-			$this->pegawai_nama->CellAttrs["class"] = ($this->RowGroupLevel == 2) ? "ewRptGrpSummary2" : "ewRptGrpField2";
+			$this->pegawai_nama->CellAttrs["class"] = ($this->RowGroupLevel == 3) ? "ewRptGrpSummary3" : "ewRptGrpField3";
 
 			// Set up summary values
 			$smry = &$this->SummaryFields[0];
@@ -1083,6 +1093,9 @@ class crr_rekon_crosstab extends crr_rekon {
 				$this->SummaryCellAttrs[$i]["class"] = ($this->RowTotalType == EWR_ROWTOTAL_GROUP) ? "ewRptGrpSummary" . $this->RowGroupLevel : "";
 			}
 
+			// lapgroup_nama
+			$this->lapgroup_nama->HrefValue = "";
+
 			// pembagian2_nama
 			$this->pembagian2_nama->HrefValue = "";
 
@@ -1090,16 +1103,22 @@ class crr_rekon_crosstab extends crr_rekon {
 			$this->pegawai_nama->HrefValue = "";
 		} else {
 
+			// lapgroup_nama
+			$this->lapgroup_nama->GroupViewValue = $this->lapgroup_nama->GroupValue();
+			$this->lapgroup_nama->CellAttrs["class"] = "ewRptGrpField1";
+			if ($this->lapgroup_nama->GroupValue() == $this->lapgroup_nama->GroupOldValue() && !$this->ChkLvlBreak(1))
+				$this->lapgroup_nama->GroupViewValue = "&nbsp;";
+
 			// pembagian2_nama
 			$this->pembagian2_nama->GroupViewValue = $this->pembagian2_nama->GroupValue();
-			$this->pembagian2_nama->CellAttrs["class"] = "ewRptGrpField1";
-			if ($this->pembagian2_nama->GroupValue() == $this->pembagian2_nama->GroupOldValue() && !$this->ChkLvlBreak(1))
+			$this->pembagian2_nama->CellAttrs["class"] = "ewRptGrpField2";
+			if ($this->pembagian2_nama->GroupValue() == $this->pembagian2_nama->GroupOldValue() && !$this->ChkLvlBreak(2))
 				$this->pembagian2_nama->GroupViewValue = "&nbsp;";
 
 			// pegawai_nama
 			$this->pegawai_nama->GroupViewValue = $this->pegawai_nama->GroupValue();
-			$this->pegawai_nama->CellAttrs["class"] = "ewRptGrpField2";
-			if ($this->pegawai_nama->GroupValue() == $this->pegawai_nama->GroupOldValue() && !$this->ChkLvlBreak(2))
+			$this->pegawai_nama->CellAttrs["class"] = "ewRptGrpField3";
+			if ($this->pegawai_nama->GroupValue() == $this->pegawai_nama->GroupOldValue() && !$this->ChkLvlBreak(3))
 				$this->pegawai_nama->GroupViewValue = "&nbsp;";
 
 			// Set up summary values
@@ -1138,6 +1157,9 @@ class crr_rekon_crosstab extends crr_rekon {
 				$this->SummaryCellAttrs[$i]["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
 			}
 
+			// lapgroup_nama
+			$this->lapgroup_nama->HrefValue = "";
+
 			// pembagian2_nama
 			$this->pembagian2_nama->HrefValue = "";
 
@@ -1148,8 +1170,18 @@ class crr_rekon_crosstab extends crr_rekon {
 		// Call Cell_Rendered event
 		if ($this->RowType == EWR_ROWTYPE_TOTAL) { // Summary row
 
-			// pembagian2_nama
+			// lapgroup_nama
 			$this->CurrentIndex = 0; // Current index
+			$CurrentValue = $this->lapgroup_nama->GroupOldValue();
+			$ViewValue = &$this->lapgroup_nama->GroupViewValue;
+			$ViewAttrs = &$this->lapgroup_nama->ViewAttrs;
+			$CellAttrs = &$this->lapgroup_nama->CellAttrs;
+			$HrefValue = &$this->lapgroup_nama->HrefValue;
+			$LinkAttrs = &$this->lapgroup_nama->LinkAttrs;
+			$this->Cell_Rendered($this->lapgroup_nama, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
+
+			// pembagian2_nama
+			$this->CurrentIndex = 1; // Current index
 			$CurrentValue = $this->pembagian2_nama->GroupOldValue();
 			$ViewValue = &$this->pembagian2_nama->GroupViewValue;
 			$ViewAttrs = &$this->pembagian2_nama->ViewAttrs;
@@ -1159,7 +1191,7 @@ class crr_rekon_crosstab extends crr_rekon {
 			$this->Cell_Rendered($this->pembagian2_nama, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
 
 			// pegawai_nama
-			$this->CurrentIndex = 1; // Current index
+			$this->CurrentIndex = 2; // Current index
 			$CurrentValue = $this->pegawai_nama->GroupOldValue();
 			$ViewValue = &$this->pegawai_nama->GroupViewValue;
 			$ViewAttrs = &$this->pegawai_nama->ViewAttrs;
@@ -1183,8 +1215,18 @@ class crr_rekon_crosstab extends crr_rekon {
 			}
 		} else {
 
-			// pembagian2_nama
+			// lapgroup_nama
 			$this->CurrentIndex = 0; // Group index
+			$CurrentValue = $this->lapgroup_nama->GroupValue();
+			$ViewValue = &$this->lapgroup_nama->GroupViewValue;
+			$ViewAttrs = &$this->lapgroup_nama->ViewAttrs;
+			$CellAttrs = &$this->lapgroup_nama->CellAttrs;
+			$HrefValue = &$this->lapgroup_nama->HrefValue;
+			$LinkAttrs = &$this->lapgroup_nama->LinkAttrs;
+			$this->Cell_Rendered($this->lapgroup_nama, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
+
+			// pembagian2_nama
+			$this->CurrentIndex = 1; // Group index
 			$CurrentValue = $this->pembagian2_nama->GroupValue();
 			$ViewValue = &$this->pembagian2_nama->GroupViewValue;
 			$ViewAttrs = &$this->pembagian2_nama->ViewAttrs;
@@ -1194,7 +1236,7 @@ class crr_rekon_crosstab extends crr_rekon {
 			$this->Cell_Rendered($this->pembagian2_nama, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
 
 			// pegawai_nama
-			$this->CurrentIndex = 1; // Group index
+			$this->CurrentIndex = 2; // Group index
 			$CurrentValue = $this->pegawai_nama->GroupValue();
 			$ViewValue = &$this->pegawai_nama->GroupViewValue;
 			$ViewAttrs = &$this->pegawai_nama->ViewAttrs;
@@ -1226,6 +1268,7 @@ class crr_rekon_crosstab extends crr_rekon {
 	// Setup field count
 	function SetupFieldCount() {
 		$this->GrpColumnCount = 0;
+		if ($this->lapgroup_nama->Visible) $this->GrpColumnCount += 1;
 		if ($this->pembagian2_nama->Visible) $this->GrpColumnCount += 1;
 		if ($this->pegawai_nama->Visible) $this->GrpColumnCount += 1;
 	}
@@ -1927,6 +1970,7 @@ class crr_rekon_crosstab extends crr_rekon {
 		if ($bResetSort) {
 			$this->setOrderBy("");
 			$this->setStartGroup(1);
+			$this->lapgroup_nama->setSort("");
 			$this->pembagian2_nama->setSort("");
 			$this->pegawai_nama->setSort("");
 
@@ -1934,6 +1978,7 @@ class crr_rekon_crosstab extends crr_rekon {
 		} elseif ($orderBy <> "") {
 			$this->CurrentOrder = $orderBy;
 			$this->CurrentOrderType = $orderType;
+			$this->UpdateSort($this->lapgroup_nama, $bCtrl); // lapgroup_nama
 			$this->UpdateSort($this->pembagian2_nama, $bCtrl); // pembagian2_nama
 			$this->UpdateSort($this->pegawai_nama, $bCtrl); // pegawai_nama
 			$sSortSql = $this->SortSql();
@@ -2498,6 +2543,26 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		</td>
 	</tr>
 	<tr class="ewTableHeader">
+<?php if ($Page->lapgroup_nama->Visible) { ?>
+<?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
+	<td data-field="lapgroup_nama">
+		<div class="r_rekon_lapgroup_nama"><span class="ewTableHeaderCaption"><?php echo $Page->lapgroup_nama->FldCaption() ?></span></div>
+	</td>
+<?php } else { ?>
+	<td data-field="lapgroup_nama">
+<?php if ($Page->SortUrl($Page->lapgroup_nama) == "") { ?>
+		<div class="ewTableHeaderBtn r_rekon_lapgroup_nama">
+			<span class="ewTableHeaderCaption"><?php echo $Page->lapgroup_nama->FldCaption() ?></span>			
+		</div>
+<?php } else { ?>
+		<div class="ewTableHeaderBtn ewPointer r_rekon_lapgroup_nama" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->lapgroup_nama) ?>',2);">
+			<span class="ewTableHeaderCaption"><?php echo $Page->lapgroup_nama->FldCaption() ?></span>
+			<span class="ewTableHeaderSort"><?php if ($Page->lapgroup_nama->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->lapgroup_nama->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
+		</div>
+<?php } ?>
+	</td>
+<?php } ?>
+<?php } ?>
 <?php if ($Page->pembagian2_nama->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
 	<td data-field="pembagian2_nama">
@@ -2561,7 +2626,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 	}
 
 	// Build detail SQL
-	$sWhere = ewr_DetailFilterSQL($Page->pembagian2_nama, $Page->getSqlFirstGroupField(), $Page->pembagian2_nama->GroupValue(), $Page->DBID);
+	$sWhere = ewr_DetailFilterSQL($Page->lapgroup_nama, $Page->getSqlFirstGroupField(), $Page->lapgroup_nama->GroupValue(), $Page->DBID);
 	if ($Page->PageFirstGroupFilter <> "") $Page->PageFirstGroupFilter .= " OR ";
 	$Page->PageFirstGroupFilter .= $sWhere;
 	if ($Page->Filter != "")
@@ -2581,6 +2646,11 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		$Page->RenderRow();
 ?>
 	<tr<?php echo $Page->RowAttributes(); ?>>
+<?php if ($Page->lapgroup_nama->Visible) { ?>
+		<!-- lapgroup_nama -->
+		<td data-field="lapgroup_nama"<?php echo $Page->lapgroup_nama->CellAttributes(); ?>>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_r_rekon_lapgroup_nama"<?php echo $Page->lapgroup_nama->ViewAttributes() ?>><?php echo $Page->lapgroup_nama->GroupViewValue ?></span></td>
+<?php } ?>
 <?php if ($Page->pembagian2_nama->Visible) { ?>
 		<!-- pembagian2_nama -->
 		<td data-field="pembagian2_nama"<?php echo $Page->pembagian2_nama->CellAttributes(); ?>>

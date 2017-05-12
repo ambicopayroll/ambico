@@ -10,15 +10,15 @@ else {
 }
 
 $rs = $conn->Execute('select * from t_jdw_krj_peg order by pegawai_id, tgl1');
-//$msql = 'select * from t_jdw_krj_peg order by pegawai_id, tgl1'; echo $msql; exit;
-
 while (!$rs->EOF) {
-	//echo "1"; exit;
+
 	$mpegawai_id = $rs->fields["pegawai_id"];
 	$mtanggal_hari_ini = date("Y-m-d");
-	//$msql = "delete from t_jdw_krj_def where pegawai_id = ".$mpegawai_id." and tgl > '".$mtanggal_hari_ini."'"; //echo $msql; exit;
-	$msql = "delete from t_jdw_krj_def where pegawai_id = ".$mpegawai_id." and tgl >= '".$rs->fields["tgl1"]."'"; //echo $msql; exit;
+
+	//hapus data jadwal kerja lama dimulai dari tanggal awal pembuatan jadwal kerja periodik
+	$msql = "delete from t_jdw_krj_def where pegawai_id = ".$mpegawai_id." and tgl >= '".$rs->fields["tgl1"]."'";
 	$conn->Execute($msql);
+	
 	while ($mpegawai_id == $rs->fields["pegawai_id"]) {
 		$mtgl1 = $rs->fields["tgl1"];
 		$mtgl2 = $rs->fields["tgl2"];
@@ -26,8 +26,8 @@ while (!$rs->EOF) {
 			$msql = "select pegawai_id from t_jdw_krj_def where pegawai_id = ".$mpegawai_id." and tgl = '".$mtgl1."'";
 			$rs_cari = $conn->Execute($msql);
 			if ($rs_cari->EOF) {
-			$msql = "insert into t_jdw_krj_def values (null, ".$mpegawai_id.", '".$mtgl1."', ".$rs->fields["jk_id"].", null, null, ".$rs->fields["hk"].")";
-			$conn->Execute($msql);
+				$msql = "insert	 into t_jdw_krj_def values (null, ".$mpegawai_id.", '".$mtgl1."', ".$rs->fields["jk_id"].", null, null, ".$rs->fields["hk"].")";
+				$conn->Execute($msql);
 			}
 			$mtgl1 = date("Y-m-d", strtotime("+1 day", strtotime($mtgl1)));
 		}
