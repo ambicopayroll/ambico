@@ -25,6 +25,8 @@ class crr_lapgjbln extends crTableBase {
 	var $p_aspen;
 	var $p_bpjs;
 	var $j_netto;
+	var $start;
+	var $end;
 
 	//
 	// Table class constructor
@@ -193,6 +195,24 @@ class crr_lapgjbln extends crTableBase {
 		$this->j_netto->DateFilter = "";
 		$this->j_netto->SqlSelect = "";
 		$this->j_netto->SqlOrderBy = "";
+
+		// start
+		$this->start = new crField('r_lapgjbln', 'r_lapgjbln', 'x_start', 'start', '`start`', 133, EWR_DATATYPE_DATE, 0);
+		$this->start->Sortable = TRUE; // Allow sort
+		$this->start->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EWR_DATE_FORMAT"], $ReportLanguage->Phrase("IncorrectDate"));
+		$this->fields['start'] = &$this->start;
+		$this->start->DateFilter = "";
+		$this->start->SqlSelect = "";
+		$this->start->SqlOrderBy = "";
+
+		// end
+		$this->end = new crField('r_lapgjbln', 'r_lapgjbln', 'x_end', 'end', '`end`', 133, EWR_DATATYPE_DATE, 0);
+		$this->end->Sortable = TRUE; // Allow sort
+		$this->end->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EWR_DATE_FORMAT"], $ReportLanguage->Phrase("IncorrectDate"));
+		$this->fields['end'] = &$this->end;
+		$this->end->DateFilter = "";
+		$this->end->SqlSelect = "";
+		$this->end->SqlOrderBy = "";
 	}
 
 	// Set Field Visibility

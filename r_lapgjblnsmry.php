@@ -867,6 +867,8 @@ class crr_lapgjbln_summary extends crr_lapgjbln {
 				$this->FirstRowData['p_aspen'] = ewr_Conv($rs->fields('p_aspen'), 4);
 				$this->FirstRowData['p_bpjs'] = ewr_Conv($rs->fields('p_bpjs'), 4);
 				$this->FirstRowData['j_netto'] = ewr_Conv($rs->fields('j_netto'), 4);
+				$this->FirstRowData['start'] = ewr_Conv($rs->fields('start'), 133);
+				$this->FirstRowData['end'] = ewr_Conv($rs->fields('end'), 133);
 			}
 		} else { // Get next row
 			$rs->MoveNext();
@@ -893,6 +895,8 @@ class crr_lapgjbln_summary extends crr_lapgjbln {
 			$this->p_aspen->setDbValue($rs->fields('p_aspen'));
 			$this->p_bpjs->setDbValue($rs->fields('p_bpjs'));
 			$this->j_netto->setDbValue($rs->fields('j_netto'));
+			$this->start->setDbValue($rs->fields('start'));
+			$this->end->setDbValue($rs->fields('end'));
 			$this->Val[1] = $this->nama->CurrentValue;
 			$this->Val[2] = $this->nip->CurrentValue;
 			$this->Val[3] = $this->gp->CurrentValue;
@@ -923,6 +927,8 @@ class crr_lapgjbln_summary extends crr_lapgjbln {
 			$this->p_aspen->setDbValue("");
 			$this->p_bpjs->setDbValue("");
 			$this->j_netto->setDbValue("");
+			$this->start->setDbValue("");
+			$this->end->setDbValue("");
 		}
 	}
 
@@ -2032,7 +2038,8 @@ class crr_lapgjbln_summary extends crr_lapgjbln {
 		// Example:
 		//$header = "your header";
 
-		$header = "Laporan Gaji Bulanan<br>Periode ".tgl_indo_header($_GET["start"])." s.d. ".tgl_indo_header($_GET["end"])."<br>&nbsp;";
+		$MyRow = ewr_ExecuteRow("SELECT start, end FROM t_gjbln limit 1");
+		$header = "Laporan Gaji Bulanan<br>Periode ".tgl_indo_header($MyRow["start"])." s.d. ".tgl_indo_header($MyRow["end"])."<br>&nbsp;";
 	}
 
 	// Page Data Rendered event

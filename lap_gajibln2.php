@@ -206,6 +206,8 @@ while (!$rs->EOF) {
 				, ".$p_aspen."
 				, ".$p_bpjs."
 				, ".$netto."
+				, '".$_POST["start"]."'
+				, '".$_POST["end"]."'
 				)
 				"; //echo $msql; exit;
 			$conn->Execute($msql);
@@ -215,5 +217,5 @@ while (!$rs->EOF) {
 	}
 }
 $rs->Close();
-header("location: r_lapgjblnsmry.php?start=".$_POST["start"]."&end=".$_POST["end"]."");
+header("location: r_lapgjblnsmry.php");
 ?>

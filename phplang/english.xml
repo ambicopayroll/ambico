@@ -586,11 +586,11 @@
     <menu id="10234">
       <phrase id="menutext" value="t gjhrn" />
     </menu>
-    <menu id="10235">
-      <phrase id="menutext" value="t gjbln" />
-    </menu>
     <menu id="77">
       <phrase id="menutext" value="Home" />
+    </menu>
+    <menu id="10235">
+      <phrase id="menutext" value="t gjbln" />
     </menu>
     <menu id="78">
       <phrase id="menutext" value="Setup" />
@@ -844,12 +844,6 @@
     <menu id="76">
       <phrase id="menutext" value="audittrail" />
     </menu>
-    <menu id="10060">
-      <phrase id="menutext" value="v rekon" />
-    </menu>
-    <menu id="10061">
-      <phrase id="menutext" value="v rekon 2" />
-    </menu>
     <menu id="10086">
       <phrase id="menutext" value="t gjbln" />
     </menu>
@@ -867,9 +861,6 @@
     </menu>
     <menu id="10082">
       <phrase id="menutext" value="t jns pengecualian" />
-    </menu>
-    <menu id="10232">
-      <phrase id="menutext" value="v lapgjhrn" />
     </menu>
     <menu id="10078">
       <phrase id="menutext" value="v jdw krj def" />
@@ -3032,6 +3023,12 @@
       <field id="total">
         <phrase id="fldcaption" value="total" />
       </field>
+      <field id="start">
+        <phrase id="fldcaption" value="start" />
+      </field>
+      <field id="end">
+        <phrase id="fldcaption" value="end" />
+      </field>
     </table>
     <table id="t_gjbln">
       <phrase id="tblcaption" value="t gjbln" />
@@ -3082,6 +3079,12 @@
       </field>
       <field id="j_netto">
         <phrase id="fldcaption" value="j netto" />
+      </field>
+      <field id="start">
+        <phrase id="fldcaption" value="start" />
+      </field>
+      <field id="end">
+        <phrase id="fldcaption" value="end" />
       </field>
     </table>
   </project>

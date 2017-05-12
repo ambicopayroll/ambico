@@ -844,6 +844,8 @@ class crr_lapgjhrn_summary extends crr_lapgjhrn {
 				$this->FirstRowData['premi_hadir'] = ewr_Conv($rs->fields('premi_hadir'), 4);
 				$this->FirstRowData['pot_absen'] = ewr_Conv($rs->fields('pot_absen'), 4);
 				$this->FirstRowData['total'] = ewr_Conv($rs->fields('total'), 4);
+				$this->FirstRowData['start'] = ewr_Conv($rs->fields('start'), 133);
+				$this->FirstRowData['end'] = ewr_Conv($rs->fields('end'), 133);
 			}
 		} else { // Get next row
 			$rs->MoveNext();
@@ -864,6 +866,8 @@ class crr_lapgjhrn_summary extends crr_lapgjhrn {
 			$this->premi_hadir->setDbValue($rs->fields('premi_hadir'));
 			$this->pot_absen->setDbValue($rs->fields('pot_absen'));
 			$this->total->setDbValue($rs->fields('total'));
+			$this->start->setDbValue($rs->fields('start'));
+			$this->end->setDbValue($rs->fields('end'));
 			$this->Val[1] = $this->divisi->CurrentValue;
 			$this->Val[2] = $this->nama->CurrentValue;
 			$this->Val[3] = $this->nip->CurrentValue;
@@ -883,6 +887,8 @@ class crr_lapgjhrn_summary extends crr_lapgjhrn {
 			$this->premi_hadir->setDbValue("");
 			$this->pot_absen->setDbValue("");
 			$this->total->setDbValue("");
+			$this->start->setDbValue("");
+			$this->end->setDbValue("");
 		}
 	}
 
@@ -1724,7 +1730,8 @@ class crr_lapgjhrn_summary extends crr_lapgjhrn {
 		// Example:
 		//$header = "your header";
 
-		$header = "Laporan Gaji Harian<br>Periode ".tgl_indo_header($_GET["start"])." s.d. ".tgl_indo_header($_GET["end"])."<br>&nbsp;";
+		$MyRow = ewr_ExecuteRow("SELECT start, end FROM t_gjhrn limit 1");
+		$header = "Laporan Gaji Harian<br>Periode ".tgl_indo_header($MyRow["start"])." s.d. ".tgl_indo_header($MyRow["end"])."<br>&nbsp;";
 	}
 
 	// Page Data Rendered event

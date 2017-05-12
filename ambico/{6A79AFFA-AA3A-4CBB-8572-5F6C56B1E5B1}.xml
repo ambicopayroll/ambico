@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <configuration date="2017/05/12" author="e.World Technology Ltd.">
-  <project id="{6A79AFFA-AA3A-4CBB-8572-5F6C56B1E5B1}" file="D:\xampp\htdocs\ambico\ambico.prp" name="ambico" product="PHPReportMaker" version="10.0" datetime="2017/05/12 03:36:06" languagefolder="phprptlang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+  <project id="{6A79AFFA-AA3A-4CBB-8572-5F6C56B1E5B1}" file="D:\xampp\htdocs\ambico\ambico.prp" name="ambico" product="PHPReportMaker" version="10.0" datetime="2017/05/12 17:16:22" languagefolder="phprptlang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
     <table id="att_log" name="att_log" caption="att log" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="audittrail" name="audittrail" caption="audittrail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="cuti_normatif" name="cuti_normatif" caption="cuti normatif" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
@@ -79,7 +79,6 @@
     <table id="r_jdw_krj_def" name="r_jdw_krj_def" caption="Jadwal Kerja (Perincian)" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="t_pengecualian_peg" name="t_pengecualian_peg" caption="t pengecualian" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="t_jns_pengecualian" name="t_jns_pengecualian" caption="t jns pengecualian" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="v_lapgjhrn" name="v_lapgjhrn" caption="v lapgjhrn" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="t_gjhrn" name="t_gjhrn" caption="t gjhrn" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="r_lapgjhrn" name="r_lapgjhrn" caption="Gaji (Harian)" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="t_gjbln" name="t_gjbln" caption="t gjbln" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />

@@ -98,6 +98,8 @@ while (!$rs->EOF) {
 				, ".$mpremi_hadir."
 				, ".$mpot_absen."
 				, ".$mtotal."
+				, '".$_POST["start"]."'
+				, '".$_POST["end"]."'
 				)
 				"; //echo $msql; exit;
 			$conn->Execute($msql);
@@ -109,5 +111,6 @@ while (!$rs->EOF) {
 	$mgrand_total += $mtotal1;
 }
 $rs->Close();
-header("location: r_lapgjhrnsmry.php?start=".$_POST["start"]."&end=".$_POST["end"]."");
+//header("location: r_lapgjhrnsmry.php?start=".$_POST["start"]."&end=".$_POST["end"]."");
+header("location: r_lapgjhrnsmry.php");
 ?>
