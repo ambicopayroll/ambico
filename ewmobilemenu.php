@@ -8,6 +8,7 @@ $RootMenu->AddMenuItem(78, "mmci_Setup", $Language->MenuPhrase("78", "MenuText")
 $RootMenu->AddMenuItem(32, "mmi_pembagian1", $Language->MenuPhrase("32", "MenuText"), "pembagian1list.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}pembagian1'), FALSE, FALSE);
 $RootMenu->AddMenuItem(44, "mmi_t_lapgroup", $Language->MenuPhrase("44", "MenuText"), "t_lapgrouplist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_lapgroup'), FALSE, FALSE);
 $RootMenu->AddMenuItem(33, "mmi_pembagian2", $Language->MenuPhrase("33", "MenuText"), "pembagian2list.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}pembagian2'), FALSE, FALSE);
+$RootMenu->AddMenuItem(10236, "mmi_t_harilibur", $Language->MenuPhrase("10236", "MenuText"), "t_hariliburlist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_harilibur'), FALSE, FALSE);
 $RootMenu->AddMenuItem(43, "mmi_t_jk", $Language->MenuPhrase("43", "MenuText"), "t_jklist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_jk'), FALSE, FALSE);
 $RootMenu->AddMenuItem(47, "mmi_t_rumus2", $Language->MenuPhrase("47", "MenuText"), "t_rumus2list.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_rumus2'), FALSE, FALSE);
 $RootMenu->AddMenuItem(46, "mmi_t_rumus", $Language->MenuPhrase("46", "MenuText"), "t_rumuslist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_rumus'), FALSE, FALSE);
