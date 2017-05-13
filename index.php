@@ -310,8 +310,8 @@ class cdefault {
 			$this->Page_Terminate("t_hariliburlist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_lembur'))
 			$this->Page_Terminate("t_lemburlist.php");
-		if ($Security->AllowList(CurrentProjectID() . 't_keg_detai'))
-			$this->Page_Terminate("t_keg_detailist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_keg_detail'))
+			$this->Page_Terminate("t_keg_detaillist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_keg_master'))
 			$this->Page_Terminate("t_keg_masterlist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_kegiatan'))
