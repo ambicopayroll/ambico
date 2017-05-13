@@ -10,8 +10,19 @@ else {
 }
 
 if ($_POST["radio_proses"]) {
-	$conn->Execute("CALL p_gen_rekon ('".$_POST["start"]."', '".$_POST["end"]."')");
+	if ($_POST["bulharbor"] == 0 or $_POST["bulharbor"] == 1) {
+		$conn->Execute("CALL p_gen_rekon ('".$_POST["start"]."', '".$_POST["end"]."')");
+	}
+	else {
+		$conn->Execute("CALL p_gen_rekon_brngan ('".$_POST["start"]."', '".$_POST["end"]."')");
+		http://localhost/ambico/r_rekon_brnganctb.php
+	}
 }
 
-header("location: ./r_rekonctb.php?cmd=search&so_pegawai_id=%3D&sv_pegawai_id=&so_tgl=BETWEEN&sv_tgl=".$_POST["start"]."&sv2_tgl=".$_POST["end"]."");
+if ($_POST["bulharbor"] == 0 or $_POST["bulharbor"] == 1) {
+	header("location: ./r_rekonctb.php?cmd=search&so_pegawai_id=%3D&sv_pegawai_id=&so_tgl=BETWEEN&sv_tgl=".$_POST["start"]."&sv2_tgl=".$_POST["end"]."");
+}
+else {
+	header("location: ./r_rekon_brnganctb.php?cmd=search&so_tgl=BETWEEN&sv_tgl=".$_POST["start"]."&sv2_tgl=".$_POST["end"]."&so_pegawai_nama=LIKE&sv_pegawai_nama=");
+}
 ?>

@@ -350,6 +350,30 @@
   <project>
     <phrase id="bodytitle" value="AMBICO" />
     <phrase id="footertext" value="&amp;copy;2017 AMBICO. All rights reserved." />
+    <menu id="88">
+      <phrase id="menutext" value="v jdw krj brngan" />
+    </menu>
+    <menu id="89">
+      <phrase id="menutext" value="t harilibur" />
+    </menu>
+    <menu id="90">
+      <phrase id="menutext" value="v lapgjhrn" />
+    </menu>
+    <menu id="91">
+      <phrase id="menutext" value="t lembur" />
+    </menu>
+    <menu id="92">
+      <phrase id="menutext" value="t keg detai" />
+    </menu>
+    <menu id="93">
+      <phrase id="menutext" value="t keg master" />
+    </menu>
+    <menu id="94">
+      <phrase id="menutext" value="t kegiatan" />
+    </menu>
+    <menu id="95">
+      <phrase id="menutext" value="Rekonsiliasi (Borongan)" />
+    </menu>
     <menu id="86">
       <phrase id="menutext" value="t gjbln" />
     </menu>
@@ -2772,6 +2796,231 @@
       </field>
       <field id="end">
         <phrase id="fldcaption" value="end" />
+      </field>
+    </table>
+    <table id="t_harilibur">
+      <phrase id="tblcaption" value="t harilibur" />
+      <field id="libur_id">
+        <phrase id="fldcaption" value="libur id" />
+      </field>
+      <field id="libur_tgl">
+        <phrase id="fldcaption" value="libur tgl" />
+      </field>
+      <field id="libur_ket">
+        <phrase id="fldcaption" value="libur ket" />
+      </field>
+    </table>
+    <table id="v_lapgjhrn">
+      <phrase id="tblcaption" value="v lapgjhrn" />
+      <field id="lapgroup_id">
+        <phrase id="fldcaption" value="lapgroup id" />
+      </field>
+      <field id="lapgroup_nama">
+        <phrase id="fldcaption" value="lapgroup nama" />
+      </field>
+      <field id="lapgroup_index">
+        <phrase id="fldcaption" value="lapgroup index" />
+      </field>
+      <field id="lapsubgroup_index">
+        <phrase id="fldcaption" value="lapsubgroup index" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="tgl" />
+      </field>
+      <field id="jk_id">
+        <phrase id="fldcaption" value="jk id" />
+      </field>
+      <field id="scan_masuk">
+        <phrase id="fldcaption" value="scan masuk" />
+      </field>
+      <field id="scan_keluar">
+        <phrase id="fldcaption" value="scan keluar" />
+      </field>
+      <field id="hk_def">
+        <phrase id="fldcaption" value="hk def" />
+      </field>
+      <field id="pegawai_nip">
+        <phrase id="fldcaption" value="pegawai nip" />
+      </field>
+      <field id="pegawai_nama">
+        <phrase id="fldcaption" value="pegawai nama" />
+      </field>
+      <field id="jk_kd">
+        <phrase id="fldcaption" value="jk kd" />
+      </field>
+      <field id="pembagian2_nama">
+        <phrase id="fldcaption" value="pembagian 2 nama" />
+      </field>
+      <field id="pembagian2_id">
+        <phrase id="fldcaption" value="pembagian 2 id" />
+      </field>
+      <field id="rumus_id">
+        <phrase id="fldcaption" value="rumus id" />
+      </field>
+      <field id="rumus_nama">
+        <phrase id="fldcaption" value="rumus nama" />
+      </field>
+      <field id="hk_gol">
+        <phrase id="fldcaption" value="hk gol" />
+      </field>
+      <field id="umr">
+        <phrase id="fldcaption" value="umr" />
+      </field>
+      <field id="hk_jml">
+        <phrase id="fldcaption" value="hk jml" />
+      </field>
+      <field id="upah">
+        <phrase id="fldcaption" value="upah" />
+      </field>
+      <field id="premi_hadir">
+        <phrase id="fldcaption" value="premi hadir" />
+      </field>
+      <field id="premi_malam">
+        <phrase id="fldcaption" value="premi malam" />
+      </field>
+      <field id="pot_absen">
+        <phrase id="fldcaption" value="pot absen" />
+      </field>
+      <field id="lembur">
+        <phrase id="fldcaption" value="lembur" />
+      </field>
+      <field id="upah2">
+        <phrase id="fldcaption" value="upah 2" />
+      </field>
+      <field id="premi_malam2">
+        <phrase id="fldcaption" value="premi malam 2" />
+      </field>
+      <field id="premi_hadir2">
+        <phrase id="fldcaption" value="premi hadir 2" />
+      </field>
+    </table>
+    <table id="t_lembur">
+      <phrase id="tblcaption" value="t lembur" />
+      <field id="lembur_id">
+        <phrase id="fldcaption" value="lembur id" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
+      </field>
+      <field id="tgl_mulai">
+        <phrase id="fldcaption" value="tgl mulai" />
+      </field>
+      <field id="tgl_selesai">
+        <phrase id="fldcaption" value="tgl selesai" />
+      </field>
+      <field id="jam_mulai">
+        <phrase id="fldcaption" value="jam mulai" />
+      </field>
+      <field id="jam_selesai">
+        <phrase id="fldcaption" value="jam selesai" />
+      </field>
+    </table>
+    <table id="t_keg_detail">
+      <phrase id="tblcaption" value="t keg detai" />
+      <field id="kegd_id">
+        <phrase id="fldcaption" value="kegd id" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
+      </field>
+      <field id="kegm_id">
+        <phrase id="fldcaption" value="kegm id" />
+      </field>
+      <field id="scan_masuk">
+        <phrase id="fldcaption" value="scan masuk" />
+      </field>
+      <field id="scan_keluar">
+        <phrase id="fldcaption" value="scan keluar" />
+      </field>
+    </table>
+    <table id="t_keg_master">
+      <phrase id="tblcaption" value="t keg master" />
+      <field id="kegm_id">
+        <phrase id="fldcaption" value="kegm id" />
+      </field>
+      <field id="keg_id">
+        <phrase id="fldcaption" value="keg id" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="tgl" />
+      </field>
+      <field id="shift">
+        <phrase id="fldcaption" value="shift" />
+      </field>
+      <field id="hasil">
+        <phrase id="fldcaption" value="hasil" />
+      </field>
+    </table>
+    <table id="t_kegiatan">
+      <phrase id="tblcaption" value="t kegiatan" />
+      <field id="keg_id">
+        <phrase id="fldcaption" value="keg id" />
+      </field>
+      <field id="keg_nama">
+        <phrase id="fldcaption" value="keg nama" />
+      </field>
+      <field id="keg_ket">
+        <phrase id="fldcaption" value="keg ket" />
+      </field>
+      <field id="tarif_acuan">
+        <phrase id="fldcaption" value="tarif acuan" />
+      </field>
+      <field id="tarif1">
+        <phrase id="fldcaption" value="tarif 1" />
+      </field>
+      <field id="tarif2">
+        <phrase id="fldcaption" value="tarif 2" />
+      </field>
+    </table>
+    <table id="v_jdw_krj_brngan">
+      <phrase id="tblcaption" value="v jdw krj brngan" />
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="tgl" />
+      </field>
+      <field id="scan_masuk">
+        <phrase id="fldcaption" value="scan masuk" />
+      </field>
+      <field id="scan_keluar">
+        <phrase id="fldcaption" value="scan keluar" />
+      </field>
+      <field id="pegawai_nip">
+        <phrase id="fldcaption" value="pegawai nip" />
+      </field>
+      <field id="pegawai_nama">
+        <phrase id="fldcaption" value="pegawai nama" />
+      </field>
+      <field id="pegawai_pin">
+        <phrase id="fldcaption" value="pegawai pin" />
+      </field>
+    </table>
+    <table id="r_rekon_brngan">
+      <phrase id="tblcaption" value="Rekonsiliasi (Borongan)" />
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="Tgl." />
+      </field>
+      <field id="scan_masuk">
+        <phrase id="fldcaption" value="Scan Masuk" />
+      </field>
+      <field id="scan_keluar">
+        <phrase id="fldcaption" value="Scan Keluar" />
+      </field>
+      <field id="pegawai_nip">
+        <phrase id="fldcaption" value="pegawai nip" />
+      </field>
+      <field id="pegawai_nama">
+        <phrase id="fldcaption" value="Nama" />
+      </field>
+      <field id="pegawai_pin">
+        <phrase id="fldcaption" value="pegawai pin" />
       </field>
     </table>
   </project>

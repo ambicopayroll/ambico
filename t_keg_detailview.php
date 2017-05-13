@@ -388,6 +388,8 @@ class ct_keg_detail_view extends ct_keg_detail {
 		// Setup export options
 		$this->SetupExportOptions();
 		$this->pegawai_id->SetVisibility();
+		$this->scan_masuk->SetVisibility();
+		$this->scan_keluar->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -715,6 +717,8 @@ class ct_keg_detail_view extends ct_keg_detail {
 			$this->pegawai_id->VirtualValue = ""; // Clear value
 		}
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
+		$this->scan_masuk->setDbValue($rs->fields('scan_masuk'));
+		$this->scan_keluar->setDbValue($rs->fields('scan_keluar'));
 	}
 
 	// Load DbValue from recordset
@@ -724,6 +728,8 @@ class ct_keg_detail_view extends ct_keg_detail {
 		$this->kegd_id->DbValue = $row['kegd_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
 		$this->kegm_id->DbValue = $row['kegm_id'];
+		$this->scan_masuk->DbValue = $row['scan_masuk'];
+		$this->scan_keluar->DbValue = $row['scan_keluar'];
 	}
 
 	// Render row values based on field settings
@@ -745,6 +751,8 @@ class ct_keg_detail_view extends ct_keg_detail {
 		// kegd_id
 		// pegawai_id
 		// kegm_id
+		// scan_masuk
+		// scan_keluar
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -783,10 +791,30 @@ class ct_keg_detail_view extends ct_keg_detail {
 		$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
 		$this->kegm_id->ViewCustomAttributes = "";
 
+		// scan_masuk
+		$this->scan_masuk->ViewValue = $this->scan_masuk->CurrentValue;
+		$this->scan_masuk->ViewValue = ew_FormatDateTime($this->scan_masuk->ViewValue, 0);
+		$this->scan_masuk->ViewCustomAttributes = "";
+
+		// scan_keluar
+		$this->scan_keluar->ViewValue = $this->scan_keluar->CurrentValue;
+		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 0);
+		$this->scan_keluar->ViewCustomAttributes = "";
+
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
+
+			// scan_masuk
+			$this->scan_masuk->LinkCustomAttributes = "";
+			$this->scan_masuk->HrefValue = "";
+			$this->scan_masuk->TooltipValue = "";
+
+			// scan_keluar
+			$this->scan_keluar->LinkCustomAttributes = "";
+			$this->scan_keluar->HrefValue = "";
+			$this->scan_keluar->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1353,6 +1381,28 @@ $t_keg_detail_view->ShowMessage();
 <span id="el_t_keg_detail_pegawai_id">
 <span<?php echo $t_keg_detail->pegawai_id->ViewAttributes() ?>>
 <?php echo $t_keg_detail->pegawai_id->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($t_keg_detail->scan_masuk->Visible) { // scan_masuk ?>
+	<tr id="r_scan_masuk">
+		<td><span id="elh_t_keg_detail_scan_masuk"><?php echo $t_keg_detail->scan_masuk->FldCaption() ?></span></td>
+		<td data-name="scan_masuk"<?php echo $t_keg_detail->scan_masuk->CellAttributes() ?>>
+<span id="el_t_keg_detail_scan_masuk">
+<span<?php echo $t_keg_detail->scan_masuk->ViewAttributes() ?>>
+<?php echo $t_keg_detail->scan_masuk->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($t_keg_detail->scan_keluar->Visible) { // scan_keluar ?>
+	<tr id="r_scan_keluar">
+		<td><span id="elh_t_keg_detail_scan_keluar"><?php echo $t_keg_detail->scan_keluar->FldCaption() ?></span></td>
+		<td data-name="scan_keluar"<?php echo $t_keg_detail->scan_keluar->CellAttributes() ?>>
+<span id="el_t_keg_detail_scan_keluar">
+<span<?php echo $t_keg_detail->scan_keluar->ViewAttributes() ?>>
+<?php echo $t_keg_detail->scan_keluar->ViewValue ?></span>
 </span>
 </td>
 	</tr>

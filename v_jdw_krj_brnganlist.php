@@ -5,9 +5,8 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "t_keg_detailinfo.php" ?>
+<?php include_once "v_jdw_krj_brnganinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
-<?php include_once "t_keg_masterinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -15,9 +14,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$t_keg_detail_list = NULL; // Initialize page object first
+$v_jdw_krj_brngan_list = NULL; // Initialize page object first
 
-class ct_keg_detail_list extends ct_keg_detail {
+class cv_jdw_krj_brngan_list extends cv_jdw_krj_brngan {
 
 	// Page ID
 	var $PageID = 'list';
@@ -26,13 +25,13 @@ class ct_keg_detail_list extends ct_keg_detail {
 	var $ProjectID = "{9712DCF3-D9FD-406D-93E5-FEA5020667C8}";
 
 	// Table name
-	var $TableName = 't_keg_detail';
+	var $TableName = 'v_jdw_krj_brngan';
 
 	// Page object name
-	var $PageObjName = 't_keg_detail_list';
+	var $PageObjName = 'v_jdw_krj_brngan_list';
 
 	// Grid form hidden field names
-	var $FormName = 'ft_keg_detaillist';
+	var $FormName = 'fv_jdw_krj_brnganlist';
 	var $FormActionName = 'k_action';
 	var $FormKeyName = 'k_key';
 	var $FormOldKeyName = 'k_oldkey';
@@ -267,10 +266,10 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t_keg_detail)
-		if (!isset($GLOBALS["t_keg_detail"]) || get_class($GLOBALS["t_keg_detail"]) == "ct_keg_detail") {
-			$GLOBALS["t_keg_detail"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t_keg_detail"];
+		// Table object (v_jdw_krj_brngan)
+		if (!isset($GLOBALS["v_jdw_krj_brngan"]) || get_class($GLOBALS["v_jdw_krj_brngan"]) == "cv_jdw_krj_brngan") {
+			$GLOBALS["v_jdw_krj_brngan"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["v_jdw_krj_brngan"];
 		}
 
 		// Initialize URLs
@@ -281,18 +280,15 @@ class ct_keg_detail_list extends ct_keg_detail {
 		$this->ExportXmlUrl = $this->PageUrl() . "export=xml";
 		$this->ExportCsvUrl = $this->PageUrl() . "export=csv";
 		$this->ExportPdfUrl = $this->PageUrl() . "export=pdf";
-		$this->AddUrl = "t_keg_detailadd.php";
+		$this->AddUrl = "v_jdw_krj_brnganadd.php";
 		$this->InlineAddUrl = $this->PageUrl() . "a=add";
 		$this->GridAddUrl = $this->PageUrl() . "a=gridadd";
 		$this->GridEditUrl = $this->PageUrl() . "a=gridedit";
-		$this->MultiDeleteUrl = "t_keg_detaildelete.php";
-		$this->MultiUpdateUrl = "t_keg_detailupdate.php";
+		$this->MultiDeleteUrl = "v_jdw_krj_brngandelete.php";
+		$this->MultiUpdateUrl = "v_jdw_krj_brnganupdate.php";
 
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
-
-		// Table object (t_keg_master)
-		if (!isset($GLOBALS['t_keg_master'])) $GLOBALS['t_keg_master'] = new ct_keg_master();
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -300,7 +296,7 @@ class ct_keg_detail_list extends ct_keg_detail {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 't_keg_detail', TRUE);
+			define("EW_TABLE_NAME", 'v_jdw_krj_brngan', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -337,7 +333,7 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Filter options
 		$this->FilterOptions = new cListOptions();
 		$this->FilterOptions->Tag = "div";
-		$this->FilterOptions->TagClassName = "ewFilterOption ft_keg_detaillistsrch";
+		$this->FilterOptions->TagClassName = "ewFilterOption fv_jdw_krj_brnganlistsrch";
 
 		// List actions
 		$this->ListActions = new cListActions();
@@ -415,8 +411,12 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Setup export options
 		$this->SetupExportOptions();
 		$this->pegawai_id->SetVisibility();
+		$this->tgl->SetVisibility();
 		$this->scan_masuk->SetVisibility();
 		$this->scan_keluar->SetVisibility();
+		$this->pegawai_nip->SetVisibility();
+		$this->pegawai_nama->SetVisibility();
+		$this->pegawai_pin->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -448,9 +448,6 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Create Token
 		$this->CreateToken();
 
-		// Set up master detail parameters
-		$this->SetUpMasterParms();
-
 		// Setup other options
 		$this->SetupOtherOptions();
 
@@ -480,13 +477,13 @@ class ct_keg_detail_list extends ct_keg_detail {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $t_keg_detail;
+		global $EW_EXPORT, $v_jdw_krj_brngan;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($t_keg_detail);
+				$doc = new $class($v_jdw_krj_brngan);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -605,8 +602,28 @@ class ct_keg_detail_list extends ct_keg_detail {
 					$option->HideAllOptions();
 			}
 
+			// Get default search criteria
+			ew_AddFilter($this->DefaultSearchWhere, $this->BasicSearchWhere(TRUE));
+
+			// Get basic search values
+			$this->LoadBasicSearchValues();
+
+			// Process filter list
+			$this->ProcessFilterList();
+
+			// Restore search parms from Session if not searching / reset / export
+			if (($this->Export <> "" || $this->Command <> "search" && $this->Command <> "reset" && $this->Command <> "resetall") && $this->CheckSearchParms())
+				$this->RestoreSearchParms();
+
+			// Call Recordset SearchValidated event
+			$this->Recordset_SearchValidated();
+
 			// Set up sorting order
 			$this->SetUpSortOrder();
+
+			// Get basic search criteria
+			if ($gsSearchError == "")
+				$sSrchBasic = $this->BasicSearchWhere();
 		}
 
 		// Restore display records
@@ -619,32 +636,37 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Load Sorting Order
 		$this->LoadSortOrder();
 
+		// Load search default if no existing search criteria
+		if (!$this->CheckSearchParms()) {
+
+			// Load basic search from default
+			$this->BasicSearch->LoadDefault();
+			if ($this->BasicSearch->Keyword != "")
+				$sSrchBasic = $this->BasicSearchWhere();
+		}
+
+		// Build search criteria
+		ew_AddFilter($this->SearchWhere, $sSrchAdvanced);
+		ew_AddFilter($this->SearchWhere, $sSrchBasic);
+
+		// Call Recordset_Searching event
+		$this->Recordset_Searching($this->SearchWhere);
+
+		// Save search criteria
+		if ($this->Command == "search" && !$this->RestoreSearch) {
+			$this->setSearchWhere($this->SearchWhere); // Save to Session
+			$this->StartRec = 1; // Reset start record counter
+			$this->setStartRecordNumber($this->StartRec);
+		} else {
+			$this->SearchWhere = $this->getSearchWhere();
+		}
+
 		// Build filter
 		$sFilter = "";
 		if (!$Security->CanList())
 			$sFilter = "(0=1)"; // Filter all records
-
-		// Restore master/detail filter
-		$this->DbMasterFilter = $this->GetMasterFilter(); // Restore master filter
-		$this->DbDetailFilter = $this->GetDetailFilter(); // Restore detail filter
 		ew_AddFilter($sFilter, $this->DbDetailFilter);
 		ew_AddFilter($sFilter, $this->SearchWhere);
-
-		// Load master record
-		if ($this->CurrentMode <> "add" && $this->GetMasterFilter() <> "" && $this->getCurrentMasterTable() == "t_keg_master") {
-			global $t_keg_master;
-			$rsmaster = $t_keg_master->LoadRs($this->DbMasterFilter);
-			$this->MasterRecordExists = ($rsmaster && !$rsmaster->EOF);
-			if (!$this->MasterRecordExists) {
-				$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record found
-				$this->Page_Terminate("t_keg_masterlist.php"); // Return to master page
-			} else {
-				$t_keg_master->LoadListRowValues($rsmaster);
-				$t_keg_master->RowType = EW_ROWTYPE_MASTER; // Master row
-				$t_keg_master->RenderListRow();
-				$rsmaster->Close();
-			}
-		}
 
 		// Set up filter in session
 		$this->setSessionWhere($sFilter);
@@ -723,12 +745,296 @@ class ct_keg_detail_list extends ct_keg_detail {
 	// Set up key values
 	function SetupKeyValues($key) {
 		$arrKeyFlds = explode($GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"], $key);
-		if (count($arrKeyFlds) >= 1) {
-			$this->kegd_id->setFormValue($arrKeyFlds[0]);
-			if (!is_numeric($this->kegd_id->FormValue))
-				return FALSE;
+		if (count($arrKeyFlds) >= 0) {
 		}
 		return TRUE;
+	}
+
+	// Get list of filters
+	function GetFilterList() {
+		global $UserProfile;
+
+		// Load server side filters
+		if (EW_SEARCH_FILTER_OPTION == "Server") {
+			$sSavedFilterList = $UserProfile->GetSearchFilters(CurrentUserName(), "fv_jdw_krj_brnganlistsrch");
+		} else {
+			$sSavedFilterList = "";
+		}
+
+		// Initialize
+		$sFilterList = "";
+		$sFilterList = ew_Concat($sFilterList, $this->pegawai_id->AdvancedSearch->ToJSON(), ","); // Field pegawai_id
+		$sFilterList = ew_Concat($sFilterList, $this->tgl->AdvancedSearch->ToJSON(), ","); // Field tgl
+		$sFilterList = ew_Concat($sFilterList, $this->scan_masuk->AdvancedSearch->ToJSON(), ","); // Field scan_masuk
+		$sFilterList = ew_Concat($sFilterList, $this->scan_keluar->AdvancedSearch->ToJSON(), ","); // Field scan_keluar
+		$sFilterList = ew_Concat($sFilterList, $this->pegawai_nip->AdvancedSearch->ToJSON(), ","); // Field pegawai_nip
+		$sFilterList = ew_Concat($sFilterList, $this->pegawai_nama->AdvancedSearch->ToJSON(), ","); // Field pegawai_nama
+		$sFilterList = ew_Concat($sFilterList, $this->pegawai_pin->AdvancedSearch->ToJSON(), ","); // Field pegawai_pin
+		if ($this->BasicSearch->Keyword <> "") {
+			$sWrk = "\"" . EW_TABLE_BASIC_SEARCH . "\":\"" . ew_JsEncode2($this->BasicSearch->Keyword) . "\",\"" . EW_TABLE_BASIC_SEARCH_TYPE . "\":\"" . ew_JsEncode2($this->BasicSearch->Type) . "\"";
+			$sFilterList = ew_Concat($sFilterList, $sWrk, ",");
+		}
+		$sFilterList = preg_replace('/,$/', "", $sFilterList);
+
+		// Return filter list in json
+		if ($sFilterList <> "")
+			$sFilterList = "\"data\":{" . $sFilterList . "}";
+		if ($sSavedFilterList <> "") {
+			if ($sFilterList <> "")
+				$sFilterList .= ",";
+			$sFilterList .= "\"filters\":" . $sSavedFilterList;
+		}
+		return ($sFilterList <> "") ? "{" . $sFilterList . "}" : "null";
+	}
+
+	// Process filter list
+	function ProcessFilterList() {
+		global $UserProfile;
+		if (@$_POST["ajax"] == "savefilters") { // Save filter request (Ajax)
+			$filters = ew_StripSlashes(@$_POST["filters"]);
+			$UserProfile->SetSearchFilters(CurrentUserName(), "fv_jdw_krj_brnganlistsrch", $filters);
+
+			// Clean output buffer
+			if (!EW_DEBUG_ENABLED && ob_get_length())
+				ob_end_clean();
+			echo ew_ArrayToJson(array(array("success" => TRUE))); // Success
+			$this->Page_Terminate();
+			exit();
+		} elseif (@$_POST["cmd"] == "resetfilter") {
+			$this->RestoreFilterList();
+		}
+	}
+
+	// Restore list of filters
+	function RestoreFilterList() {
+
+		// Return if not reset filter
+		if (@$_POST["cmd"] <> "resetfilter")
+			return FALSE;
+		$filter = json_decode(ew_StripSlashes(@$_POST["filter"]), TRUE);
+		$this->Command = "search";
+
+		// Field pegawai_id
+		$this->pegawai_id->AdvancedSearch->SearchValue = @$filter["x_pegawai_id"];
+		$this->pegawai_id->AdvancedSearch->SearchOperator = @$filter["z_pegawai_id"];
+		$this->pegawai_id->AdvancedSearch->SearchCondition = @$filter["v_pegawai_id"];
+		$this->pegawai_id->AdvancedSearch->SearchValue2 = @$filter["y_pegawai_id"];
+		$this->pegawai_id->AdvancedSearch->SearchOperator2 = @$filter["w_pegawai_id"];
+		$this->pegawai_id->AdvancedSearch->Save();
+
+		// Field tgl
+		$this->tgl->AdvancedSearch->SearchValue = @$filter["x_tgl"];
+		$this->tgl->AdvancedSearch->SearchOperator = @$filter["z_tgl"];
+		$this->tgl->AdvancedSearch->SearchCondition = @$filter["v_tgl"];
+		$this->tgl->AdvancedSearch->SearchValue2 = @$filter["y_tgl"];
+		$this->tgl->AdvancedSearch->SearchOperator2 = @$filter["w_tgl"];
+		$this->tgl->AdvancedSearch->Save();
+
+		// Field scan_masuk
+		$this->scan_masuk->AdvancedSearch->SearchValue = @$filter["x_scan_masuk"];
+		$this->scan_masuk->AdvancedSearch->SearchOperator = @$filter["z_scan_masuk"];
+		$this->scan_masuk->AdvancedSearch->SearchCondition = @$filter["v_scan_masuk"];
+		$this->scan_masuk->AdvancedSearch->SearchValue2 = @$filter["y_scan_masuk"];
+		$this->scan_masuk->AdvancedSearch->SearchOperator2 = @$filter["w_scan_masuk"];
+		$this->scan_masuk->AdvancedSearch->Save();
+
+		// Field scan_keluar
+		$this->scan_keluar->AdvancedSearch->SearchValue = @$filter["x_scan_keluar"];
+		$this->scan_keluar->AdvancedSearch->SearchOperator = @$filter["z_scan_keluar"];
+		$this->scan_keluar->AdvancedSearch->SearchCondition = @$filter["v_scan_keluar"];
+		$this->scan_keluar->AdvancedSearch->SearchValue2 = @$filter["y_scan_keluar"];
+		$this->scan_keluar->AdvancedSearch->SearchOperator2 = @$filter["w_scan_keluar"];
+		$this->scan_keluar->AdvancedSearch->Save();
+
+		// Field pegawai_nip
+		$this->pegawai_nip->AdvancedSearch->SearchValue = @$filter["x_pegawai_nip"];
+		$this->pegawai_nip->AdvancedSearch->SearchOperator = @$filter["z_pegawai_nip"];
+		$this->pegawai_nip->AdvancedSearch->SearchCondition = @$filter["v_pegawai_nip"];
+		$this->pegawai_nip->AdvancedSearch->SearchValue2 = @$filter["y_pegawai_nip"];
+		$this->pegawai_nip->AdvancedSearch->SearchOperator2 = @$filter["w_pegawai_nip"];
+		$this->pegawai_nip->AdvancedSearch->Save();
+
+		// Field pegawai_nama
+		$this->pegawai_nama->AdvancedSearch->SearchValue = @$filter["x_pegawai_nama"];
+		$this->pegawai_nama->AdvancedSearch->SearchOperator = @$filter["z_pegawai_nama"];
+		$this->pegawai_nama->AdvancedSearch->SearchCondition = @$filter["v_pegawai_nama"];
+		$this->pegawai_nama->AdvancedSearch->SearchValue2 = @$filter["y_pegawai_nama"];
+		$this->pegawai_nama->AdvancedSearch->SearchOperator2 = @$filter["w_pegawai_nama"];
+		$this->pegawai_nama->AdvancedSearch->Save();
+
+		// Field pegawai_pin
+		$this->pegawai_pin->AdvancedSearch->SearchValue = @$filter["x_pegawai_pin"];
+		$this->pegawai_pin->AdvancedSearch->SearchOperator = @$filter["z_pegawai_pin"];
+		$this->pegawai_pin->AdvancedSearch->SearchCondition = @$filter["v_pegawai_pin"];
+		$this->pegawai_pin->AdvancedSearch->SearchValue2 = @$filter["y_pegawai_pin"];
+		$this->pegawai_pin->AdvancedSearch->SearchOperator2 = @$filter["w_pegawai_pin"];
+		$this->pegawai_pin->AdvancedSearch->Save();
+		$this->BasicSearch->setKeyword(@$filter[EW_TABLE_BASIC_SEARCH]);
+		$this->BasicSearch->setType(@$filter[EW_TABLE_BASIC_SEARCH_TYPE]);
+	}
+
+	// Return basic search SQL
+	function BasicSearchSQL($arKeywords, $type) {
+		$sWhere = "";
+		$this->BuildBasicSearchSQL($sWhere, $this->pegawai_nip, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->pegawai_nama, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->pegawai_pin, $arKeywords, $type);
+		return $sWhere;
+	}
+
+	// Build basic search SQL
+	function BuildBasicSearchSQL(&$Where, &$Fld, $arKeywords, $type) {
+		global $EW_BASIC_SEARCH_IGNORE_PATTERN;
+		$sDefCond = ($type == "OR") ? "OR" : "AND";
+		$arSQL = array(); // Array for SQL parts
+		$arCond = array(); // Array for search conditions
+		$cnt = count($arKeywords);
+		$j = 0; // Number of SQL parts
+		for ($i = 0; $i < $cnt; $i++) {
+			$Keyword = $arKeywords[$i];
+			$Keyword = trim($Keyword);
+			if ($EW_BASIC_SEARCH_IGNORE_PATTERN <> "") {
+				$Keyword = preg_replace($EW_BASIC_SEARCH_IGNORE_PATTERN, "\\", $Keyword);
+				$ar = explode("\\", $Keyword);
+			} else {
+				$ar = array($Keyword);
+			}
+			foreach ($ar as $Keyword) {
+				if ($Keyword <> "") {
+					$sWrk = "";
+					if ($Keyword == "OR" && $type == "") {
+						if ($j > 0)
+							$arCond[$j-1] = "OR";
+					} elseif ($Keyword == EW_NULL_VALUE) {
+						$sWrk = $Fld->FldExpression . " IS NULL";
+					} elseif ($Keyword == EW_NOT_NULL_VALUE) {
+						$sWrk = $Fld->FldExpression . " IS NOT NULL";
+					} elseif ($Fld->FldIsVirtual) {
+						$sWrk = $Fld->FldVirtualExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
+					} elseif ($Fld->FldDataType != EW_DATATYPE_NUMBER || is_numeric($Keyword)) {
+						$sWrk = $Fld->FldBasicSearchExpression . ew_Like(ew_QuotedValue("%" . $Keyword . "%", EW_DATATYPE_STRING, $this->DBID), $this->DBID);
+					}
+					if ($sWrk <> "") {
+						$arSQL[$j] = $sWrk;
+						$arCond[$j] = $sDefCond;
+						$j += 1;
+					}
+				}
+			}
+		}
+		$cnt = count($arSQL);
+		$bQuoted = FALSE;
+		$sSql = "";
+		if ($cnt > 0) {
+			for ($i = 0; $i < $cnt-1; $i++) {
+				if ($arCond[$i] == "OR") {
+					if (!$bQuoted) $sSql .= "(";
+					$bQuoted = TRUE;
+				}
+				$sSql .= $arSQL[$i];
+				if ($bQuoted && $arCond[$i] <> "OR") {
+					$sSql .= ")";
+					$bQuoted = FALSE;
+				}
+				$sSql .= " " . $arCond[$i] . " ";
+			}
+			$sSql .= $arSQL[$cnt-1];
+			if ($bQuoted)
+				$sSql .= ")";
+		}
+		if ($sSql <> "") {
+			if ($Where <> "") $Where .= " OR ";
+			$Where .=  "(" . $sSql . ")";
+		}
+	}
+
+	// Return basic search WHERE clause based on search keyword and type
+	function BasicSearchWhere($Default = FALSE) {
+		global $Security;
+		$sSearchStr = "";
+		if (!$Security->CanSearch()) return "";
+		$sSearchKeyword = ($Default) ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
+		$sSearchType = ($Default) ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
+		if ($sSearchKeyword <> "") {
+			$sSearch = trim($sSearchKeyword);
+			if ($sSearchType <> "=") {
+				$ar = array();
+
+				// Match quoted keywords (i.e.: "...")
+				if (preg_match_all('/"([^"]*)"/i', $sSearch, $matches, PREG_SET_ORDER)) {
+					foreach ($matches as $match) {
+						$p = strpos($sSearch, $match[0]);
+						$str = substr($sSearch, 0, $p);
+						$sSearch = substr($sSearch, $p + strlen($match[0]));
+						if (strlen(trim($str)) > 0)
+							$ar = array_merge($ar, explode(" ", trim($str)));
+						$ar[] = $match[1]; // Save quoted keyword
+					}
+				}
+
+				// Match individual keywords
+				if (strlen(trim($sSearch)) > 0)
+					$ar = array_merge($ar, explode(" ", trim($sSearch)));
+
+				// Search keyword in any fields
+				if (($sSearchType == "OR" || $sSearchType == "AND") && $this->BasicSearch->BasicSearchAnyFields) {
+					foreach ($ar as $sKeyword) {
+						if ($sKeyword <> "") {
+							if ($sSearchStr <> "") $sSearchStr .= " " . $sSearchType . " ";
+							$sSearchStr .= "(" . $this->BasicSearchSQL(array($sKeyword), $sSearchType) . ")";
+						}
+					}
+				} else {
+					$sSearchStr = $this->BasicSearchSQL($ar, $sSearchType);
+				}
+			} else {
+				$sSearchStr = $this->BasicSearchSQL(array($sSearch), $sSearchType);
+			}
+			if (!$Default) $this->Command = "search";
+		}
+		if (!$Default && $this->Command == "search") {
+			$this->BasicSearch->setKeyword($sSearchKeyword);
+			$this->BasicSearch->setType($sSearchType);
+		}
+		return $sSearchStr;
+	}
+
+	// Check if search parm exists
+	function CheckSearchParms() {
+
+		// Check basic search
+		if ($this->BasicSearch->IssetSession())
+			return TRUE;
+		return FALSE;
+	}
+
+	// Clear all search parameters
+	function ResetSearchParms() {
+
+		// Clear search WHERE clause
+		$this->SearchWhere = "";
+		$this->setSearchWhere($this->SearchWhere);
+
+		// Clear basic search parameters
+		$this->ResetBasicSearchParms();
+	}
+
+	// Load advanced search default values
+	function LoadAdvancedSearchDefault() {
+		return FALSE;
+	}
+
+	// Clear all basic search parameters
+	function ResetBasicSearchParms() {
+		$this->BasicSearch->UnsetSession();
+	}
+
+	// Restore all search parameters
+	function RestoreSearchParms() {
+		$this->RestoreSearch = TRUE;
+
+		// Restore basic search values
+		$this->BasicSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -742,8 +1048,12 @@ class ct_keg_detail_list extends ct_keg_detail {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
 			$this->UpdateSort($this->pegawai_id, $bCtrl); // pegawai_id
+			$this->UpdateSort($this->tgl, $bCtrl); // tgl
 			$this->UpdateSort($this->scan_masuk, $bCtrl); // scan_masuk
 			$this->UpdateSort($this->scan_keluar, $bCtrl); // scan_keluar
+			$this->UpdateSort($this->pegawai_nip, $bCtrl); // pegawai_nip
+			$this->UpdateSort($this->pegawai_nama, $bCtrl); // pegawai_nama
+			$this->UpdateSort($this->pegawai_pin, $bCtrl); // pegawai_pin
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -768,22 +1078,21 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Check if reset command
 		if (substr($this->Command,0,5) == "reset") {
 
-			// Reset master/detail keys
-			if ($this->Command == "resetall") {
-				$this->setCurrentMasterTable(""); // Clear master table
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-				$this->kegm_id->setSessionValue("");
-			}
+			// Reset search criteria
+			if ($this->Command == "reset" || $this->Command == "resetall")
+				$this->ResetSearchParms();
 
 			// Reset sorting order
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
-				$this->setSessionOrderByList($sOrderBy);
 				$this->pegawai_id->setSort("");
+				$this->tgl->setSort("");
 				$this->scan_masuk->setSort("");
 				$this->scan_keluar->setSort("");
+				$this->pegawai_nip->setSort("");
+				$this->pegawai_nama->setSort("");
+				$this->pegawai_pin->setSort("");
 			}
 
 			// Reset start position
@@ -802,24 +1111,6 @@ class ct_keg_detail_list extends ct_keg_detail {
 		$item->OnLeft = TRUE;
 		$item->Visible = FALSE;
 
-		// "view"
-		$item = &$this->ListOptions->Add("view");
-		$item->CssStyle = "white-space: nowrap;";
-		$item->Visible = $Security->CanView();
-		$item->OnLeft = TRUE;
-
-		// "edit"
-		$item = &$this->ListOptions->Add("edit");
-		$item->CssStyle = "white-space: nowrap;";
-		$item->Visible = $Security->CanEdit();
-		$item->OnLeft = TRUE;
-
-		// "copy"
-		$item = &$this->ListOptions->Add("copy");
-		$item->CssStyle = "white-space: nowrap;";
-		$item->Visible = $Security->CanAdd();
-		$item->OnLeft = TRUE;
-
 		// List actions
 		$item = &$this->ListOptions->Add("listactions");
 		$item->CssStyle = "white-space: nowrap;";
@@ -830,18 +1121,10 @@ class ct_keg_detail_list extends ct_keg_detail {
 
 		// "checkbox"
 		$item = &$this->ListOptions->Add("checkbox");
-		$item->Visible = $Security->CanDelete();
+		$item->Visible = FALSE;
 		$item->OnLeft = TRUE;
 		$item->Header = "<input type=\"checkbox\" name=\"key\" id=\"key\" onclick=\"ew_SelectAllKey(this);\">";
 		$item->MoveTo(0);
-		$item->ShowInDropDown = FALSE;
-		$item->ShowInButtonGroup = FALSE;
-
-		// "sequence"
-		$item = &$this->ListOptions->Add("sequence");
-		$item->CssStyle = "white-space: nowrap;";
-		$item->Visible = TRUE;
-		$item->OnLeft = TRUE; // Always on left
 		$item->ShowInDropDown = FALSE;
 		$item->ShowInButtonGroup = FALSE;
 
@@ -865,37 +1148,6 @@ class ct_keg_detail_list extends ct_keg_detail {
 	function RenderListOptions() {
 		global $Security, $Language, $objForm;
 		$this->ListOptions->LoadDefault();
-
-		// "sequence"
-		$oListOpt = &$this->ListOptions->Items["sequence"];
-		$oListOpt->Body = ew_FormatSeqNo($this->RecCnt);
-
-		// "view"
-		$oListOpt = &$this->ListOptions->Items["view"];
-		$viewcaption = ew_HtmlTitle($Language->Phrase("ViewLink"));
-		if ($Security->CanView()) {
-			$oListOpt->Body = "<a class=\"ewRowLink ewView\" title=\"" . $viewcaption . "\" data-caption=\"" . $viewcaption . "\" href=\"" . ew_HtmlEncode($this->ViewUrl) . "\">" . $Language->Phrase("ViewLink") . "</a>";
-		} else {
-			$oListOpt->Body = "";
-		}
-
-		// "edit"
-		$oListOpt = &$this->ListOptions->Items["edit"];
-		$editcaption = ew_HtmlTitle($Language->Phrase("EditLink"));
-		if ($Security->CanEdit()) {
-			$oListOpt->Body = "<a class=\"ewRowLink ewEdit\" title=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" href=\"" . ew_HtmlEncode($this->EditUrl) . "\">" . $Language->Phrase("EditLink") . "</a>";
-		} else {
-			$oListOpt->Body = "";
-		}
-
-		// "copy"
-		$oListOpt = &$this->ListOptions->Items["copy"];
-		$copycaption = ew_HtmlTitle($Language->Phrase("CopyLink"));
-		if ($Security->CanAdd()) {
-			$oListOpt->Body = "<a class=\"ewRowLink ewCopy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . ew_HtmlEncode($this->CopyUrl) . "\">" . $Language->Phrase("CopyLink") . "</a>";
-		} else {
-			$oListOpt->Body = "";
-		}
 
 		// Set up list action buttons
 		$oListOpt = &$this->ListOptions->GetItem("listactions");
@@ -928,7 +1180,6 @@ class ct_keg_detail_list extends ct_keg_detail {
 
 		// "checkbox"
 		$oListOpt = &$this->ListOptions->Items["checkbox"];
-		$oListOpt->Body = "<input type=\"checkbox\" name=\"key_m[]\" value=\"" . ew_HtmlEncode($this->kegd_id->CurrentValue) . "\" onclick='ew_ClickMultiCheckbox(event);'>";
 		$this->RenderListOptionsExt();
 
 		// Call ListOptions_Rendered event
@@ -939,19 +1190,7 @@ class ct_keg_detail_list extends ct_keg_detail {
 	function SetupOtherOptions() {
 		global $Language, $Security;
 		$options = &$this->OtherOptions;
-		$option = $options["addedit"];
-
-		// Add
-		$item = &$option->Add("add");
-		$addcaption = ew_HtmlTitle($Language->Phrase("AddLink"));
-		$item->Body = "<a class=\"ewAddEdit ewAdd\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . ew_HtmlEncode($this->AddUrl) . "\">" . $Language->Phrase("AddLink") . "</a>";
-		$item->Visible = ($this->AddUrl <> "" && $Security->CanAdd());
 		$option = $options["action"];
-
-		// Add multi delete
-		$item = &$option->Add("multidelete");
-		$item->Body = "<a class=\"ewAction ewMultiDelete\" title=\"" . ew_HtmlTitle($Language->Phrase("DeleteSelectedLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("DeleteSelectedLink")) . "\" href=\"\" onclick=\"ew_SubmitAction(event,{f:document.ft_keg_detaillist,url:'" . $this->MultiDeleteUrl . "'});return false;\">" . $Language->Phrase("DeleteSelectedLink") . "</a>";
-		$item->Visible = ($Security->CanDelete());
 
 		// Set up options default
 		foreach ($options as &$option) {
@@ -969,11 +1208,11 @@ class ct_keg_detail_list extends ct_keg_detail {
 
 		// Filter button
 		$item = &$this->FilterOptions->Add("savecurrentfilter");
-		$item->Body = "<a class=\"ewSaveFilter\" data-form=\"ft_keg_detaillistsrch\" href=\"#\">" . $Language->Phrase("SaveCurrentFilter") . "</a>";
-		$item->Visible = FALSE;
+		$item->Body = "<a class=\"ewSaveFilter\" data-form=\"fv_jdw_krj_brnganlistsrch\" href=\"#\">" . $Language->Phrase("SaveCurrentFilter") . "</a>";
+		$item->Visible = TRUE;
 		$item = &$this->FilterOptions->Add("deletefilter");
-		$item->Body = "<a class=\"ewDeleteFilter\" data-form=\"ft_keg_detaillistsrch\" href=\"#\">" . $Language->Phrase("DeleteFilter") . "</a>";
-		$item->Visible = FALSE;
+		$item->Body = "<a class=\"ewDeleteFilter\" data-form=\"fv_jdw_krj_brnganlistsrch\" href=\"#\">" . $Language->Phrase("DeleteFilter") . "</a>";
+		$item->Visible = TRUE;
 		$this->FilterOptions->UseDropDownButton = TRUE;
 		$this->FilterOptions->UseButtonGroup = !$this->FilterOptions->UseDropDownButton;
 		$this->FilterOptions->DropDownButtonPhrase = $Language->Phrase("Filters");
@@ -996,7 +1235,7 @@ class ct_keg_detail_list extends ct_keg_detail {
 					$item = &$option->Add("custom_" . $listaction->Action);
 					$caption = $listaction->Caption;
 					$icon = ($listaction->Icon <> "") ? "<span class=\"" . ew_HtmlEncode($listaction->Icon) . "\" data-caption=\"" . ew_HtmlEncode($caption) . "\"></span> " : $caption;
-					$item->Body = "<a class=\"ewAction ewListAction\" title=\"" . ew_HtmlEncode($caption) . "\" data-caption=\"" . ew_HtmlEncode($caption) . "\" href=\"\" onclick=\"ew_SubmitAction(event,jQuery.extend({f:document.ft_keg_detaillist}," . $listaction->ToJson(TRUE) . "));return false;\">" . $icon . "</a>";
+					$item->Body = "<a class=\"ewAction ewListAction\" title=\"" . ew_HtmlEncode($caption) . "\" data-caption=\"" . ew_HtmlEncode($caption) . "\" href=\"\" onclick=\"ew_SubmitAction(event,jQuery.extend({f:document.fv_jdw_krj_brnganlist}," . $listaction->ToJson(TRUE) . "));return false;\">" . $icon . "</a>";
 					$item->Visible = $listaction->Allow;
 				}
 			}
@@ -1097,6 +1336,17 @@ class ct_keg_detail_list extends ct_keg_detail {
 		$this->SearchOptions->Tag = "div";
 		$this->SearchOptions->TagClassName = "ewSearchOption";
 
+		// Search button
+		$item = &$this->SearchOptions->Add("searchtoggle");
+		$SearchToggleClass = ($this->SearchWhere <> "") ? " active" : " active";
+		$item->Body = "<button type=\"button\" class=\"btn btn-default ewSearchToggle" . $SearchToggleClass . "\" title=\"" . $Language->Phrase("SearchPanel") . "\" data-caption=\"" . $Language->Phrase("SearchPanel") . "\" data-toggle=\"button\" data-form=\"fv_jdw_krj_brnganlistsrch\">" . $Language->Phrase("SearchBtn") . "</button>";
+		$item->Visible = TRUE;
+
+		// Show all button
+		$item = &$this->SearchOptions->Add("showall");
+		$item->Body = "<a class=\"btn btn-default ewShowAll\" title=\"" . $Language->Phrase("ShowAll") . "\" data-caption=\"" . $Language->Phrase("ShowAll") . "\" href=\"" . $this->PageUrl() . "cmd=reset\">" . $Language->Phrase("ShowAllBtn") . "</a>";
+		$item->Visible = ($this->SearchWhere <> $this->DefaultSearchWhere && $this->SearchWhere <> "0=101");
+
 		// Button group for search
 		$this->SearchOptions->UseDropDownButton = FALSE;
 		$this->SearchOptions->UseImageAndText = TRUE;
@@ -1162,6 +1412,13 @@ class ct_keg_detail_list extends ct_keg_detail {
 		}
 	}
 
+	// Load basic search values
+	function LoadBasicSearchValues() {
+		$this->BasicSearch->Keyword = @$_GET[EW_TABLE_BASIC_SEARCH];
+		if ($this->BasicSearch->Keyword <> "") $this->Command = "search";
+		$this->BasicSearch->Type = @$_GET[EW_TABLE_BASIC_SEARCH_TYPE];
+	}
+
 	// Load recordset
 	function LoadRecordset($offset = -1, $rowcnt = -1) {
 
@@ -1174,7 +1431,7 @@ class ct_keg_detail_list extends ct_keg_detail {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -1217,27 +1474,26 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->kegd_id->setDbValue($rs->fields('kegd_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
-		if (array_key_exists('EV__pegawai_id', $rs->fields)) {
-			$this->pegawai_id->VirtualValue = $rs->fields('EV__pegawai_id'); // Set up virtual field value
-		} else {
-			$this->pegawai_id->VirtualValue = ""; // Clear value
-		}
-		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
+		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->scan_masuk->setDbValue($rs->fields('scan_masuk'));
 		$this->scan_keluar->setDbValue($rs->fields('scan_keluar'));
+		$this->pegawai_nip->setDbValue($rs->fields('pegawai_nip'));
+		$this->pegawai_nama->setDbValue($rs->fields('pegawai_nama'));
+		$this->pegawai_pin->setDbValue($rs->fields('pegawai_pin'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->kegd_id->DbValue = $row['kegd_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
-		$this->kegm_id->DbValue = $row['kegm_id'];
+		$this->tgl->DbValue = $row['tgl'];
 		$this->scan_masuk->DbValue = $row['scan_masuk'];
 		$this->scan_keluar->DbValue = $row['scan_keluar'];
+		$this->pegawai_nip->DbValue = $row['pegawai_nip'];
+		$this->pegawai_nama->DbValue = $row['pegawai_nama'];
+		$this->pegawai_pin->DbValue = $row['pegawai_pin'];
 	}
 
 	// Load old record
@@ -1245,10 +1501,6 @@ class ct_keg_detail_list extends ct_keg_detail {
 
 		// Load key values from Session
 		$bValidKey = TRUE;
-		if (strval($this->getKey("kegd_id")) <> "")
-			$this->kegd_id->CurrentValue = $this->getKey("kegd_id"); // kegd_id
-		else
-			$bValidKey = FALSE;
 
 		// Load old recordset
 		if ($bValidKey) {
@@ -1279,48 +1531,24 @@ class ct_keg_detail_list extends ct_keg_detail {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// kegd_id
 		// pegawai_id
-		// kegm_id
+		// tgl
 		// scan_masuk
 		// scan_keluar
+		// pegawai_nip
+		// pegawai_nama
+		// pegawai_pin
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// kegd_id
-		$this->kegd_id->ViewValue = $this->kegd_id->CurrentValue;
-		$this->kegd_id->ViewCustomAttributes = "";
-
 		// pegawai_id
-		if ($this->pegawai_id->VirtualValue <> "") {
-			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
-		} else {
-		if (strval($this->pegawai_id->CurrentValue) <> "") {
-			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
-		$sWhereWrk = "";
-		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
-			}
-		} else {
-			$this->pegawai_id->ViewValue = NULL;
-		}
-		}
+		$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
 		$this->pegawai_id->ViewCustomAttributes = "";
 
-		// kegm_id
-		$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
-		$this->kegm_id->ViewCustomAttributes = "";
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewCustomAttributes = "";
 
 		// scan_masuk
 		$this->scan_masuk->ViewValue = $this->scan_masuk->CurrentValue;
@@ -1332,10 +1560,27 @@ class ct_keg_detail_list extends ct_keg_detail {
 		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 0);
 		$this->scan_keluar->ViewCustomAttributes = "";
 
+		// pegawai_nip
+		$this->pegawai_nip->ViewValue = $this->pegawai_nip->CurrentValue;
+		$this->pegawai_nip->ViewCustomAttributes = "";
+
+		// pegawai_nama
+		$this->pegawai_nama->ViewValue = $this->pegawai_nama->CurrentValue;
+		$this->pegawai_nama->ViewCustomAttributes = "";
+
+		// pegawai_pin
+		$this->pegawai_pin->ViewValue = $this->pegawai_pin->CurrentValue;
+		$this->pegawai_pin->ViewCustomAttributes = "";
+
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
+
+			// tgl
+			$this->tgl->LinkCustomAttributes = "";
+			$this->tgl->HrefValue = "";
+			$this->tgl->TooltipValue = "";
 
 			// scan_masuk
 			$this->scan_masuk->LinkCustomAttributes = "";
@@ -1346,6 +1591,21 @@ class ct_keg_detail_list extends ct_keg_detail {
 			$this->scan_keluar->LinkCustomAttributes = "";
 			$this->scan_keluar->HrefValue = "";
 			$this->scan_keluar->TooltipValue = "";
+
+			// pegawai_nip
+			$this->pegawai_nip->LinkCustomAttributes = "";
+			$this->pegawai_nip->HrefValue = "";
+			$this->pegawai_nip->TooltipValue = "";
+
+			// pegawai_nama
+			$this->pegawai_nama->LinkCustomAttributes = "";
+			$this->pegawai_nama->HrefValue = "";
+			$this->pegawai_nama->TooltipValue = "";
+
+			// pegawai_pin
+			$this->pegawai_pin->LinkCustomAttributes = "";
+			$this->pegawai_pin->HrefValue = "";
+			$this->pegawai_pin->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1395,7 +1655,7 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Export to Email
 		$item = &$this->ExportOptions->Add("email");
 		$url = "";
-		$item->Body = "<button id=\"emf_t_keg_detail\" class=\"ewExportLink ewEmail\" title=\"" . $Language->Phrase("ExportToEmailText") . "\" data-caption=\"" . $Language->Phrase("ExportToEmailText") . "\" onclick=\"ew_EmailDialogShow({lnk:'emf_t_keg_detail',hdr:ewLanguage.Phrase('ExportToEmailText'),f:document.ft_keg_detaillist,sel:false" . $url . "});\">" . $Language->Phrase("ExportToEmail") . "</button>";
+		$item->Body = "<button id=\"emf_v_jdw_krj_brngan\" class=\"ewExportLink ewEmail\" title=\"" . $Language->Phrase("ExportToEmailText") . "\" data-caption=\"" . $Language->Phrase("ExportToEmailText") . "\" onclick=\"ew_EmailDialogShow({lnk:'emf_v_jdw_krj_brngan',hdr:ewLanguage.Phrase('ExportToEmailText'),f:document.fv_jdw_krj_brnganlist,sel:false" . $url . "});\">" . $Language->Phrase("ExportToEmail") . "</button>";
 		$item->Visible = TRUE;
 
 		// Drop down button for export
@@ -1467,25 +1727,6 @@ class ct_keg_detail_list extends ct_keg_detail {
 		// Call Page Exporting server event
 		$this->ExportDoc->ExportCustom = !$this->Page_Exporting();
 		$ParentTable = "";
-
-		// Export master record
-		if (EW_EXPORT_MASTER_RECORD && $this->GetMasterFilter() <> "" && $this->getCurrentMasterTable() == "t_keg_master") {
-			global $t_keg_master;
-			if (!isset($t_keg_master)) $t_keg_master = new ct_keg_master;
-			$rsmaster = $t_keg_master->LoadRs($this->DbMasterFilter); // Load master record
-			if ($rsmaster && !$rsmaster->EOF) {
-				$ExportStyle = $Doc->Style;
-				$Doc->SetStyle("v"); // Change to vertical
-				if ($this->Export <> "csv" || EW_EXPORT_MASTER_RECORD_FOR_CSV) {
-					$Doc->Table = &$t_keg_master;
-					$t_keg_master->ExportDocument($Doc, $rsmaster, 1, 1);
-					$Doc->ExportEmptyRow();
-					$Doc->Table = &$this;
-				}
-				$Doc->SetStyle($ExportStyle); // Restore
-				$rsmaster->Close();
-			}
-		}
 		$sHeader = $this->PageHeader;
 		$this->Page_DataRendering($sHeader);
 		$Doc->Text .= $sHeader;
@@ -1621,8 +1862,11 @@ class ct_keg_detail_list extends ct_keg_detail {
 		$sQry = "export=html";
 
 		// Build QueryString for search
-		// Build QueryString for pager
+		if ($this->BasicSearch->getKeyword() <> "") {
+			$sQry .= "&" . EW_TABLE_BASIC_SEARCH . "=" . urlencode($this->BasicSearch->getKeyword()) . "&" . EW_TABLE_BASIC_SEARCH_TYPE . "=" . urlencode($this->BasicSearch->getType());
+		}
 
+		// Build QueryString for pager
 		$sQry .= "&" . EW_TABLE_REC_PER_PAGE . "=" . urlencode($this->getRecordsPerPage()) . "&" . EW_TABLE_START_REC . "=" . urlencode($this->getStartRecordNumber());
 		return $sQry;
 	}
@@ -1641,72 +1885,6 @@ class ct_keg_detail_list extends ct_keg_detail {
 				"&y_" . $FldParm . "=" . urlencode($FldSearchValue2) .
 				"&w_" . $FldParm . "=" . urlencode($Fld->AdvancedSearch->getValue("w"));
 		}
-	}
-
-	// Set up master/detail based on QueryString
-	function SetUpMasterParms() {
-		$bValidMaster = FALSE;
-
-		// Get the keys for master table
-		if (isset($_GET[EW_TABLE_SHOW_MASTER])) {
-			$sMasterTblVar = $_GET[EW_TABLE_SHOW_MASTER];
-			if ($sMasterTblVar == "") {
-				$bValidMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($sMasterTblVar == "t_keg_master") {
-				$bValidMaster = TRUE;
-				if (@$_GET["fk_kegm_id"] <> "") {
-					$GLOBALS["t_keg_master"]->kegm_id->setQueryStringValue($_GET["fk_kegm_id"]);
-					$this->kegm_id->setQueryStringValue($GLOBALS["t_keg_master"]->kegm_id->QueryStringValue);
-					$this->kegm_id->setSessionValue($this->kegm_id->QueryStringValue);
-					if (!is_numeric($GLOBALS["t_keg_master"]->kegm_id->QueryStringValue)) $bValidMaster = FALSE;
-				} else {
-					$bValidMaster = FALSE;
-				}
-			}
-		} elseif (isset($_POST[EW_TABLE_SHOW_MASTER])) {
-			$sMasterTblVar = $_POST[EW_TABLE_SHOW_MASTER];
-			if ($sMasterTblVar == "") {
-				$bValidMaster = TRUE;
-				$this->DbMasterFilter = "";
-				$this->DbDetailFilter = "";
-			}
-			if ($sMasterTblVar == "t_keg_master") {
-				$bValidMaster = TRUE;
-				if (@$_POST["fk_kegm_id"] <> "") {
-					$GLOBALS["t_keg_master"]->kegm_id->setFormValue($_POST["fk_kegm_id"]);
-					$this->kegm_id->setFormValue($GLOBALS["t_keg_master"]->kegm_id->FormValue);
-					$this->kegm_id->setSessionValue($this->kegm_id->FormValue);
-					if (!is_numeric($GLOBALS["t_keg_master"]->kegm_id->FormValue)) $bValidMaster = FALSE;
-				} else {
-					$bValidMaster = FALSE;
-				}
-			}
-		}
-		if ($bValidMaster) {
-
-			// Update URL
-			$this->AddUrl = $this->AddMasterUrl($this->AddUrl);
-			$this->InlineAddUrl = $this->AddMasterUrl($this->InlineAddUrl);
-			$this->GridAddUrl = $this->AddMasterUrl($this->GridAddUrl);
-			$this->GridEditUrl = $this->AddMasterUrl($this->GridEditUrl);
-
-			// Save current master table
-			$this->setCurrentMasterTable($sMasterTblVar);
-
-			// Reset start record counter (new master key)
-			$this->StartRec = 1;
-			$this->setStartRecordNumber($this->StartRec);
-
-			// Clear previous master key from Session
-			if ($sMasterTblVar <> "t_keg_master") {
-				if ($this->kegm_id->CurrentValue == "") $this->kegm_id->setSessionValue("");
-			}
-		}
-		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
-		$this->DbDetailFilter = $this->GetDetailFilter(); // Get detail filter
 	}
 
 	// Set up Breadcrumb
@@ -1858,31 +2036,31 @@ class ct_keg_detail_list extends ct_keg_detail {
 <?php
 
 // Create page object
-if (!isset($t_keg_detail_list)) $t_keg_detail_list = new ct_keg_detail_list();
+if (!isset($v_jdw_krj_brngan_list)) $v_jdw_krj_brngan_list = new cv_jdw_krj_brngan_list();
 
 // Page init
-$t_keg_detail_list->Page_Init();
+$v_jdw_krj_brngan_list->Page_Init();
 
 // Page main
-$t_keg_detail_list->Page_Main();
+$v_jdw_krj_brngan_list->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$t_keg_detail_list->Page_Render();
+$v_jdw_krj_brngan_list->Page_Render();
 ?>
 <?php include_once "header.php" ?>
-<?php if ($t_keg_detail->Export == "") { ?>
+<?php if ($v_jdw_krj_brngan->Export == "") { ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "list";
-var CurrentForm = ft_keg_detaillist = new ew_Form("ft_keg_detaillist", "list");
-ft_keg_detaillist.FormKeyCountName = '<?php echo $t_keg_detail_list->FormKeyCountName ?>';
+var CurrentForm = fv_jdw_krj_brnganlist = new ew_Form("fv_jdw_krj_brnganlist", "list");
+fv_jdw_krj_brnganlist.FormKeyCountName = '<?php echo $v_jdw_krj_brngan_list->FormKeyCountName ?>';
 
 // Form_CustomValidate event
-ft_keg_detaillist.Form_CustomValidate = 
+fv_jdw_krj_brnganlist.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -1891,137 +2069,161 @@ ft_keg_detaillist.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ft_keg_detaillist.ValidateRequired = true;
+fv_jdw_krj_brnganlist.ValidateRequired = true;
 <?php } else { ?>
-ft_keg_detaillist.ValidateRequired = false; 
+fv_jdw_krj_brnganlist.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ft_keg_detaillist.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
-
 // Form object for search
+
+var CurrentSearchForm = fv_jdw_krj_brnganlistsrch = new ew_Form("fv_jdw_krj_brnganlistsrch");
 </script>
 <script type="text/javascript">
 
 // Write your client script here, no need to add script tags.
 </script>
 <?php } ?>
-<?php if ($t_keg_detail->Export == "") { ?>
+<?php if ($v_jdw_krj_brngan->Export == "") { ?>
 <div class="ewToolbar">
-<?php if ($t_keg_detail->Export == "") { ?>
+<?php if ($v_jdw_krj_brngan->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<?php if ($t_keg_detail_list->TotalRecs > 0 && $t_keg_detail_list->ExportOptions->Visible()) { ?>
-<?php $t_keg_detail_list->ExportOptions->Render("body") ?>
+<?php if ($v_jdw_krj_brngan_list->TotalRecs > 0 && $v_jdw_krj_brngan_list->ExportOptions->Visible()) { ?>
+<?php $v_jdw_krj_brngan_list->ExportOptions->Render("body") ?>
 <?php } ?>
-<?php if ($t_keg_detail->Export == "") { ?>
+<?php if ($v_jdw_krj_brngan_list->SearchOptions->Visible()) { ?>
+<?php $v_jdw_krj_brngan_list->SearchOptions->Render("body") ?>
+<?php } ?>
+<?php if ($v_jdw_krj_brngan_list->FilterOptions->Visible()) { ?>
+<?php $v_jdw_krj_brngan_list->FilterOptions->Render("body") ?>
+<?php } ?>
+<?php if ($v_jdw_krj_brngan->Export == "") { ?>
 <?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php if (($t_keg_detail->Export == "") || (EW_EXPORT_MASTER_RECORD && $t_keg_detail->Export == "print")) { ?>
 <?php
-if ($t_keg_detail_list->DbMasterFilter <> "" && $t_keg_detail->getCurrentMasterTable() == "t_keg_master") {
-	if ($t_keg_detail_list->MasterRecordExists) {
-?>
-<?php include_once "t_keg_mastermaster.php" ?>
-<?php
-	}
-}
-?>
-<?php } ?>
-<?php
-	$bSelectLimit = $t_keg_detail_list->UseSelectLimit;
+	$bSelectLimit = $v_jdw_krj_brngan_list->UseSelectLimit;
 	if ($bSelectLimit) {
-		if ($t_keg_detail_list->TotalRecs <= 0)
-			$t_keg_detail_list->TotalRecs = $t_keg_detail->SelectRecordCount();
+		if ($v_jdw_krj_brngan_list->TotalRecs <= 0)
+			$v_jdw_krj_brngan_list->TotalRecs = $v_jdw_krj_brngan->SelectRecordCount();
 	} else {
-		if (!$t_keg_detail_list->Recordset && ($t_keg_detail_list->Recordset = $t_keg_detail_list->LoadRecordset()))
-			$t_keg_detail_list->TotalRecs = $t_keg_detail_list->Recordset->RecordCount();
+		if (!$v_jdw_krj_brngan_list->Recordset && ($v_jdw_krj_brngan_list->Recordset = $v_jdw_krj_brngan_list->LoadRecordset()))
+			$v_jdw_krj_brngan_list->TotalRecs = $v_jdw_krj_brngan_list->Recordset->RecordCount();
 	}
-	$t_keg_detail_list->StartRec = 1;
-	if ($t_keg_detail_list->DisplayRecs <= 0 || ($t_keg_detail->Export <> "" && $t_keg_detail->ExportAll)) // Display all records
-		$t_keg_detail_list->DisplayRecs = $t_keg_detail_list->TotalRecs;
-	if (!($t_keg_detail->Export <> "" && $t_keg_detail->ExportAll))
-		$t_keg_detail_list->SetUpStartRec(); // Set up start record position
+	$v_jdw_krj_brngan_list->StartRec = 1;
+	if ($v_jdw_krj_brngan_list->DisplayRecs <= 0 || ($v_jdw_krj_brngan->Export <> "" && $v_jdw_krj_brngan->ExportAll)) // Display all records
+		$v_jdw_krj_brngan_list->DisplayRecs = $v_jdw_krj_brngan_list->TotalRecs;
+	if (!($v_jdw_krj_brngan->Export <> "" && $v_jdw_krj_brngan->ExportAll))
+		$v_jdw_krj_brngan_list->SetUpStartRec(); // Set up start record position
 	if ($bSelectLimit)
-		$t_keg_detail_list->Recordset = $t_keg_detail_list->LoadRecordset($t_keg_detail_list->StartRec-1, $t_keg_detail_list->DisplayRecs);
+		$v_jdw_krj_brngan_list->Recordset = $v_jdw_krj_brngan_list->LoadRecordset($v_jdw_krj_brngan_list->StartRec-1, $v_jdw_krj_brngan_list->DisplayRecs);
 
 	// Set no record found message
-	if ($t_keg_detail->CurrentAction == "" && $t_keg_detail_list->TotalRecs == 0) {
+	if ($v_jdw_krj_brngan->CurrentAction == "" && $v_jdw_krj_brngan_list->TotalRecs == 0) {
 		if (!$Security->CanList())
-			$t_keg_detail_list->setWarningMessage(ew_DeniedMsg());
-		if ($t_keg_detail_list->SearchWhere == "0=101")
-			$t_keg_detail_list->setWarningMessage($Language->Phrase("EnterSearchCriteria"));
+			$v_jdw_krj_brngan_list->setWarningMessage(ew_DeniedMsg());
+		if ($v_jdw_krj_brngan_list->SearchWhere == "0=101")
+			$v_jdw_krj_brngan_list->setWarningMessage($Language->Phrase("EnterSearchCriteria"));
 		else
-			$t_keg_detail_list->setWarningMessage($Language->Phrase("NoRecord"));
+			$v_jdw_krj_brngan_list->setWarningMessage($Language->Phrase("NoRecord"));
 	}
-$t_keg_detail_list->RenderOtherOptions();
+$v_jdw_krj_brngan_list->RenderOtherOptions();
 ?>
-<?php $t_keg_detail_list->ShowPageHeader(); ?>
+<?php if ($Security->CanSearch()) { ?>
+<?php if ($v_jdw_krj_brngan->Export == "" && $v_jdw_krj_brngan->CurrentAction == "") { ?>
+<form name="fv_jdw_krj_brnganlistsrch" id="fv_jdw_krj_brnganlistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
+<?php $SearchPanelClass = ($v_jdw_krj_brngan_list->SearchWhere <> "") ? " in" : " in"; ?>
+<div id="fv_jdw_krj_brnganlistsrch_SearchPanel" class="ewSearchPanel collapse<?php echo $SearchPanelClass ?>">
+<input type="hidden" name="cmd" value="search">
+<input type="hidden" name="t" value="v_jdw_krj_brngan">
+	<div class="ewBasicSearch">
+<div id="xsr_1" class="ewRow">
+	<div class="ewQuickSearch input-group">
+	<input type="text" name="<?php echo EW_TABLE_BASIC_SEARCH ?>" id="<?php echo EW_TABLE_BASIC_SEARCH ?>" class="form-control" value="<?php echo ew_HtmlEncode($v_jdw_krj_brngan_list->BasicSearch->getKeyword()) ?>" placeholder="<?php echo ew_HtmlEncode($Language->Phrase("Search")) ?>">
+	<input type="hidden" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" id="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="<?php echo ew_HtmlEncode($v_jdw_krj_brngan_list->BasicSearch->getType()) ?>">
+	<div class="input-group-btn">
+		<button type="button" data-toggle="dropdown" class="btn btn-default"><span id="searchtype"><?php echo $v_jdw_krj_brngan_list->BasicSearch->getTypeNameShort() ?></span><span class="caret"></span></button>
+		<ul class="dropdown-menu pull-right" role="menu">
+			<li<?php if ($v_jdw_krj_brngan_list->BasicSearch->getType() == "") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this)"><?php echo $Language->Phrase("QuickSearchAuto") ?></a></li>
+			<li<?php if ($v_jdw_krj_brngan_list->BasicSearch->getType() == "=") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'=')"><?php echo $Language->Phrase("QuickSearchExact") ?></a></li>
+			<li<?php if ($v_jdw_krj_brngan_list->BasicSearch->getType() == "AND") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'AND')"><?php echo $Language->Phrase("QuickSearchAll") ?></a></li>
+			<li<?php if ($v_jdw_krj_brngan_list->BasicSearch->getType() == "OR") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'OR')"><?php echo $Language->Phrase("QuickSearchAny") ?></a></li>
+		</ul>
+	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+	</div>
+	</div>
+</div>
+	</div>
+</div>
+</form>
+<?php } ?>
+<?php } ?>
+<?php $v_jdw_krj_brngan_list->ShowPageHeader(); ?>
 <?php
-$t_keg_detail_list->ShowMessage();
+$v_jdw_krj_brngan_list->ShowMessage();
 ?>
-<?php if ($t_keg_detail_list->TotalRecs > 0 || $t_keg_detail->CurrentAction <> "") { ?>
-<div class="panel panel-default ewGrid t_keg_detail">
-<?php if ($t_keg_detail->Export == "") { ?>
+<?php if ($v_jdw_krj_brngan_list->TotalRecs > 0 || $v_jdw_krj_brngan->CurrentAction <> "") { ?>
+<div class="panel panel-default ewGrid v_jdw_krj_brngan">
+<?php if ($v_jdw_krj_brngan->Export == "") { ?>
 <div class="panel-heading ewGridUpperPanel">
-<?php if ($t_keg_detail->CurrentAction <> "gridadd" && $t_keg_detail->CurrentAction <> "gridedit") { ?>
+<?php if ($v_jdw_krj_brngan->CurrentAction <> "gridadd" && $v_jdw_krj_brngan->CurrentAction <> "gridedit") { ?>
 <form name="ewPagerForm" class="form-inline ewForm ewPagerForm" action="<?php echo ew_CurrentPage() ?>">
-<?php if (!isset($t_keg_detail_list->Pager)) $t_keg_detail_list->Pager = new cPrevNextPager($t_keg_detail_list->StartRec, $t_keg_detail_list->DisplayRecs, $t_keg_detail_list->TotalRecs) ?>
-<?php if ($t_keg_detail_list->Pager->RecordCount > 0 && $t_keg_detail_list->Pager->Visible) { ?>
+<?php if (!isset($v_jdw_krj_brngan_list->Pager)) $v_jdw_krj_brngan_list->Pager = new cPrevNextPager($v_jdw_krj_brngan_list->StartRec, $v_jdw_krj_brngan_list->DisplayRecs, $v_jdw_krj_brngan_list->TotalRecs) ?>
+<?php if ($v_jdw_krj_brngan_list->Pager->RecordCount > 0 && $v_jdw_krj_brngan_list->Pager->Visible) { ?>
 <div class="ewPager">
 <span><?php echo $Language->Phrase("Page") ?>&nbsp;</span>
 <div class="ewPrevNext"><div class="input-group">
 <div class="input-group-btn">
 <!--first page button-->
-	<?php if ($t_keg_detail_list->Pager->FirstButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_keg_detail_list->PageUrl() ?>start=<?php echo $t_keg_detail_list->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
+	<?php if ($v_jdw_krj_brngan_list->Pager->FirstButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $v_jdw_krj_brngan_list->PageUrl() ?>start=<?php echo $v_jdw_krj_brngan_list->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerFirst") ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } ?>
 <!--previous page button-->
-	<?php if ($t_keg_detail_list->Pager->PrevButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_keg_detail_list->PageUrl() ?>start=<?php echo $t_keg_detail_list->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
+	<?php if ($v_jdw_krj_brngan_list->Pager->PrevButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $v_jdw_krj_brngan_list->PageUrl() ?>start=<?php echo $v_jdw_krj_brngan_list->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerPrevious") ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } ?>
 </div>
 <!--current page number-->
-	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_keg_detail_list->Pager->CurrentPage ?>">
+	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $v_jdw_krj_brngan_list->Pager->CurrentPage ?>">
 <div class="input-group-btn">
 <!--next page button-->
-	<?php if ($t_keg_detail_list->Pager->NextButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_keg_detail_list->PageUrl() ?>start=<?php echo $t_keg_detail_list->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
+	<?php if ($v_jdw_krj_brngan_list->Pager->NextButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $v_jdw_krj_brngan_list->PageUrl() ?>start=<?php echo $v_jdw_krj_brngan_list->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerNext") ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } ?>
 <!--last page button-->
-	<?php if ($t_keg_detail_list->Pager->LastButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_keg_detail_list->PageUrl() ?>start=<?php echo $t_keg_detail_list->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
+	<?php if ($v_jdw_krj_brngan_list->Pager->LastButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $v_jdw_krj_brngan_list->PageUrl() ?>start=<?php echo $v_jdw_krj_brngan_list->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerLast") ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } ?>
 </div>
 </div>
 </div>
-<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_keg_detail_list->Pager->PageCount ?></span>
+<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $v_jdw_krj_brngan_list->Pager->PageCount ?></span>
 </div>
 <div class="ewPager ewRec">
-	<span><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $t_keg_detail_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $t_keg_detail_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $t_keg_detail_list->Pager->RecordCount ?></span>
+	<span><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $v_jdw_krj_brngan_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $v_jdw_krj_brngan_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $v_jdw_krj_brngan_list->Pager->RecordCount ?></span>
 </div>
 <?php } ?>
-<?php if ($t_keg_detail_list->TotalRecs > 0 && (!EW_AUTO_HIDE_PAGE_SIZE_SELECTOR || $t_keg_detail_list->Pager->Visible)) { ?>
+<?php if ($v_jdw_krj_brngan_list->TotalRecs > 0 && (!EW_AUTO_HIDE_PAGE_SIZE_SELECTOR || $v_jdw_krj_brngan_list->Pager->Visible)) { ?>
 <div class="ewPager">
-<input type="hidden" name="t" value="t_keg_detail">
+<input type="hidden" name="t" value="v_jdw_krj_brngan">
 <select name="<?php echo EW_TABLE_REC_PER_PAGE ?>" class="form-control input-sm ewTooltip" title="<?php echo $Language->Phrase("RecordsPerPage") ?>" onchange="this.form.submit();">
-<option value="10"<?php if ($t_keg_detail_list->DisplayRecs == 10) { ?> selected<?php } ?>>10</option>
-<option value="20"<?php if ($t_keg_detail_list->DisplayRecs == 20) { ?> selected<?php } ?>>20</option>
-<option value="50"<?php if ($t_keg_detail_list->DisplayRecs == 50) { ?> selected<?php } ?>>50</option>
-<option value="100"<?php if ($t_keg_detail_list->DisplayRecs == 100) { ?> selected<?php } ?>>100</option>
-<option value="200"<?php if ($t_keg_detail_list->DisplayRecs == 200) { ?> selected<?php } ?>>200</option>
-<option value="ALL"<?php if ($t_keg_detail->getRecordsPerPage() == -1) { ?> selected<?php } ?>><?php echo $Language->Phrase("AllRecords") ?></option>
+<option value="10"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 10) { ?> selected<?php } ?>>10</option>
+<option value="20"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 20) { ?> selected<?php } ?>>20</option>
+<option value="50"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 50) { ?> selected<?php } ?>>50</option>
+<option value="100"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 100) { ?> selected<?php } ?>>100</option>
+<option value="200"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 200) { ?> selected<?php } ?>>200</option>
+<option value="ALL"<?php if ($v_jdw_krj_brngan->getRecordsPerPage() == -1) { ?> selected<?php } ?>><?php echo $Language->Phrase("AllRecords") ?></option>
 </select>
 </div>
 <?php } ?>
@@ -2029,171 +2231,235 @@ $t_keg_detail_list->ShowMessage();
 <?php } ?>
 <div class="ewListOtherOptions">
 <?php
-	foreach ($t_keg_detail_list->OtherOptions as &$option)
+	foreach ($v_jdw_krj_brngan_list->OtherOptions as &$option)
 		$option->Render("body");
 ?>
 </div>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<form name="ft_keg_detaillist" id="ft_keg_detaillist" class="form-inline ewForm ewListForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($t_keg_detail_list->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_keg_detail_list->Token ?>">
+<form name="fv_jdw_krj_brnganlist" id="fv_jdw_krj_brnganlist" class="form-inline ewForm ewListForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($v_jdw_krj_brngan_list->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $v_jdw_krj_brngan_list->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="t_keg_detail">
-<?php if ($t_keg_detail->getCurrentMasterTable() == "t_keg_master" && $t_keg_detail->CurrentAction <> "") { ?>
-<input type="hidden" name="<?php echo EW_TABLE_SHOW_MASTER ?>" value="t_keg_master">
-<input type="hidden" name="fk_kegm_id" value="<?php echo $t_keg_detail->kegm_id->getSessionValue() ?>">
-<?php } ?>
-<div id="gmp_t_keg_detail" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
-<?php if ($t_keg_detail_list->TotalRecs > 0 || $t_keg_detail->CurrentAction == "gridedit") { ?>
-<table id="tbl_t_keg_detaillist" class="table ewTable">
-<?php echo $t_keg_detail->TableCustomInnerHtml ?>
+<input type="hidden" name="t" value="v_jdw_krj_brngan">
+<div id="gmp_v_jdw_krj_brngan" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
+<?php if ($v_jdw_krj_brngan_list->TotalRecs > 0 || $v_jdw_krj_brngan->CurrentAction == "gridedit") { ?>
+<table id="tbl_v_jdw_krj_brnganlist" class="table ewTable">
+<?php echo $v_jdw_krj_brngan->TableCustomInnerHtml ?>
 <thead><!-- Table header -->
 	<tr class="ewTableHeader">
 <?php
 
 // Header row
-$t_keg_detail_list->RowType = EW_ROWTYPE_HEADER;
+$v_jdw_krj_brngan_list->RowType = EW_ROWTYPE_HEADER;
 
 // Render list options
-$t_keg_detail_list->RenderListOptions();
+$v_jdw_krj_brngan_list->RenderListOptions();
 
 // Render list options (header, left)
-$t_keg_detail_list->ListOptions->Render("header", "left");
+$v_jdw_krj_brngan_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($t_keg_detail->pegawai_id->Visible) { // pegawai_id ?>
-	<?php if ($t_keg_detail->SortUrl($t_keg_detail->pegawai_id) == "") { ?>
-		<th data-name="pegawai_id"><div id="elh_t_keg_detail_pegawai_id" class="t_keg_detail_pegawai_id"><div class="ewTableHeaderCaption"><?php echo $t_keg_detail->pegawai_id->FldCaption() ?></div></div></th>
+<?php if ($v_jdw_krj_brngan->pegawai_id->Visible) { // pegawai_id ?>
+	<?php if ($v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->pegawai_id) == "") { ?>
+		<th data-name="pegawai_id"><div id="elh_v_jdw_krj_brngan_pegawai_id" class="v_jdw_krj_brngan_pegawai_id"><div class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->pegawai_id->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="pegawai_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_keg_detail->SortUrl($t_keg_detail->pegawai_id) ?>',2);"><div id="elh_t_keg_detail_pegawai_id" class="t_keg_detail_pegawai_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detail->pegawai_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detail->pegawai_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detail->pegawai_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="pegawai_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->pegawai_id) ?>',2);"><div id="elh_v_jdw_krj_brngan_pegawai_id" class="v_jdw_krj_brngan_pegawai_id">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->pegawai_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($v_jdw_krj_brngan->pegawai_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_jdw_krj_brngan->pegawai_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($t_keg_detail->scan_masuk->Visible) { // scan_masuk ?>
-	<?php if ($t_keg_detail->SortUrl($t_keg_detail->scan_masuk) == "") { ?>
-		<th data-name="scan_masuk"><div id="elh_t_keg_detail_scan_masuk" class="t_keg_detail_scan_masuk"><div class="ewTableHeaderCaption"><?php echo $t_keg_detail->scan_masuk->FldCaption() ?></div></div></th>
+<?php if ($v_jdw_krj_brngan->tgl->Visible) { // tgl ?>
+	<?php if ($v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->tgl) == "") { ?>
+		<th data-name="tgl"><div id="elh_v_jdw_krj_brngan_tgl" class="v_jdw_krj_brngan_tgl"><div class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->tgl->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="scan_masuk"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_keg_detail->SortUrl($t_keg_detail->scan_masuk) ?>',2);"><div id="elh_t_keg_detail_scan_masuk" class="t_keg_detail_scan_masuk">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detail->scan_masuk->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detail->scan_masuk->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detail->scan_masuk->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="tgl"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->tgl) ?>',2);"><div id="elh_v_jdw_krj_brngan_tgl" class="v_jdw_krj_brngan_tgl">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->tgl->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($v_jdw_krj_brngan->tgl->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_jdw_krj_brngan->tgl->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($t_keg_detail->scan_keluar->Visible) { // scan_keluar ?>
-	<?php if ($t_keg_detail->SortUrl($t_keg_detail->scan_keluar) == "") { ?>
-		<th data-name="scan_keluar"><div id="elh_t_keg_detail_scan_keluar" class="t_keg_detail_scan_keluar"><div class="ewTableHeaderCaption"><?php echo $t_keg_detail->scan_keluar->FldCaption() ?></div></div></th>
+<?php if ($v_jdw_krj_brngan->scan_masuk->Visible) { // scan_masuk ?>
+	<?php if ($v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->scan_masuk) == "") { ?>
+		<th data-name="scan_masuk"><div id="elh_v_jdw_krj_brngan_scan_masuk" class="v_jdw_krj_brngan_scan_masuk"><div class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->scan_masuk->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="scan_keluar"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_keg_detail->SortUrl($t_keg_detail->scan_keluar) ?>',2);"><div id="elh_t_keg_detail_scan_keluar" class="t_keg_detail_scan_keluar">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detail->scan_keluar->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detail->scan_keluar->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detail->scan_keluar->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="scan_masuk"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->scan_masuk) ?>',2);"><div id="elh_v_jdw_krj_brngan_scan_masuk" class="v_jdw_krj_brngan_scan_masuk">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->scan_masuk->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($v_jdw_krj_brngan->scan_masuk->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_jdw_krj_brngan->scan_masuk->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($v_jdw_krj_brngan->scan_keluar->Visible) { // scan_keluar ?>
+	<?php if ($v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->scan_keluar) == "") { ?>
+		<th data-name="scan_keluar"><div id="elh_v_jdw_krj_brngan_scan_keluar" class="v_jdw_krj_brngan_scan_keluar"><div class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->scan_keluar->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="scan_keluar"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->scan_keluar) ?>',2);"><div id="elh_v_jdw_krj_brngan_scan_keluar" class="v_jdw_krj_brngan_scan_keluar">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->scan_keluar->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($v_jdw_krj_brngan->scan_keluar->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_jdw_krj_brngan->scan_keluar->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($v_jdw_krj_brngan->pegawai_nip->Visible) { // pegawai_nip ?>
+	<?php if ($v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->pegawai_nip) == "") { ?>
+		<th data-name="pegawai_nip"><div id="elh_v_jdw_krj_brngan_pegawai_nip" class="v_jdw_krj_brngan_pegawai_nip"><div class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->pegawai_nip->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="pegawai_nip"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->pegawai_nip) ?>',2);"><div id="elh_v_jdw_krj_brngan_pegawai_nip" class="v_jdw_krj_brngan_pegawai_nip">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->pegawai_nip->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($v_jdw_krj_brngan->pegawai_nip->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_jdw_krj_brngan->pegawai_nip->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($v_jdw_krj_brngan->pegawai_nama->Visible) { // pegawai_nama ?>
+	<?php if ($v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->pegawai_nama) == "") { ?>
+		<th data-name="pegawai_nama"><div id="elh_v_jdw_krj_brngan_pegawai_nama" class="v_jdw_krj_brngan_pegawai_nama"><div class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->pegawai_nama->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="pegawai_nama"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->pegawai_nama) ?>',2);"><div id="elh_v_jdw_krj_brngan_pegawai_nama" class="v_jdw_krj_brngan_pegawai_nama">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->pegawai_nama->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($v_jdw_krj_brngan->pegawai_nama->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_jdw_krj_brngan->pegawai_nama->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($v_jdw_krj_brngan->pegawai_pin->Visible) { // pegawai_pin ?>
+	<?php if ($v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->pegawai_pin) == "") { ?>
+		<th data-name="pegawai_pin"><div id="elh_v_jdw_krj_brngan_pegawai_pin" class="v_jdw_krj_brngan_pegawai_pin"><div class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->pegawai_pin->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="pegawai_pin"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $v_jdw_krj_brngan->SortUrl($v_jdw_krj_brngan->pegawai_pin) ?>',2);"><div id="elh_v_jdw_krj_brngan_pegawai_pin" class="v_jdw_krj_brngan_pegawai_pin">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $v_jdw_krj_brngan->pegawai_pin->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($v_jdw_krj_brngan->pegawai_pin->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($v_jdw_krj_brngan->pegawai_pin->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
 <?php
 
 // Render list options (header, right)
-$t_keg_detail_list->ListOptions->Render("header", "right");
+$v_jdw_krj_brngan_list->ListOptions->Render("header", "right");
 ?>
 	</tr>
 </thead>
 <tbody>
 <?php
-if ($t_keg_detail->ExportAll && $t_keg_detail->Export <> "") {
-	$t_keg_detail_list->StopRec = $t_keg_detail_list->TotalRecs;
+if ($v_jdw_krj_brngan->ExportAll && $v_jdw_krj_brngan->Export <> "") {
+	$v_jdw_krj_brngan_list->StopRec = $v_jdw_krj_brngan_list->TotalRecs;
 } else {
 
 	// Set the last record to display
-	if ($t_keg_detail_list->TotalRecs > $t_keg_detail_list->StartRec + $t_keg_detail_list->DisplayRecs - 1)
-		$t_keg_detail_list->StopRec = $t_keg_detail_list->StartRec + $t_keg_detail_list->DisplayRecs - 1;
+	if ($v_jdw_krj_brngan_list->TotalRecs > $v_jdw_krj_brngan_list->StartRec + $v_jdw_krj_brngan_list->DisplayRecs - 1)
+		$v_jdw_krj_brngan_list->StopRec = $v_jdw_krj_brngan_list->StartRec + $v_jdw_krj_brngan_list->DisplayRecs - 1;
 	else
-		$t_keg_detail_list->StopRec = $t_keg_detail_list->TotalRecs;
+		$v_jdw_krj_brngan_list->StopRec = $v_jdw_krj_brngan_list->TotalRecs;
 }
-$t_keg_detail_list->RecCnt = $t_keg_detail_list->StartRec - 1;
-if ($t_keg_detail_list->Recordset && !$t_keg_detail_list->Recordset->EOF) {
-	$t_keg_detail_list->Recordset->MoveFirst();
-	$bSelectLimit = $t_keg_detail_list->UseSelectLimit;
-	if (!$bSelectLimit && $t_keg_detail_list->StartRec > 1)
-		$t_keg_detail_list->Recordset->Move($t_keg_detail_list->StartRec - 1);
-} elseif (!$t_keg_detail->AllowAddDeleteRow && $t_keg_detail_list->StopRec == 0) {
-	$t_keg_detail_list->StopRec = $t_keg_detail->GridAddRowCount;
+$v_jdw_krj_brngan_list->RecCnt = $v_jdw_krj_brngan_list->StartRec - 1;
+if ($v_jdw_krj_brngan_list->Recordset && !$v_jdw_krj_brngan_list->Recordset->EOF) {
+	$v_jdw_krj_brngan_list->Recordset->MoveFirst();
+	$bSelectLimit = $v_jdw_krj_brngan_list->UseSelectLimit;
+	if (!$bSelectLimit && $v_jdw_krj_brngan_list->StartRec > 1)
+		$v_jdw_krj_brngan_list->Recordset->Move($v_jdw_krj_brngan_list->StartRec - 1);
+} elseif (!$v_jdw_krj_brngan->AllowAddDeleteRow && $v_jdw_krj_brngan_list->StopRec == 0) {
+	$v_jdw_krj_brngan_list->StopRec = $v_jdw_krj_brngan->GridAddRowCount;
 }
 
 // Initialize aggregate
-$t_keg_detail->RowType = EW_ROWTYPE_AGGREGATEINIT;
-$t_keg_detail->ResetAttrs();
-$t_keg_detail_list->RenderRow();
-while ($t_keg_detail_list->RecCnt < $t_keg_detail_list->StopRec) {
-	$t_keg_detail_list->RecCnt++;
-	if (intval($t_keg_detail_list->RecCnt) >= intval($t_keg_detail_list->StartRec)) {
-		$t_keg_detail_list->RowCnt++;
+$v_jdw_krj_brngan->RowType = EW_ROWTYPE_AGGREGATEINIT;
+$v_jdw_krj_brngan->ResetAttrs();
+$v_jdw_krj_brngan_list->RenderRow();
+while ($v_jdw_krj_brngan_list->RecCnt < $v_jdw_krj_brngan_list->StopRec) {
+	$v_jdw_krj_brngan_list->RecCnt++;
+	if (intval($v_jdw_krj_brngan_list->RecCnt) >= intval($v_jdw_krj_brngan_list->StartRec)) {
+		$v_jdw_krj_brngan_list->RowCnt++;
 
 		// Set up key count
-		$t_keg_detail_list->KeyCount = $t_keg_detail_list->RowIndex;
+		$v_jdw_krj_brngan_list->KeyCount = $v_jdw_krj_brngan_list->RowIndex;
 
 		// Init row class and style
-		$t_keg_detail->ResetAttrs();
-		$t_keg_detail->CssClass = "";
-		if ($t_keg_detail->CurrentAction == "gridadd") {
+		$v_jdw_krj_brngan->ResetAttrs();
+		$v_jdw_krj_brngan->CssClass = "";
+		if ($v_jdw_krj_brngan->CurrentAction == "gridadd") {
 		} else {
-			$t_keg_detail_list->LoadRowValues($t_keg_detail_list->Recordset); // Load row values
+			$v_jdw_krj_brngan_list->LoadRowValues($v_jdw_krj_brngan_list->Recordset); // Load row values
 		}
-		$t_keg_detail->RowType = EW_ROWTYPE_VIEW; // Render view
+		$v_jdw_krj_brngan->RowType = EW_ROWTYPE_VIEW; // Render view
 
 		// Set up row id / data-rowindex
-		$t_keg_detail->RowAttrs = array_merge($t_keg_detail->RowAttrs, array('data-rowindex'=>$t_keg_detail_list->RowCnt, 'id'=>'r' . $t_keg_detail_list->RowCnt . '_t_keg_detail', 'data-rowtype'=>$t_keg_detail->RowType));
+		$v_jdw_krj_brngan->RowAttrs = array_merge($v_jdw_krj_brngan->RowAttrs, array('data-rowindex'=>$v_jdw_krj_brngan_list->RowCnt, 'id'=>'r' . $v_jdw_krj_brngan_list->RowCnt . '_v_jdw_krj_brngan', 'data-rowtype'=>$v_jdw_krj_brngan->RowType));
 
 		// Render row
-		$t_keg_detail_list->RenderRow();
+		$v_jdw_krj_brngan_list->RenderRow();
 
 		// Render list options
-		$t_keg_detail_list->RenderListOptions();
+		$v_jdw_krj_brngan_list->RenderListOptions();
 ?>
-	<tr<?php echo $t_keg_detail->RowAttributes() ?>>
+	<tr<?php echo $v_jdw_krj_brngan->RowAttributes() ?>>
 <?php
 
 // Render list options (body, left)
-$t_keg_detail_list->ListOptions->Render("body", "left", $t_keg_detail_list->RowCnt);
+$v_jdw_krj_brngan_list->ListOptions->Render("body", "left", $v_jdw_krj_brngan_list->RowCnt);
 ?>
-	<?php if ($t_keg_detail->pegawai_id->Visible) { // pegawai_id ?>
-		<td data-name="pegawai_id"<?php echo $t_keg_detail->pegawai_id->CellAttributes() ?>>
-<span id="el<?php echo $t_keg_detail_list->RowCnt ?>_t_keg_detail_pegawai_id" class="t_keg_detail_pegawai_id">
-<span<?php echo $t_keg_detail->pegawai_id->ViewAttributes() ?>>
-<?php echo $t_keg_detail->pegawai_id->ListViewValue() ?></span>
+	<?php if ($v_jdw_krj_brngan->pegawai_id->Visible) { // pegawai_id ?>
+		<td data-name="pegawai_id"<?php echo $v_jdw_krj_brngan->pegawai_id->CellAttributes() ?>>
+<span id="el<?php echo $v_jdw_krj_brngan_list->RowCnt ?>_v_jdw_krj_brngan_pegawai_id" class="v_jdw_krj_brngan_pegawai_id">
+<span<?php echo $v_jdw_krj_brngan->pegawai_id->ViewAttributes() ?>>
+<?php echo $v_jdw_krj_brngan->pegawai_id->ListViewValue() ?></span>
 </span>
-<a id="<?php echo $t_keg_detail_list->PageObjName . "_row_" . $t_keg_detail_list->RowCnt ?>"></a></td>
+<a id="<?php echo $v_jdw_krj_brngan_list->PageObjName . "_row_" . $v_jdw_krj_brngan_list->RowCnt ?>"></a></td>
 	<?php } ?>
-	<?php if ($t_keg_detail->scan_masuk->Visible) { // scan_masuk ?>
-		<td data-name="scan_masuk"<?php echo $t_keg_detail->scan_masuk->CellAttributes() ?>>
-<span id="el<?php echo $t_keg_detail_list->RowCnt ?>_t_keg_detail_scan_masuk" class="t_keg_detail_scan_masuk">
-<span<?php echo $t_keg_detail->scan_masuk->ViewAttributes() ?>>
-<?php echo $t_keg_detail->scan_masuk->ListViewValue() ?></span>
+	<?php if ($v_jdw_krj_brngan->tgl->Visible) { // tgl ?>
+		<td data-name="tgl"<?php echo $v_jdw_krj_brngan->tgl->CellAttributes() ?>>
+<span id="el<?php echo $v_jdw_krj_brngan_list->RowCnt ?>_v_jdw_krj_brngan_tgl" class="v_jdw_krj_brngan_tgl">
+<span<?php echo $v_jdw_krj_brngan->tgl->ViewAttributes() ?>>
+<?php echo $v_jdw_krj_brngan->tgl->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>
-	<?php if ($t_keg_detail->scan_keluar->Visible) { // scan_keluar ?>
-		<td data-name="scan_keluar"<?php echo $t_keg_detail->scan_keluar->CellAttributes() ?>>
-<span id="el<?php echo $t_keg_detail_list->RowCnt ?>_t_keg_detail_scan_keluar" class="t_keg_detail_scan_keluar">
-<span<?php echo $t_keg_detail->scan_keluar->ViewAttributes() ?>>
-<?php echo $t_keg_detail->scan_keluar->ListViewValue() ?></span>
+	<?php if ($v_jdw_krj_brngan->scan_masuk->Visible) { // scan_masuk ?>
+		<td data-name="scan_masuk"<?php echo $v_jdw_krj_brngan->scan_masuk->CellAttributes() ?>>
+<span id="el<?php echo $v_jdw_krj_brngan_list->RowCnt ?>_v_jdw_krj_brngan_scan_masuk" class="v_jdw_krj_brngan_scan_masuk">
+<span<?php echo $v_jdw_krj_brngan->scan_masuk->ViewAttributes() ?>>
+<?php echo $v_jdw_krj_brngan->scan_masuk->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($v_jdw_krj_brngan->scan_keluar->Visible) { // scan_keluar ?>
+		<td data-name="scan_keluar"<?php echo $v_jdw_krj_brngan->scan_keluar->CellAttributes() ?>>
+<span id="el<?php echo $v_jdw_krj_brngan_list->RowCnt ?>_v_jdw_krj_brngan_scan_keluar" class="v_jdw_krj_brngan_scan_keluar">
+<span<?php echo $v_jdw_krj_brngan->scan_keluar->ViewAttributes() ?>>
+<?php echo $v_jdw_krj_brngan->scan_keluar->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($v_jdw_krj_brngan->pegawai_nip->Visible) { // pegawai_nip ?>
+		<td data-name="pegawai_nip"<?php echo $v_jdw_krj_brngan->pegawai_nip->CellAttributes() ?>>
+<span id="el<?php echo $v_jdw_krj_brngan_list->RowCnt ?>_v_jdw_krj_brngan_pegawai_nip" class="v_jdw_krj_brngan_pegawai_nip">
+<span<?php echo $v_jdw_krj_brngan->pegawai_nip->ViewAttributes() ?>>
+<?php echo $v_jdw_krj_brngan->pegawai_nip->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($v_jdw_krj_brngan->pegawai_nama->Visible) { // pegawai_nama ?>
+		<td data-name="pegawai_nama"<?php echo $v_jdw_krj_brngan->pegawai_nama->CellAttributes() ?>>
+<span id="el<?php echo $v_jdw_krj_brngan_list->RowCnt ?>_v_jdw_krj_brngan_pegawai_nama" class="v_jdw_krj_brngan_pegawai_nama">
+<span<?php echo $v_jdw_krj_brngan->pegawai_nama->ViewAttributes() ?>>
+<?php echo $v_jdw_krj_brngan->pegawai_nama->ListViewValue() ?></span>
+</span>
+</td>
+	<?php } ?>
+	<?php if ($v_jdw_krj_brngan->pegawai_pin->Visible) { // pegawai_pin ?>
+		<td data-name="pegawai_pin"<?php echo $v_jdw_krj_brngan->pegawai_pin->CellAttributes() ?>>
+<span id="el<?php echo $v_jdw_krj_brngan_list->RowCnt ?>_v_jdw_krj_brngan_pegawai_pin" class="v_jdw_krj_brngan_pegawai_pin">
+<span<?php echo $v_jdw_krj_brngan->pegawai_pin->ViewAttributes() ?>>
+<?php echo $v_jdw_krj_brngan->pegawai_pin->ListViewValue() ?></span>
 </span>
 </td>
 	<?php } ?>
 <?php
 
 // Render list options (body, right)
-$t_keg_detail_list->ListOptions->Render("body", "right", $t_keg_detail_list->RowCnt);
+$v_jdw_krj_brngan_list->ListOptions->Render("body", "right", $v_jdw_krj_brngan_list->RowCnt);
 ?>
 	</tr>
 <?php
 	}
-	if ($t_keg_detail->CurrentAction <> "gridadd")
-		$t_keg_detail_list->Recordset->MoveNext();
+	if ($v_jdw_krj_brngan->CurrentAction <> "gridadd")
+		$v_jdw_krj_brngan_list->Recordset->MoveNext();
 }
 ?>
 </tbody>
 </table>
 <?php } ?>
-<?php if ($t_keg_detail->CurrentAction == "") { ?>
+<?php if ($v_jdw_krj_brngan->CurrentAction == "") { ?>
 <input type="hidden" name="a_list" id="a_list" value="">
 <?php } ?>
 </div>
@@ -2201,66 +2467,66 @@ $t_keg_detail_list->ListOptions->Render("body", "right", $t_keg_detail_list->Row
 <?php
 
 // Close recordset
-if ($t_keg_detail_list->Recordset)
-	$t_keg_detail_list->Recordset->Close();
+if ($v_jdw_krj_brngan_list->Recordset)
+	$v_jdw_krj_brngan_list->Recordset->Close();
 ?>
-<?php if ($t_keg_detail->Export == "") { ?>
+<?php if ($v_jdw_krj_brngan->Export == "") { ?>
 <div class="panel-footer ewGridLowerPanel">
-<?php if ($t_keg_detail->CurrentAction <> "gridadd" && $t_keg_detail->CurrentAction <> "gridedit") { ?>
+<?php if ($v_jdw_krj_brngan->CurrentAction <> "gridadd" && $v_jdw_krj_brngan->CurrentAction <> "gridedit") { ?>
 <form name="ewPagerForm" class="ewForm form-inline ewPagerForm" action="<?php echo ew_CurrentPage() ?>">
-<?php if (!isset($t_keg_detail_list->Pager)) $t_keg_detail_list->Pager = new cPrevNextPager($t_keg_detail_list->StartRec, $t_keg_detail_list->DisplayRecs, $t_keg_detail_list->TotalRecs) ?>
-<?php if ($t_keg_detail_list->Pager->RecordCount > 0 && $t_keg_detail_list->Pager->Visible) { ?>
+<?php if (!isset($v_jdw_krj_brngan_list->Pager)) $v_jdw_krj_brngan_list->Pager = new cPrevNextPager($v_jdw_krj_brngan_list->StartRec, $v_jdw_krj_brngan_list->DisplayRecs, $v_jdw_krj_brngan_list->TotalRecs) ?>
+<?php if ($v_jdw_krj_brngan_list->Pager->RecordCount > 0 && $v_jdw_krj_brngan_list->Pager->Visible) { ?>
 <div class="ewPager">
 <span><?php echo $Language->Phrase("Page") ?>&nbsp;</span>
 <div class="ewPrevNext"><div class="input-group">
 <div class="input-group-btn">
 <!--first page button-->
-	<?php if ($t_keg_detail_list->Pager->FirstButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_keg_detail_list->PageUrl() ?>start=<?php echo $t_keg_detail_list->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
+	<?php if ($v_jdw_krj_brngan_list->Pager->FirstButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $v_jdw_krj_brngan_list->PageUrl() ?>start=<?php echo $v_jdw_krj_brngan_list->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerFirst") ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } ?>
 <!--previous page button-->
-	<?php if ($t_keg_detail_list->Pager->PrevButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_keg_detail_list->PageUrl() ?>start=<?php echo $t_keg_detail_list->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
+	<?php if ($v_jdw_krj_brngan_list->Pager->PrevButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $v_jdw_krj_brngan_list->PageUrl() ?>start=<?php echo $v_jdw_krj_brngan_list->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerPrevious") ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } ?>
 </div>
 <!--current page number-->
-	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_keg_detail_list->Pager->CurrentPage ?>">
+	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $v_jdw_krj_brngan_list->Pager->CurrentPage ?>">
 <div class="input-group-btn">
 <!--next page button-->
-	<?php if ($t_keg_detail_list->Pager->NextButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_keg_detail_list->PageUrl() ?>start=<?php echo $t_keg_detail_list->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
+	<?php if ($v_jdw_krj_brngan_list->Pager->NextButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $v_jdw_krj_brngan_list->PageUrl() ?>start=<?php echo $v_jdw_krj_brngan_list->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerNext") ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } ?>
 <!--last page button-->
-	<?php if ($t_keg_detail_list->Pager->LastButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_keg_detail_list->PageUrl() ?>start=<?php echo $t_keg_detail_list->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
+	<?php if ($v_jdw_krj_brngan_list->Pager->LastButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $v_jdw_krj_brngan_list->PageUrl() ?>start=<?php echo $v_jdw_krj_brngan_list->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerLast") ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } ?>
 </div>
 </div>
 </div>
-<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_keg_detail_list->Pager->PageCount ?></span>
+<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $v_jdw_krj_brngan_list->Pager->PageCount ?></span>
 </div>
 <div class="ewPager ewRec">
-	<span><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $t_keg_detail_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $t_keg_detail_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $t_keg_detail_list->Pager->RecordCount ?></span>
+	<span><?php echo $Language->Phrase("Record") ?>&nbsp;<?php echo $v_jdw_krj_brngan_list->Pager->FromIndex ?>&nbsp;<?php echo $Language->Phrase("To") ?>&nbsp;<?php echo $v_jdw_krj_brngan_list->Pager->ToIndex ?>&nbsp;<?php echo $Language->Phrase("Of") ?>&nbsp;<?php echo $v_jdw_krj_brngan_list->Pager->RecordCount ?></span>
 </div>
 <?php } ?>
-<?php if ($t_keg_detail_list->TotalRecs > 0 && (!EW_AUTO_HIDE_PAGE_SIZE_SELECTOR || $t_keg_detail_list->Pager->Visible)) { ?>
+<?php if ($v_jdw_krj_brngan_list->TotalRecs > 0 && (!EW_AUTO_HIDE_PAGE_SIZE_SELECTOR || $v_jdw_krj_brngan_list->Pager->Visible)) { ?>
 <div class="ewPager">
-<input type="hidden" name="t" value="t_keg_detail">
+<input type="hidden" name="t" value="v_jdw_krj_brngan">
 <select name="<?php echo EW_TABLE_REC_PER_PAGE ?>" class="form-control input-sm ewTooltip" title="<?php echo $Language->Phrase("RecordsPerPage") ?>" onchange="this.form.submit();">
-<option value="10"<?php if ($t_keg_detail_list->DisplayRecs == 10) { ?> selected<?php } ?>>10</option>
-<option value="20"<?php if ($t_keg_detail_list->DisplayRecs == 20) { ?> selected<?php } ?>>20</option>
-<option value="50"<?php if ($t_keg_detail_list->DisplayRecs == 50) { ?> selected<?php } ?>>50</option>
-<option value="100"<?php if ($t_keg_detail_list->DisplayRecs == 100) { ?> selected<?php } ?>>100</option>
-<option value="200"<?php if ($t_keg_detail_list->DisplayRecs == 200) { ?> selected<?php } ?>>200</option>
-<option value="ALL"<?php if ($t_keg_detail->getRecordsPerPage() == -1) { ?> selected<?php } ?>><?php echo $Language->Phrase("AllRecords") ?></option>
+<option value="10"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 10) { ?> selected<?php } ?>>10</option>
+<option value="20"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 20) { ?> selected<?php } ?>>20</option>
+<option value="50"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 50) { ?> selected<?php } ?>>50</option>
+<option value="100"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 100) { ?> selected<?php } ?>>100</option>
+<option value="200"<?php if ($v_jdw_krj_brngan_list->DisplayRecs == 200) { ?> selected<?php } ?>>200</option>
+<option value="ALL"<?php if ($v_jdw_krj_brngan->getRecordsPerPage() == -1) { ?> selected<?php } ?>><?php echo $Language->Phrase("AllRecords") ?></option>
 </select>
 </div>
 <?php } ?>
@@ -2268,7 +2534,7 @@ if ($t_keg_detail_list->Recordset)
 <?php } ?>
 <div class="ewListOtherOptions">
 <?php
-	foreach ($t_keg_detail_list->OtherOptions as &$option)
+	foreach ($v_jdw_krj_brngan_list->OtherOptions as &$option)
 		$option->Render("body", "bottom");
 ?>
 </div>
@@ -2277,10 +2543,10 @@ if ($t_keg_detail_list->Recordset)
 <?php } ?>
 </div>
 <?php } ?>
-<?php if ($t_keg_detail_list->TotalRecs == 0 && $t_keg_detail->CurrentAction == "") { // Show other options ?>
+<?php if ($v_jdw_krj_brngan_list->TotalRecs == 0 && $v_jdw_krj_brngan->CurrentAction == "") { // Show other options ?>
 <div class="ewListOtherOptions">
 <?php
-	foreach ($t_keg_detail_list->OtherOptions as &$option) {
+	foreach ($v_jdw_krj_brngan_list->OtherOptions as &$option) {
 		$option->ButtonClass = "";
 		$option->Render("body", "");
 	}
@@ -2288,17 +2554,19 @@ if ($t_keg_detail_list->Recordset)
 </div>
 <div class="clearfix"></div>
 <?php } ?>
-<?php if ($t_keg_detail->Export == "") { ?>
+<?php if ($v_jdw_krj_brngan->Export == "") { ?>
 <script type="text/javascript">
-ft_keg_detaillist.Init();
+fv_jdw_krj_brnganlistsrch.FilterList = <?php echo $v_jdw_krj_brngan_list->GetFilterList() ?>;
+fv_jdw_krj_brnganlistsrch.Init();
+fv_jdw_krj_brnganlist.Init();
 </script>
 <?php } ?>
 <?php
-$t_keg_detail_list->ShowPageFooter();
+$v_jdw_krj_brngan_list->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
-<?php if ($t_keg_detail->Export == "") { ?>
+<?php if ($v_jdw_krj_brngan->Export == "") { ?>
 <script type="text/javascript">
 
 // Write your table-specific startup script here
@@ -2308,5 +2576,5 @@ if (EW_DEBUG_ENABLED)
 <?php } ?>
 <?php include_once "footer.php" ?>
 <?php
-$t_keg_detail_list->Page_Terminate();
+$v_jdw_krj_brngan_list->Page_Terminate();
 ?>

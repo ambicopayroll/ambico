@@ -347,6 +347,20 @@ Page_Rendering();
 		  <!--</span>-->
 		</div>
 	</div>
+	<div id="cmb_bulharbor" class="form-group">
+		<label for="cmb_proses" class="col-sm-2 control-label ewLabel">Pegawai</label>
+		<div class="col-sm-10">
+		  <!--<span id="el_calendar_end">-->
+		  <!--<input type="text" name="end" data-field="end" data-format="5" size="20" class="form-control" id="end">-->
+		  <label class="radio-inline"><input type="radio" name="bulharbor" id="x1_hk_0" value="0">Bulanan</label>
+		  <label class="radio-inline"><input type="radio" name="bulharbor" id="x1_hk_1" value="1">Harian</label>
+		  <label class="radio-inline"><input type="radio" name="bulharbor" id="x1_hk_2" value="2">Borongan</label>
+		  <!--<script type="text/javascript">
+			ew_CreateCalendar("myform", "end", 5);
+		  </script>-->
+		  <!--</span>-->
+		</div>
+	</div>
 	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit">Submit</button>
 </form>
 <?php if (EW_DEBUG_ENABLED) echo ew_DebugMsg(); ?>

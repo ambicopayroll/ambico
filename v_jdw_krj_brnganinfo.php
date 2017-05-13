@@ -1,23 +1,19 @@
 <?php
 
 // Global variable for table object
-$t_keg_detail = NULL;
+$v_jdw_krj_brngan = NULL;
 
 //
-// Table class for t_keg_detail
+// Table class for v_jdw_krj_brngan
 //
-class ct_keg_detail extends cTable {
-	var $AuditTrailOnAdd = TRUE;
-	var $AuditTrailOnEdit = TRUE;
-	var $AuditTrailOnDelete = TRUE;
-	var $AuditTrailOnView = FALSE;
-	var $AuditTrailOnViewData = FALSE;
-	var $AuditTrailOnSearch = FALSE;
-	var $kegd_id;
+class cv_jdw_krj_brngan extends cTable {
 	var $pegawai_id;
-	var $kegm_id;
+	var $tgl;
 	var $scan_masuk;
 	var $scan_keluar;
+	var $pegawai_nip;
+	var $pegawai_nama;
+	var $pegawai_pin;
 
 	//
 	// Table class constructor
@@ -27,12 +23,12 @@ class ct_keg_detail extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 't_keg_detail';
-		$this->TableName = 't_keg_detail';
-		$this->TableType = 'TABLE';
+		$this->TableVar = 'v_jdw_krj_brngan';
+		$this->TableName = 'v_jdw_krj_brngan';
+		$this->TableType = 'VIEW';
 
 		// Update Table
-		$this->UpdateTable = "`t_keg_detail`";
+		$this->UpdateTable = "`v_jdw_krj_brngan`";
 		$this->DBID = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -40,46 +36,53 @@ class ct_keg_detail extends cTable {
 		$this->ExportPageSize = "a4"; // Page size (PDF only)
 		$this->ExportExcelPageOrientation = ""; // Page orientation (PHPExcel only)
 		$this->ExportExcelPageSize = ""; // Page size (PHPExcel only)
-		$this->DetailAdd = TRUE; // Allow detail add
-		$this->DetailEdit = TRUE; // Allow detail edit
-		$this->DetailView = TRUE; // Allow detail view
+		$this->DetailAdd = FALSE; // Allow detail add
+		$this->DetailEdit = FALSE; // Allow detail edit
+		$this->DetailView = FALSE; // Allow detail view
 		$this->ShowMultipleDetails = FALSE; // Show multiple details
 		$this->GridAddRowCount = 5;
 		$this->AllowAddDeleteRow = ew_AllowAddDeleteRow(); // Allow add/delete row
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
-		// kegd_id
-		$this->kegd_id = new cField('t_keg_detail', 't_keg_detail', 'x_kegd_id', 'kegd_id', '`kegd_id`', '`kegd_id`', 3, -1, FALSE, '`kegd_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
-		$this->kegd_id->Sortable = TRUE; // Allow sort
-		$this->kegd_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['kegd_id'] = &$this->kegd_id;
-
 		// pegawai_id
-		$this->pegawai_id = new cField('t_keg_detail', 't_keg_detail', 'x_pegawai_id', 'pegawai_id', '`pegawai_id`', '`pegawai_id`', 3, -1, FALSE, '`EV__pegawai_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
+		$this->pegawai_id = new cField('v_jdw_krj_brngan', 'v_jdw_krj_brngan', 'x_pegawai_id', 'pegawai_id', '`pegawai_id`', '`pegawai_id`', 3, -1, FALSE, '`pegawai_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->pegawai_id->Sortable = TRUE; // Allow sort
-		$this->pegawai_id->UsePleaseSelect = TRUE; // Use PleaseSelect by default
-		$this->pegawai_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
 		$this->pegawai_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['pegawai_id'] = &$this->pegawai_id;
 
-		// kegm_id
-		$this->kegm_id = new cField('t_keg_detail', 't_keg_detail', 'x_kegm_id', 'kegm_id', '`kegm_id`', '`kegm_id`', 3, -1, FALSE, '`kegm_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->kegm_id->Sortable = TRUE; // Allow sort
-		$this->kegm_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['kegm_id'] = &$this->kegm_id;
+		// tgl
+		$this->tgl = new cField('v_jdw_krj_brngan', 'v_jdw_krj_brngan', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, 0, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl->Sortable = TRUE; // Allow sort
+		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['tgl'] = &$this->tgl;
 
 		// scan_masuk
-		$this->scan_masuk = new cField('t_keg_detail', 't_keg_detail', 'x_scan_masuk', 'scan_masuk', '`scan_masuk`', ew_CastDateFieldForLike('`scan_masuk`', 0, "DB"), 135, 0, FALSE, '`scan_masuk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->scan_masuk = new cField('v_jdw_krj_brngan', 'v_jdw_krj_brngan', 'x_scan_masuk', 'scan_masuk', '`scan_masuk`', ew_CastDateFieldForLike('`scan_masuk`', 0, "DB"), 135, 0, FALSE, '`scan_masuk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->scan_masuk->Sortable = TRUE; // Allow sort
 		$this->scan_masuk->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['scan_masuk'] = &$this->scan_masuk;
 
 		// scan_keluar
-		$this->scan_keluar = new cField('t_keg_detail', 't_keg_detail', 'x_scan_keluar', 'scan_keluar', '`scan_keluar`', ew_CastDateFieldForLike('`scan_keluar`', 0, "DB"), 135, 0, FALSE, '`scan_keluar`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->scan_keluar = new cField('v_jdw_krj_brngan', 'v_jdw_krj_brngan', 'x_scan_keluar', 'scan_keluar', '`scan_keluar`', ew_CastDateFieldForLike('`scan_keluar`', 0, "DB"), 135, 0, FALSE, '`scan_keluar`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->scan_keluar->Sortable = TRUE; // Allow sort
 		$this->scan_keluar->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['scan_keluar'] = &$this->scan_keluar;
+
+		// pegawai_nip
+		$this->pegawai_nip = new cField('v_jdw_krj_brngan', 'v_jdw_krj_brngan', 'x_pegawai_nip', 'pegawai_nip', '`pegawai_nip`', '`pegawai_nip`', 200, -1, FALSE, '`pegawai_nip`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->pegawai_nip->Sortable = TRUE; // Allow sort
+		$this->fields['pegawai_nip'] = &$this->pegawai_nip;
+
+		// pegawai_nama
+		$this->pegawai_nama = new cField('v_jdw_krj_brngan', 'v_jdw_krj_brngan', 'x_pegawai_nama', 'pegawai_nama', '`pegawai_nama`', '`pegawai_nama`', 200, -1, FALSE, '`pegawai_nama`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->pegawai_nama->Sortable = TRUE; // Allow sort
+		$this->fields['pegawai_nama'] = &$this->pegawai_nama;
+
+		// pegawai_pin
+		$this->pegawai_pin = new cField('v_jdw_krj_brngan', 'v_jdw_krj_brngan', 'x_pegawai_pin', 'pegawai_pin', '`pegawai_pin`', '`pegawai_pin`', 200, -1, FALSE, '`pegawai_pin`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->pegawai_pin->Sortable = TRUE; // Allow sort
+		$this->fields['pegawai_pin'] = &$this->pegawai_pin;
 	}
 
 	// Set Field Visibility
@@ -111,85 +114,16 @@ class ct_keg_detail extends cTable {
 			} else {
 				$this->setSessionOrderBy($sSortField . " " . $sThisSort); // Save to Session
 			}
-			$sSortFieldList = ($ofld->FldVirtualExpression <> "") ? $ofld->FldVirtualExpression : $sSortField;
-			if ($ctrl) {
-				$sOrderByList = $this->getSessionOrderByList();
-				if (strpos($sOrderByList, $sSortFieldList . " " . $sLastSort) !== FALSE) {
-					$sOrderByList = str_replace($sSortFieldList . " " . $sLastSort, $sSortFieldList . " " . $sThisSort, $sOrderByList);
-				} else {
-					if ($sOrderByList <> "") $sOrderByList .= ", ";
-					$sOrderByList .= $sSortFieldList . " " . $sThisSort;
-				}
-				$this->setSessionOrderByList($sOrderByList); // Save to Session
-			} else {
-				$this->setSessionOrderByList($sSortFieldList . " " . $sThisSort); // Save to Session
-			}
 		} else {
 			if (!$ctrl) $ofld->setSort("");
 		}
-	}
-
-	// Session ORDER BY for List page
-	function getSessionOrderByList() {
-		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST];
-	}
-
-	function setSessionOrderByList($v) {
-		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST] = $v;
-	}
-
-	// Current master table name
-	function getCurrentMasterTable() {
-		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_MASTER_TABLE];
-	}
-
-	function setCurrentMasterTable($v) {
-		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_MASTER_TABLE] = $v;
-	}
-
-	// Session master WHERE clause
-	function GetMasterFilter() {
-
-		// Master filter
-		$sMasterFilter = "";
-		if ($this->getCurrentMasterTable() == "t_keg_master") {
-			if ($this->kegm_id->getSessionValue() <> "")
-				$sMasterFilter .= "`kegm_id`=" . ew_QuotedValue($this->kegm_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		return $sMasterFilter;
-	}
-
-	// Session detail WHERE clause
-	function GetDetailFilter() {
-
-		// Detail filter
-		$sDetailFilter = "";
-		if ($this->getCurrentMasterTable() == "t_keg_master") {
-			if ($this->kegm_id->getSessionValue() <> "")
-				$sDetailFilter .= "`kegm_id`=" . ew_QuotedValue($this->kegm_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
-			else
-				return "";
-		}
-		return $sDetailFilter;
-	}
-
-	// Master filter
-	function SqlMasterFilter_t_keg_master() {
-		return "`kegm_id`=@kegm_id@";
-	}
-
-	// Detail filter
-	function SqlDetailFilter_t_keg_master() {
-		return "`kegm_id`=@kegm_id@";
 	}
 
 	// Table level SQL
 	var $_SqlFrom = "";
 
 	function getSqlFrom() { // From
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`t_keg_detail`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`v_jdw_krj_brngan`";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -211,23 +145,6 @@ class ct_keg_detail extends cTable {
 
 	function setSqlSelect($v) {
 		$this->_SqlSelect = $v;
-	}
-	var $_SqlSelectList = "";
-
-	function getSqlSelectList() { // Select for List page
-		$select = "";
-		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT `pegawai_nama` FROM `pegawai` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`pegawai_id` = `t_keg_detail`.`pegawai_id` LIMIT 1) AS `EV__pegawai_id` FROM `t_keg_detail`" .
-			") `EW_TMP_TABLE`";
-		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
-	}
-
-	function SqlSelectList() { // For backward compatibility
-		return $this->getSqlSelectList();
-	}
-
-	function setSqlSelectList($v) {
-		$this->_SqlSelectList = $v;
 	}
 	var $_SqlWhere = "";
 
@@ -340,38 +257,15 @@ class ct_keg_detail extends cTable {
 		ew_AddFilter($sFilter, $this->CurrentFilter);
 		$sFilter = $this->ApplyUserIDFilters($sFilter);
 		$this->Recordset_Selecting($sFilter);
-		if ($this->UseVirtualFields()) {
-			$sSort = $this->getSessionOrderByList();
-			return ew_BuildSelectSql($this->getSqlSelectList(), $this->getSqlWhere(), $this->getSqlGroupBy(),
-				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
-		} else {
-			$sSort = $this->getSessionOrderBy();
-			return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
-				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
-		}
+		$sSort = $this->getSessionOrderBy();
+		return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
+			$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
 	}
 
 	// Get ORDER BY clause
 	function GetOrderBy() {
-		$sSort = ($this->UseVirtualFields()) ? $this->getSessionOrderByList() : $this->getSessionOrderBy();
+		$sSort = $this->getSessionOrderBy();
 		return ew_BuildSelectSql("", "", "", "", $this->getSqlOrderBy(), "", $sSort);
-	}
-
-	// Check if virtual fields is used in SQL
-	function UseVirtualFields() {
-		$sWhere = $this->getSessionWhere();
-		$sOrderBy = $this->getSessionOrderByList();
-		if ($sWhere <> "")
-			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
-		if ($sOrderBy <> "")
-			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
-		if ($this->pegawai_id->AdvancedSearch->SearchValue <> "" ||
-			$this->pegawai_id->AdvancedSearch->SearchValue2 <> "" ||
-			strpos($sWhere, " " . $this->pegawai_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		if (strpos($sOrderBy, " " . $this->pegawai_id->FldVirtualExpression . " ") !== FALSE)
-			return TRUE;
-		return FALSE;
 	}
 
 	// Try to get record count
@@ -450,12 +344,6 @@ class ct_keg_detail extends cTable {
 		$conn = &$this->Connection();
 		$bInsert = $conn->Execute($this->InsertSQL($rs));
 		if ($bInsert) {
-
-			// Get insert id if necessary
-			$this->kegd_id->setDbValue($conn->Insert_ID());
-			$rs['kegd_id'] = $this->kegd_id->DbValue;
-			if ($this->AuditTrailOnAdd)
-				$this->WriteAuditTrailOnAdd($rs);
 		}
 		return $bInsert;
 	}
@@ -483,12 +371,6 @@ class ct_keg_detail extends cTable {
 	function Update(&$rs, $where = "", $rsold = NULL, $curfilter = TRUE) {
 		$conn = &$this->Connection();
 		$bUpdate = $conn->Execute($this->UpdateSQL($rs, $where, $curfilter));
-		if ($bUpdate && $this->AuditTrailOnEdit) {
-			$rsaudit = $rs;
-			$fldname = 'kegd_id';
-			if (!array_key_exists($fldname, $rsaudit)) $rsaudit[$fldname] = $rsold[$fldname];
-			$this->WriteAuditTrailOnEdit($rsaudit, $rsold);
-		}
 		return $bUpdate;
 	}
 
@@ -498,8 +380,6 @@ class ct_keg_detail extends cTable {
 		if (is_array($where))
 			$where = $this->ArrayToFilter($where);
 		if ($rs) {
-			if (array_key_exists('kegd_id', $rs))
-				ew_AddFilter($where, ew_QuotedName('kegd_id', $this->DBID) . '=' . ew_QuotedValue($rs['kegd_id'], $this->kegd_id->FldDataType, $this->DBID));
 		}
 		$filter = ($curfilter) ? $this->CurrentFilter : "";
 		ew_AddFilter($filter, $where);
@@ -514,22 +394,17 @@ class ct_keg_detail extends cTable {
 	function Delete(&$rs, $where = "", $curfilter = TRUE) {
 		$conn = &$this->Connection();
 		$bDelete = $conn->Execute($this->DeleteSQL($rs, $where, $curfilter));
-		if ($bDelete && $this->AuditTrailOnDelete)
-			$this->WriteAuditTrailOnDelete($rs);
 		return $bDelete;
 	}
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "`kegd_id` = @kegd_id@";
+		return "";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
-		if (!is_numeric($this->kegd_id->CurrentValue))
-			$sKeyFilter = "0=1"; // Invalid key
-		$sKeyFilter = str_replace("@kegd_id@", ew_AdjustSql($this->kegd_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -543,7 +418,7 @@ class ct_keg_detail extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "t_keg_detaillist.php";
+			return "v_jdw_krj_brnganlist.php";
 		}
 	}
 
@@ -553,30 +428,30 @@ class ct_keg_detail extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "t_keg_detaillist.php";
+		return "v_jdw_krj_brnganlist.php";
 	}
 
 	// View URL
 	function GetViewUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("t_keg_detailview.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("v_jdw_krj_brnganview.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("t_keg_detailview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("v_jdw_krj_brnganview.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
 	// Add URL
 	function GetAddUrl($parm = "") {
 		if ($parm <> "")
-			$url = "t_keg_detailadd.php?" . $this->UrlParm($parm);
+			$url = "v_jdw_krj_brnganadd.php?" . $this->UrlParm($parm);
 		else
-			$url = "t_keg_detailadd.php";
+			$url = "v_jdw_krj_brnganadd.php";
 		return $this->AddMasterUrl($url);
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		$url = $this->KeyUrl("t_keg_detailedit.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("v_jdw_krj_brnganedit.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -588,7 +463,7 @@ class ct_keg_detail extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		$url = $this->KeyUrl("t_keg_detailadd.php", $this->UrlParm($parm));
+		$url = $this->KeyUrl("v_jdw_krj_brnganadd.php", $this->UrlParm($parm));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -600,21 +475,16 @@ class ct_keg_detail extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("t_keg_detaildelete.php", $this->UrlParm());
+		return $this->KeyUrl("v_jdw_krj_brngandelete.php", $this->UrlParm());
 	}
 
 	// Add master url
 	function AddMasterUrl($url) {
-		if ($this->getCurrentMasterTable() == "t_keg_master" && strpos($url, EW_TABLE_SHOW_MASTER . "=") === FALSE) {
-			$url .= (strpos($url, "?") !== FALSE ? "&" : "?") . EW_TABLE_SHOW_MASTER . "=" . $this->getCurrentMasterTable();
-			$url .= "&fk_kegm_id=" . urlencode($this->kegm_id->CurrentValue);
-		}
 		return $url;
 	}
 
 	function KeyToJson() {
 		$json = "";
-		$json .= "kegd_id:" . ew_VarToJson($this->kegd_id->CurrentValue, "number", "'");
 		return "{" . $json . "}";
 	}
 
@@ -622,11 +492,6 @@ class ct_keg_detail extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
-		if (!is_null($this->kegd_id->CurrentValue)) {
-			$sUrl .= "kegd_id=" . urlencode($this->kegd_id->CurrentValue);
-		} else {
-			return "javascript:ew_Alert(ewLanguage.Phrase('InvalidRecord'));";
-		}
 		return $sUrl;
 	}
 
@@ -656,12 +521,6 @@ class ct_keg_detail extends cTable {
 			$cnt = count($arKeys);
 		} elseif (!empty($_GET) || !empty($_POST)) {
 			$isPost = ew_IsHttpPost();
-			if ($isPost && isset($_POST["kegd_id"]))
-				$arKeys[] = ew_StripSlashes($_POST["kegd_id"]);
-			elseif (isset($_GET["kegd_id"]))
-				$arKeys[] = ew_StripSlashes($_GET["kegd_id"]);
-			else
-				$arKeys = NULL; // Do not setup
 
 			//return $arKeys; // Do not return yet, so the values will also be checked by the following code
 		}
@@ -670,8 +529,6 @@ class ct_keg_detail extends cTable {
 		$ar = array();
 		if (is_array($arKeys)) {
 			foreach ($arKeys as $key) {
-				if (!is_numeric($key))
-					continue;
 				$ar[] = $key;
 			}
 		}
@@ -684,7 +541,6 @@ class ct_keg_detail extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
-			$this->kegd_id->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -705,11 +561,13 @@ class ct_keg_detail extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
-		$this->kegd_id->setDbValue($rs->fields('kegd_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
-		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
+		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->scan_masuk->setDbValue($rs->fields('scan_masuk'));
 		$this->scan_keluar->setDbValue($rs->fields('scan_keluar'));
+		$this->pegawai_nip->setDbValue($rs->fields('pegawai_nip'));
+		$this->pegawai_nama->setDbValue($rs->fields('pegawai_nama'));
+		$this->pegawai_pin->setDbValue($rs->fields('pegawai_pin'));
 	}
 
 	// Render list row values
@@ -720,46 +578,22 @@ class ct_keg_detail extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// kegd_id
 		// pegawai_id
-		// kegm_id
+		// tgl
 		// scan_masuk
 		// scan_keluar
-		// kegd_id
-
-		$this->kegd_id->ViewValue = $this->kegd_id->CurrentValue;
-		$this->kegd_id->ViewCustomAttributes = "";
-
+		// pegawai_nip
+		// pegawai_nama
+		// pegawai_pin
 		// pegawai_id
-		if ($this->pegawai_id->VirtualValue <> "") {
-			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
-		} else {
-		if (strval($this->pegawai_id->CurrentValue) <> "") {
-			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
-		$sWhereWrk = "";
-		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
-		ew_AddFilter($sWhereWrk, $sFilterWrk);
-		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$rswrk = Conn()->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$arwrk = array();
-				$arwrk[1] = $rswrk->fields('DispFld');
-				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
-				$rswrk->Close();
-			} else {
-				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
-			}
-		} else {
-			$this->pegawai_id->ViewValue = NULL;
-		}
-		}
+
+		$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
 		$this->pegawai_id->ViewCustomAttributes = "";
 
-		// kegm_id
-		$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
-		$this->kegm_id->ViewCustomAttributes = "";
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewCustomAttributes = "";
 
 		// scan_masuk
 		$this->scan_masuk->ViewValue = $this->scan_masuk->CurrentValue;
@@ -771,20 +605,27 @@ class ct_keg_detail extends cTable {
 		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 0);
 		$this->scan_keluar->ViewCustomAttributes = "";
 
-		// kegd_id
-		$this->kegd_id->LinkCustomAttributes = "";
-		$this->kegd_id->HrefValue = "";
-		$this->kegd_id->TooltipValue = "";
+		// pegawai_nip
+		$this->pegawai_nip->ViewValue = $this->pegawai_nip->CurrentValue;
+		$this->pegawai_nip->ViewCustomAttributes = "";
+
+		// pegawai_nama
+		$this->pegawai_nama->ViewValue = $this->pegawai_nama->CurrentValue;
+		$this->pegawai_nama->ViewCustomAttributes = "";
+
+		// pegawai_pin
+		$this->pegawai_pin->ViewValue = $this->pegawai_pin->CurrentValue;
+		$this->pegawai_pin->ViewCustomAttributes = "";
 
 		// pegawai_id
 		$this->pegawai_id->LinkCustomAttributes = "";
 		$this->pegawai_id->HrefValue = "";
 		$this->pegawai_id->TooltipValue = "";
 
-		// kegm_id
-		$this->kegm_id->LinkCustomAttributes = "";
-		$this->kegm_id->HrefValue = "";
-		$this->kegm_id->TooltipValue = "";
+		// tgl
+		$this->tgl->LinkCustomAttributes = "";
+		$this->tgl->HrefValue = "";
+		$this->tgl->TooltipValue = "";
 
 		// scan_masuk
 		$this->scan_masuk->LinkCustomAttributes = "";
@@ -795,6 +636,21 @@ class ct_keg_detail extends cTable {
 		$this->scan_keluar->LinkCustomAttributes = "";
 		$this->scan_keluar->HrefValue = "";
 		$this->scan_keluar->TooltipValue = "";
+
+		// pegawai_nip
+		$this->pegawai_nip->LinkCustomAttributes = "";
+		$this->pegawai_nip->HrefValue = "";
+		$this->pegawai_nip->TooltipValue = "";
+
+		// pegawai_nama
+		$this->pegawai_nama->LinkCustomAttributes = "";
+		$this->pegawai_nama->HrefValue = "";
+		$this->pegawai_nama->TooltipValue = "";
+
+		// pegawai_pin
+		$this->pegawai_pin->LinkCustomAttributes = "";
+		$this->pegawai_pin->HrefValue = "";
+		$this->pegawai_pin->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -807,27 +663,17 @@ class ct_keg_detail extends cTable {
 		// Call Row Rendering event
 		$this->Row_Rendering();
 
-		// kegd_id
-		$this->kegd_id->EditAttrs["class"] = "form-control";
-		$this->kegd_id->EditCustomAttributes = "";
-		$this->kegd_id->EditValue = $this->kegd_id->CurrentValue;
-		$this->kegd_id->ViewCustomAttributes = "";
-
 		// pegawai_id
 		$this->pegawai_id->EditAttrs["class"] = "form-control";
 		$this->pegawai_id->EditCustomAttributes = "";
+		$this->pegawai_id->EditValue = $this->pegawai_id->CurrentValue;
+		$this->pegawai_id->PlaceHolder = ew_RemoveHtml($this->pegawai_id->FldCaption());
 
-		// kegm_id
-		$this->kegm_id->EditAttrs["class"] = "form-control";
-		$this->kegm_id->EditCustomAttributes = "";
-		if ($this->kegm_id->getSessionValue() <> "") {
-			$this->kegm_id->CurrentValue = $this->kegm_id->getSessionValue();
-		$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
-		$this->kegm_id->ViewCustomAttributes = "";
-		} else {
-		$this->kegm_id->EditValue = $this->kegm_id->CurrentValue;
-		$this->kegm_id->PlaceHolder = ew_RemoveHtml($this->kegm_id->FldCaption());
-		}
+		// tgl
+		$this->tgl->EditAttrs["class"] = "form-control";
+		$this->tgl->EditCustomAttributes = "";
+		$this->tgl->EditValue = ew_FormatDateTime($this->tgl->CurrentValue, 8);
+		$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 		// scan_masuk
 		$this->scan_masuk->EditAttrs["class"] = "form-control";
@@ -840,6 +686,24 @@ class ct_keg_detail extends cTable {
 		$this->scan_keluar->EditCustomAttributes = "";
 		$this->scan_keluar->EditValue = ew_FormatDateTime($this->scan_keluar->CurrentValue, 8);
 		$this->scan_keluar->PlaceHolder = ew_RemoveHtml($this->scan_keluar->FldCaption());
+
+		// pegawai_nip
+		$this->pegawai_nip->EditAttrs["class"] = "form-control";
+		$this->pegawai_nip->EditCustomAttributes = "";
+		$this->pegawai_nip->EditValue = $this->pegawai_nip->CurrentValue;
+		$this->pegawai_nip->PlaceHolder = ew_RemoveHtml($this->pegawai_nip->FldCaption());
+
+		// pegawai_nama
+		$this->pegawai_nama->EditAttrs["class"] = "form-control";
+		$this->pegawai_nama->EditCustomAttributes = "";
+		$this->pegawai_nama->EditValue = $this->pegawai_nama->CurrentValue;
+		$this->pegawai_nama->PlaceHolder = ew_RemoveHtml($this->pegawai_nama->FldCaption());
+
+		// pegawai_pin
+		$this->pegawai_pin->EditAttrs["class"] = "form-control";
+		$this->pegawai_pin->EditCustomAttributes = "";
+		$this->pegawai_pin->EditValue = $this->pegawai_pin->CurrentValue;
+		$this->pegawai_pin->PlaceHolder = ew_RemoveHtml($this->pegawai_pin->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -869,14 +733,20 @@ class ct_keg_detail extends cTable {
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
+					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->scan_masuk->Exportable) $Doc->ExportCaption($this->scan_masuk);
 					if ($this->scan_keluar->Exportable) $Doc->ExportCaption($this->scan_keluar);
+					if ($this->pegawai_nip->Exportable) $Doc->ExportCaption($this->pegawai_nip);
+					if ($this->pegawai_nama->Exportable) $Doc->ExportCaption($this->pegawai_nama);
+					if ($this->pegawai_pin->Exportable) $Doc->ExportCaption($this->pegawai_pin);
 				} else {
-					if ($this->kegd_id->Exportable) $Doc->ExportCaption($this->kegd_id);
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
-					if ($this->kegm_id->Exportable) $Doc->ExportCaption($this->kegm_id);
+					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->scan_masuk->Exportable) $Doc->ExportCaption($this->scan_masuk);
 					if ($this->scan_keluar->Exportable) $Doc->ExportCaption($this->scan_keluar);
+					if ($this->pegawai_nip->Exportable) $Doc->ExportCaption($this->pegawai_nip);
+					if ($this->pegawai_nama->Exportable) $Doc->ExportCaption($this->pegawai_nama);
+					if ($this->pegawai_pin->Exportable) $Doc->ExportCaption($this->pegawai_pin);
 				}
 				$Doc->EndExportRow();
 			}
@@ -909,14 +779,20 @@ class ct_keg_detail extends cTable {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
+						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->scan_masuk->Exportable) $Doc->ExportField($this->scan_masuk);
 						if ($this->scan_keluar->Exportable) $Doc->ExportField($this->scan_keluar);
+						if ($this->pegawai_nip->Exportable) $Doc->ExportField($this->pegawai_nip);
+						if ($this->pegawai_nama->Exportable) $Doc->ExportField($this->pegawai_nama);
+						if ($this->pegawai_pin->Exportable) $Doc->ExportField($this->pegawai_pin);
 					} else {
-						if ($this->kegd_id->Exportable) $Doc->ExportField($this->kegd_id);
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
-						if ($this->kegm_id->Exportable) $Doc->ExportField($this->kegm_id);
+						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->scan_masuk->Exportable) $Doc->ExportField($this->scan_masuk);
 						if ($this->scan_keluar->Exportable) $Doc->ExportField($this->scan_keluar);
+						if ($this->pegawai_nip->Exportable) $Doc->ExportField($this->pegawai_nip);
+						if ($this->pegawai_nama->Exportable) $Doc->ExportField($this->pegawai_nama);
+						if ($this->pegawai_pin->Exportable) $Doc->ExportField($this->pegawai_pin);
 					}
 					$Doc->EndExportRow();
 				}
@@ -955,129 +831,6 @@ class ct_keg_detail extends cTable {
 			return ew_ArrayToJson($rsarr);
 		} else {
 			return FALSE;
-		}
-	}
-
-	// Write Audit Trail start/end for grid update
-	function WriteAuditTrailDummy($typ) {
-		$table = 't_keg_detail';
-		$usr = CurrentUserID();
-		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
-	}
-
-	// Write Audit Trail (add page)
-	function WriteAuditTrailOnAdd(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnAdd) return;
-		$table = 't_keg_detail';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['kegd_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserID();
-		foreach (array_keys($rs) as $fldname) {
-			if (array_key_exists($fldname, $this->fields) && $this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$newvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$newvalue = $rs[$fldname];
-					else
-						$newvalue = "[MEMO]"; // Memo Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$newvalue = "[XML]"; // XML Field
-				} else {
-					$newvalue = $rs[$fldname];
-				}
-				ew_WriteAuditTrail("log", $dt, $id, $usr, "A", $table, $fldname, $key, "", $newvalue);
-			}
-		}
-	}
-
-	// Write Audit Trail (edit page)
-	function WriteAuditTrailOnEdit(&$rsold, &$rsnew) {
-		global $Language;
-		if (!$this->AuditTrailOnEdit) return;
-		$table = 't_keg_detail';
-
-		// Get key value
-		$key = "";
-		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rsold['kegd_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$usr = CurrentUserID();
-		foreach (array_keys($rsnew) as $fldname) {
-			if (array_key_exists($fldname, $this->fields) && array_key_exists($fldname, $rsold) && $this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldDataType == EW_DATATYPE_DATE) { // DateTime field
-					$modified = (ew_FormatDateTime($rsold[$fldname], 0) <> ew_FormatDateTime($rsnew[$fldname], 0));
-				} else {
-					$modified = !ew_CompareValue($rsold[$fldname], $rsnew[$fldname]);
-				}
-				if ($modified) {
-					if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") { // Password Field
-						$oldvalue = $Language->Phrase("PasswordMask");
-						$newvalue = $Language->Phrase("PasswordMask");
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) { // Memo field
-						if (EW_AUDIT_TRAIL_TO_DATABASE) {
-							$oldvalue = $rsold[$fldname];
-							$newvalue = $rsnew[$fldname];
-						} else {
-							$oldvalue = "[MEMO]";
-							$newvalue = "[MEMO]";
-						}
-					} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) { // XML field
-						$oldvalue = "[XML]";
-						$newvalue = "[XML]";
-					} else {
-						$oldvalue = $rsold[$fldname];
-						$newvalue = $rsnew[$fldname];
-					}
-					ew_WriteAuditTrail("log", $dt, $id, $usr, "U", $table, $fldname, $key, $oldvalue, $newvalue);
-				}
-			}
-		}
-	}
-
-	// Write Audit Trail (delete page)
-	function WriteAuditTrailOnDelete(&$rs) {
-		global $Language;
-		if (!$this->AuditTrailOnDelete) return;
-		$table = 't_keg_detail';
-
-		// Get key value
-		$key = "";
-		if ($key <> "")
-			$key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['kegd_id'];
-
-		// Write Audit Trail
-		$dt = ew_StdCurrentDateTime();
-		$id = ew_ScriptName();
-		$curUser = CurrentUserID();
-		foreach (array_keys($rs) as $fldname) {
-			if (array_key_exists($fldname, $this->fields) && $this->fields[$fldname]->FldDataType <> EW_DATATYPE_BLOB) { // Ignore BLOB fields
-				if ($this->fields[$fldname]->FldHtmlTag == "PASSWORD") {
-					$oldvalue = $Language->Phrase("PasswordMask"); // Password Field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_MEMO) {
-					if (EW_AUDIT_TRAIL_TO_DATABASE)
-						$oldvalue = $rs[$fldname];
-					else
-						$oldvalue = "[MEMO]"; // Memo field
-				} elseif ($this->fields[$fldname]->FldDataType == EW_DATATYPE_XML) {
-					$oldvalue = "[XML]"; // XML field
-				} else {
-					$oldvalue = $rs[$fldname];
-				}
-				ew_WriteAuditTrail("log", $dt, $id, $curUser, "D", $table, $fldname, $key, $oldvalue, "");
-			}
 		}
 	}
 

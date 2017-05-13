@@ -290,6 +290,8 @@ class ct_keg_detail_add extends ct_keg_detail {
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->pegawai_id->SetVisibility();
+		$this->scan_masuk->SetVisibility();
+		$this->scan_keluar->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -481,6 +483,10 @@ class ct_keg_detail_add extends ct_keg_detail {
 	function LoadDefaultValues() {
 		$this->pegawai_id->CurrentValue = NULL;
 		$this->pegawai_id->OldValue = $this->pegawai_id->CurrentValue;
+		$this->scan_masuk->CurrentValue = NULL;
+		$this->scan_masuk->OldValue = $this->scan_masuk->CurrentValue;
+		$this->scan_keluar->CurrentValue = NULL;
+		$this->scan_keluar->OldValue = $this->scan_keluar->CurrentValue;
 	}
 
 	// Load form values
@@ -491,6 +497,14 @@ class ct_keg_detail_add extends ct_keg_detail {
 		if (!$this->pegawai_id->FldIsDetailKey) {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
+		if (!$this->scan_masuk->FldIsDetailKey) {
+			$this->scan_masuk->setFormValue($objForm->GetValue("x_scan_masuk"));
+			$this->scan_masuk->CurrentValue = ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 0);
+		}
+		if (!$this->scan_keluar->FldIsDetailKey) {
+			$this->scan_keluar->setFormValue($objForm->GetValue("x_scan_keluar"));
+			$this->scan_keluar->CurrentValue = ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 0);
+		}
 	}
 
 	// Restore form values
@@ -498,6 +512,10 @@ class ct_keg_detail_add extends ct_keg_detail {
 		global $objForm;
 		$this->LoadOldRecord();
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
+		$this->scan_masuk->CurrentValue = $this->scan_masuk->FormValue;
+		$this->scan_masuk->CurrentValue = ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 0);
+		$this->scan_keluar->CurrentValue = $this->scan_keluar->FormValue;
+		$this->scan_keluar->CurrentValue = ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 0);
 	}
 
 	// Load row based on key values
@@ -537,6 +555,8 @@ class ct_keg_detail_add extends ct_keg_detail {
 			$this->pegawai_id->VirtualValue = ""; // Clear value
 		}
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
+		$this->scan_masuk->setDbValue($rs->fields('scan_masuk'));
+		$this->scan_keluar->setDbValue($rs->fields('scan_keluar'));
 	}
 
 	// Load DbValue from recordset
@@ -546,6 +566,8 @@ class ct_keg_detail_add extends ct_keg_detail {
 		$this->kegd_id->DbValue = $row['kegd_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
 		$this->kegm_id->DbValue = $row['kegm_id'];
+		$this->scan_masuk->DbValue = $row['scan_masuk'];
+		$this->scan_keluar->DbValue = $row['scan_keluar'];
 	}
 
 	// Load old record
@@ -584,6 +606,8 @@ class ct_keg_detail_add extends ct_keg_detail {
 		// kegd_id
 		// pegawai_id
 		// kegm_id
+		// scan_masuk
+		// scan_keluar
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -622,10 +646,30 @@ class ct_keg_detail_add extends ct_keg_detail {
 		$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
 		$this->kegm_id->ViewCustomAttributes = "";
 
+		// scan_masuk
+		$this->scan_masuk->ViewValue = $this->scan_masuk->CurrentValue;
+		$this->scan_masuk->ViewValue = ew_FormatDateTime($this->scan_masuk->ViewValue, 0);
+		$this->scan_masuk->ViewCustomAttributes = "";
+
+		// scan_keluar
+		$this->scan_keluar->ViewValue = $this->scan_keluar->CurrentValue;
+		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 0);
+		$this->scan_keluar->ViewCustomAttributes = "";
+
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
+
+			// scan_masuk
+			$this->scan_masuk->LinkCustomAttributes = "";
+			$this->scan_masuk->HrefValue = "";
+			$this->scan_masuk->TooltipValue = "";
+
+			// scan_keluar
+			$this->scan_keluar->LinkCustomAttributes = "";
+			$this->scan_keluar->HrefValue = "";
+			$this->scan_keluar->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// pegawai_id
@@ -653,11 +697,31 @@ class ct_keg_detail_add extends ct_keg_detail {
 			if ($rswrk) $rswrk->Close();
 			$this->pegawai_id->EditValue = $arwrk;
 
+			// scan_masuk
+			$this->scan_masuk->EditAttrs["class"] = "form-control";
+			$this->scan_masuk->EditCustomAttributes = "";
+			$this->scan_masuk->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->scan_masuk->CurrentValue, 8));
+			$this->scan_masuk->PlaceHolder = ew_RemoveHtml($this->scan_masuk->FldCaption());
+
+			// scan_keluar
+			$this->scan_keluar->EditAttrs["class"] = "form-control";
+			$this->scan_keluar->EditCustomAttributes = "";
+			$this->scan_keluar->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->scan_keluar->CurrentValue, 8));
+			$this->scan_keluar->PlaceHolder = ew_RemoveHtml($this->scan_keluar->FldCaption());
+
 			// Add refer script
 			// pegawai_id
 
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
+
+			// scan_masuk
+			$this->scan_masuk->LinkCustomAttributes = "";
+			$this->scan_masuk->HrefValue = "";
+
+			// scan_keluar
+			$this->scan_keluar->LinkCustomAttributes = "";
+			$this->scan_keluar->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -682,6 +746,12 @@ class ct_keg_detail_add extends ct_keg_detail {
 			return ($gsFormError == "");
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
+		}
+		if (!ew_CheckDateDef($this->scan_masuk->FormValue)) {
+			ew_AddMessage($gsFormError, $this->scan_masuk->FldErrMsg());
+		}
+		if (!ew_CheckDateDef($this->scan_keluar->FormValue)) {
+			ew_AddMessage($gsFormError, $this->scan_keluar->FldErrMsg());
 		}
 
 		// Return validate result
@@ -709,6 +779,12 @@ class ct_keg_detail_add extends ct_keg_detail {
 
 		// pegawai_id
 		$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, FALSE);
+
+		// scan_masuk
+		$this->scan_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 0), NULL, FALSE);
+
+		// scan_keluar
+		$this->scan_keluar->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 0), NULL, FALSE);
 
 		// kegm_id
 		if ($this->kegm_id->getSessionValue() <> "") {
@@ -954,6 +1030,12 @@ ft_keg_detailadd.Validate = function() {
 			elm = this.GetElements("x" + infix + "_pegawai_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detail->pegawai_id->FldCaption(), $t_keg_detail->pegawai_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_scan_masuk");
+			if (elm && !ew_CheckDateDef(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detail->scan_masuk->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_scan_keluar");
+			if (elm && !ew_CheckDateDef(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detail->scan_keluar->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -1033,6 +1115,26 @@ $t_keg_detail_add->ShowMessage();
 <input type="hidden" name="s_x_pegawai_id" id="s_x_pegawai_id" value="<?php echo $t_keg_detail->pegawai_id->LookupFilterQuery() ?>">
 </span>
 <?php echo $t_keg_detail->pegawai_id->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($t_keg_detail->scan_masuk->Visible) { // scan_masuk ?>
+	<div id="r_scan_masuk" class="form-group">
+		<label id="elh_t_keg_detail_scan_masuk" for="x_scan_masuk" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_detail->scan_masuk->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $t_keg_detail->scan_masuk->CellAttributes() ?>>
+<span id="el_t_keg_detail_scan_masuk">
+<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" name="x_scan_masuk" id="x_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
+</span>
+<?php echo $t_keg_detail->scan_masuk->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($t_keg_detail->scan_keluar->Visible) { // scan_keluar ?>
+	<div id="r_scan_keluar" class="form-group">
+		<label id="elh_t_keg_detail_scan_keluar" for="x_scan_keluar" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_detail->scan_keluar->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $t_keg_detail->scan_keluar->CellAttributes() ?>>
+<span id="el_t_keg_detail_scan_keluar">
+<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" name="x_scan_keluar" id="x_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
+</span>
+<?php echo $t_keg_detail->scan_keluar->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>

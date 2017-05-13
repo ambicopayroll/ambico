@@ -44,6 +44,12 @@ ft_keg_detailgrid.Validate = function() {
 			elm = this.GetElements("x" + infix + "_pegawai_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detail->pegawai_id->FldCaption(), $t_keg_detail->pegawai_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_scan_masuk");
+			if (elm && !ew_CheckDateDef(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detail->scan_masuk->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_scan_keluar");
+			if (elm && !ew_CheckDateDef(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detail->scan_keluar->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -57,6 +63,8 @@ ft_keg_detailgrid.Validate = function() {
 ft_keg_detailgrid.EmptyRow = function(infix) {
 	var fobj = this.Form;
 	if (ew_ValueChanged(fobj, infix, "pegawai_id", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "scan_masuk", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "scan_keluar", false)) return false;
 	return true;
 }
 
@@ -165,6 +173,24 @@ $t_keg_detail_grid->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<th data-name="pegawai_id"><div><div id="elh_t_keg_detail_pegawai_id" class="t_keg_detail_pegawai_id">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detail->pegawai_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detail->pegawai_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detail->pegawai_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($t_keg_detail->scan_masuk->Visible) { // scan_masuk ?>
+	<?php if ($t_keg_detail->SortUrl($t_keg_detail->scan_masuk) == "") { ?>
+		<th data-name="scan_masuk"><div id="elh_t_keg_detail_scan_masuk" class="t_keg_detail_scan_masuk"><div class="ewTableHeaderCaption"><?php echo $t_keg_detail->scan_masuk->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="scan_masuk"><div><div id="elh_t_keg_detail_scan_masuk" class="t_keg_detail_scan_masuk">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detail->scan_masuk->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detail->scan_masuk->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detail->scan_masuk->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($t_keg_detail->scan_keluar->Visible) { // scan_keluar ?>
+	<?php if ($t_keg_detail->SortUrl($t_keg_detail->scan_keluar) == "") { ?>
+		<th data-name="scan_keluar"><div id="elh_t_keg_detail_scan_keluar" class="t_keg_detail_scan_keluar"><div class="ewTableHeaderCaption"><?php echo $t_keg_detail->scan_keluar->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="scan_keluar"><div><div id="elh_t_keg_detail_scan_keluar" class="t_keg_detail_scan_keluar">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detail->scan_keluar->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detail->scan_keluar->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detail->scan_keluar->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -322,6 +348,62 @@ $t_keg_detail_grid->ListOptions->Render("body", "left", $t_keg_detail_grid->RowC
 <?php if ($t_keg_detail->RowType == EW_ROWTYPE_EDIT || $t_keg_detail->CurrentMode == "edit") { ?>
 <input type="hidden" data-table="t_keg_detail" data-field="x_kegd_id" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_kegd_id" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_kegd_id" value="<?php echo ew_HtmlEncode($t_keg_detail->kegd_id->CurrentValue) ?>">
 <?php } ?>
+	<?php if ($t_keg_detail->scan_masuk->Visible) { // scan_masuk ?>
+		<td data-name="scan_masuk"<?php echo $t_keg_detail->scan_masuk->CellAttributes() ?>>
+<?php if ($t_keg_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_masuk" class="form-group t_keg_detail_scan_masuk">
+<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
+</span>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_masuk" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->OldValue) ?>">
+<?php } ?>
+<?php if ($t_keg_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_masuk" class="form-group t_keg_detail_scan_masuk">
+<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($t_keg_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_masuk" class="t_keg_detail_scan_masuk">
+<span<?php echo $t_keg_detail->scan_masuk->ViewAttributes() ?>>
+<?php echo $t_keg_detail->scan_masuk->ListViewValue() ?></span>
+</span>
+<?php if ($t_keg_detail->CurrentAction <> "F") { ?>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_masuk" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->FormValue) ?>">
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_masuk" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_masuk" name="ft_keg_detailgrid$x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="ft_keg_detailgrid$x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->FormValue) ?>">
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_masuk" name="ft_keg_detailgrid$o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="ft_keg_detailgrid$o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($t_keg_detail->scan_keluar->Visible) { // scan_keluar ?>
+		<td data-name="scan_keluar"<?php echo $t_keg_detail->scan_keluar->CellAttributes() ?>>
+<?php if ($t_keg_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_keluar" class="form-group t_keg_detail_scan_keluar">
+<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
+</span>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_keluar" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->OldValue) ?>">
+<?php } ?>
+<?php if ($t_keg_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_keluar" class="form-group t_keg_detail_scan_keluar">
+<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
+</span>
+<?php } ?>
+<?php if ($t_keg_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_keluar" class="t_keg_detail_scan_keluar">
+<span<?php echo $t_keg_detail->scan_keluar->ViewAttributes() ?>>
+<?php echo $t_keg_detail->scan_keluar->ListViewValue() ?></span>
+</span>
+<?php if ($t_keg_detail->CurrentAction <> "F") { ?>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_keluar" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->FormValue) ?>">
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_keluar" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_keluar" name="ft_keg_detailgrid$x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="ft_keg_detailgrid$x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->FormValue) ?>">
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_keluar" name="ft_keg_detailgrid$o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="ft_keg_detailgrid$o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+	<?php } ?>
 <?php
 
 // Render list options (body, right)
@@ -383,6 +465,38 @@ $t_keg_detail_grid->ListOptions->Render("body", "left", $t_keg_detail_grid->RowI
 <input type="hidden" data-table="t_keg_detail" data-field="x_pegawai_id" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_pegawai_id" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_keg_detail->pegawai_id->FormValue) ?>">
 <?php } ?>
 <input type="hidden" data-table="t_keg_detail" data-field="x_pegawai_id" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_pegawai_id" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_keg_detail->pegawai_id->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($t_keg_detail->scan_masuk->Visible) { // scan_masuk ?>
+		<td data-name="scan_masuk">
+<?php if ($t_keg_detail->CurrentAction <> "F") { ?>
+<span id="el$rowindex$_t_keg_detail_scan_masuk" class="form-group t_keg_detail_scan_masuk">
+<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el$rowindex$_t_keg_detail_scan_masuk" class="form-group t_keg_detail_scan_masuk">
+<span<?php echo $t_keg_detail->scan_masuk->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_keg_detail->scan_masuk->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_masuk" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->FormValue) ?>">
+<?php } ?>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_masuk" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($t_keg_detail->scan_keluar->Visible) { // scan_keluar ?>
+		<td data-name="scan_keluar">
+<?php if ($t_keg_detail->CurrentAction <> "F") { ?>
+<span id="el$rowindex$_t_keg_detail_scan_keluar" class="form-group t_keg_detail_scan_keluar">
+<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el$rowindex$_t_keg_detail_scan_keluar" class="form-group t_keg_detail_scan_keluar">
+<span<?php echo $t_keg_detail->scan_keluar->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_keg_detail->scan_keluar->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_keluar" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->FormValue) ?>">
+<?php } ?>
+<input type="hidden" data-table="t_keg_detail" data-field="x_scan_keluar" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php
