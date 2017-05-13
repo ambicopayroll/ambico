@@ -2563,6 +2563,12 @@
       <field id="jam_keluar">
         <phrase id="fldcaption" value="jam keluar" />
       </field>
+      <field id="pegawai_id2">
+        <phrase id="fldcaption" value="pegawai id 2" />
+      </field>
+      <field id="pegawai_id3">
+        <phrase id="fldcaption" value="pegawai id 3" />
+      </field>
     </table>
     <table id="t_jns_pengecualian">
       <phrase id="tblcaption" value="t jns pengecualian" />

@@ -11,22 +11,26 @@ FROM att_log
   LEFT JOIN pegawai ON att_log.pin = pegawai.pegawai_pin;
 
 create view v_jdw_krj_def as
-SELECT t_jdw_krj_def.pegawai_id AS pegawai_id,
-  t_jdw_krj_def.tgl AS tgl,
-  t_jdw_krj_def.jk_id AS jk_id,
-  t_jdw_krj_def.scan_masuk AS scan_masuk,
-  t_jdw_krj_def.scan_keluar AS scan_keluar,
-  t_jdw_krj_def.hk_def AS hk_def,
-  pegawai.pegawai_nip AS pegawai_nip,
-  pegawai.pegawai_nama AS pegawai_nama,
-  t_jk.jk_kd AS jk_kd,
-  pembagian2.pembagian2_nama AS pembagian2_nama,
-  pegawai.pembagian2_id,
-  pegawai.pegawai_pin As pegawai_pin
-FROM ((t_jdw_krj_def
-  JOIN pegawai ON t_jdw_krj_def.pegawai_id = pegawai.pegawai_id)
-  JOIN t_jk ON t_jdw_krj_def.jk_id = t_jk.jk_id)
-  JOIN pembagian2 ON pegawai.pembagian2_id = pembagian2.pembagian2_id;
+Select t_jdw_krj_def.pegawai_id As pegawai_id,
+  t_jdw_krj_def.tgl As tgl,
+  t_jdw_krj_def.jk_id As jk_id,
+  t_jdw_krj_def.scan_masuk As scan_masuk,
+  t_jdw_krj_def.scan_keluar As scan_keluar,
+  t_jdw_krj_def.hk_def As hk_def,
+  pegawai.pegawai_nip As pegawai_nip,
+  pegawai.pegawai_nama As pegawai_nama,
+  t_jk.jk_kd As jk_kd,
+  pembagian2.pembagian2_nama As pembagian2_nama,
+  pegawai.pembagian2_id As pembagian2_id,
+  pegawai.pegawai_pin As pegawai_pin,
+  t_lapgroup.lapgroup_nama As lapgroup_nama
+From ((((t_jdw_krj_def
+  Join pegawai On t_jdw_krj_def.pegawai_id = pegawai.pegawai_id)
+  Join t_jk On t_jdw_krj_def.jk_id = t_jk.jk_id)
+  Join pembagian2 On pegawai.pembagian2_id = pembagian2.pembagian2_id)
+  Left Join t_lapsubgroup
+    On pegawai.pembagian2_id = t_lapsubgroup.pembagian2_id)
+  Join t_lapgroup On t_lapsubgroup.lapgroup_id = t_lapgroup.lapgroup_id;
 
 create view v_lapgjhrn as  
 SELECT e.lapgroup_id AS lapgroup_id,
