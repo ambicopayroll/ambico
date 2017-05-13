@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <configuration date="2017/05/14" author="e.World Technology Ltd.">
-  <project id="{9712DCF3-D9FD-406D-93E5-FEA5020667C8}" file="D:\xampp\htdocs\ambico\ambico.pmp" name="ambico" product="PHPMaker" version="13.0" datetime="2017/05/14 04:50:54" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+  <project id="{9712DCF3-D9FD-406D-93E5-FEA5020667C8}" file="D:\xampp\htdocs\ambico\ambico.pmp" name="ambico" product="PHPMaker" version="13.0" datetime="2017/05/14 04:59:58" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
     <table id="att_log" name="att_log" caption="att log" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="cuti_normatif" name="cuti_normatif" caption="cuti normatif" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="dev_type" name="dev_type" caption="dev type" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
@@ -89,5 +89,6 @@
     <table id="t_keg_master" name="t_keg_master" caption="Master" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="t_kegiatan" name="t_kegiatan" caption="Jenis Kegiatan" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="v_jdw_krj_brngan" name="v_jdw_krj_brngan" caption="v jdw krj brngan" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="lap_gaji3__php" name="lap_gaji3_.php" caption="Gaji (Borongan)" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
   </project>
 </configuration>

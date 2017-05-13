@@ -589,9 +589,6 @@
     <menu id="77">
       <phrase id="menutext" value="Home" />
     </menu>
-    <menu id="10240">
-      <phrase id="menutext" value="Detail" />
-    </menu>
     <menu id="78">
       <phrase id="menutext" value="Setup" />
     </menu>
@@ -640,8 +637,8 @@
     <menu id="10230">
       <phrase id="menutext" value="Pengecualian" />
     </menu>
-    <menu id="10234">
-      <phrase id="menutext" value="t gjhrn" />
+    <menu id="10240">
+      <phrase id="menutext" value="Detail" />
     </menu>
     <menu id="10411">
       <phrase id="menutext" value="Input" />
@@ -654,6 +651,9 @@
     </menu>
     <menu id="10227">
       <phrase id="menutext" value="Generate Jadwal Kerja" />
+    </menu>
+    <menu id="10234">
+      <phrase id="menutext" value="t gjhrn" />
     </menu>
     <menu id="10077">
       <phrase id="menutext" value="Laporan" />
@@ -672,6 +672,9 @@
     </menu>
     <menu id="10228">
       <phrase id="menutext" value="Gaji (Harian)" />
+    </menu>
+    <menu id="10413">
+      <phrase id="menutext" value="Gaji (Borongan)" />
     </menu>
     <menu id="10095">
       <phrase id="menutext" value="Rekonsiliasi (Borongan)" />
@@ -3260,6 +3263,9 @@
       <field id="pegawai_pin">
         <phrase id="fldcaption" value="pegawai pin" />
       </field>
+    </table>
+    <table id="lap_gaji3__php">
+      <phrase id="tblcaption" value="Gaji (Borongan)" />
     </table>
   </project>
 </ew-language>
