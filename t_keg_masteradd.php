@@ -1181,6 +1181,11 @@ $t_keg_master_add->ShowMessage();
 		<div class="col-sm-10"><div<?php echo $t_keg_master->tgl->CellAttributes() ?>>
 <span id="el_t_keg_master_tgl">
 <input type="text" data-table="t_keg_master" data-field="x_tgl" name="x_tgl" id="x_tgl" placeholder="<?php echo ew_HtmlEncode($t_keg_master->tgl->getPlaceHolder()) ?>" value="<?php echo $t_keg_master->tgl->EditValue ?>"<?php echo $t_keg_master->tgl->EditAttributes() ?>>
+<?php if (!$t_keg_master->tgl->ReadOnly && !$t_keg_master->tgl->Disabled && !isset($t_keg_master->tgl->EditAttrs["readonly"]) && !isset($t_keg_master->tgl->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_keg_masteradd", "x_tgl", 0);
+</script>
+<?php } ?>
 </span>
 <?php echo $t_keg_master->tgl->CustomMsg ?></div></div>
 	</div>

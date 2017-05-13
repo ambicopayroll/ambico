@@ -3153,14 +3153,14 @@
         <phrase id="fldcaption" value="ID" />
       </field>
       <field id="pegawai_id">
-        <phrase id="fldcaption" value="Nama" />
+        <phrase id="fldcaption" value="Nama Pegawai" />
       </field>
       <field id="kegm_id">
         <phrase id="fldcaption" value="Master" />
       </field>
     </table>
     <table id="t_keg_master">
-      <phrase id="tblcaption" value="Kegiatan (Borongan)" />
+      <phrase id="tblcaption" value="Master" />
       <field id="kegm_id">
         <phrase id="fldcaption" value="ID" />
       </field>
