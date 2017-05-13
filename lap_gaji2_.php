@@ -327,7 +327,6 @@ else {
 			ew_CreateCalendar("myform", "start", 5);
 		  </script>
 		  </span>
-		  
 		</div>
 	</div>
 	<div id="r_end" class="form-group">
