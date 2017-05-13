@@ -604,6 +604,9 @@
     <menu id="34">
       <phrase id="menutext" value="Status Pegawai" />
     </menu>
+    <menu id="10237">
+      <phrase id="menutext" value="Lembur" />
+    </menu>
     <menu id="10236">
       <phrase id="menutext" value="Hari Libur" />
     </menu>
@@ -631,14 +634,14 @@
     <menu id="10230">
       <phrase id="menutext" value="Pengecualian" />
     </menu>
-    <menu id="10235">
-      <phrase id="menutext" value="t gjbln" />
-    </menu>
     <menu id="10224">
       <phrase id="menutext" value="Proses" />
     </menu>
     <menu id="10227">
       <phrase id="menutext" value="Generate Jadwal Kerja" />
+    </menu>
+    <menu id="10235">
+      <phrase id="menutext" value="t gjbln" />
     </menu>
     <menu id="10077">
       <phrase id="menutext" value="Laporan" />
@@ -3109,6 +3112,27 @@
       </field>
       <field id="libur_ket">
         <phrase id="fldcaption" value="Keterangan" />
+      </field>
+    </table>
+    <table id="t_lembur">
+      <phrase id="tblcaption" value="Lembur" />
+      <field id="lembur_id">
+        <phrase id="fldcaption" value="ID" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="Nama" />
+      </field>
+      <field id="tgl_mulai">
+        <phrase id="fldcaption" value="Tgl. Mulai" />
+      </field>
+      <field id="tgl_selesai">
+        <phrase id="fldcaption" value="Tgl. Selesai" />
+      </field>
+      <field id="jam_mulai">
+        <phrase id="fldcaption" value="Jam Mulai" />
+      </field>
+      <field id="jam_selesai">
+        <phrase id="fldcaption" value="Jam Selesai" />
       </field>
     </table>
   </project>

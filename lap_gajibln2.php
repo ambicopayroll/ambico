@@ -52,6 +52,40 @@ function f_carilamakerja($p_pegawai_id, $p_tgl, $p_conn) {
 	}
 }
 
+function f_hitungjamlembur($p_conn, $p_pegawai_id) {
+	$query = "select * from t_lembur where pegawai_id = ".$p_pegawai_id." order by tgl_mulai";
+	$rs = $p_conn->Execute($query);
+	$mlama_lembur = 0;
+	while (!$rs->EOF) {
+		$mtgl_mulai = $rs->fields["tgl_mulai"];
+		$mtgl_selesai = $rs->fields["tgl_selesai"];
+		
+		// cek apakah hanya lembur 1 hari
+		if ($mtgl_mulai == $mtgl_selesai) {
+			
+			// cek apakah hari lembur masuk dalam range input laporan gaji
+			if ($mtgl_mulai >= $_POST["start"] and $mtgl_mulai <= $_POST["end"]) {
+				// hitung jam lembur
+				$lama_lembur = strtotime($rs->fields["jam_selesai"]) - strtotime($rs->fields["jam_mulai"]);
+				$mlama_lembur += floor($lama_lembur / (60 * 60));
+			}
+		}
+		// hari lembur lebih dari 1 hari
+		else {
+			while (strtotime($mtgl_mulai) <= strtotime($mtgl_selesai)) {
+				if ($mtgl_mulai >= $_POST["start"] and $mtgl_mulai <= $_POST["end"]) {
+					// hitung jam lembur
+					$lama_lembur = strtotime($rs->fields["jam_selesai"]) - strtotime($rs->fields["jam_mulai"]);
+					$mlama_lembur += floor($lama_lembur / (60 * 60));
+				}
+				$mtgl_mulai = date("Y-m-d", strtotime("+1 day", strtotime($mtgl_mulai)));
+			}
+		}
+		$rs->MoveNext();
+	}
+	return $mlama_lembur;
+}
+
 $msql = "delete from t_gjbln";
 $conn->Execute($msql);
 
@@ -149,11 +183,20 @@ while (!$rs->EOF) {
 						}
 					}
 					else {
+						$mdata_valid = 0;
 						// ada data pengecualian
+						// S1 => tidak diproses; tidak ada potongan absen;
+						// P4 => tidak diproses; tidak ada potongan absen;
+						// IS => tidak diproses; tidak ada potongan absen; invalid scan;
+						// TS => tidak diproses; tidak ada potongan absen; tukar shift;
+						// LB => tidak diproses; tidak ada potongan absen; lembur;
+
+						// TL
 						if ($kode_pengecualian == "TL") {
 							$mterlambat = 1; // untuk acuan perhitungan tunjangan hadir
-							$mdata_valid = 0;
 						}
+
+						// HD
 						if ($kode_pengecualian == "HD") {
 							$lama_kerja = f_carilamakerja($pegawai_id, $tgl, $conn);
 							if ($lama_kerja != null and $lama_kerja >= 3) {
@@ -184,6 +227,9 @@ while (!$rs->EOF) {
 				
 				$rs2->MoveNext(); // go to next record on data rekonsiliasi
 			}
+			
+			// hitung lembur
+			$mt_lembur += f_hitungjamlembur($conn, $pegawai_id) * $t_lembur;
 			
 			if ($mabsen == 1 or $mterlambat == 1) $t_hadir = 0;
 			$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $mt_lembur + $t_hadir + $mt_um; //+ $mt_fork;
