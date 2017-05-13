@@ -78,3 +78,15 @@ ORDER BY lapgroup_index,
   lapsubgroup_index,
   pegawai_id,
   tgl;
+
+create view v_jdw_krj_brngan as
+Select a.pegawai_id As pegawai_id,
+  b.tgl As tgl,
+  a.scan_masuk As scan_masuk,
+  a.scan_keluar As scan_keluar,
+  c.pegawai_nip As pegawai_nip,
+  c.pegawai_nama As pegawai_nama,
+  c.pegawai_pin As pegawai_pin
+From (t_keg_detail a
+  Left Join t_keg_master b On a.kegm_id = b.kegm_id)
+  Left Join pegawai c On a.pegawai_id = c.pegawai_id;
