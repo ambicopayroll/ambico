@@ -1,6 +1,5 @@
 <?php
 
-// kegm_id
 // keg_id
 // tgl
 // shift
@@ -12,17 +11,6 @@
 <table id="tbl_t_keg_mastermaster" class="table table-bordered table-striped ewViewTable">
 <?php echo $t_keg_master->TableCustomInnerHtml ?>
 	<tbody>
-<?php if ($t_keg_master->kegm_id->Visible) { // kegm_id ?>
-		<tr id="r_kegm_id">
-			<td><?php echo $t_keg_master->kegm_id->FldCaption() ?></td>
-			<td<?php echo $t_keg_master->kegm_id->CellAttributes() ?>>
-<span id="el_t_keg_master_kegm_id">
-<span<?php echo $t_keg_master->kegm_id->ViewAttributes() ?>>
-<?php echo $t_keg_master->kegm_id->ListViewValue() ?></span>
-</span>
-</td>
-		</tr>
-<?php } ?>
 <?php if ($t_keg_master->keg_id->Visible) { // keg_id ?>
 		<tr id="r_keg_id">
 			<td><?php echo $t_keg_master->keg_id->FldCaption() ?></td>

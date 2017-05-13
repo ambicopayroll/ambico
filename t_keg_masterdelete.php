@@ -282,8 +282,6 @@ class ct_keg_master_delete extends ct_keg_master {
 			$Security->UserID_Loaded();
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->kegm_id->SetVisibility();
-		$this->kegm_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->keg_id->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->shift->SetVisibility();
@@ -552,11 +550,6 @@ class ct_keg_master_delete extends ct_keg_master {
 		$this->hasil->ViewValue = ew_FormatNumber($this->hasil->ViewValue, 0, -2, -2, -2);
 		$this->hasil->CellCssStyle .= "text-align: right;";
 		$this->hasil->ViewCustomAttributes = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
 
 			// keg_id
 			$this->keg_id->LinkCustomAttributes = "";
@@ -833,9 +826,6 @@ $t_keg_master_delete->ShowMessage();
 <?php echo $t_keg_master->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($t_keg_master->kegm_id->Visible) { // kegm_id ?>
-		<th><span id="elh_t_keg_master_kegm_id" class="t_keg_master_kegm_id"><?php echo $t_keg_master->kegm_id->FldCaption() ?></span></th>
-<?php } ?>
 <?php if ($t_keg_master->keg_id->Visible) { // keg_id ?>
 		<th><span id="elh_t_keg_master_keg_id" class="t_keg_master_keg_id"><?php echo $t_keg_master->keg_id->FldCaption() ?></span></th>
 <?php } ?>
@@ -869,14 +859,6 @@ while (!$t_keg_master_delete->Recordset->EOF) {
 	$t_keg_master_delete->RenderRow();
 ?>
 	<tr<?php echo $t_keg_master->RowAttributes() ?>>
-<?php if ($t_keg_master->kegm_id->Visible) { // kegm_id ?>
-		<td<?php echo $t_keg_master->kegm_id->CellAttributes() ?>>
-<span id="el<?php echo $t_keg_master_delete->RowCnt ?>_t_keg_master_kegm_id" class="t_keg_master_kegm_id">
-<span<?php echo $t_keg_master->kegm_id->ViewAttributes() ?>>
-<?php echo $t_keg_master->kegm_id->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($t_keg_master->keg_id->Visible) { // keg_id ?>
 		<td<?php echo $t_keg_master->keg_id->CellAttributes() ?>>
 <span id="el<?php echo $t_keg_master_delete->RowCnt ?>_t_keg_master_keg_id" class="t_keg_master_keg_id">

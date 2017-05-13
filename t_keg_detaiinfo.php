@@ -819,7 +819,6 @@ class ct_keg_detai extends cTable {
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
-					if ($this->kegm_id->Exportable) $Doc->ExportCaption($this->kegm_id);
 				} else {
 					if ($this->kegd_id->Exportable) $Doc->ExportCaption($this->kegd_id);
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
@@ -856,7 +855,6 @@ class ct_keg_detai extends cTable {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
-						if ($this->kegm_id->Exportable) $Doc->ExportField($this->kegm_id);
 					} else {
 						if ($this->kegd_id->Exportable) $Doc->ExportField($this->kegd_id);
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);

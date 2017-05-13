@@ -44,12 +44,6 @@ ft_keg_detaigrid.Validate = function() {
 			elm = this.GetElements("x" + infix + "_pegawai_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detai->pegawai_id->FldCaption(), $t_keg_detai->pegawai_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_kegm_id");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detai->kegm_id->FldCaption(), $t_keg_detai->kegm_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_kegm_id");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detai->kegm_id->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -63,7 +57,6 @@ ft_keg_detaigrid.Validate = function() {
 ft_keg_detaigrid.EmptyRow = function(infix) {
 	var fobj = this.Form;
 	if (ew_ValueChanged(fobj, infix, "pegawai_id", false)) return false;
-	if (ew_ValueChanged(fobj, infix, "kegm_id", false)) return false;
 	return true;
 }
 
@@ -172,15 +165,6 @@ $t_keg_detai_grid->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<th data-name="pegawai_id"><div><div id="elh_t_keg_detai_pegawai_id" class="t_keg_detai_pegawai_id">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detai->pegawai_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detai->pegawai_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detai->pegawai_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-	<?php if ($t_keg_detai->SortUrl($t_keg_detai->kegm_id) == "") { ?>
-		<th data-name="kegm_id"><div id="elh_t_keg_detai_kegm_id" class="t_keg_detai_kegm_id"><div class="ewTableHeaderCaption"><?php echo $t_keg_detai->kegm_id->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="kegm_id"><div><div id="elh_t_keg_detai_kegm_id" class="t_keg_detai_kegm_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detai->kegm_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detai->kegm_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detai->kegm_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -338,50 +322,6 @@ $t_keg_detai_grid->ListOptions->Render("body", "left", $t_keg_detai_grid->RowCnt
 <?php if ($t_keg_detai->RowType == EW_ROWTYPE_EDIT || $t_keg_detai->CurrentMode == "edit") { ?>
 <input type="hidden" data-table="t_keg_detai" data-field="x_kegd_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegd_id" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegd_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegd_id->CurrentValue) ?>">
 <?php } ?>
-	<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-		<td data-name="kegm_id"<?php echo $t_keg_detai->kegm_id->CellAttributes() ?>>
-<?php if ($t_keg_detai->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<?php if ($t_keg_detai->kegm_id->getSessionValue() <> "") { ?>
-<span id="el<?php echo $t_keg_detai_grid->RowCnt ?>_t_keg_detai_kegm_id" class="form-group t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_keg_detai->kegm_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $t_keg_detai_grid->RowCnt ?>_t_keg_detai_kegm_id" class="form-group t_keg_detai_kegm_id">
-<input type="text" data-table="t_keg_detai" data-field="x_kegm_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->getPlaceHolder()) ?>" value="<?php echo $t_keg_detai->kegm_id->EditValue ?>"<?php echo $t_keg_detai->kegm_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<input type="hidden" data-table="t_keg_detai" data-field="x_kegm_id" name="o<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="o<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->OldValue) ?>">
-<?php } ?>
-<?php if ($t_keg_detai->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<?php if ($t_keg_detai->kegm_id->getSessionValue() <> "") { ?>
-<span id="el<?php echo $t_keg_detai_grid->RowCnt ?>_t_keg_detai_kegm_id" class="form-group t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_keg_detai->kegm_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el<?php echo $t_keg_detai_grid->RowCnt ?>_t_keg_detai_kegm_id" class="form-group t_keg_detai_kegm_id">
-<input type="text" data-table="t_keg_detai" data-field="x_kegm_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->getPlaceHolder()) ?>" value="<?php echo $t_keg_detai->kegm_id->EditValue ?>"<?php echo $t_keg_detai->kegm_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php } ?>
-<?php if ($t_keg_detai->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $t_keg_detai_grid->RowCnt ?>_t_keg_detai_kegm_id" class="t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<?php echo $t_keg_detai->kegm_id->ListViewValue() ?></span>
-</span>
-<?php if ($t_keg_detai->CurrentAction <> "F") { ?>
-<input type="hidden" data-table="t_keg_detai" data-field="x_kegm_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->FormValue) ?>">
-<input type="hidden" data-table="t_keg_detai" data-field="x_kegm_id" name="o<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="o<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->OldValue) ?>">
-<?php } else { ?>
-<input type="hidden" data-table="t_keg_detai" data-field="x_kegm_id" name="ft_keg_detaigrid$x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="ft_keg_detaigrid$x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->FormValue) ?>">
-<input type="hidden" data-table="t_keg_detai" data-field="x_kegm_id" name="ft_keg_detaigrid$o<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="ft_keg_detaigrid$o<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->OldValue) ?>">
-<?php } ?>
-<?php } ?>
-</td>
-	<?php } ?>
 <?php
 
 // Render list options (body, right)
@@ -443,30 +383,6 @@ $t_keg_detai_grid->ListOptions->Render("body", "left", $t_keg_detai_grid->RowInd
 <input type="hidden" data-table="t_keg_detai" data-field="x_pegawai_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_pegawai_id" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_keg_detai->pegawai_id->FormValue) ?>">
 <?php } ?>
 <input type="hidden" data-table="t_keg_detai" data-field="x_pegawai_id" name="o<?php echo $t_keg_detai_grid->RowIndex ?>_pegawai_id" id="o<?php echo $t_keg_detai_grid->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_keg_detai->pegawai_id->OldValue) ?>">
-</td>
-	<?php } ?>
-	<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-		<td data-name="kegm_id">
-<?php if ($t_keg_detai->CurrentAction <> "F") { ?>
-<?php if ($t_keg_detai->kegm_id->getSessionValue() <> "") { ?>
-<span id="el$rowindex$_t_keg_detai_kegm_id" class="form-group t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_keg_detai->kegm_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el$rowindex$_t_keg_detai_kegm_id" class="form-group t_keg_detai_kegm_id">
-<input type="text" data-table="t_keg_detai" data-field="x_kegm_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->getPlaceHolder()) ?>" value="<?php echo $t_keg_detai->kegm_id->EditValue ?>"<?php echo $t_keg_detai->kegm_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php } else { ?>
-<span id="el$rowindex$_t_keg_detai_kegm_id" class="form-group t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_keg_detai->kegm_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" data-table="t_keg_detai" data-field="x_kegm_id" name="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="x<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->FormValue) ?>">
-<?php } ?>
-<input type="hidden" data-table="t_keg_detai" data-field="x_kegm_id" name="o<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" id="o<?php echo $t_keg_detai_grid->RowIndex ?>_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php

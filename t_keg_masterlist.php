@@ -411,8 +411,6 @@ class ct_keg_master_list extends ct_keg_master {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->kegm_id->SetVisibility();
-		$this->kegm_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->keg_id->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->shift->SetVisibility();
@@ -726,7 +724,6 @@ class ct_keg_master_list extends ct_keg_master {
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->kegm_id, $bCtrl); // kegm_id
 			$this->UpdateSort($this->keg_id, $bCtrl); // keg_id
 			$this->UpdateSort($this->tgl, $bCtrl); // tgl
 			$this->UpdateSort($this->shift, $bCtrl); // shift
@@ -760,7 +757,6 @@ class ct_keg_master_list extends ct_keg_master {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
 				$this->setSessionOrderByList($sOrderBy);
-				$this->kegm_id->setSort("");
 				$this->keg_id->setSort("");
 				$this->tgl->setSort("");
 				$this->shift->setSort("");
@@ -1423,11 +1419,6 @@ class ct_keg_master_list extends ct_keg_master {
 		$this->hasil->CellCssStyle .= "text-align: right;";
 		$this->hasil->ViewCustomAttributes = "";
 
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
-
 			// keg_id
 			$this->keg_id->LinkCustomAttributes = "";
 			$this->keg_id->HrefValue = "";
@@ -2065,15 +2056,6 @@ $t_keg_master_list->RenderListOptions();
 // Render list options (header, left)
 $t_keg_master_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($t_keg_master->kegm_id->Visible) { // kegm_id ?>
-	<?php if ($t_keg_master->SortUrl($t_keg_master->kegm_id) == "") { ?>
-		<th data-name="kegm_id"><div id="elh_t_keg_master_kegm_id" class="t_keg_master_kegm_id"><div class="ewTableHeaderCaption"><?php echo $t_keg_master->kegm_id->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="kegm_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_keg_master->SortUrl($t_keg_master->kegm_id) ?>',2);"><div id="elh_t_keg_master_kegm_id" class="t_keg_master_kegm_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_master->kegm_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_master->kegm_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_master->kegm_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
 <?php if ($t_keg_master->keg_id->Visible) { // keg_id ?>
 	<?php if ($t_keg_master->SortUrl($t_keg_master->keg_id) == "") { ?>
 		<th data-name="keg_id"><div id="elh_t_keg_master_keg_id" class="t_keg_master_keg_id"><div class="ewTableHeaderCaption"><?php echo $t_keg_master->keg_id->FldCaption() ?></div></div></th>
@@ -2175,21 +2157,13 @@ while ($t_keg_master_list->RecCnt < $t_keg_master_list->StopRec) {
 // Render list options (body, left)
 $t_keg_master_list->ListOptions->Render("body", "left", $t_keg_master_list->RowCnt);
 ?>
-	<?php if ($t_keg_master->kegm_id->Visible) { // kegm_id ?>
-		<td data-name="kegm_id"<?php echo $t_keg_master->kegm_id->CellAttributes() ?>>
-<span id="el<?php echo $t_keg_master_list->RowCnt ?>_t_keg_master_kegm_id" class="t_keg_master_kegm_id">
-<span<?php echo $t_keg_master->kegm_id->ViewAttributes() ?>>
-<?php echo $t_keg_master->kegm_id->ListViewValue() ?></span>
-</span>
-<a id="<?php echo $t_keg_master_list->PageObjName . "_row_" . $t_keg_master_list->RowCnt ?>"></a></td>
-	<?php } ?>
 	<?php if ($t_keg_master->keg_id->Visible) { // keg_id ?>
 		<td data-name="keg_id"<?php echo $t_keg_master->keg_id->CellAttributes() ?>>
 <span id="el<?php echo $t_keg_master_list->RowCnt ?>_t_keg_master_keg_id" class="t_keg_master_keg_id">
 <span<?php echo $t_keg_master->keg_id->ViewAttributes() ?>>
 <?php echo $t_keg_master->keg_id->ListViewValue() ?></span>
 </span>
-</td>
+<a id="<?php echo $t_keg_master_list->PageObjName . "_row_" . $t_keg_master_list->RowCnt ?>"></a></td>
 	<?php } ?>
 	<?php if ($t_keg_master->tgl->Visible) { // tgl ?>
 		<td data-name="tgl"<?php echo $t_keg_master->tgl->CellAttributes() ?>>

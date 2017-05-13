@@ -388,7 +388,6 @@ class ct_keg_detai_view extends ct_keg_detai {
 		// Setup export options
 		$this->SetupExportOptions();
 		$this->pegawai_id->SetVisibility();
-		$this->kegm_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -788,11 +787,6 @@ class ct_keg_detai_view extends ct_keg_detai {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1359,17 +1353,6 @@ $t_keg_detai_view->ShowMessage();
 <span id="el_t_keg_detai_pegawai_id">
 <span<?php echo $t_keg_detai->pegawai_id->ViewAttributes() ?>>
 <?php echo $t_keg_detai->pegawai_id->ViewValue ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
-<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-	<tr id="r_kegm_id">
-		<td><span id="elh_t_keg_detai_kegm_id"><?php echo $t_keg_detai->kegm_id->FldCaption() ?></span></td>
-		<td data-name="kegm_id"<?php echo $t_keg_detai->kegm_id->CellAttributes() ?>>
-<span id="el_t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<?php echo $t_keg_detai->kegm_id->ViewValue ?></span>
 </span>
 </td>
 	</tr>

@@ -286,8 +286,6 @@ class ct_keg_master_edit extends ct_keg_master {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->kegm_id->SetVisibility();
-		$this->kegm_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->keg_id->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->shift->SetVisibility();
@@ -563,8 +561,6 @@ class ct_keg_master_edit extends ct_keg_master {
 
 		// Load from form
 		global $objForm;
-		if (!$this->kegm_id->FldIsDetailKey)
-			$this->kegm_id->setFormValue($objForm->GetValue("x_kegm_id"));
 		if (!$this->keg_id->FldIsDetailKey) {
 			$this->keg_id->setFormValue($objForm->GetValue("x_keg_id"));
 		}
@@ -578,6 +574,8 @@ class ct_keg_master_edit extends ct_keg_master {
 		if (!$this->hasil->FldIsDetailKey) {
 			$this->hasil->setFormValue($objForm->GetValue("x_hasil"));
 		}
+		if (!$this->kegm_id->FldIsDetailKey)
+			$this->kegm_id->setFormValue($objForm->GetValue("x_kegm_id"));
 	}
 
 	// Restore form values
@@ -738,11 +736,6 @@ class ct_keg_master_edit extends ct_keg_master {
 		$this->hasil->CellCssStyle .= "text-align: right;";
 		$this->hasil->ViewCustomAttributes = "";
 
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
-
 			// keg_id
 			$this->keg_id->LinkCustomAttributes = "";
 			$this->keg_id->HrefValue = "";
@@ -763,12 +756,6 @@ class ct_keg_master_edit extends ct_keg_master {
 			$this->hasil->HrefValue = "";
 			$this->hasil->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
-
-			// kegm_id
-			$this->kegm_id->EditAttrs["class"] = "form-control";
-			$this->kegm_id->EditCustomAttributes = "";
-			$this->kegm_id->EditValue = $this->kegm_id->CurrentValue;
-			$this->kegm_id->ViewCustomAttributes = "";
 
 			// keg_id
 			$this->keg_id->EditCustomAttributes = "";
@@ -812,12 +799,8 @@ class ct_keg_master_edit extends ct_keg_master {
 			$this->hasil->PlaceHolder = ew_RemoveHtml($this->hasil->FldCaption());
 
 			// Edit refer script
-			// kegm_id
-
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-
 			// keg_id
+
 			$this->keg_id->LinkCustomAttributes = "";
 			$this->keg_id->HrefValue = "";
 
@@ -1286,18 +1269,6 @@ $t_keg_master_edit->ShowMessage();
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <div>
-<?php if ($t_keg_master->kegm_id->Visible) { // kegm_id ?>
-	<div id="r_kegm_id" class="form-group">
-		<label id="elh_t_keg_master_kegm_id" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_master->kegm_id->FldCaption() ?></label>
-		<div class="col-sm-10"><div<?php echo $t_keg_master->kegm_id->CellAttributes() ?>>
-<span id="el_t_keg_master_kegm_id">
-<span<?php echo $t_keg_master->kegm_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_keg_master->kegm_id->EditValue ?></p></span>
-</span>
-<input type="hidden" data-table="t_keg_master" data-field="x_kegm_id" name="x_kegm_id" id="x_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_master->kegm_id->CurrentValue) ?>">
-<?php echo $t_keg_master->kegm_id->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 <?php if ($t_keg_master->keg_id->Visible) { // keg_id ?>
 	<div id="r_keg_id" class="form-group">
 		<label id="elh_t_keg_master_keg_id" for="x_keg_id" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_master->keg_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
@@ -1352,6 +1323,7 @@ ew_CreateCalendar("ft_keg_masteredit", "x_tgl", 0);
 	</div>
 <?php } ?>
 </div>
+<input type="hidden" data-table="t_keg_master" data-field="x_kegm_id" name="x_kegm_id" id="x_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_master->kegm_id->CurrentValue) ?>">
 <?php
 	if (in_array("t_keg_detai", explode(",", $t_keg_master->getCurrentDetailTable())) && $t_keg_detai->DetailEdit) {
 ?>

@@ -384,8 +384,6 @@ class ct_keg_master_view extends ct_keg_master {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->kegm_id->SetVisibility();
-		$this->kegm_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->keg_id->SetVisibility();
 		$this->tgl->SetVisibility();
 		$this->shift->SetVisibility();
@@ -880,11 +878,6 @@ class ct_keg_master_view extends ct_keg_master {
 		$this->hasil->ViewValue = ew_FormatNumber($this->hasil->ViewValue, 0, -2, -2, -2);
 		$this->hasil->CellCssStyle .= "text-align: right;";
 		$this->hasil->ViewCustomAttributes = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
 
 			// keg_id
 			$this->keg_id->LinkCustomAttributes = "";
@@ -1452,17 +1445,6 @@ $t_keg_master_view->ShowMessage();
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <table class="table table-bordered table-striped ewViewTable">
-<?php if ($t_keg_master->kegm_id->Visible) { // kegm_id ?>
-	<tr id="r_kegm_id">
-		<td><span id="elh_t_keg_master_kegm_id"><?php echo $t_keg_master->kegm_id->FldCaption() ?></span></td>
-		<td data-name="kegm_id"<?php echo $t_keg_master->kegm_id->CellAttributes() ?>>
-<span id="el_t_keg_master_kegm_id">
-<span<?php echo $t_keg_master->kegm_id->ViewAttributes() ?>>
-<?php echo $t_keg_master->kegm_id->ViewValue ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($t_keg_master->keg_id->Visible) { // keg_id ?>
 	<tr id="r_keg_id">
 		<td><span id="elh_t_keg_master_keg_id"><?php echo $t_keg_master->keg_id->FldCaption() ?></span></td>

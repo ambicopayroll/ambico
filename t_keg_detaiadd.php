@@ -290,7 +290,6 @@ class ct_keg_detai_add extends ct_keg_detai {
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->pegawai_id->SetVisibility();
-		$this->kegm_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -482,8 +481,6 @@ class ct_keg_detai_add extends ct_keg_detai {
 	function LoadDefaultValues() {
 		$this->pegawai_id->CurrentValue = NULL;
 		$this->pegawai_id->OldValue = $this->pegawai_id->CurrentValue;
-		$this->kegm_id->CurrentValue = NULL;
-		$this->kegm_id->OldValue = $this->kegm_id->CurrentValue;
 	}
 
 	// Load form values
@@ -494,9 +491,6 @@ class ct_keg_detai_add extends ct_keg_detai {
 		if (!$this->pegawai_id->FldIsDetailKey) {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
-		if (!$this->kegm_id->FldIsDetailKey) {
-			$this->kegm_id->setFormValue($objForm->GetValue("x_kegm_id"));
-		}
 	}
 
 	// Restore form values
@@ -504,7 +498,6 @@ class ct_keg_detai_add extends ct_keg_detai {
 		global $objForm;
 		$this->LoadOldRecord();
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
-		$this->kegm_id->CurrentValue = $this->kegm_id->FormValue;
 	}
 
 	// Load row based on key values
@@ -633,11 +626,6 @@ class ct_keg_detai_add extends ct_keg_detai {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// pegawai_id
@@ -665,27 +653,11 @@ class ct_keg_detai_add extends ct_keg_detai {
 			if ($rswrk) $rswrk->Close();
 			$this->pegawai_id->EditValue = $arwrk;
 
-			// kegm_id
-			$this->kegm_id->EditAttrs["class"] = "form-control";
-			$this->kegm_id->EditCustomAttributes = "";
-			if ($this->kegm_id->getSessionValue() <> "") {
-				$this->kegm_id->CurrentValue = $this->kegm_id->getSessionValue();
-			$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
-			$this->kegm_id->ViewCustomAttributes = "";
-			} else {
-			$this->kegm_id->EditValue = ew_HtmlEncode($this->kegm_id->CurrentValue);
-			$this->kegm_id->PlaceHolder = ew_RemoveHtml($this->kegm_id->FldCaption());
-			}
-
 			// Add refer script
 			// pegawai_id
 
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -710,12 +682,6 @@ class ct_keg_detai_add extends ct_keg_detai {
 			return ($gsFormError == "");
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
-		}
-		if (!$this->kegm_id->FldIsDetailKey && !is_null($this->kegm_id->FormValue) && $this->kegm_id->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->kegm_id->FldCaption(), $this->kegm_id->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->kegm_id->FormValue)) {
-			ew_AddMessage($gsFormError, $this->kegm_id->FldErrMsg());
 		}
 
 		// Return validate result
@@ -745,7 +711,9 @@ class ct_keg_detai_add extends ct_keg_detai {
 		$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, FALSE);
 
 		// kegm_id
-		$this->kegm_id->SetDbValueDef($rsnew, $this->kegm_id->CurrentValue, 0, FALSE);
+		if ($this->kegm_id->getSessionValue() <> "") {
+			$rsnew['kegm_id'] = $this->kegm_id->getSessionValue();
+		}
 
 		// Call Row Inserting event
 		$rs = ($rsold == NULL) ? NULL : $rsold->fields;
@@ -986,12 +954,6 @@ ft_keg_detaiadd.Validate = function() {
 			elm = this.GetElements("x" + infix + "_pegawai_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detai->pegawai_id->FldCaption(), $t_keg_detai->pegawai_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_kegm_id");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detai->kegm_id->FldCaption(), $t_keg_detai->kegm_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_kegm_id");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detai->kegm_id->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -1073,25 +1035,10 @@ $t_keg_detai_add->ShowMessage();
 <?php echo $t_keg_detai->pegawai_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-	<div id="r_kegm_id" class="form-group">
-		<label id="elh_t_keg_detai_kegm_id" for="x_kegm_id" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_detai->kegm_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_keg_detai->kegm_id->CellAttributes() ?>>
-<?php if ($t_keg_detai->kegm_id->getSessionValue() <> "") { ?>
-<span id="el_t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_keg_detai->kegm_id->ViewValue ?></p></span>
-</span>
-<input type="hidden" id="x_kegm_id" name="x_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->CurrentValue) ?>">
-<?php } else { ?>
-<span id="el_t_keg_detai_kegm_id">
-<input type="text" data-table="t_keg_detai" data-field="x_kegm_id" name="x_kegm_id" id="x_kegm_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->getPlaceHolder()) ?>" value="<?php echo $t_keg_detai->kegm_id->EditValue ?>"<?php echo $t_keg_detai->kegm_id->EditAttributes() ?>>
-</span>
-<?php } ?>
-<?php echo $t_keg_detai->kegm_id->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 </div>
+<?php if (strval($t_keg_detai->kegm_id->getSessionValue()) <> "") { ?>
+<input type="hidden" name="x_kegm_id" id="x_kegm_id" value="<?php echo ew_HtmlEncode(strval($t_keg_detai->kegm_id->getSessionValue())) ?>">
+<?php } ?>
 <?php if (!$t_keg_detai_add->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">

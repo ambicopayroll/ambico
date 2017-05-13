@@ -845,7 +845,6 @@ class ct_keg_master extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->kegm_id->Exportable) $Doc->ExportCaption($this->kegm_id);
 					if ($this->keg_id->Exportable) $Doc->ExportCaption($this->keg_id);
 					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->shift->Exportable) $Doc->ExportCaption($this->shift);
@@ -887,7 +886,6 @@ class ct_keg_master extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->kegm_id->Exportable) $Doc->ExportField($this->kegm_id);
 						if ($this->keg_id->Exportable) $Doc->ExportField($this->keg_id);
 						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->shift->Exportable) $Doc->ExportField($this->shift);

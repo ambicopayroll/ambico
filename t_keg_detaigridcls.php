@@ -313,7 +313,6 @@ class ct_keg_detai_grid extends ct_keg_detai {
 		// Set up list options
 		$this->SetupListOptions();
 		$this->pegawai_id->SetVisibility();
-		$this->kegm_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -802,8 +801,6 @@ class ct_keg_detai_grid extends ct_keg_detai {
 		global $objForm;
 		if ($objForm->HasValue("x_pegawai_id") && $objForm->HasValue("o_pegawai_id") && $this->pegawai_id->CurrentValue <> $this->pegawai_id->OldValue)
 			return FALSE;
-		if ($objForm->HasValue("x_kegm_id") && $objForm->HasValue("o_kegm_id") && $this->kegm_id->CurrentValue <> $this->kegm_id->OldValue)
-			return FALSE;
 		return TRUE;
 	}
 
@@ -1163,8 +1160,6 @@ class ct_keg_detai_grid extends ct_keg_detai {
 	function LoadDefaultValues() {
 		$this->pegawai_id->CurrentValue = NULL;
 		$this->pegawai_id->OldValue = $this->pegawai_id->CurrentValue;
-		$this->kegm_id->CurrentValue = NULL;
-		$this->kegm_id->OldValue = $this->kegm_id->CurrentValue;
 	}
 
 	// Load form values
@@ -1177,10 +1172,6 @@ class ct_keg_detai_grid extends ct_keg_detai {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
 		$this->pegawai_id->setOldValue($objForm->GetValue("o_pegawai_id"));
-		if (!$this->kegm_id->FldIsDetailKey) {
-			$this->kegm_id->setFormValue($objForm->GetValue("x_kegm_id"));
-		}
-		$this->kegm_id->setOldValue($objForm->GetValue("o_kegm_id"));
 		if (!$this->kegd_id->FldIsDetailKey && $this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
 			$this->kegd_id->setFormValue($objForm->GetValue("x_kegd_id"));
 	}
@@ -1191,7 +1182,6 @@ class ct_keg_detai_grid extends ct_keg_detai {
 		if ($this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
 			$this->kegd_id->CurrentValue = $this->kegd_id->FormValue;
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
-		$this->kegm_id->CurrentValue = $this->kegm_id->FormValue;
 	}
 
 	// Load recordset
@@ -1356,11 +1346,6 @@ class ct_keg_detai_grid extends ct_keg_detai {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// pegawai_id
@@ -1388,28 +1373,11 @@ class ct_keg_detai_grid extends ct_keg_detai {
 			if ($rswrk) $rswrk->Close();
 			$this->pegawai_id->EditValue = $arwrk;
 
-			// kegm_id
-			$this->kegm_id->EditAttrs["class"] = "form-control";
-			$this->kegm_id->EditCustomAttributes = "";
-			if ($this->kegm_id->getSessionValue() <> "") {
-				$this->kegm_id->CurrentValue = $this->kegm_id->getSessionValue();
-				$this->kegm_id->OldValue = $this->kegm_id->CurrentValue;
-			$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
-			$this->kegm_id->ViewCustomAttributes = "";
-			} else {
-			$this->kegm_id->EditValue = ew_HtmlEncode($this->kegm_id->CurrentValue);
-			$this->kegm_id->PlaceHolder = ew_RemoveHtml($this->kegm_id->FldCaption());
-			}
-
 			// Add refer script
 			// pegawai_id
 
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// pegawai_id
@@ -1437,28 +1405,11 @@ class ct_keg_detai_grid extends ct_keg_detai {
 			if ($rswrk) $rswrk->Close();
 			$this->pegawai_id->EditValue = $arwrk;
 
-			// kegm_id
-			$this->kegm_id->EditAttrs["class"] = "form-control";
-			$this->kegm_id->EditCustomAttributes = "";
-			if ($this->kegm_id->getSessionValue() <> "") {
-				$this->kegm_id->CurrentValue = $this->kegm_id->getSessionValue();
-				$this->kegm_id->OldValue = $this->kegm_id->CurrentValue;
-			$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
-			$this->kegm_id->ViewCustomAttributes = "";
-			} else {
-			$this->kegm_id->EditValue = ew_HtmlEncode($this->kegm_id->CurrentValue);
-			$this->kegm_id->PlaceHolder = ew_RemoveHtml($this->kegm_id->FldCaption());
-			}
-
 			// Edit refer script
 			// pegawai_id
 
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1480,12 +1431,6 @@ class ct_keg_detai_grid extends ct_keg_detai {
 			return ($gsFormError == "");
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
-		}
-		if (!$this->kegm_id->FldIsDetailKey && !is_null($this->kegm_id->FormValue) && $this->kegm_id->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->kegm_id->FldCaption(), $this->kegm_id->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->kegm_id->FormValue)) {
-			ew_AddMessage($gsFormError, $this->kegm_id->FldErrMsg());
 		}
 
 		// Return validate result
@@ -1608,9 +1553,6 @@ class ct_keg_detai_grid extends ct_keg_detai {
 			// pegawai_id
 			$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, $this->pegawai_id->ReadOnly);
 
-			// kegm_id
-			$this->kegm_id->SetDbValueDef($rsnew, $this->kegm_id->CurrentValue, 0, $this->kegm_id->ReadOnly);
-
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
 			if ($bUpdateRow) {
@@ -1663,7 +1605,9 @@ class ct_keg_detai_grid extends ct_keg_detai {
 		$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, FALSE);
 
 		// kegm_id
-		$this->kegm_id->SetDbValueDef($rsnew, $this->kegm_id->CurrentValue, 0, FALSE);
+		if ($this->kegm_id->getSessionValue() <> "") {
+			$rsnew['kegm_id'] = $this->kegm_id->getSessionValue();
+		}
 
 		// Call Row Inserting event
 		$rs = ($rsold == NULL) ? NULL : $rsold->fields;

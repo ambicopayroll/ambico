@@ -287,7 +287,6 @@ class ct_keg_detai_delete extends ct_keg_detai {
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->pegawai_id->SetVisibility();
-		$this->kegm_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -539,11 +538,6 @@ class ct_keg_detai_delete extends ct_keg_detai {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -861,9 +855,6 @@ $t_keg_detai_delete->ShowMessage();
 <?php if ($t_keg_detai->pegawai_id->Visible) { // pegawai_id ?>
 		<th><span id="elh_t_keg_detai_pegawai_id" class="t_keg_detai_pegawai_id"><?php echo $t_keg_detai->pegawai_id->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-		<th><span id="elh_t_keg_detai_kegm_id" class="t_keg_detai_kegm_id"><?php echo $t_keg_detai->kegm_id->FldCaption() ?></span></th>
-<?php } ?>
 	</tr>
 	</thead>
 	<tbody>
@@ -890,14 +881,6 @@ while (!$t_keg_detai_delete->Recordset->EOF) {
 <span id="el<?php echo $t_keg_detai_delete->RowCnt ?>_t_keg_detai_pegawai_id" class="t_keg_detai_pegawai_id">
 <span<?php echo $t_keg_detai->pegawai_id->ViewAttributes() ?>>
 <?php echo $t_keg_detai->pegawai_id->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-		<td<?php echo $t_keg_detai->kegm_id->CellAttributes() ?>>
-<span id="el<?php echo $t_keg_detai_delete->RowCnt ?>_t_keg_detai_kegm_id" class="t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<?php echo $t_keg_detai->kegm_id->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

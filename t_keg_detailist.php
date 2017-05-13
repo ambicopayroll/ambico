@@ -415,7 +415,6 @@ class ct_keg_detai_list extends ct_keg_detai {
 		// Setup export options
 		$this->SetupExportOptions();
 		$this->pegawai_id->SetVisibility();
-		$this->kegm_id->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -741,7 +740,6 @@ class ct_keg_detai_list extends ct_keg_detai {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
 			$this->UpdateSort($this->pegawai_id, $bCtrl); // pegawai_id
-			$this->UpdateSort($this->kegm_id, $bCtrl); // kegm_id
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -780,7 +778,6 @@ class ct_keg_detai_list extends ct_keg_detai {
 				$this->setSessionOrderBy($sOrderBy);
 				$this->setSessionOrderByList($sOrderBy);
 				$this->pegawai_id->setSort("");
-				$this->kegm_id->setSort("");
 			}
 
 			// Reset start position
@@ -1317,11 +1314,6 @@ class ct_keg_detai_list extends ct_keg_detai {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
-
-			// kegm_id
-			$this->kegm_id->LinkCustomAttributes = "";
-			$this->kegm_id->HrefValue = "";
-			$this->kegm_id->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -2047,15 +2039,6 @@ $t_keg_detai_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-	<?php if ($t_keg_detai->SortUrl($t_keg_detai->kegm_id) == "") { ?>
-		<th data-name="kegm_id"><div id="elh_t_keg_detai_kegm_id" class="t_keg_detai_kegm_id"><div class="ewTableHeaderCaption"><?php echo $t_keg_detai->kegm_id->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="kegm_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_keg_detai->SortUrl($t_keg_detai->kegm_id) ?>',2);"><div id="elh_t_keg_detai_kegm_id" class="t_keg_detai_kegm_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detai->kegm_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detai->kegm_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detai->kegm_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -2128,14 +2111,6 @@ $t_keg_detai_list->ListOptions->Render("body", "left", $t_keg_detai_list->RowCnt
 <?php echo $t_keg_detai->pegawai_id->ListViewValue() ?></span>
 </span>
 <a id="<?php echo $t_keg_detai_list->PageObjName . "_row_" . $t_keg_detai_list->RowCnt ?>"></a></td>
-	<?php } ?>
-	<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
-		<td data-name="kegm_id"<?php echo $t_keg_detai->kegm_id->CellAttributes() ?>>
-<span id="el<?php echo $t_keg_detai_list->RowCnt ?>_t_keg_detai_kegm_id" class="t_keg_detai_kegm_id">
-<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
-<?php echo $t_keg_detai->kegm_id->ListViewValue() ?></span>
-</span>
-</td>
 	<?php } ?>
 <?php
 
