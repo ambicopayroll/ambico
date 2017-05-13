@@ -310,6 +310,12 @@ class cdefault {
 			$this->Page_Terminate("t_hariliburlist.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_lembur'))
 			$this->Page_Terminate("t_lemburlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_keg_detai'))
+			$this->Page_Terminate("t_keg_detailist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_keg_master'))
+			$this->Page_Terminate("t_keg_masterlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_kegiatan'))
+			$this->Page_Terminate("t_kegiatanlist.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {
