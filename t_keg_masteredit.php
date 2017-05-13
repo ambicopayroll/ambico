@@ -7,6 +7,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "phpfn13.php" ?>
 <?php include_once "t_keg_masterinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
+<?php include_once "t_keg_detaigridcls.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -307,6 +308,14 @@ class ct_keg_master_edit extends ct_keg_master {
 
 		// Process auto fill
 		if (@$_POST["ajax"] == "autofill") {
+
+			// Process auto fill for detail table 't_keg_detai'
+			if (@$_POST["grid"] == "ft_keg_detaigrid") {
+				if (!isset($GLOBALS["t_keg_detai_grid"])) $GLOBALS["t_keg_detai_grid"] = new ct_keg_detai_grid;
+				$GLOBALS["t_keg_detai_grid"]->Page_Init();
+				$this->Page_Terminate();
+				exit();
+			}
 			$results = $this->GetAutoFill(@$_POST["name"], @$_POST["q"]);
 			if ($results) {
 
@@ -445,6 +454,9 @@ class ct_keg_master_edit extends ct_keg_master {
 		if (@$_POST["a_edit"] <> "") {
 			$this->CurrentAction = $_POST["a_edit"]; // Get action code
 			$this->LoadFormValues(); // Get form values
+
+			// Set up detail parameters
+			$this->SetUpDetailParms();
 		} else {
 			$this->CurrentAction = "I"; // Default action is display
 		}
@@ -467,9 +479,15 @@ class ct_keg_master_edit extends ct_keg_master {
 				} else {
 					$this->LoadRowValues($this->Recordset); // Load row values
 				}
+
+				// Set up detail parameters
+				$this->SetUpDetailParms();
 				break;
 			Case "U": // Update
-				$sReturnUrl = $this->getReturnUrl();
+				if ($this->getCurrentDetailTable() <> "") // Master/detail edit
+					$sReturnUrl = $this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=" . $this->getCurrentDetailTable()); // Master/Detail view page
+				else
+					$sReturnUrl = $this->getReturnUrl();
 				if (ew_GetPageName($sReturnUrl) == "t_keg_masterlist.php")
 					$sReturnUrl = $this->AddMasterUrl($sReturnUrl); // List page, return to list page with correct master key if necessary
 				$this->SendEmail = TRUE; // Send email on update success
@@ -482,6 +500,9 @@ class ct_keg_master_edit extends ct_keg_master {
 				} else {
 					$this->EventCancelled = TRUE; // Event cancelled
 					$this->RestoreFormValues(); // Restore form values if update failed
+
+					// Set up detail parameters
+					$this->SetUpDetailParms();
 				}
 		}
 
@@ -583,7 +604,7 @@ class ct_keg_master_edit extends ct_keg_master {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -628,6 +649,11 @@ class ct_keg_master_edit extends ct_keg_master {
 		$this->Row_Selected($row);
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
 		$this->keg_id->setDbValue($rs->fields('keg_id'));
+		if (array_key_exists('EV__keg_id', $rs->fields)) {
+			$this->keg_id->VirtualValue = $rs->fields('EV__keg_id'); // Set up virtual field value
+		} else {
+			$this->keg_id->VirtualValue = ""; // Clear value
+		}
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->shift->setDbValue($rs->fields('shift'));
 		$this->hasil->setDbValue($rs->fields('hasil'));
@@ -667,7 +693,30 @@ class ct_keg_master_edit extends ct_keg_master {
 		$this->kegm_id->ViewCustomAttributes = "";
 
 		// keg_id
-		$this->keg_id->ViewValue = $this->keg_id->CurrentValue;
+		if ($this->keg_id->VirtualValue <> "") {
+			$this->keg_id->ViewValue = $this->keg_id->VirtualValue;
+		} else {
+		if (strval($this->keg_id->CurrentValue) <> "") {
+			$sFilterWrk = "`keg_id`" . ew_SearchString("=", $this->keg_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `keg_id`, `keg_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_kegiatan`";
+		$sWhereWrk = "";
+		$this->keg_id->LookupFilters = array("dx1" => '`keg_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->keg_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->keg_id->ViewValue = $this->keg_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->keg_id->ViewValue = $this->keg_id->CurrentValue;
+			}
+		} else {
+			$this->keg_id->ViewValue = NULL;
+		}
+		}
 		$this->keg_id->ViewCustomAttributes = "";
 
 		// tgl
@@ -676,11 +725,17 @@ class ct_keg_master_edit extends ct_keg_master {
 		$this->tgl->ViewCustomAttributes = "";
 
 		// shift
-		$this->shift->ViewValue = $this->shift->CurrentValue;
+		if (strval($this->shift->CurrentValue) <> "") {
+			$this->shift->ViewValue = $this->shift->OptionCaption($this->shift->CurrentValue);
+		} else {
+			$this->shift->ViewValue = NULL;
+		}
 		$this->shift->ViewCustomAttributes = "";
 
 		// hasil
 		$this->hasil->ViewValue = $this->hasil->CurrentValue;
+		$this->hasil->ViewValue = ew_FormatNumber($this->hasil->ViewValue, 0, -2, -2, -2);
+		$this->hasil->CellCssStyle .= "text-align: right;";
 		$this->hasil->ViewCustomAttributes = "";
 
 			// kegm_id
@@ -716,10 +771,29 @@ class ct_keg_master_edit extends ct_keg_master {
 			$this->kegm_id->ViewCustomAttributes = "";
 
 			// keg_id
-			$this->keg_id->EditAttrs["class"] = "form-control";
 			$this->keg_id->EditCustomAttributes = "";
-			$this->keg_id->EditValue = ew_HtmlEncode($this->keg_id->CurrentValue);
-			$this->keg_id->PlaceHolder = ew_RemoveHtml($this->keg_id->FldCaption());
+			if (trim(strval($this->keg_id->CurrentValue)) == "") {
+				$sFilterWrk = "0=1";
+			} else {
+				$sFilterWrk = "`keg_id`" . ew_SearchString("=", $this->keg_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			}
+			$sSqlWrk = "SELECT `keg_id`, `keg_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `t_kegiatan`";
+			$sWhereWrk = "";
+			$this->keg_id->LookupFilters = array("dx1" => '`keg_nama`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->keg_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+				$this->keg_id->ViewValue = $this->keg_id->DisplayValue($arwrk);
+			} else {
+				$this->keg_id->ViewValue = $Language->Phrase("PleaseSelect");
+			}
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			$this->keg_id->EditValue = $arwrk;
 
 			// tgl
 			$this->tgl->EditAttrs["class"] = "form-control";
@@ -728,10 +802,8 @@ class ct_keg_master_edit extends ct_keg_master {
 			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 			// shift
-			$this->shift->EditAttrs["class"] = "form-control";
 			$this->shift->EditCustomAttributes = "";
-			$this->shift->EditValue = ew_HtmlEncode($this->shift->CurrentValue);
-			$this->shift->PlaceHolder = ew_RemoveHtml($this->shift->FldCaption());
+			$this->shift->EditValue = $this->shift->Options(FALSE);
 
 			// hasil
 			$this->hasil->EditAttrs["class"] = "form-control";
@@ -785,26 +857,27 @@ class ct_keg_master_edit extends ct_keg_master {
 		if (!$this->keg_id->FldIsDetailKey && !is_null($this->keg_id->FormValue) && $this->keg_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->keg_id->FldCaption(), $this->keg_id->ReqErrMsg));
 		}
-		if (!ew_CheckInteger($this->keg_id->FormValue)) {
-			ew_AddMessage($gsFormError, $this->keg_id->FldErrMsg());
-		}
 		if (!$this->tgl->FldIsDetailKey && !is_null($this->tgl->FormValue) && $this->tgl->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl->FldCaption(), $this->tgl->ReqErrMsg));
 		}
 		if (!ew_CheckDateDef($this->tgl->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl->FldErrMsg());
 		}
-		if (!$this->shift->FldIsDetailKey && !is_null($this->shift->FormValue) && $this->shift->FormValue == "") {
+		if ($this->shift->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->shift->FldCaption(), $this->shift->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->shift->FormValue)) {
-			ew_AddMessage($gsFormError, $this->shift->FldErrMsg());
 		}
 		if (!$this->hasil->FldIsDetailKey && !is_null($this->hasil->FormValue) && $this->hasil->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->hasil->FldCaption(), $this->hasil->ReqErrMsg));
 		}
 		if (!ew_CheckInteger($this->hasil->FormValue)) {
 			ew_AddMessage($gsFormError, $this->hasil->FldErrMsg());
+		}
+
+		// Validate detail grid
+		$DetailTblVar = explode(",", $this->getCurrentDetailTable());
+		if (in_array("t_keg_detai", $DetailTblVar) && $GLOBALS["t_keg_detai"]->DetailEdit) {
+			if (!isset($GLOBALS["t_keg_detai_grid"])) $GLOBALS["t_keg_detai_grid"] = new ct_keg_detai_grid(); // get detail page object
+			$GLOBALS["t_keg_detai_grid"]->ValidateGridForm();
 		}
 
 		// Return validate result
@@ -837,6 +910,10 @@ class ct_keg_master_edit extends ct_keg_master {
 			$EditRow = FALSE; // Update Failed
 		} else {
 
+			// Begin transaction
+			if ($this->getCurrentDetailTable() <> "")
+				$conn->BeginTrans();
+
 			// Save old values
 			$rsold = &$rs->fields;
 			$this->LoadDbValues($rsold);
@@ -865,6 +942,26 @@ class ct_keg_master_edit extends ct_keg_master {
 				$conn->raiseErrorFn = '';
 				if ($EditRow) {
 				}
+
+				// Update detail records
+				$DetailTblVar = explode(",", $this->getCurrentDetailTable());
+				if ($EditRow) {
+					if (in_array("t_keg_detai", $DetailTblVar) && $GLOBALS["t_keg_detai"]->DetailEdit) {
+						if (!isset($GLOBALS["t_keg_detai_grid"])) $GLOBALS["t_keg_detai_grid"] = new ct_keg_detai_grid(); // Get detail page object
+						$Security->LoadCurrentUserLevel($this->ProjectID . "t_keg_detai"); // Load user level of detail table
+						$EditRow = $GLOBALS["t_keg_detai_grid"]->GridUpdate();
+						$Security->LoadCurrentUserLevel($this->ProjectID . $this->TableName); // Restore user level of master table
+					}
+				}
+
+				// Commit/Rollback transaction
+				if ($this->getCurrentDetailTable() <> "") {
+					if ($EditRow) {
+						$conn->CommitTrans(); // Commit transaction
+					} else {
+						$conn->RollbackTrans(); // Rollback transaction
+					}
+				}
 			} else {
 				if ($this->getSuccessMessage() <> "" || $this->getFailureMessage() <> "") {
 
@@ -886,6 +983,36 @@ class ct_keg_master_edit extends ct_keg_master {
 		return $EditRow;
 	}
 
+	// Set up detail parms based on QueryString
+	function SetUpDetailParms() {
+
+		// Get the keys for master table
+		if (isset($_GET[EW_TABLE_SHOW_DETAIL])) {
+			$sDetailTblVar = $_GET[EW_TABLE_SHOW_DETAIL];
+			$this->setCurrentDetailTable($sDetailTblVar);
+		} else {
+			$sDetailTblVar = $this->getCurrentDetailTable();
+		}
+		if ($sDetailTblVar <> "") {
+			$DetailTblVar = explode(",", $sDetailTblVar);
+			if (in_array("t_keg_detai", $DetailTblVar)) {
+				if (!isset($GLOBALS["t_keg_detai_grid"]))
+					$GLOBALS["t_keg_detai_grid"] = new ct_keg_detai_grid;
+				if ($GLOBALS["t_keg_detai_grid"]->DetailEdit) {
+					$GLOBALS["t_keg_detai_grid"]->CurrentMode = "edit";
+					$GLOBALS["t_keg_detai_grid"]->CurrentAction = "gridedit";
+
+					// Save current master table to detail table
+					$GLOBALS["t_keg_detai_grid"]->setCurrentMasterTable($this->TableVar);
+					$GLOBALS["t_keg_detai_grid"]->setStartRecordNumber(1);
+					$GLOBALS["t_keg_detai_grid"]->kegm_id->FldIsDetailKey = TRUE;
+					$GLOBALS["t_keg_detai_grid"]->kegm_id->CurrentValue = $this->kegm_id->CurrentValue;
+					$GLOBALS["t_keg_detai_grid"]->kegm_id->setSessionValue($GLOBALS["t_keg_detai_grid"]->kegm_id->CurrentValue);
+				}
+			}
+		}
+	}
+
 	// Set up Breadcrumb
 	function SetupBreadcrumb() {
 		global $Breadcrumb, $Language;
@@ -901,6 +1028,18 @@ class ct_keg_master_edit extends ct_keg_master {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
+		case "x_keg_id":
+			$sSqlWrk = "";
+			$sSqlWrk = "SELECT `keg_id` AS `LinkFld`, `keg_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_kegiatan`";
+			$sWhereWrk = "{filter}";
+			$this->keg_id->LookupFilters = array("dx1" => '`keg_nama`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`keg_id` = {filter_value}', "t0" => "3", "fn0" => "");
+			$sSqlWrk = "";
+			$this->Lookup_Selecting($this->keg_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			if ($sSqlWrk <> "")
+				$fld->LookupFilters["s"] .= $sSqlWrk;
+			break;
 		}
 	}
 
@@ -1023,9 +1162,6 @@ ft_keg_masteredit.Validate = function() {
 			elm = this.GetElements("x" + infix + "_keg_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_master->keg_id->FldCaption(), $t_keg_master->keg_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_keg_id");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_master->keg_id->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_tgl");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_master->tgl->FldCaption(), $t_keg_master->tgl->ReqErrMsg)) ?>");
@@ -1035,9 +1171,6 @@ ft_keg_masteredit.Validate = function() {
 			elm = this.GetElements("x" + infix + "_shift");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_master->shift->FldCaption(), $t_keg_master->shift->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_shift");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_master->shift->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_hasil");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_master->hasil->FldCaption(), $t_keg_master->hasil->ReqErrMsg)) ?>");
@@ -1077,8 +1210,11 @@ ft_keg_masteredit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ft_keg_masteredit.Lists["x_keg_id"] = {"LinkField":"x_keg_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_keg_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_kegiatan"};
+ft_keg_masteredit.Lists["x_shift"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ft_keg_masteredit.Lists["x_shift"].Options = <?php echo json_encode($t_keg_master->shift->Options()) ?>;
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -1167,7 +1303,12 @@ $t_keg_master_edit->ShowMessage();
 		<label id="elh_t_keg_master_keg_id" for="x_keg_id" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_master->keg_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $t_keg_master->keg_id->CellAttributes() ?>>
 <span id="el_t_keg_master_keg_id">
-<input type="text" data-table="t_keg_master" data-field="x_keg_id" name="x_keg_id" id="x_keg_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_keg_master->keg_id->getPlaceHolder()) ?>" value="<?php echo $t_keg_master->keg_id->EditValue ?>"<?php echo $t_keg_master->keg_id->EditAttributes() ?>>
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_keg_id"><?php echo (strval($t_keg_master->keg_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_keg_master->keg_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_keg_master->keg_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_keg_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_keg_master" data-field="x_keg_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_keg_master->keg_id->DisplayValueSeparatorAttribute() ?>" name="x_keg_id" id="x_keg_id" value="<?php echo $t_keg_master->keg_id->CurrentValue ?>"<?php echo $t_keg_master->keg_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_keg_id" id="s_x_keg_id" value="<?php echo $t_keg_master->keg_id->LookupFilterQuery() ?>">
 </span>
 <?php echo $t_keg_master->keg_id->CustomMsg ?></div></div>
 	</div>
@@ -1184,10 +1325,13 @@ $t_keg_master_edit->ShowMessage();
 <?php } ?>
 <?php if ($t_keg_master->shift->Visible) { // shift ?>
 	<div id="r_shift" class="form-group">
-		<label id="elh_t_keg_master_shift" for="x_shift" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_master->shift->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<label id="elh_t_keg_master_shift" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_master->shift->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $t_keg_master->shift->CellAttributes() ?>>
 <span id="el_t_keg_master_shift">
-<input type="text" data-table="t_keg_master" data-field="x_shift" name="x_shift" id="x_shift" size="30" placeholder="<?php echo ew_HtmlEncode($t_keg_master->shift->getPlaceHolder()) ?>" value="<?php echo $t_keg_master->shift->EditValue ?>"<?php echo $t_keg_master->shift->EditAttributes() ?>>
+<div id="tp_x_shift" class="ewTemplate"><input type="radio" data-table="t_keg_master" data-field="x_shift" data-value-separator="<?php echo $t_keg_master->shift->DisplayValueSeparatorAttribute() ?>" name="x_shift" id="x_shift" value="{value}"<?php echo $t_keg_master->shift->EditAttributes() ?>></div>
+<div id="dsl_x_shift" data-repeatcolumn="5" class="ewItemList" style="display: none;"><div>
+<?php echo $t_keg_master->shift->RadioButtonListHtml(FALSE, "x_shift") ?>
+</div></div>
 </span>
 <?php echo $t_keg_master->shift->CustomMsg ?></div></div>
 	</div>
@@ -1203,6 +1347,14 @@ $t_keg_master_edit->ShowMessage();
 	</div>
 <?php } ?>
 </div>
+<?php
+	if (in_array("t_keg_detai", explode(",", $t_keg_master->getCurrentDetailTable())) && $t_keg_detai->DetailEdit) {
+?>
+<?php if ($t_keg_master->getCurrentDetailTable() <> "") { ?>
+<h4 class="ewDetailCaption"><?php echo $Language->TablePhrase("t_keg_detai", "TblCaption") ?></h4>
+<?php } ?>
+<?php include_once "t_keg_detaigrid.php" ?>
+<?php } ?>
 <?php if (!$t_keg_master_edit->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">

@@ -7,6 +7,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "phpfn13.php" ?>
 <?php include_once "t_keg_masterinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
+<?php include_once "t_keg_detaigridcls.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -280,7 +281,7 @@ class ct_keg_master_list extends ct_keg_master {
 		$this->ExportXmlUrl = $this->PageUrl() . "export=xml";
 		$this->ExportCsvUrl = $this->PageUrl() . "export=csv";
 		$this->ExportPdfUrl = $this->PageUrl() . "export=pdf";
-		$this->AddUrl = "t_keg_masteradd.php";
+		$this->AddUrl = "t_keg_masteradd.php?" . EW_TABLE_SHOW_DETAIL . "=";
 		$this->InlineAddUrl = $this->PageUrl() . "a=add";
 		$this->GridAddUrl = $this->PageUrl() . "a=gridadd";
 		$this->GridEditUrl = $this->PageUrl() . "a=gridedit";
@@ -432,6 +433,14 @@ class ct_keg_master_list extends ct_keg_master {
 
 		// Process auto fill
 		if (@$_POST["ajax"] == "autofill") {
+
+			// Process auto fill for detail table 't_keg_detai'
+			if (@$_POST["grid"] == "ft_keg_detaigrid") {
+				if (!isset($GLOBALS["t_keg_detai_grid"])) $GLOBALS["t_keg_detai_grid"] = new ct_keg_detai_grid;
+				$GLOBALS["t_keg_detai_grid"]->Page_Init();
+				$this->Page_Terminate();
+				exit();
+			}
 			$results = $this->GetAutoFill(@$_POST["name"], @$_POST["q"]);
 			if ($results) {
 
@@ -750,6 +759,7 @@ class ct_keg_master_list extends ct_keg_master {
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
+				$this->setSessionOrderByList($sOrderBy);
 				$this->kegm_id->setSort("");
 				$this->keg_id->setSort("");
 				$this->tgl->setSort("");
@@ -791,6 +801,28 @@ class ct_keg_master_list extends ct_keg_master {
 		$item->Visible = $Security->CanAdd();
 		$item->OnLeft = TRUE;
 
+		// "detail_t_keg_detai"
+		$item = &$this->ListOptions->Add("detail_t_keg_detai");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->AllowList(CurrentProjectID() . 't_keg_detai') && !$this->ShowMultipleDetails;
+		$item->OnLeft = TRUE;
+		$item->ShowInButtonGroup = FALSE;
+		if (!isset($GLOBALS["t_keg_detai_grid"])) $GLOBALS["t_keg_detai_grid"] = new ct_keg_detai_grid;
+
+		// Multiple details
+		if ($this->ShowMultipleDetails) {
+			$item = &$this->ListOptions->Add("details");
+			$item->CssStyle = "white-space: nowrap;";
+			$item->Visible = $this->ShowMultipleDetails;
+			$item->OnLeft = TRUE;
+			$item->ShowInButtonGroup = FALSE;
+		}
+
+		// Set up detail pages
+		$pages = new cSubPages();
+		$pages->Add("t_keg_detai");
+		$this->DetailPages = $pages;
+
 		// List actions
 		$item = &$this->ListOptions->Add("listactions");
 		$item->CssStyle = "white-space: nowrap;";
@@ -805,6 +837,14 @@ class ct_keg_master_list extends ct_keg_master {
 		$item->OnLeft = TRUE;
 		$item->Header = "<input type=\"checkbox\" name=\"key\" id=\"key\" onclick=\"ew_SelectAllKey(this);\">";
 		$item->MoveTo(0);
+		$item->ShowInDropDown = FALSE;
+		$item->ShowInButtonGroup = FALSE;
+
+		// "sequence"
+		$item = &$this->ListOptions->Add("sequence");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = TRUE;
+		$item->OnLeft = TRUE; // Always on left
 		$item->ShowInDropDown = FALSE;
 		$item->ShowInButtonGroup = FALSE;
 
@@ -828,6 +868,10 @@ class ct_keg_master_list extends ct_keg_master {
 	function RenderListOptions() {
 		global $Security, $Language, $objForm;
 		$this->ListOptions->LoadDefault();
+
+		// "sequence"
+		$oListOpt = &$this->ListOptions->Items["sequence"];
+		$oListOpt->Body = ew_FormatSeqNo($this->RecCnt);
 
 		// "view"
 		$oListOpt = &$this->ListOptions->Items["view"];
@@ -884,6 +928,62 @@ class ct_keg_master_list extends ct_keg_master {
 				$oListOpt->Visible = TRUE;
 			}
 		}
+		$DetailViewTblVar = "";
+		$DetailCopyTblVar = "";
+		$DetailEditTblVar = "";
+
+		// "detail_t_keg_detai"
+		$oListOpt = &$this->ListOptions->Items["detail_t_keg_detai"];
+		if ($Security->AllowList(CurrentProjectID() . 't_keg_detai')) {
+			$body = $Language->Phrase("DetailLink") . $Language->TablePhrase("t_keg_detai", "TblCaption");
+			$body = "<a class=\"btn btn-default btn-sm ewRowLink ewDetail\" data-action=\"list\" href=\"" . ew_HtmlEncode("t_keg_detailist.php?" . EW_TABLE_SHOW_MASTER . "=t_keg_master&fk_kegm_id=" . urlencode(strval($this->kegm_id->CurrentValue)) . "") . "\">" . $body . "</a>";
+			$links = "";
+			if ($GLOBALS["t_keg_detai_grid"]->DetailView && $Security->CanView() && $Security->AllowView(CurrentProjectID() . 't_keg_detai')) {
+				$links .= "<li><a class=\"ewRowLink ewDetailView\" data-action=\"view\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . ew_HtmlEncode($this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=t_keg_detai")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
+				if ($DetailViewTblVar <> "") $DetailViewTblVar .= ",";
+				$DetailViewTblVar .= "t_keg_detai";
+			}
+			if ($GLOBALS["t_keg_detai_grid"]->DetailEdit && $Security->CanEdit() && $Security->AllowEdit(CurrentProjectID() . 't_keg_detai')) {
+				$links .= "<li><a class=\"ewRowLink ewDetailEdit\" data-action=\"edit\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . ew_HtmlEncode($this->GetEditUrl(EW_TABLE_SHOW_DETAIL . "=t_keg_detai")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
+				if ($DetailEditTblVar <> "") $DetailEditTblVar .= ",";
+				$DetailEditTblVar .= "t_keg_detai";
+			}
+			if ($GLOBALS["t_keg_detai_grid"]->DetailAdd && $Security->CanAdd() && $Security->AllowAdd(CurrentProjectID() . 't_keg_detai')) {
+				$links .= "<li><a class=\"ewRowLink ewDetailCopy\" data-action=\"add\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . ew_HtmlEncode($this->GetCopyUrl(EW_TABLE_SHOW_DETAIL . "=t_keg_detai")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
+				if ($DetailCopyTblVar <> "") $DetailCopyTblVar .= ",";
+				$DetailCopyTblVar .= "t_keg_detai";
+			}
+			if ($links <> "") {
+				$body .= "<button class=\"dropdown-toggle btn btn-default btn-sm ewDetail\" data-toggle=\"dropdown\"><b class=\"caret\"></b></button>";
+				$body .= "<ul class=\"dropdown-menu\">". $links . "</ul>";
+			}
+			$body = "<div class=\"btn-group\">" . $body . "</div>";
+			$oListOpt->Body = $body;
+			if ($this->ShowMultipleDetails) $oListOpt->Visible = FALSE;
+		}
+		if ($this->ShowMultipleDetails) {
+			$body = $Language->Phrase("MultipleMasterDetails");
+			$body = "<div class=\"btn-group\">";
+			$links = "";
+			if ($DetailViewTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailView\" data-action=\"view\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . ew_HtmlEncode($this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailViewTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
+			}
+			if ($DetailEditTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailEdit\" data-action=\"edit\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . ew_HtmlEncode($this->GetEditUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailEditTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
+			}
+			if ($DetailCopyTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailCopy\" data-action=\"add\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . ew_HtmlEncode($this->GetCopyUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailCopyTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
+			}
+			if ($links <> "") {
+				$body .= "<button class=\"dropdown-toggle btn btn-default btn-sm ewMasterDetail\" title=\"" . ew_HtmlTitle($Language->Phrase("MultipleMasterDetails")) . "\" data-toggle=\"dropdown\">" . $Language->Phrase("MultipleMasterDetails") . "<b class=\"caret\"></b></button>";
+				$body .= "<ul class=\"dropdown-menu ewMenu\">". $links . "</ul>";
+			}
+			$body .= "</div>";
+
+			// Multiple details
+			$oListOpt = &$this->ListOptions->Items["details"];
+			$oListOpt->Body = $body;
+		}
 
 		// "checkbox"
 		$oListOpt = &$this->ListOptions->Items["checkbox"];
@@ -905,6 +1005,33 @@ class ct_keg_master_list extends ct_keg_master {
 		$addcaption = ew_HtmlTitle($Language->Phrase("AddLink"));
 		$item->Body = "<a class=\"ewAddEdit ewAdd\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . ew_HtmlEncode($this->AddUrl) . "\">" . $Language->Phrase("AddLink") . "</a>";
 		$item->Visible = ($this->AddUrl <> "" && $Security->CanAdd());
+		$option = $options["detail"];
+		$DetailTableLink = "";
+		$item = &$option->Add("detailadd_t_keg_detai");
+		$url = $this->GetAddUrl(EW_TABLE_SHOW_DETAIL . "=t_keg_detai");
+		$caption = $Language->Phrase("Add") . "&nbsp;" . $this->TableCaption() . "/" . $GLOBALS["t_keg_detai"]->TableCaption();
+		$item->Body = "<a class=\"ewDetailAddGroup ewDetailAdd\" title=\"" . ew_HtmlTitle($caption) . "\" data-caption=\"" . ew_HtmlTitle($caption) . "\" href=\"" . ew_HtmlEncode($url) . "\">" . $caption . "</a>";
+		$item->Visible = ($GLOBALS["t_keg_detai"]->DetailAdd && $Security->AllowAdd(CurrentProjectID() . 't_keg_detai') && $Security->CanAdd());
+		if ($item->Visible) {
+			if ($DetailTableLink <> "") $DetailTableLink .= ",";
+			$DetailTableLink .= "t_keg_detai";
+		}
+
+		// Add multiple details
+		if ($this->ShowMultipleDetails) {
+			$item = &$option->Add("detailsadd");
+			$url = $this->GetAddUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailTableLink);
+			$item->Body = "<a class=\"ewDetailAddGroup ewDetailAdd\" title=\"" . ew_HtmlTitle($Language->Phrase("AddMasterDetailLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("AddMasterDetailLink")) . "\" href=\"" . ew_HtmlEncode($url) . "\">" . $Language->Phrase("AddMasterDetailLink") . "</a>";
+			$item->Visible = ($DetailTableLink <> "" && $Security->CanAdd());
+
+			// Hide single master/detail items
+			$ar = explode(",", $DetailTableLink);
+			$cnt = count($ar);
+			for ($i = 0; $i < $cnt; $i++) {
+				if ($item = &$option->GetItem("detailadd_" . $ar[$i]))
+					$item->Visible = FALSE;
+			}
+		}
 		$option = $options["action"];
 
 		// Add multi delete
@@ -1133,7 +1260,7 @@ class ct_keg_master_list extends ct_keg_master {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -1178,6 +1305,11 @@ class ct_keg_master_list extends ct_keg_master {
 		$this->Row_Selected($row);
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
 		$this->keg_id->setDbValue($rs->fields('keg_id'));
+		if (array_key_exists('EV__keg_id', $rs->fields)) {
+			$this->keg_id->VirtualValue = $rs->fields('EV__keg_id'); // Set up virtual field value
+		} else {
+			$this->keg_id->VirtualValue = ""; // Clear value
+		}
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->shift->setDbValue($rs->fields('shift'));
 		$this->hasil->setDbValue($rs->fields('hasil'));
@@ -1246,7 +1378,30 @@ class ct_keg_master_list extends ct_keg_master {
 		$this->kegm_id->ViewCustomAttributes = "";
 
 		// keg_id
-		$this->keg_id->ViewValue = $this->keg_id->CurrentValue;
+		if ($this->keg_id->VirtualValue <> "") {
+			$this->keg_id->ViewValue = $this->keg_id->VirtualValue;
+		} else {
+		if (strval($this->keg_id->CurrentValue) <> "") {
+			$sFilterWrk = "`keg_id`" . ew_SearchString("=", $this->keg_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `keg_id`, `keg_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_kegiatan`";
+		$sWhereWrk = "";
+		$this->keg_id->LookupFilters = array("dx1" => '`keg_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->keg_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->keg_id->ViewValue = $this->keg_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->keg_id->ViewValue = $this->keg_id->CurrentValue;
+			}
+		} else {
+			$this->keg_id->ViewValue = NULL;
+		}
+		}
 		$this->keg_id->ViewCustomAttributes = "";
 
 		// tgl
@@ -1255,11 +1410,17 @@ class ct_keg_master_list extends ct_keg_master {
 		$this->tgl->ViewCustomAttributes = "";
 
 		// shift
-		$this->shift->ViewValue = $this->shift->CurrentValue;
+		if (strval($this->shift->CurrentValue) <> "") {
+			$this->shift->ViewValue = $this->shift->OptionCaption($this->shift->CurrentValue);
+		} else {
+			$this->shift->ViewValue = NULL;
+		}
 		$this->shift->ViewCustomAttributes = "";
 
 		// hasil
 		$this->hasil->ViewValue = $this->hasil->CurrentValue;
+		$this->hasil->ViewValue = ew_FormatNumber($this->hasil->ViewValue, 0, -2, -2, -2);
+		$this->hasil->CellCssStyle .= "text-align: right;";
 		$this->hasil->ViewCustomAttributes = "";
 
 			// kegm_id
@@ -1752,8 +1913,11 @@ ft_keg_masterlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ft_keg_masterlist.Lists["x_keg_id"] = {"LinkField":"x_keg_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_keg_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_kegiatan"};
+ft_keg_masterlist.Lists["x_shift"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ft_keg_masterlist.Lists["x_shift"].Options = <?php echo json_encode($t_keg_master->shift->Options()) ?>;
 
+// Form object for search
 </script>
 <script type="text/javascript">
 

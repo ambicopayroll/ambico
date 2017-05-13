@@ -7,6 +7,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "phpfn13.php" ?>
 <?php include_once "t_keg_detaiinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
+<?php include_once "t_keg_masterinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -290,6 +291,9 @@ class ct_keg_detai_list extends ct_keg_detai {
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
 
+		// Table object (t_keg_master)
+		if (!isset($GLOBALS['t_keg_master'])) $GLOBALS['t_keg_master'] = new ct_keg_master();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'list', TRUE);
@@ -410,8 +414,6 @@ class ct_keg_detai_list extends ct_keg_detai {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->kegd_id->SetVisibility();
-		$this->kegd_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->pegawai_id->SetVisibility();
 		$this->kegm_id->SetVisibility();
 
@@ -444,6 +446,9 @@ class ct_keg_detai_list extends ct_keg_detai {
 
 		// Create Token
 		$this->CreateToken();
+
+		// Set up master detail parameters
+		$this->SetUpMasterParms();
 
 		// Setup other options
 		$this->SetupOtherOptions();
@@ -617,8 +622,28 @@ class ct_keg_detai_list extends ct_keg_detai {
 		$sFilter = "";
 		if (!$Security->CanList())
 			$sFilter = "(0=1)"; // Filter all records
+
+		// Restore master/detail filter
+		$this->DbMasterFilter = $this->GetMasterFilter(); // Restore master filter
+		$this->DbDetailFilter = $this->GetDetailFilter(); // Restore detail filter
 		ew_AddFilter($sFilter, $this->DbDetailFilter);
 		ew_AddFilter($sFilter, $this->SearchWhere);
+
+		// Load master record
+		if ($this->CurrentMode <> "add" && $this->GetMasterFilter() <> "" && $this->getCurrentMasterTable() == "t_keg_master") {
+			global $t_keg_master;
+			$rsmaster = $t_keg_master->LoadRs($this->DbMasterFilter);
+			$this->MasterRecordExists = ($rsmaster && !$rsmaster->EOF);
+			if (!$this->MasterRecordExists) {
+				$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record found
+				$this->Page_Terminate("t_keg_masterlist.php"); // Return to master page
+			} else {
+				$t_keg_master->LoadListRowValues($rsmaster);
+				$t_keg_master->RowType = EW_ROWTYPE_MASTER; // Master row
+				$t_keg_master->RenderListRow();
+				$rsmaster->Close();
+			}
+		}
 
 		// Set up filter in session
 		$this->setSessionWhere($sFilter);
@@ -715,7 +740,6 @@ class ct_keg_detai_list extends ct_keg_detai {
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->kegd_id, $bCtrl); // kegd_id
 			$this->UpdateSort($this->pegawai_id, $bCtrl); // pegawai_id
 			$this->UpdateSort($this->kegm_id, $bCtrl); // kegm_id
 			$this->setStartRecordNumber(1); // Reset start position
@@ -742,11 +766,19 @@ class ct_keg_detai_list extends ct_keg_detai {
 		// Check if reset command
 		if (substr($this->Command,0,5) == "reset") {
 
+			// Reset master/detail keys
+			if ($this->Command == "resetall") {
+				$this->setCurrentMasterTable(""); // Clear master table
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+				$this->kegm_id->setSessionValue("");
+			}
+
 			// Reset sorting order
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
-				$this->kegd_id->setSort("");
+				$this->setSessionOrderByList($sOrderBy);
 				$this->pegawai_id->setSort("");
 				$this->kegm_id->setSort("");
 			}
@@ -802,6 +834,14 @@ class ct_keg_detai_list extends ct_keg_detai {
 		$item->ShowInDropDown = FALSE;
 		$item->ShowInButtonGroup = FALSE;
 
+		// "sequence"
+		$item = &$this->ListOptions->Add("sequence");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = TRUE;
+		$item->OnLeft = TRUE; // Always on left
+		$item->ShowInDropDown = FALSE;
+		$item->ShowInButtonGroup = FALSE;
+
 		// Drop down button for ListOptions
 		$this->ListOptions->UseImageAndText = TRUE;
 		$this->ListOptions->UseDropDownButton = TRUE;
@@ -822,6 +862,10 @@ class ct_keg_detai_list extends ct_keg_detai {
 	function RenderListOptions() {
 		global $Security, $Language, $objForm;
 		$this->ListOptions->LoadDefault();
+
+		// "sequence"
+		$oListOpt = &$this->ListOptions->Items["sequence"];
+		$oListOpt->Body = ew_FormatSeqNo($this->RecCnt);
 
 		// "view"
 		$oListOpt = &$this->ListOptions->Items["view"];
@@ -1127,7 +1171,7 @@ class ct_keg_detai_list extends ct_keg_detai {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -1172,6 +1216,11 @@ class ct_keg_detai_list extends ct_keg_detai {
 		$this->Row_Selected($row);
 		$this->kegd_id->setDbValue($rs->fields('kegd_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
+		if (array_key_exists('EV__pegawai_id', $rs->fields)) {
+			$this->pegawai_id->VirtualValue = $rs->fields('EV__pegawai_id'); // Set up virtual field value
+		} else {
+			$this->pegawai_id->VirtualValue = ""; // Clear value
+		}
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
 	}
 
@@ -1234,17 +1283,35 @@ class ct_keg_detai_list extends ct_keg_detai {
 		$this->kegd_id->ViewCustomAttributes = "";
 
 		// pegawai_id
-		$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+		if ($this->pegawai_id->VirtualValue <> "") {
+			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+		} else {
+		if (strval($this->pegawai_id->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id->ViewValue = NULL;
+		}
+		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
 		// kegm_id
 		$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
 		$this->kegm_id->ViewCustomAttributes = "";
-
-			// kegd_id
-			$this->kegd_id->LinkCustomAttributes = "";
-			$this->kegd_id->HrefValue = "";
-			$this->kegd_id->TooltipValue = "";
 
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
@@ -1376,6 +1443,25 @@ class ct_keg_detai_list extends ct_keg_detai {
 		// Call Page Exporting server event
 		$this->ExportDoc->ExportCustom = !$this->Page_Exporting();
 		$ParentTable = "";
+
+		// Export master record
+		if (EW_EXPORT_MASTER_RECORD && $this->GetMasterFilter() <> "" && $this->getCurrentMasterTable() == "t_keg_master") {
+			global $t_keg_master;
+			if (!isset($t_keg_master)) $t_keg_master = new ct_keg_master;
+			$rsmaster = $t_keg_master->LoadRs($this->DbMasterFilter); // Load master record
+			if ($rsmaster && !$rsmaster->EOF) {
+				$ExportStyle = $Doc->Style;
+				$Doc->SetStyle("v"); // Change to vertical
+				if ($this->Export <> "csv" || EW_EXPORT_MASTER_RECORD_FOR_CSV) {
+					$Doc->Table = &$t_keg_master;
+					$t_keg_master->ExportDocument($Doc, $rsmaster, 1, 1);
+					$Doc->ExportEmptyRow();
+					$Doc->Table = &$this;
+				}
+				$Doc->SetStyle($ExportStyle); // Restore
+				$rsmaster->Close();
+			}
+		}
 		$sHeader = $this->PageHeader;
 		$this->Page_DataRendering($sHeader);
 		$Doc->Text .= $sHeader;
@@ -1531,6 +1617,72 @@ class ct_keg_detai_list extends ct_keg_detai {
 				"&y_" . $FldParm . "=" . urlencode($FldSearchValue2) .
 				"&w_" . $FldParm . "=" . urlencode($Fld->AdvancedSearch->getValue("w"));
 		}
+	}
+
+	// Set up master/detail based on QueryString
+	function SetUpMasterParms() {
+		$bValidMaster = FALSE;
+
+		// Get the keys for master table
+		if (isset($_GET[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_GET[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "t_keg_master") {
+				$bValidMaster = TRUE;
+				if (@$_GET["fk_kegm_id"] <> "") {
+					$GLOBALS["t_keg_master"]->kegm_id->setQueryStringValue($_GET["fk_kegm_id"]);
+					$this->kegm_id->setQueryStringValue($GLOBALS["t_keg_master"]->kegm_id->QueryStringValue);
+					$this->kegm_id->setSessionValue($this->kegm_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["t_keg_master"]->kegm_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		} elseif (isset($_POST[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_POST[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "t_keg_master") {
+				$bValidMaster = TRUE;
+				if (@$_POST["fk_kegm_id"] <> "") {
+					$GLOBALS["t_keg_master"]->kegm_id->setFormValue($_POST["fk_kegm_id"]);
+					$this->kegm_id->setFormValue($GLOBALS["t_keg_master"]->kegm_id->FormValue);
+					$this->kegm_id->setSessionValue($this->kegm_id->FormValue);
+					if (!is_numeric($GLOBALS["t_keg_master"]->kegm_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		}
+		if ($bValidMaster) {
+
+			// Update URL
+			$this->AddUrl = $this->AddMasterUrl($this->AddUrl);
+			$this->InlineAddUrl = $this->AddMasterUrl($this->InlineAddUrl);
+			$this->GridAddUrl = $this->AddMasterUrl($this->GridAddUrl);
+			$this->GridEditUrl = $this->AddMasterUrl($this->GridEditUrl);
+
+			// Save current master table
+			$this->setCurrentMasterTable($sMasterTblVar);
+
+			// Reset start record counter (new master key)
+			$this->StartRec = 1;
+			$this->setStartRecordNumber($this->StartRec);
+
+			// Clear previous master key from Session
+			if ($sMasterTblVar <> "t_keg_master") {
+				if ($this->kegm_id->CurrentValue == "") $this->kegm_id->setSessionValue("");
+			}
+		}
+		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
+		$this->DbDetailFilter = $this->GetDetailFilter(); // Get detail filter
 	}
 
 	// Set up Breadcrumb
@@ -1721,8 +1873,9 @@ ft_keg_detailist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ft_keg_detailist.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -1742,6 +1895,17 @@ ft_keg_detailist.ValidateRequired = false;
 <?php } ?>
 <div class="clearfix"></div>
 </div>
+<?php } ?>
+<?php if (($t_keg_detai->Export == "") || (EW_EXPORT_MASTER_RECORD && $t_keg_detai->Export == "print")) { ?>
+<?php
+if ($t_keg_detai_list->DbMasterFilter <> "" && $t_keg_detai->getCurrentMasterTable() == "t_keg_master") {
+	if ($t_keg_detai_list->MasterRecordExists) {
+?>
+<?php include_once "t_keg_mastermaster.php" ?>
+<?php
+	}
+}
+?>
 <?php } ?>
 <?php
 	$bSelectLimit = $t_keg_detai_list->UseSelectLimit;
@@ -1853,6 +2017,10 @@ $t_keg_detai_list->ShowMessage();
 <input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_keg_detai_list->Token ?>">
 <?php } ?>
 <input type="hidden" name="t" value="t_keg_detai">
+<?php if ($t_keg_detai->getCurrentMasterTable() == "t_keg_master" && $t_keg_detai->CurrentAction <> "") { ?>
+<input type="hidden" name="<?php echo EW_TABLE_SHOW_MASTER ?>" value="t_keg_master">
+<input type="hidden" name="fk_kegm_id" value="<?php echo $t_keg_detai->kegm_id->getSessionValue() ?>">
+<?php } ?>
 <div id="gmp_t_keg_detai" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <?php if ($t_keg_detai_list->TotalRecs > 0 || $t_keg_detai->CurrentAction == "gridedit") { ?>
 <table id="tbl_t_keg_detailist" class="table ewTable">
@@ -1870,15 +2038,6 @@ $t_keg_detai_list->RenderListOptions();
 // Render list options (header, left)
 $t_keg_detai_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($t_keg_detai->kegd_id->Visible) { // kegd_id ?>
-	<?php if ($t_keg_detai->SortUrl($t_keg_detai->kegd_id) == "") { ?>
-		<th data-name="kegd_id"><div id="elh_t_keg_detai_kegd_id" class="t_keg_detai_kegd_id"><div class="ewTableHeaderCaption"><?php echo $t_keg_detai->kegd_id->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="kegd_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_keg_detai->SortUrl($t_keg_detai->kegd_id) ?>',2);"><div id="elh_t_keg_detai_kegd_id" class="t_keg_detai_kegd_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_keg_detai->kegd_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_keg_detai->kegd_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_keg_detai->kegd_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
 <?php if ($t_keg_detai->pegawai_id->Visible) { // pegawai_id ?>
 	<?php if ($t_keg_detai->SortUrl($t_keg_detai->pegawai_id) == "") { ?>
 		<th data-name="pegawai_id"><div id="elh_t_keg_detai_pegawai_id" class="t_keg_detai_pegawai_id"><div class="ewTableHeaderCaption"><?php echo $t_keg_detai->pegawai_id->FldCaption() ?></div></div></th>
@@ -1962,21 +2121,13 @@ while ($t_keg_detai_list->RecCnt < $t_keg_detai_list->StopRec) {
 // Render list options (body, left)
 $t_keg_detai_list->ListOptions->Render("body", "left", $t_keg_detai_list->RowCnt);
 ?>
-	<?php if ($t_keg_detai->kegd_id->Visible) { // kegd_id ?>
-		<td data-name="kegd_id"<?php echo $t_keg_detai->kegd_id->CellAttributes() ?>>
-<span id="el<?php echo $t_keg_detai_list->RowCnt ?>_t_keg_detai_kegd_id" class="t_keg_detai_kegd_id">
-<span<?php echo $t_keg_detai->kegd_id->ViewAttributes() ?>>
-<?php echo $t_keg_detai->kegd_id->ListViewValue() ?></span>
-</span>
-<a id="<?php echo $t_keg_detai_list->PageObjName . "_row_" . $t_keg_detai_list->RowCnt ?>"></a></td>
-	<?php } ?>
 	<?php if ($t_keg_detai->pegawai_id->Visible) { // pegawai_id ?>
 		<td data-name="pegawai_id"<?php echo $t_keg_detai->pegawai_id->CellAttributes() ?>>
 <span id="el<?php echo $t_keg_detai_list->RowCnt ?>_t_keg_detai_pegawai_id" class="t_keg_detai_pegawai_id">
 <span<?php echo $t_keg_detai->pegawai_id->ViewAttributes() ?>>
 <?php echo $t_keg_detai->pegawai_id->ListViewValue() ?></span>
 </span>
-</td>
+<a id="<?php echo $t_keg_detai_list->PageObjName . "_row_" . $t_keg_detai_list->RowCnt ?>"></a></td>
 	<?php } ?>
 	<?php if ($t_keg_detai->kegm_id->Visible) { // kegm_id ?>
 		<td data-name="kegm_id"<?php echo $t_keg_detai->kegm_id->CellAttributes() ?>>

@@ -7,6 +7,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "phpfn13.php" ?>
 <?php include_once "t_keg_masterinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
+<?php include_once "t_keg_detaigridcls.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -559,6 +560,9 @@ class ct_keg_master_view extends ct_keg_master {
 		$this->RowType = EW_ROWTYPE_VIEW;
 		$this->ResetAttrs();
 		$this->RenderRow();
+
+		// Set up detail parameters
+		$this->SetUpDetailParms();
 	}
 
 	// Set up other options
@@ -601,6 +605,81 @@ class ct_keg_master_view extends ct_keg_master {
 		else
 			$item->Body = "<a class=\"ewAction ewDelete\" title=\"" . ew_HtmlTitle($Language->Phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("ViewPageDeleteLink")) . "\" href=\"" . ew_HtmlEncode($this->DeleteUrl) . "\">" . $Language->Phrase("ViewPageDeleteLink") . "</a>";
 		$item->Visible = ($this->DeleteUrl <> "" && $Security->CanDelete());
+		$option = &$options["detail"];
+		$DetailTableLink = "";
+		$DetailViewTblVar = "";
+		$DetailCopyTblVar = "";
+		$DetailEditTblVar = "";
+
+		// "detail_t_keg_detai"
+		$item = &$option->Add("detail_t_keg_detai");
+		$body = $Language->Phrase("ViewPageDetailLink") . $Language->TablePhrase("t_keg_detai", "TblCaption");
+		$body = "<a class=\"btn btn-default btn-sm ewRowLink ewDetail\" data-action=\"list\" href=\"" . ew_HtmlEncode("t_keg_detailist.php?" . EW_TABLE_SHOW_MASTER . "=t_keg_master&fk_kegm_id=" . urlencode(strval($this->kegm_id->CurrentValue)) . "") . "\">" . $body . "</a>";
+		$links = "";
+		if ($GLOBALS["t_keg_detai_grid"] && $GLOBALS["t_keg_detai_grid"]->DetailView && $Security->CanView() && $Security->AllowView(CurrentProjectID() . 't_keg_detai')) {
+			$links .= "<li><a class=\"ewRowLink ewDetailView\" data-action=\"view\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . ew_HtmlEncode($this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=t_keg_detai")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
+			if ($DetailViewTblVar <> "") $DetailViewTblVar .= ",";
+			$DetailViewTblVar .= "t_keg_detai";
+		}
+		if ($GLOBALS["t_keg_detai_grid"] && $GLOBALS["t_keg_detai_grid"]->DetailEdit && $Security->CanEdit() && $Security->AllowEdit(CurrentProjectID() . 't_keg_detai')) {
+			$links .= "<li><a class=\"ewRowLink ewDetailEdit\" data-action=\"edit\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . ew_HtmlEncode($this->GetEditUrl(EW_TABLE_SHOW_DETAIL . "=t_keg_detai")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
+			if ($DetailEditTblVar <> "") $DetailEditTblVar .= ",";
+			$DetailEditTblVar .= "t_keg_detai";
+		}
+		if ($GLOBALS["t_keg_detai_grid"] && $GLOBALS["t_keg_detai_grid"]->DetailAdd && $Security->CanAdd() && $Security->AllowAdd(CurrentProjectID() . 't_keg_detai')) {
+			$links .= "<li><a class=\"ewRowLink ewDetailCopy\" data-action=\"add\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . ew_HtmlEncode($this->GetCopyUrl(EW_TABLE_SHOW_DETAIL . "=t_keg_detai")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
+			if ($DetailCopyTblVar <> "") $DetailCopyTblVar .= ",";
+			$DetailCopyTblVar .= "t_keg_detai";
+		}
+		if ($links <> "") {
+			$body .= "<button class=\"dropdown-toggle btn btn-default btn-sm ewDetail\" data-toggle=\"dropdown\"><b class=\"caret\"></b></button>";
+			$body .= "<ul class=\"dropdown-menu\">". $links . "</ul>";
+		}
+		$body = "<div class=\"btn-group\">" . $body . "</div>";
+		$item->Body = $body;
+		$item->Visible = $Security->AllowList(CurrentProjectID() . 't_keg_detai');
+		if ($item->Visible) {
+			if ($DetailTableLink <> "") $DetailTableLink .= ",";
+			$DetailTableLink .= "t_keg_detai";
+		}
+		if ($this->ShowMultipleDetails) $item->Visible = FALSE;
+
+		// Multiple details
+		if ($this->ShowMultipleDetails) {
+			$body = $Language->Phrase("MultipleMasterDetails");
+			$body = "<div class=\"btn-group\">";
+			$links = "";
+			if ($DetailViewTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailView\" data-action=\"view\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . ew_HtmlEncode($this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailViewTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
+			}
+			if ($DetailEditTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailEdit\" data-action=\"edit\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . ew_HtmlEncode($this->GetEditUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailEditTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
+			}
+			if ($DetailCopyTblVar <> "") {
+				$links .= "<li><a class=\"ewRowLink ewDetailCopy\" data-action=\"add\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . ew_HtmlEncode($this->GetCopyUrl(EW_TABLE_SHOW_DETAIL . "=" . $DetailCopyTblVar)) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
+			}
+			if ($links <> "") {
+				$body .= "<button class=\"dropdown-toggle btn btn-default btn-sm ewMasterDetail\" title=\"" . ew_HtmlTitle($Language->Phrase("MultipleMasterDetails")) . "\" data-toggle=\"dropdown\">" . $Language->Phrase("MultipleMasterDetails") . "<b class=\"caret\"></b></button>";
+				$body .= "<ul class=\"dropdown-menu ewMenu\">". $links . "</ul>";
+			}
+			$body .= "</div>";
+
+			// Multiple details
+			$oListOpt = &$option->Add("details");
+			$oListOpt->Body = $body;
+		}
+
+		// Set up detail default
+		$option = &$options["detail"];
+		$options["detail"]->DropDownButtonPhrase = $Language->Phrase("ButtonDetails");
+		$option->UseImageAndText = TRUE;
+		$ar = explode(",", $DetailTableLink);
+		$cnt = count($ar);
+		$option->UseDropDownButton = ($cnt > 1);
+		$option->UseButtonGroup = TRUE;
+		$item = &$option->Add($option->GroupOptionName);
+		$item->Body = "";
+		$item->Visible = FALSE;
 
 		// Set up action default
 		$option = &$options["action"];
@@ -661,7 +740,7 @@ class ct_keg_master_view extends ct_keg_master {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -704,8 +783,14 @@ class ct_keg_master_view extends ct_keg_master {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
+		if ($this->AuditTrailOnView) $this->WriteAuditTrailOnView($row);
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
 		$this->keg_id->setDbValue($rs->fields('keg_id'));
+		if (array_key_exists('EV__keg_id', $rs->fields)) {
+			$this->keg_id->VirtualValue = $rs->fields('EV__keg_id'); // Set up virtual field value
+		} else {
+			$this->keg_id->VirtualValue = ""; // Clear value
+		}
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->shift->setDbValue($rs->fields('shift'));
 		$this->hasil->setDbValue($rs->fields('hasil'));
@@ -751,7 +836,30 @@ class ct_keg_master_view extends ct_keg_master {
 		$this->kegm_id->ViewCustomAttributes = "";
 
 		// keg_id
-		$this->keg_id->ViewValue = $this->keg_id->CurrentValue;
+		if ($this->keg_id->VirtualValue <> "") {
+			$this->keg_id->ViewValue = $this->keg_id->VirtualValue;
+		} else {
+		if (strval($this->keg_id->CurrentValue) <> "") {
+			$sFilterWrk = "`keg_id`" . ew_SearchString("=", $this->keg_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `keg_id`, `keg_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_kegiatan`";
+		$sWhereWrk = "";
+		$this->keg_id->LookupFilters = array("dx1" => '`keg_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->keg_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->keg_id->ViewValue = $this->keg_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->keg_id->ViewValue = $this->keg_id->CurrentValue;
+			}
+		} else {
+			$this->keg_id->ViewValue = NULL;
+		}
+		}
 		$this->keg_id->ViewCustomAttributes = "";
 
 		// tgl
@@ -760,11 +868,17 @@ class ct_keg_master_view extends ct_keg_master {
 		$this->tgl->ViewCustomAttributes = "";
 
 		// shift
-		$this->shift->ViewValue = $this->shift->CurrentValue;
+		if (strval($this->shift->CurrentValue) <> "") {
+			$this->shift->ViewValue = $this->shift->OptionCaption($this->shift->CurrentValue);
+		} else {
+			$this->shift->ViewValue = NULL;
+		}
 		$this->shift->ViewCustomAttributes = "";
 
 		// hasil
 		$this->hasil->ViewValue = $this->hasil->CurrentValue;
+		$this->hasil->ViewValue = ew_FormatNumber($this->hasil->ViewValue, 0, -2, -2, -2);
+		$this->hasil->CellCssStyle .= "text-align: right;";
 		$this->hasil->ViewCustomAttributes = "";
 
 			// kegm_id
@@ -910,6 +1024,24 @@ class ct_keg_master_view extends ct_keg_master {
 		$this->Page_DataRendering($sHeader);
 		$Doc->Text .= $sHeader;
 		$this->ExportDocument($Doc, $rs, $this->StartRec, $this->StopRec, "view");
+
+		// Export detail records (t_keg_detai)
+		if (EW_EXPORT_DETAIL_RECORDS && in_array("t_keg_detai", explode(",", $this->getCurrentDetailTable()))) {
+			global $t_keg_detai;
+			if (!isset($t_keg_detai)) $t_keg_detai = new ct_keg_detai;
+			$rsdetail = $t_keg_detai->LoadRs($t_keg_detai->GetDetailFilter()); // Load detail records
+			if ($rsdetail && !$rsdetail->EOF) {
+				$ExportStyle = $Doc->Style;
+				$Doc->SetStyle("h"); // Change to horizontal
+				if ($this->Export <> "csv" || EW_EXPORT_DETAIL_RECORDS_FOR_CSV) {
+					$Doc->ExportEmptyRow();
+					$detailcnt = $rsdetail->RecordCount();
+					$t_keg_detai->ExportDocument($Doc, $rsdetail, 1, $detailcnt);
+				}
+				$Doc->SetStyle($ExportStyle); // Restore
+				$rsdetail->Close();
+			}
+		}
 		$sFooter = $this->PageFooter;
 		$this->Page_DataRendered($sFooter);
 		$Doc->Text .= $sFooter;
@@ -1043,6 +1175,35 @@ class ct_keg_master_view extends ct_keg_master {
 		// Add record key QueryString
 		$sQry .= "&" . substr($this->KeyUrl("", ""), 1);
 		return $sQry;
+	}
+
+	// Set up detail parms based on QueryString
+	function SetUpDetailParms() {
+
+		// Get the keys for master table
+		if (isset($_GET[EW_TABLE_SHOW_DETAIL])) {
+			$sDetailTblVar = $_GET[EW_TABLE_SHOW_DETAIL];
+			$this->setCurrentDetailTable($sDetailTblVar);
+		} else {
+			$sDetailTblVar = $this->getCurrentDetailTable();
+		}
+		if ($sDetailTblVar <> "") {
+			$DetailTblVar = explode(",", $sDetailTblVar);
+			if (in_array("t_keg_detai", $DetailTblVar)) {
+				if (!isset($GLOBALS["t_keg_detai_grid"]))
+					$GLOBALS["t_keg_detai_grid"] = new ct_keg_detai_grid;
+				if ($GLOBALS["t_keg_detai_grid"]->DetailView) {
+					$GLOBALS["t_keg_detai_grid"]->CurrentMode = "view";
+
+					// Save current master table to detail table
+					$GLOBALS["t_keg_detai_grid"]->setCurrentMasterTable($this->TableVar);
+					$GLOBALS["t_keg_detai_grid"]->setStartRecordNumber(1);
+					$GLOBALS["t_keg_detai_grid"]->kegm_id->FldIsDetailKey = TRUE;
+					$GLOBALS["t_keg_detai_grid"]->kegm_id->CurrentValue = $this->kegm_id->CurrentValue;
+					$GLOBALS["t_keg_detai_grid"]->kegm_id->setSessionValue($GLOBALS["t_keg_detai_grid"]->kegm_id->CurrentValue);
+				}
+			}
+		}
 	}
 
 	// Set up Breadcrumb
@@ -1200,8 +1361,11 @@ ft_keg_masterview.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ft_keg_masterview.Lists["x_keg_id"] = {"LinkField":"x_keg_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_keg_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_kegiatan"};
+ft_keg_masterview.Lists["x_shift"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ft_keg_masterview.Lists["x_shift"].Options = <?php echo json_encode($t_keg_master->shift->Options()) ?>;
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -1388,6 +1552,14 @@ $t_keg_master_view->ShowMessage();
 <?php } ?>
 <div class="clearfix"></div>
 <?php } ?>
+<?php } ?>
+<?php
+	if (in_array("t_keg_detai", explode(",", $t_keg_master->getCurrentDetailTable())) && $t_keg_detai->DetailView) {
+?>
+<?php if ($t_keg_master->getCurrentDetailTable() <> "") { ?>
+<h4 class="ewDetailCaption"><?php echo $Language->TablePhrase("t_keg_detai", "TblCaption") ?></h4>
+<?php } ?>
+<?php include_once "t_keg_detaigrid.php" ?>
 <?php } ?>
 </form>
 <?php if ($t_keg_master->Export == "") { ?>

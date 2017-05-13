@@ -583,11 +583,8 @@
   <project>
     <phrase id="bodytitle" value="AMBICO" />
     <phrase id="footertext" value="&amp;copy;2017 AMBICO. All rights reserved." />
-    <menu id="10239">
-      <phrase id="menutext" value="t keg master" />
-    </menu>
     <menu id="10240">
-      <phrase id="menutext" value="t keg detai" />
+      <phrase id="menutext" value="Detail" />
     </menu>
     <menu id="10234">
       <phrase id="menutext" value="t gjhrn" />
@@ -642,6 +639,12 @@
     </menu>
     <menu id="10230">
       <phrase id="menutext" value="Pengecualian" />
+    </menu>
+    <menu id="10411">
+      <phrase id="menutext" value="Input" />
+    </menu>
+    <menu id="10239">
+      <phrase id="menutext" value="Kegiatan (Borongan)" />
     </menu>
     <menu id="10224">
       <phrase id="menutext" value="Proses" />
@@ -3145,33 +3148,39 @@
       </field>
     </table>
     <table id="t_keg_detai">
-      <phrase id="tblcaption" value="t keg detai" />
+      <phrase id="tblcaption" value="Detail" />
       <field id="kegd_id">
-        <phrase id="fldcaption" value="kegd id" />
+        <phrase id="fldcaption" value="ID" />
       </field>
       <field id="pegawai_id">
-        <phrase id="fldcaption" value="pegawai id" />
+        <phrase id="fldcaption" value="Nama" />
       </field>
       <field id="kegm_id">
-        <phrase id="fldcaption" value="kegm id" />
+        <phrase id="fldcaption" value="Master" />
       </field>
     </table>
     <table id="t_keg_master">
-      <phrase id="tblcaption" value="t keg master" />
+      <phrase id="tblcaption" value="Kegiatan (Borongan)" />
       <field id="kegm_id">
-        <phrase id="fldcaption" value="kegm id" />
+        <phrase id="fldcaption" value="ID" />
       </field>
       <field id="keg_id">
-        <phrase id="fldcaption" value="keg id" />
+        <phrase id="fldcaption" value="Jenis Kegiatan" />
       </field>
       <field id="tgl">
-        <phrase id="fldcaption" value="tgl" />
+        <phrase id="fldcaption" value="Tgl." />
       </field>
       <field id="shift">
-        <phrase id="fldcaption" value="shift" />
+        <phrase id="fldcaption" value="Shift" />
+        <phrase id="fldtagvalue1" value="1" />
+        <phrase id="fldtagcaption1" value="1" />
+        <phrase id="fldtagvalue2" value="2" />
+        <phrase id="fldtagcaption2" value="2" />
+        <phrase id="fldtagvalue3" value="3" />
+        <phrase id="fldtagcaption3" value="3" />
       </field>
       <field id="hasil">
-        <phrase id="fldcaption" value="hasil" />
+        <phrase id="fldcaption" value="Hasil (kg)" />
       </field>
     </table>
     <table id="t_kegiatan">

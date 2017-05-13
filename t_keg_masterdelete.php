@@ -419,7 +419,7 @@ class ct_keg_master_delete extends ct_keg_master {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -464,6 +464,11 @@ class ct_keg_master_delete extends ct_keg_master {
 		$this->Row_Selected($row);
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
 		$this->keg_id->setDbValue($rs->fields('keg_id'));
+		if (array_key_exists('EV__keg_id', $rs->fields)) {
+			$this->keg_id->VirtualValue = $rs->fields('EV__keg_id'); // Set up virtual field value
+		} else {
+			$this->keg_id->VirtualValue = ""; // Clear value
+		}
 		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->shift->setDbValue($rs->fields('shift'));
 		$this->hasil->setDbValue($rs->fields('hasil'));
@@ -503,7 +508,30 @@ class ct_keg_master_delete extends ct_keg_master {
 		$this->kegm_id->ViewCustomAttributes = "";
 
 		// keg_id
-		$this->keg_id->ViewValue = $this->keg_id->CurrentValue;
+		if ($this->keg_id->VirtualValue <> "") {
+			$this->keg_id->ViewValue = $this->keg_id->VirtualValue;
+		} else {
+		if (strval($this->keg_id->CurrentValue) <> "") {
+			$sFilterWrk = "`keg_id`" . ew_SearchString("=", $this->keg_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `keg_id`, `keg_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_kegiatan`";
+		$sWhereWrk = "";
+		$this->keg_id->LookupFilters = array("dx1" => '`keg_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->keg_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->keg_id->ViewValue = $this->keg_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->keg_id->ViewValue = $this->keg_id->CurrentValue;
+			}
+		} else {
+			$this->keg_id->ViewValue = NULL;
+		}
+		}
 		$this->keg_id->ViewCustomAttributes = "";
 
 		// tgl
@@ -512,11 +540,17 @@ class ct_keg_master_delete extends ct_keg_master {
 		$this->tgl->ViewCustomAttributes = "";
 
 		// shift
-		$this->shift->ViewValue = $this->shift->CurrentValue;
+		if (strval($this->shift->CurrentValue) <> "") {
+			$this->shift->ViewValue = $this->shift->OptionCaption($this->shift->CurrentValue);
+		} else {
+			$this->shift->ViewValue = NULL;
+		}
 		$this->shift->ViewCustomAttributes = "";
 
 		// hasil
 		$this->hasil->ViewValue = $this->hasil->CurrentValue;
+		$this->hasil->ViewValue = ew_FormatNumber($this->hasil->ViewValue, 0, -2, -2, -2);
+		$this->hasil->CellCssStyle .= "text-align: right;";
 		$this->hasil->ViewCustomAttributes = "";
 
 			// kegm_id
@@ -578,6 +612,7 @@ class ct_keg_master_delete extends ct_keg_master {
 		}
 		$rows = ($rs) ? $rs->GetRows() : array();
 		$conn->BeginTrans();
+		if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteBegin")); // Batch delete begin
 
 		// Clone old rows
 		$rsold = $rows;
@@ -620,8 +655,10 @@ class ct_keg_master_delete extends ct_keg_master {
 		}
 		if ($DeleteRows) {
 			$conn->CommitTrans(); // Commit the changes
+			if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteSuccess")); // Batch delete success
 		} else {
 			$conn->RollbackTrans(); // Rollback changes
+			if ($this->AuditTrailOnDelete) $this->WriteAuditTrailDummy($Language->Phrase("BatchDeleteRollback")); // Batch delete rollback
 		}
 
 		// Call Row Deleted event
@@ -761,8 +798,11 @@ ft_keg_masterdelete.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ft_keg_masterdelete.Lists["x_keg_id"] = {"LinkField":"x_keg_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_keg_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_kegiatan"};
+ft_keg_masterdelete.Lists["x_shift"] = {"LinkField":"","Ajax":null,"AutoFill":false,"DisplayFields":["","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+ft_keg_masterdelete.Lists["x_shift"].Options = <?php echo json_encode($t_keg_master->shift->Options()) ?>;
 
+// Form object for search
 </script>
 <script type="text/javascript">
 

@@ -7,6 +7,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "phpfn13.php" ?>
 <?php include_once "t_keg_detaiinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
+<?php include_once "t_keg_masterinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -279,6 +280,9 @@ class ct_keg_detai_view extends ct_keg_detai {
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
 
+		// Table object (t_keg_master)
+		if (!isset($GLOBALS['t_keg_master'])) $GLOBALS['t_keg_master'] = new ct_keg_master();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'view', TRUE);
@@ -383,8 +387,6 @@ class ct_keg_detai_view extends ct_keg_detai {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->kegd_id->SetVisibility();
-		$this->kegd_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->pegawai_id->SetVisibility();
 		$this->kegm_id->SetVisibility();
 
@@ -486,6 +488,9 @@ class ct_keg_detai_view extends ct_keg_detai {
 		$bLoadCurrentRecord = FALSE;
 		$sReturnUrl = "";
 		$bMatchRecord = FALSE;
+
+		// Set up master/detail parameters
+		$this->SetUpMasterParms();
 		if ($this->IsPageRequest()) { // Validate request
 			if (@$_GET["kegd_id"] <> "") {
 				$this->kegd_id->setQueryStringValue($_GET["kegd_id"]);
@@ -659,7 +664,7 @@ class ct_keg_detai_view extends ct_keg_detai {
 		if ($this->UseSelectLimit) {
 			$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 			if ($dbtype == "MSSQL") {
-				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderBy())));
+				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset, array("_hasOrderBy" => trim($this->getOrderBy()) || trim($this->getSessionOrderByList())));
 			} else {
 				$rs = $conn->SelectLimit($sSql, $rowcnt, $offset);
 			}
@@ -702,8 +707,14 @@ class ct_keg_detai_view extends ct_keg_detai {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
+		if ($this->AuditTrailOnView) $this->WriteAuditTrailOnView($row);
 		$this->kegd_id->setDbValue($rs->fields('kegd_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
+		if (array_key_exists('EV__pegawai_id', $rs->fields)) {
+			$this->pegawai_id->VirtualValue = $rs->fields('EV__pegawai_id'); // Set up virtual field value
+		} else {
+			$this->pegawai_id->VirtualValue = ""; // Clear value
+		}
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
 	}
 
@@ -743,17 +754,35 @@ class ct_keg_detai_view extends ct_keg_detai {
 		$this->kegd_id->ViewCustomAttributes = "";
 
 		// pegawai_id
-		$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+		if ($this->pegawai_id->VirtualValue <> "") {
+			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+		} else {
+		if (strval($this->pegawai_id->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id->ViewValue = NULL;
+		}
+		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
 		// kegm_id
 		$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
 		$this->kegm_id->ViewCustomAttributes = "";
-
-			// kegd_id
-			$this->kegd_id->LinkCustomAttributes = "";
-			$this->kegd_id->HrefValue = "";
-			$this->kegd_id->TooltipValue = "";
 
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
@@ -1018,6 +1047,67 @@ class ct_keg_detai_view extends ct_keg_detai {
 		return $sQry;
 	}
 
+	// Set up master/detail based on QueryString
+	function SetUpMasterParms() {
+		$bValidMaster = FALSE;
+
+		// Get the keys for master table
+		if (isset($_GET[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_GET[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "t_keg_master") {
+				$bValidMaster = TRUE;
+				if (@$_GET["fk_kegm_id"] <> "") {
+					$GLOBALS["t_keg_master"]->kegm_id->setQueryStringValue($_GET["fk_kegm_id"]);
+					$this->kegm_id->setQueryStringValue($GLOBALS["t_keg_master"]->kegm_id->QueryStringValue);
+					$this->kegm_id->setSessionValue($this->kegm_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["t_keg_master"]->kegm_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		} elseif (isset($_POST[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_POST[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "t_keg_master") {
+				$bValidMaster = TRUE;
+				if (@$_POST["fk_kegm_id"] <> "") {
+					$GLOBALS["t_keg_master"]->kegm_id->setFormValue($_POST["fk_kegm_id"]);
+					$this->kegm_id->setFormValue($GLOBALS["t_keg_master"]->kegm_id->FormValue);
+					$this->kegm_id->setSessionValue($this->kegm_id->FormValue);
+					if (!is_numeric($GLOBALS["t_keg_master"]->kegm_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		}
+		if ($bValidMaster) {
+
+			// Save current master table
+			$this->setCurrentMasterTable($sMasterTblVar);
+			$this->setSessionWhere($this->GetDetailFilter());
+
+			// Reset start record counter (new master key)
+			$this->StartRec = 1;
+			$this->setStartRecordNumber($this->StartRec);
+
+			// Clear previous master key from Session
+			if ($sMasterTblVar <> "t_keg_master") {
+				if ($this->kegm_id->CurrentValue == "") $this->kegm_id->setSessionValue("");
+			}
+		}
+		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
+		$this->DbDetailFilter = $this->GetDetailFilter(); // Get detail filter
+	}
+
 	// Set up Breadcrumb
 	function SetupBreadcrumb() {
 		global $Breadcrumb, $Language;
@@ -1173,8 +1263,9 @@ ft_keg_detaiview.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ft_keg_detaiview.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -1261,17 +1352,6 @@ $t_keg_detai_view->ShowMessage();
 <input type="hidden" name="modal" value="1">
 <?php } ?>
 <table class="table table-bordered table-striped ewViewTable">
-<?php if ($t_keg_detai->kegd_id->Visible) { // kegd_id ?>
-	<tr id="r_kegd_id">
-		<td><span id="elh_t_keg_detai_kegd_id"><?php echo $t_keg_detai->kegd_id->FldCaption() ?></span></td>
-		<td data-name="kegd_id"<?php echo $t_keg_detai->kegd_id->CellAttributes() ?>>
-<span id="el_t_keg_detai_kegd_id">
-<span<?php echo $t_keg_detai->kegd_id->ViewAttributes() ?>>
-<?php echo $t_keg_detai->kegd_id->ViewValue ?></span>
-</span>
-</td>
-	</tr>
-<?php } ?>
 <?php if ($t_keg_detai->pegawai_id->Visible) { // pegawai_id ?>
 	<tr id="r_pegawai_id">
 		<td><span id="elh_t_keg_detai_pegawai_id"><?php echo $t_keg_detai->pegawai_id->FldCaption() ?></span></td>

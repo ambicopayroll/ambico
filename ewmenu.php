@@ -4,8 +4,6 @@
 
 // Generate all menu items
 $RootMenu->IsRoot = TRUE;
-$RootMenu->AddMenuItem(10239, "mi_t_keg_master", $Language->MenuPhrase("10239", "MenuText"), "t_keg_masterlist.php", -1, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_keg_master'), FALSE, FALSE);
-$RootMenu->AddMenuItem(10240, "mi_t_keg_detai", $Language->MenuPhrase("10240", "MenuText"), "t_keg_detailist.php", -1, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_keg_detai'), FALSE, FALSE);
 $RootMenu->AddMenuItem(77, "mi_home_php", $Language->MenuPhrase("77", "MenuText"), "home.php", -1, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}home.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(78, "mci_Setup", $Language->MenuPhrase("78", "MenuText"), "", -1, "", TRUE, FALSE, TRUE);
 $RootMenu->AddMenuItem(32, "mi_pembagian1", $Language->MenuPhrase("32", "MenuText"), "pembagian1list.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}pembagian1'), FALSE, FALSE);
@@ -20,6 +18,8 @@ $RootMenu->AddMenuItem(41, "mi_t_jdw_krj_def", $Language->MenuPhrase("41", "Menu
 $RootMenu->AddMenuItem(10231, "mi_t_jns_pengecualian", $Language->MenuPhrase("10231", "MenuText"), "t_jns_pengecualianlist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_jns_pengecualian'), FALSE, FALSE);
 $RootMenu->AddMenuItem(10238, "mi_t_kegiatan", $Language->MenuPhrase("10238", "MenuText"), "t_kegiatanlist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_kegiatan'), FALSE, FALSE);
 $RootMenu->AddMenuItem(50, "mi_t_user", $Language->MenuPhrase("50", "MenuText"), "t_userlist.php", 78, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_user'), FALSE, FALSE);
+$RootMenu->AddMenuItem(10411, "mci_Input", $Language->MenuPhrase("10411", "MenuText"), "", -1, "", TRUE, FALSE, TRUE);
+$RootMenu->AddMenuItem(10239, "mi_t_keg_master", $Language->MenuPhrase("10239", "MenuText"), "t_keg_masterlist.php", 10411, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}t_keg_master'), FALSE, FALSE);
 $RootMenu->AddMenuItem(10224, "mci_Proses", $Language->MenuPhrase("10224", "MenuText"), "", -1, "", TRUE, FALSE, TRUE);
 $RootMenu->AddMenuItem(10227, "mi_gen_jdw_krj__php", $Language->MenuPhrase("10227", "MenuText"), "gen_jdw_krj_.php", 10224, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}gen_jdw_krj_.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(10077, "mci_Laporan", $Language->MenuPhrase("10077", "MenuText"), "", -1, "", TRUE, FALSE, TRUE);

@@ -7,6 +7,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "phpfn13.php" ?>
 <?php include_once "t_keg_detaiinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
+<?php include_once "t_keg_masterinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -235,6 +236,9 @@ class ct_keg_detai_add extends ct_keg_detai {
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
 
+		// Table object (t_keg_master)
+		if (!isset($GLOBALS['t_keg_master'])) $GLOBALS['t_keg_master'] = new ct_keg_master();
+
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
 			define("EW_PAGE_ID", 'add', TRUE);
@@ -390,6 +394,9 @@ class ct_keg_detai_add extends ct_keg_detai {
 		if ($this->IsModal)
 			$gbSkipHeaderFooter = TRUE;
 
+		// Set up master/detail parameters
+		$this->SetUpMasterParms();
+
 		// Process form if post back
 		if (@$_POST["a_add"] <> "") {
 			$this->CurrentAction = $_POST["a_add"]; // Get form action
@@ -531,6 +538,11 @@ class ct_keg_detai_add extends ct_keg_detai {
 		$this->Row_Selected($row);
 		$this->kegd_id->setDbValue($rs->fields('kegd_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
+		if (array_key_exists('EV__pegawai_id', $rs->fields)) {
+			$this->pegawai_id->VirtualValue = $rs->fields('EV__pegawai_id'); // Set up virtual field value
+		} else {
+			$this->pegawai_id->VirtualValue = ""; // Clear value
+		}
 		$this->kegm_id->setDbValue($rs->fields('kegm_id'));
 	}
 
@@ -587,7 +599,30 @@ class ct_keg_detai_add extends ct_keg_detai {
 		$this->kegd_id->ViewCustomAttributes = "";
 
 		// pegawai_id
-		$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+		if ($this->pegawai_id->VirtualValue <> "") {
+			$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+		} else {
+		if (strval($this->pegawai_id->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id->ViewValue = NULL;
+		}
+		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
 		// kegm_id
@@ -606,16 +641,41 @@ class ct_keg_detai_add extends ct_keg_detai {
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// pegawai_id
-			$this->pegawai_id->EditAttrs["class"] = "form-control";
 			$this->pegawai_id->EditCustomAttributes = "";
-			$this->pegawai_id->EditValue = ew_HtmlEncode($this->pegawai_id->CurrentValue);
-			$this->pegawai_id->PlaceHolder = ew_RemoveHtml($this->pegawai_id->FldCaption());
+			if (trim(strval($this->pegawai_id->CurrentValue)) == "") {
+				$sFilterWrk = "0=1";
+			} else {
+				$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			}
+			$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `pegawai`";
+			$sWhereWrk = "";
+			$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+				$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+			} else {
+				$this->pegawai_id->ViewValue = $Language->Phrase("PleaseSelect");
+			}
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			$this->pegawai_id->EditValue = $arwrk;
 
 			// kegm_id
 			$this->kegm_id->EditAttrs["class"] = "form-control";
 			$this->kegm_id->EditCustomAttributes = "";
+			if ($this->kegm_id->getSessionValue() <> "") {
+				$this->kegm_id->CurrentValue = $this->kegm_id->getSessionValue();
+			$this->kegm_id->ViewValue = $this->kegm_id->CurrentValue;
+			$this->kegm_id->ViewCustomAttributes = "";
+			} else {
 			$this->kegm_id->EditValue = ew_HtmlEncode($this->kegm_id->CurrentValue);
 			$this->kegm_id->PlaceHolder = ew_RemoveHtml($this->kegm_id->FldCaption());
+			}
 
 			// Add refer script
 			// pegawai_id
@@ -650,9 +710,6 @@ class ct_keg_detai_add extends ct_keg_detai {
 			return ($gsFormError == "");
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
-		}
-		if (!ew_CheckInteger($this->pegawai_id->FormValue)) {
-			ew_AddMessage($gsFormError, $this->pegawai_id->FldErrMsg());
 		}
 		if (!$this->kegm_id->FldIsDetailKey && !is_null($this->kegm_id->FormValue) && $this->kegm_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->kegm_id->FldCaption(), $this->kegm_id->ReqErrMsg));
@@ -720,6 +777,66 @@ class ct_keg_detai_add extends ct_keg_detai {
 		return $AddRow;
 	}
 
+	// Set up master/detail based on QueryString
+	function SetUpMasterParms() {
+		$bValidMaster = FALSE;
+
+		// Get the keys for master table
+		if (isset($_GET[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_GET[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "t_keg_master") {
+				$bValidMaster = TRUE;
+				if (@$_GET["fk_kegm_id"] <> "") {
+					$GLOBALS["t_keg_master"]->kegm_id->setQueryStringValue($_GET["fk_kegm_id"]);
+					$this->kegm_id->setQueryStringValue($GLOBALS["t_keg_master"]->kegm_id->QueryStringValue);
+					$this->kegm_id->setSessionValue($this->kegm_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["t_keg_master"]->kegm_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		} elseif (isset($_POST[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_POST[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "t_keg_master") {
+				$bValidMaster = TRUE;
+				if (@$_POST["fk_kegm_id"] <> "") {
+					$GLOBALS["t_keg_master"]->kegm_id->setFormValue($_POST["fk_kegm_id"]);
+					$this->kegm_id->setFormValue($GLOBALS["t_keg_master"]->kegm_id->FormValue);
+					$this->kegm_id->setSessionValue($this->kegm_id->FormValue);
+					if (!is_numeric($GLOBALS["t_keg_master"]->kegm_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		}
+		if ($bValidMaster) {
+
+			// Save current master table
+			$this->setCurrentMasterTable($sMasterTblVar);
+
+			// Reset start record counter (new master key)
+			$this->StartRec = 1;
+			$this->setStartRecordNumber($this->StartRec);
+
+			// Clear previous master key from Session
+			if ($sMasterTblVar <> "t_keg_master") {
+				if ($this->kegm_id->CurrentValue == "") $this->kegm_id->setSessionValue("");
+			}
+		}
+		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
+		$this->DbDetailFilter = $this->GetDetailFilter(); // Get detail filter
+	}
+
 	// Set up Breadcrumb
 	function SetupBreadcrumb() {
 		global $Breadcrumb, $Language;
@@ -735,6 +852,18 @@ class ct_keg_detai_add extends ct_keg_detai {
 		global $gsLanguage;
 		$pageId = $pageId ?: $this->PageID;
 		switch ($fld->FldVar) {
+		case "x_pegawai_id":
+			$sSqlWrk = "";
+			$sSqlWrk = "SELECT `pegawai_id` AS `LinkFld`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+			$sWhereWrk = "{filter}";
+			$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`pegawai_id` = {filter_value}', "t0" => "3", "fn0" => "");
+			$sSqlWrk = "";
+			$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			if ($sSqlWrk <> "")
+				$fld->LookupFilters["s"] .= $sSqlWrk;
+			break;
 		}
 	}
 
@@ -857,9 +986,6 @@ ft_keg_detaiadd.Validate = function() {
 			elm = this.GetElements("x" + infix + "_pegawai_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detai->pegawai_id->FldCaption(), $t_keg_detai->pegawai_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_pegawai_id");
-			if (elm && !ew_CheckInteger(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detai->pegawai_id->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_kegm_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detai->kegm_id->FldCaption(), $t_keg_detai->kegm_id->ReqErrMsg)) ?>");
@@ -899,8 +1025,9 @@ ft_keg_detaiadd.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+ft_keg_detaiadd.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -926,13 +1053,22 @@ $t_keg_detai_add->ShowMessage();
 <?php if ($t_keg_detai_add->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
+<?php if ($t_keg_detai->getCurrentMasterTable() == "t_keg_master") { ?>
+<input type="hidden" name="<?php echo EW_TABLE_SHOW_MASTER ?>" value="t_keg_master">
+<input type="hidden" name="fk_kegm_id" value="<?php echo $t_keg_detai->kegm_id->getSessionValue() ?>">
+<?php } ?>
 <div>
 <?php if ($t_keg_detai->pegawai_id->Visible) { // pegawai_id ?>
 	<div id="r_pegawai_id" class="form-group">
 		<label id="elh_t_keg_detai_pegawai_id" for="x_pegawai_id" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_detai->pegawai_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $t_keg_detai->pegawai_id->CellAttributes() ?>>
 <span id="el_t_keg_detai_pegawai_id">
-<input type="text" data-table="t_keg_detai" data-field="x_pegawai_id" name="x_pegawai_id" id="x_pegawai_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_keg_detai->pegawai_id->getPlaceHolder()) ?>" value="<?php echo $t_keg_detai->pegawai_id->EditValue ?>"<?php echo $t_keg_detai->pegawai_id->EditAttributes() ?>>
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_pegawai_id"><?php echo (strval($t_keg_detai->pegawai_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_keg_detai->pegawai_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_keg_detai->pegawai_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_pegawai_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_keg_detai" data-field="x_pegawai_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_keg_detai->pegawai_id->DisplayValueSeparatorAttribute() ?>" name="x_pegawai_id" id="x_pegawai_id" value="<?php echo $t_keg_detai->pegawai_id->CurrentValue ?>"<?php echo $t_keg_detai->pegawai_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_pegawai_id" id="s_x_pegawai_id" value="<?php echo $t_keg_detai->pegawai_id->LookupFilterQuery() ?>">
 </span>
 <?php echo $t_keg_detai->pegawai_id->CustomMsg ?></div></div>
 	</div>
@@ -941,9 +1077,17 @@ $t_keg_detai_add->ShowMessage();
 	<div id="r_kegm_id" class="form-group">
 		<label id="elh_t_keg_detai_kegm_id" for="x_kegm_id" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_detai->kegm_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $t_keg_detai->kegm_id->CellAttributes() ?>>
+<?php if ($t_keg_detai->kegm_id->getSessionValue() <> "") { ?>
+<span id="el_t_keg_detai_kegm_id">
+<span<?php echo $t_keg_detai->kegm_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_keg_detai->kegm_id->ViewValue ?></p></span>
+</span>
+<input type="hidden" id="x_kegm_id" name="x_kegm_id" value="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->CurrentValue) ?>">
+<?php } else { ?>
 <span id="el_t_keg_detai_kegm_id">
 <input type="text" data-table="t_keg_detai" data-field="x_kegm_id" name="x_kegm_id" id="x_kegm_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_keg_detai->kegm_id->getPlaceHolder()) ?>" value="<?php echo $t_keg_detai->kegm_id->EditValue ?>"<?php echo $t_keg_detai->kegm_id->EditAttributes() ?>>
 </span>
+<?php } ?>
 <?php echo $t_keg_detai->kegm_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
