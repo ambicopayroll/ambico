@@ -6,6 +6,7 @@ ob_start(); // Turn on output buffering
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
 <?php include_once "t_lemburinfo.php" ?>
+<?php include_once "pegawaiinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -232,6 +233,9 @@ class ct_lembur_edit extends ct_lembur {
 			$GLOBALS["Table"] = &$GLOBALS["t_lembur"];
 		}
 
+		// Table object (pegawai)
+		if (!isset($GLOBALS['pegawai'])) $GLOBALS['pegawai'] = new cpegawai();
+
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
 
@@ -285,8 +289,6 @@ class ct_lembur_edit extends ct_lembur {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->lembur_id->SetVisibility();
-		$this->lembur_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->pegawai_id->SetVisibility();
 		$this->tgl_mulai->SetVisibility();
 		$this->tgl_selesai->SetVisibility();
@@ -412,6 +414,9 @@ class ct_lembur_edit extends ct_lembur {
 		} else {
 			$bLoadCurrentRecord = TRUE;
 		}
+
+		// Set up master detail parameters
+		$this->SetUpMasterParms();
 
 		// Load recordset
 		$this->StartRec = 1; // Initialize start position
@@ -543,8 +548,6 @@ class ct_lembur_edit extends ct_lembur {
 
 		// Load from form
 		global $objForm;
-		if (!$this->lembur_id->FldIsDetailKey)
-			$this->lembur_id->setFormValue($objForm->GetValue("x_lembur_id"));
 		if (!$this->pegawai_id->FldIsDetailKey) {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
@@ -564,6 +567,8 @@ class ct_lembur_edit extends ct_lembur {
 			$this->jam_selesai->setFormValue($objForm->GetValue("x_jam_selesai"));
 			$this->jam_selesai->CurrentValue = ew_UnFormatDateTime($this->jam_selesai->CurrentValue, 4);
 		}
+		if (!$this->lembur_id->FldIsDetailKey)
+			$this->lembur_id->setFormValue($objForm->GetValue("x_lembur_id"));
 	}
 
 	// Restore form values
@@ -732,11 +737,6 @@ class ct_lembur_edit extends ct_lembur {
 		$this->jam_selesai->ViewValue = ew_FormatDateTime($this->jam_selesai->ViewValue, 4);
 		$this->jam_selesai->ViewCustomAttributes = "";
 
-			// lembur_id
-			$this->lembur_id->LinkCustomAttributes = "";
-			$this->lembur_id->HrefValue = "";
-			$this->lembur_id->TooltipValue = "";
-
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
@@ -763,14 +763,36 @@ class ct_lembur_edit extends ct_lembur {
 			$this->jam_selesai->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
-			// lembur_id
-			$this->lembur_id->EditAttrs["class"] = "form-control";
-			$this->lembur_id->EditCustomAttributes = "";
-			$this->lembur_id->EditValue = $this->lembur_id->CurrentValue;
-			$this->lembur_id->ViewCustomAttributes = "";
-
 			// pegawai_id
 			$this->pegawai_id->EditCustomAttributes = "";
+			if ($this->pegawai_id->getSessionValue() <> "") {
+				$this->pegawai_id->CurrentValue = $this->pegawai_id->getSessionValue();
+			if ($this->pegawai_id->VirtualValue <> "") {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+			} else {
+			if (strval($this->pegawai_id->CurrentValue) <> "") {
+				$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+			$sWhereWrk = "";
+			$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = $rswrk->fields('DispFld');
+					$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+				}
+			} else {
+				$this->pegawai_id->ViewValue = NULL;
+			}
+			}
+			$this->pegawai_id->ViewCustomAttributes = "";
+			} else {
 			if (trim(strval($this->pegawai_id->CurrentValue)) == "") {
 				$sFilterWrk = "0=1";
 			} else {
@@ -793,6 +815,7 @@ class ct_lembur_edit extends ct_lembur {
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			$this->pegawai_id->EditValue = $arwrk;
+			}
 
 			// tgl_mulai
 			$this->tgl_mulai->EditAttrs["class"] = "form-control";
@@ -819,12 +842,8 @@ class ct_lembur_edit extends ct_lembur {
 			$this->jam_selesai->PlaceHolder = ew_RemoveHtml($this->jam_selesai->FldCaption());
 
 			// Edit refer script
-			// lembur_id
-
-			$this->lembur_id->LinkCustomAttributes = "";
-			$this->lembur_id->HrefValue = "";
-
 			// pegawai_id
+
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
@@ -973,6 +992,67 @@ class ct_lembur_edit extends ct_lembur {
 			$this->Row_Updated($rsold, $rsnew);
 		$rs->Close();
 		return $EditRow;
+	}
+
+	// Set up master/detail based on QueryString
+	function SetUpMasterParms() {
+		$bValidMaster = FALSE;
+
+		// Get the keys for master table
+		if (isset($_GET[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_GET[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "pegawai") {
+				$bValidMaster = TRUE;
+				if (@$_GET["fk_pegawai_id"] <> "") {
+					$GLOBALS["pegawai"]->pegawai_id->setQueryStringValue($_GET["fk_pegawai_id"]);
+					$this->pegawai_id->setQueryStringValue($GLOBALS["pegawai"]->pegawai_id->QueryStringValue);
+					$this->pegawai_id->setSessionValue($this->pegawai_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["pegawai"]->pegawai_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		} elseif (isset($_POST[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_POST[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "pegawai") {
+				$bValidMaster = TRUE;
+				if (@$_POST["fk_pegawai_id"] <> "") {
+					$GLOBALS["pegawai"]->pegawai_id->setFormValue($_POST["fk_pegawai_id"]);
+					$this->pegawai_id->setFormValue($GLOBALS["pegawai"]->pegawai_id->FormValue);
+					$this->pegawai_id->setSessionValue($this->pegawai_id->FormValue);
+					if (!is_numeric($GLOBALS["pegawai"]->pegawai_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		}
+		if ($bValidMaster) {
+
+			// Save current master table
+			$this->setCurrentMasterTable($sMasterTblVar);
+			$this->setSessionWhere($this->GetDetailFilter());
+
+			// Reset start record counter (new master key)
+			$this->StartRec = 1;
+			$this->setStartRecordNumber($this->StartRec);
+
+			// Clear previous master key from Session
+			if ($sMasterTblVar <> "pegawai") {
+				if ($this->pegawai_id->CurrentValue == "") $this->pegawai_id->setSessionValue("");
+			}
+		}
+		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
+		$this->DbDetailFilter = $this->GetDetailFilter(); // Get detail filter
 	}
 
 	// Set up Breadcrumb
@@ -1254,23 +1334,22 @@ $t_lembur_edit->ShowMessage();
 <?php if ($t_lembur_edit->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
-<div>
-<?php if ($t_lembur->lembur_id->Visible) { // lembur_id ?>
-	<div id="r_lembur_id" class="form-group">
-		<label id="elh_t_lembur_lembur_id" class="col-sm-2 control-label ewLabel"><?php echo $t_lembur->lembur_id->FldCaption() ?></label>
-		<div class="col-sm-10"><div<?php echo $t_lembur->lembur_id->CellAttributes() ?>>
-<span id="el_t_lembur_lembur_id">
-<span<?php echo $t_lembur->lembur_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_lembur->lembur_id->EditValue ?></p></span>
-</span>
-<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="x_lembur_id" id="x_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->CurrentValue) ?>">
-<?php echo $t_lembur->lembur_id->CustomMsg ?></div></div>
-	</div>
+<?php if ($t_lembur->getCurrentMasterTable() == "pegawai") { ?>
+<input type="hidden" name="<?php echo EW_TABLE_SHOW_MASTER ?>" value="pegawai">
+<input type="hidden" name="fk_pegawai_id" value="<?php echo $t_lembur->pegawai_id->getSessionValue() ?>">
 <?php } ?>
+<div>
 <?php if ($t_lembur->pegawai_id->Visible) { // pegawai_id ?>
 	<div id="r_pegawai_id" class="form-group">
 		<label id="elh_t_lembur_pegawai_id" for="x_pegawai_id" class="col-sm-2 control-label ewLabel"><?php echo $t_lembur->pegawai_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $t_lembur->pegawai_id->CellAttributes() ?>>
+<?php if ($t_lembur->pegawai_id->getSessionValue() <> "") { ?>
+<span id="el_t_lembur_pegawai_id">
+<span<?php echo $t_lembur->pegawai_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_lembur->pegawai_id->ViewValue ?></p></span>
+</span>
+<input type="hidden" id="x_pegawai_id" name="x_pegawai_id" value="<?php echo ew_HtmlEncode($t_lembur->pegawai_id->CurrentValue) ?>">
+<?php } else { ?>
 <span id="el_t_lembur_pegawai_id">
 <span class="ewLookupList">
 	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_pegawai_id"><?php echo (strval($t_lembur->pegawai_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_lembur->pegawai_id->ViewValue); ?></span>
@@ -1279,6 +1358,7 @@ $t_lembur_edit->ShowMessage();
 <input type="hidden" data-table="t_lembur" data-field="x_pegawai_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_lembur->pegawai_id->DisplayValueSeparatorAttribute() ?>" name="x_pegawai_id" id="x_pegawai_id" value="<?php echo $t_lembur->pegawai_id->CurrentValue ?>"<?php echo $t_lembur->pegawai_id->EditAttributes() ?>>
 <input type="hidden" name="s_x_pegawai_id" id="s_x_pegawai_id" value="<?php echo $t_lembur->pegawai_id->LookupFilterQuery() ?>">
 </span>
+<?php } ?>
 <?php echo $t_lembur->pegawai_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -1333,6 +1413,7 @@ ew_CreateCalendar("ft_lemburedit", "x_tgl_selesai", 0);
 	</div>
 <?php } ?>
 </div>
+<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="x_lembur_id" id="x_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->CurrentValue) ?>">
 <?php if (!$t_lembur_edit->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">

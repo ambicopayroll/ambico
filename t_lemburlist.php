@@ -6,6 +6,7 @@ ob_start(); // Turn on output buffering
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
 <?php include_once "t_lemburinfo.php" ?>
+<?php include_once "pegawaiinfo.php" ?>
 <?php include_once "t_userinfo.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
@@ -287,6 +288,9 @@ class ct_lembur_list extends ct_lembur {
 		$this->MultiDeleteUrl = "t_lemburdelete.php";
 		$this->MultiUpdateUrl = "t_lemburupdate.php";
 
+		// Table object (pegawai)
+		if (!isset($GLOBALS['pegawai'])) $GLOBALS['pegawai'] = new cpegawai();
+
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
 
@@ -413,8 +417,6 @@ class ct_lembur_list extends ct_lembur {
 
 		// Setup export options
 		$this->SetupExportOptions();
-		$this->lembur_id->SetVisibility();
-		$this->lembur_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->pegawai_id->SetVisibility();
 		$this->tgl_mulai->SetVisibility();
 		$this->tgl_selesai->SetVisibility();
@@ -450,6 +452,9 @@ class ct_lembur_list extends ct_lembur {
 
 		// Create Token
 		$this->CreateToken();
+
+		// Set up master detail parameters
+		$this->SetUpMasterParms();
 
 		// Setup other options
 		$this->SetupOtherOptions();
@@ -696,8 +701,28 @@ class ct_lembur_list extends ct_lembur {
 		$sFilter = "";
 		if (!$Security->CanList())
 			$sFilter = "(0=1)"; // Filter all records
+
+		// Restore master/detail filter
+		$this->DbMasterFilter = $this->GetMasterFilter(); // Restore master filter
+		$this->DbDetailFilter = $this->GetDetailFilter(); // Restore detail filter
 		ew_AddFilter($sFilter, $this->DbDetailFilter);
 		ew_AddFilter($sFilter, $this->SearchWhere);
+
+		// Load master record
+		if ($this->CurrentMode <> "add" && $this->GetMasterFilter() <> "" && $this->getCurrentMasterTable() == "pegawai") {
+			global $pegawai;
+			$rsmaster = $pegawai->LoadRs($this->DbMasterFilter);
+			$this->MasterRecordExists = ($rsmaster && !$rsmaster->EOF);
+			if (!$this->MasterRecordExists) {
+				$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record found
+				$this->Page_Terminate("pegawailist.php"); // Return to master page
+			} else {
+				$pegawai->LoadListRowValues($rsmaster);
+				$pegawai->RowType = EW_ROWTYPE_MASTER; // Master row
+				$pegawai->RenderListRow();
+				$rsmaster->Close();
+			}
+		}
 
 		// Set up filter in session
 		$this->setSessionWhere($sFilter);
@@ -1200,7 +1225,6 @@ class ct_lembur_list extends ct_lembur {
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->lembur_id, $bCtrl); // lembur_id
 			$this->UpdateSort($this->pegawai_id, $bCtrl); // pegawai_id
 			$this->UpdateSort($this->tgl_mulai, $bCtrl); // tgl_mulai
 			$this->UpdateSort($this->tgl_selesai, $bCtrl); // tgl_selesai
@@ -1230,12 +1254,19 @@ class ct_lembur_list extends ct_lembur {
 		// Check if reset command
 		if (substr($this->Command,0,5) == "reset") {
 
+			// Reset master/detail keys
+			if ($this->Command == "resetall") {
+				$this->setCurrentMasterTable(""); // Clear master table
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+				$this->pegawai_id->setSessionValue("");
+			}
+
 			// Reset sorting order
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
 				$this->setSessionOrderByList($sOrderBy);
-				$this->lembur_id->setSort("");
 				$this->pegawai_id->setSort("");
 				$this->tgl_mulai->setSort("");
 				$this->tgl_selesai->setSort("");
@@ -1756,8 +1787,6 @@ class ct_lembur_list extends ct_lembur {
 
 	// Load default values
 	function LoadDefaultValues() {
-		$this->lembur_id->CurrentValue = NULL;
-		$this->lembur_id->OldValue = $this->lembur_id->CurrentValue;
 		$this->pegawai_id->CurrentValue = NULL;
 		$this->pegawai_id->OldValue = $this->pegawai_id->CurrentValue;
 		$this->tgl_mulai->CurrentValue = NULL;
@@ -1775,8 +1804,6 @@ class ct_lembur_list extends ct_lembur {
 
 		// Load from form
 		global $objForm;
-		if (!$this->lembur_id->FldIsDetailKey && $this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
-			$this->lembur_id->setFormValue($objForm->GetValue("x_lembur_id"));
 		if (!$this->pegawai_id->FldIsDetailKey) {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
@@ -1801,6 +1828,8 @@ class ct_lembur_list extends ct_lembur {
 			$this->jam_selesai->CurrentValue = ew_UnFormatDateTime($this->jam_selesai->CurrentValue, 4);
 		}
 		$this->jam_selesai->setOldValue($objForm->GetValue("o_jam_selesai"));
+		if (!$this->lembur_id->FldIsDetailKey && $this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
+			$this->lembur_id->setFormValue($objForm->GetValue("x_lembur_id"));
 	}
 
 	// Restore form values
@@ -1998,11 +2027,6 @@ class ct_lembur_list extends ct_lembur {
 		$this->jam_selesai->ViewValue = ew_FormatDateTime($this->jam_selesai->ViewValue, 4);
 		$this->jam_selesai->ViewCustomAttributes = "";
 
-			// lembur_id
-			$this->lembur_id->LinkCustomAttributes = "";
-			$this->lembur_id->HrefValue = "";
-			$this->lembur_id->TooltipValue = "";
-
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
@@ -2029,10 +2053,37 @@ class ct_lembur_list extends ct_lembur {
 			$this->jam_selesai->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
-			// lembur_id
 			// pegawai_id
-
 			$this->pegawai_id->EditCustomAttributes = "";
+			if ($this->pegawai_id->getSessionValue() <> "") {
+				$this->pegawai_id->CurrentValue = $this->pegawai_id->getSessionValue();
+				$this->pegawai_id->OldValue = $this->pegawai_id->CurrentValue;
+			if ($this->pegawai_id->VirtualValue <> "") {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+			} else {
+			if (strval($this->pegawai_id->CurrentValue) <> "") {
+				$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+			$sWhereWrk = "";
+			$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = $rswrk->fields('DispFld');
+					$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+				}
+			} else {
+				$this->pegawai_id->ViewValue = NULL;
+			}
+			}
+			$this->pegawai_id->ViewCustomAttributes = "";
+			} else {
 			if (trim(strval($this->pegawai_id->CurrentValue)) == "") {
 				$sFilterWrk = "0=1";
 			} else {
@@ -2055,6 +2106,7 @@ class ct_lembur_list extends ct_lembur {
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			$this->pegawai_id->EditValue = $arwrk;
+			}
 
 			// tgl_mulai
 			$this->tgl_mulai->EditAttrs["class"] = "form-control";
@@ -2081,12 +2133,8 @@ class ct_lembur_list extends ct_lembur {
 			$this->jam_selesai->PlaceHolder = ew_RemoveHtml($this->jam_selesai->FldCaption());
 
 			// Add refer script
-			// lembur_id
-
-			$this->lembur_id->LinkCustomAttributes = "";
-			$this->lembur_id->HrefValue = "";
-
 			// pegawai_id
+
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
@@ -2107,14 +2155,37 @@ class ct_lembur_list extends ct_lembur {
 			$this->jam_selesai->HrefValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
-			// lembur_id
-			$this->lembur_id->EditAttrs["class"] = "form-control";
-			$this->lembur_id->EditCustomAttributes = "";
-			$this->lembur_id->EditValue = $this->lembur_id->CurrentValue;
-			$this->lembur_id->ViewCustomAttributes = "";
-
 			// pegawai_id
 			$this->pegawai_id->EditCustomAttributes = "";
+			if ($this->pegawai_id->getSessionValue() <> "") {
+				$this->pegawai_id->CurrentValue = $this->pegawai_id->getSessionValue();
+				$this->pegawai_id->OldValue = $this->pegawai_id->CurrentValue;
+			if ($this->pegawai_id->VirtualValue <> "") {
+				$this->pegawai_id->ViewValue = $this->pegawai_id->VirtualValue;
+			} else {
+			if (strval($this->pegawai_id->CurrentValue) <> "") {
+				$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+			$sWhereWrk = "";
+			$this->pegawai_id->LookupFilters = array("dx1" => '`pegawai_nama`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->pegawai_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = $rswrk->fields('DispFld');
+					$this->pegawai_id->ViewValue = $this->pegawai_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->pegawai_id->ViewValue = $this->pegawai_id->CurrentValue;
+				}
+			} else {
+				$this->pegawai_id->ViewValue = NULL;
+			}
+			}
+			$this->pegawai_id->ViewCustomAttributes = "";
+			} else {
 			if (trim(strval($this->pegawai_id->CurrentValue)) == "") {
 				$sFilterWrk = "0=1";
 			} else {
@@ -2137,6 +2208,7 @@ class ct_lembur_list extends ct_lembur {
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			$this->pegawai_id->EditValue = $arwrk;
+			}
 
 			// tgl_mulai
 			$this->tgl_mulai->EditAttrs["class"] = "form-control";
@@ -2163,12 +2235,8 @@ class ct_lembur_list extends ct_lembur {
 			$this->jam_selesai->PlaceHolder = ew_RemoveHtml($this->jam_selesai->FldCaption());
 
 			// Edit refer script
-			// lembur_id
-
-			$this->lembur_id->LinkCustomAttributes = "";
-			$this->lembur_id->HrefValue = "";
-
 			// pegawai_id
+
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
@@ -2571,6 +2639,25 @@ class ct_lembur_list extends ct_lembur {
 		// Call Page Exporting server event
 		$this->ExportDoc->ExportCustom = !$this->Page_Exporting();
 		$ParentTable = "";
+
+		// Export master record
+		if (EW_EXPORT_MASTER_RECORD && $this->GetMasterFilter() <> "" && $this->getCurrentMasterTable() == "pegawai") {
+			global $pegawai;
+			if (!isset($pegawai)) $pegawai = new cpegawai;
+			$rsmaster = $pegawai->LoadRs($this->DbMasterFilter); // Load master record
+			if ($rsmaster && !$rsmaster->EOF) {
+				$ExportStyle = $Doc->Style;
+				$Doc->SetStyle("v"); // Change to vertical
+				if ($this->Export <> "csv" || EW_EXPORT_MASTER_RECORD_FOR_CSV) {
+					$Doc->Table = &$pegawai;
+					$pegawai->ExportDocument($Doc, $rsmaster, 1, 1);
+					$Doc->ExportEmptyRow();
+					$Doc->Table = &$this;
+				}
+				$Doc->SetStyle($ExportStyle); // Restore
+				$rsmaster->Close();
+			}
+		}
 		$sHeader = $this->PageHeader;
 		$this->Page_DataRendering($sHeader);
 		$Doc->Text .= $sHeader;
@@ -2726,6 +2813,72 @@ class ct_lembur_list extends ct_lembur {
 				"&y_" . $FldParm . "=" . urlencode($FldSearchValue2) .
 				"&w_" . $FldParm . "=" . urlencode($Fld->AdvancedSearch->getValue("w"));
 		}
+	}
+
+	// Set up master/detail based on QueryString
+	function SetUpMasterParms() {
+		$bValidMaster = FALSE;
+
+		// Get the keys for master table
+		if (isset($_GET[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_GET[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "pegawai") {
+				$bValidMaster = TRUE;
+				if (@$_GET["fk_pegawai_id"] <> "") {
+					$GLOBALS["pegawai"]->pegawai_id->setQueryStringValue($_GET["fk_pegawai_id"]);
+					$this->pegawai_id->setQueryStringValue($GLOBALS["pegawai"]->pegawai_id->QueryStringValue);
+					$this->pegawai_id->setSessionValue($this->pegawai_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["pegawai"]->pegawai_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		} elseif (isset($_POST[EW_TABLE_SHOW_MASTER])) {
+			$sMasterTblVar = $_POST[EW_TABLE_SHOW_MASTER];
+			if ($sMasterTblVar == "") {
+				$bValidMaster = TRUE;
+				$this->DbMasterFilter = "";
+				$this->DbDetailFilter = "";
+			}
+			if ($sMasterTblVar == "pegawai") {
+				$bValidMaster = TRUE;
+				if (@$_POST["fk_pegawai_id"] <> "") {
+					$GLOBALS["pegawai"]->pegawai_id->setFormValue($_POST["fk_pegawai_id"]);
+					$this->pegawai_id->setFormValue($GLOBALS["pegawai"]->pegawai_id->FormValue);
+					$this->pegawai_id->setSessionValue($this->pegawai_id->FormValue);
+					if (!is_numeric($GLOBALS["pegawai"]->pegawai_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+			}
+		}
+		if ($bValidMaster) {
+
+			// Update URL
+			$this->AddUrl = $this->AddMasterUrl($this->AddUrl);
+			$this->InlineAddUrl = $this->AddMasterUrl($this->InlineAddUrl);
+			$this->GridAddUrl = $this->AddMasterUrl($this->GridAddUrl);
+			$this->GridEditUrl = $this->AddMasterUrl($this->GridEditUrl);
+
+			// Save current master table
+			$this->setCurrentMasterTable($sMasterTblVar);
+
+			// Reset start record counter (new master key)
+			$this->StartRec = 1;
+			$this->setStartRecordNumber($this->StartRec);
+
+			// Clear previous master key from Session
+			if ($sMasterTblVar <> "pegawai") {
+				if ($this->pegawai_id->CurrentValue == "") $this->pegawai_id->setSessionValue("");
+			}
+		}
+		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
+		$this->DbDetailFilter = $this->GetDetailFilter(); // Get detail filter
 	}
 
 	// Set up Breadcrumb
@@ -3020,6 +3173,17 @@ ft_lemburlist.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"A
 <div class="clearfix"></div>
 </div>
 <?php } ?>
+<?php if (($t_lembur->Export == "") || (EW_EXPORT_MASTER_RECORD && $t_lembur->Export == "print")) { ?>
+<?php
+if ($t_lembur_list->DbMasterFilter <> "" && $t_lembur->getCurrentMasterTable() == "pegawai") {
+	if ($t_lembur_list->MasterRecordExists) {
+?>
+<?php include_once "pegawaimaster.php" ?>
+<?php
+	}
+}
+?>
+<?php } ?>
 <?php
 if ($t_lembur->CurrentAction == "gridadd") {
 	$t_lembur->CurrentFilter = "0=1";
@@ -3138,6 +3302,10 @@ $t_lembur_list->ShowMessage();
 <input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_lembur_list->Token ?>">
 <?php } ?>
 <input type="hidden" name="t" value="t_lembur">
+<?php if ($t_lembur->getCurrentMasterTable() == "pegawai" && $t_lembur->CurrentAction <> "") { ?>
+<input type="hidden" name="<?php echo EW_TABLE_SHOW_MASTER ?>" value="pegawai">
+<input type="hidden" name="fk_pegawai_id" value="<?php echo $t_lembur->pegawai_id->getSessionValue() ?>">
+<?php } ?>
 <div id="gmp_t_lembur" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <?php if ($t_lembur_list->TotalRecs > 0 || $t_lembur->CurrentAction == "add" || $t_lembur->CurrentAction == "copy" || $t_lembur->CurrentAction == "gridedit") { ?>
 <table id="tbl_t_lemburlist" class="table ewTable">
@@ -3155,15 +3323,6 @@ $t_lembur_list->RenderListOptions();
 // Render list options (header, left)
 $t_lembur_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($t_lembur->lembur_id->Visible) { // lembur_id ?>
-	<?php if ($t_lembur->SortUrl($t_lembur->lembur_id) == "") { ?>
-		<th data-name="lembur_id"><div id="elh_t_lembur_lembur_id" class="t_lembur_lembur_id"><div class="ewTableHeaderCaption"><?php echo $t_lembur->lembur_id->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="lembur_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_lembur->SortUrl($t_lembur->lembur_id) ?>',2);"><div id="elh_t_lembur_lembur_id" class="t_lembur_lembur_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_lembur->lembur_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_lembur->lembur_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_lembur->lembur_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
 <?php if ($t_lembur->pegawai_id->Visible) { // pegawai_id ?>
 	<?php if ($t_lembur->SortUrl($t_lembur->pegawai_id) == "") { ?>
 		<th data-name="pegawai_id"><div id="elh_t_lembur_pegawai_id" class="t_lembur_pegawai_id"><div class="ewTableHeaderCaption"><?php echo $t_lembur->pegawai_id->FldCaption() ?></div></div></th>
@@ -3246,13 +3405,15 @@ $t_lembur_list->ListOptions->Render("header", "right");
 // Render list options (body, left)
 $t_lembur_list->ListOptions->Render("body", "left", $t_lembur_list->RowCnt);
 ?>
-	<?php if ($t_lembur->lembur_id->Visible) { // lembur_id ?>
-		<td data-name="lembur_id">
-<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="o<?php echo $t_lembur_list->RowIndex ?>_lembur_id" id="o<?php echo $t_lembur_list->RowIndex ?>_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($t_lembur->pegawai_id->Visible) { // pegawai_id ?>
 		<td data-name="pegawai_id">
+<?php if ($t_lembur->pegawai_id->getSessionValue() <> "") { ?>
+<span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_pegawai_id" class="form-group t_lembur_pegawai_id">
+<span<?php echo $t_lembur->pegawai_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_lembur->pegawai_id->ViewValue ?></p></span>
+</span>
+<input type="hidden" id="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" name="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_lembur->pegawai_id->CurrentValue) ?>">
+<?php } else { ?>
 <span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_pegawai_id" class="form-group t_lembur_pegawai_id">
 <span class="ewLookupList">
 	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id"><?php echo (strval($t_lembur->pegawai_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_lembur->pegawai_id->ViewValue); ?></span>
@@ -3261,6 +3422,7 @@ $t_lembur_list->ListOptions->Render("body", "left", $t_lembur_list->RowCnt);
 <input type="hidden" data-table="t_lembur" data-field="x_pegawai_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_lembur->pegawai_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo $t_lembur->pegawai_id->CurrentValue ?>"<?php echo $t_lembur->pegawai_id->EditAttributes() ?>>
 <input type="hidden" name="s_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="s_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo $t_lembur->pegawai_id->LookupFilterQuery() ?>">
 </span>
+<?php } ?>
 <input type="hidden" data-table="t_lembur" data-field="x_pegawai_id" name="o<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="o<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_lembur->pegawai_id->OldValue) ?>">
 </td>
 	<?php } ?>
@@ -3431,29 +3593,16 @@ while ($t_lembur_list->RecCnt < $t_lembur_list->StopRec) {
 // Render list options (body, left)
 $t_lembur_list->ListOptions->Render("body", "left", $t_lembur_list->RowCnt);
 ?>
-	<?php if ($t_lembur->lembur_id->Visible) { // lembur_id ?>
-		<td data-name="lembur_id"<?php echo $t_lembur->lembur_id->CellAttributes() ?>>
-<?php if ($t_lembur->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="o<?php echo $t_lembur_list->RowIndex ?>_lembur_id" id="o<?php echo $t_lembur_list->RowIndex ?>_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->OldValue) ?>">
-<?php } ?>
-<?php if ($t_lembur->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_lembur_id" class="form-group t_lembur_lembur_id">
-<span<?php echo $t_lembur->lembur_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_lembur->lembur_id->EditValue ?></p></span>
-</span>
-<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="x<?php echo $t_lembur_list->RowIndex ?>_lembur_id" id="x<?php echo $t_lembur_list->RowIndex ?>_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->CurrentValue) ?>">
-<?php } ?>
-<?php if ($t_lembur->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_lembur_id" class="t_lembur_lembur_id">
-<span<?php echo $t_lembur->lembur_id->ViewAttributes() ?>>
-<?php echo $t_lembur->lembur_id->ListViewValue() ?></span>
-</span>
-<?php } ?>
-<a id="<?php echo $t_lembur_list->PageObjName . "_row_" . $t_lembur_list->RowCnt ?>"></a></td>
-	<?php } ?>
 	<?php if ($t_lembur->pegawai_id->Visible) { // pegawai_id ?>
 		<td data-name="pegawai_id"<?php echo $t_lembur->pegawai_id->CellAttributes() ?>>
 <?php if ($t_lembur->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<?php if ($t_lembur->pegawai_id->getSessionValue() <> "") { ?>
+<span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_pegawai_id" class="form-group t_lembur_pegawai_id">
+<span<?php echo $t_lembur->pegawai_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_lembur->pegawai_id->ViewValue ?></p></span>
+</span>
+<input type="hidden" id="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" name="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_lembur->pegawai_id->CurrentValue) ?>">
+<?php } else { ?>
 <span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_pegawai_id" class="form-group t_lembur_pegawai_id">
 <span class="ewLookupList">
 	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id"><?php echo (strval($t_lembur->pegawai_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_lembur->pegawai_id->ViewValue); ?></span>
@@ -3462,9 +3611,17 @@ $t_lembur_list->ListOptions->Render("body", "left", $t_lembur_list->RowCnt);
 <input type="hidden" data-table="t_lembur" data-field="x_pegawai_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_lembur->pegawai_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo $t_lembur->pegawai_id->CurrentValue ?>"<?php echo $t_lembur->pegawai_id->EditAttributes() ?>>
 <input type="hidden" name="s_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="s_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo $t_lembur->pegawai_id->LookupFilterQuery() ?>">
 </span>
+<?php } ?>
 <input type="hidden" data-table="t_lembur" data-field="x_pegawai_id" name="o<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="o<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_lembur->pegawai_id->OldValue) ?>">
 <?php } ?>
 <?php if ($t_lembur->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
+<?php if ($t_lembur->pegawai_id->getSessionValue() <> "") { ?>
+<span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_pegawai_id" class="form-group t_lembur_pegawai_id">
+<span<?php echo $t_lembur->pegawai_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_lembur->pegawai_id->ViewValue ?></p></span>
+</span>
+<input type="hidden" id="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" name="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_lembur->pegawai_id->CurrentValue) ?>">
+<?php } else { ?>
 <span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_pegawai_id" class="form-group t_lembur_pegawai_id">
 <span class="ewLookupList">
 	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id"><?php echo (strval($t_lembur->pegawai_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_lembur->pegawai_id->ViewValue); ?></span>
@@ -3473,6 +3630,7 @@ $t_lembur_list->ListOptions->Render("body", "left", $t_lembur_list->RowCnt);
 <input type="hidden" data-table="t_lembur" data-field="x_pegawai_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_lembur->pegawai_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo $t_lembur->pegawai_id->CurrentValue ?>"<?php echo $t_lembur->pegawai_id->EditAttributes() ?>>
 <input type="hidden" name="s_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="s_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo $t_lembur->pegawai_id->LookupFilterQuery() ?>">
 </span>
+<?php } ?>
 <?php } ?>
 <?php if ($t_lembur->RowType == EW_ROWTYPE_VIEW) { // View record ?>
 <span id="el<?php echo $t_lembur_list->RowCnt ?>_t_lembur_pegawai_id" class="t_lembur_pegawai_id">
@@ -3480,8 +3638,15 @@ $t_lembur_list->ListOptions->Render("body", "left", $t_lembur_list->RowCnt);
 <?php echo $t_lembur->pegawai_id->ListViewValue() ?></span>
 </span>
 <?php } ?>
-</td>
+<a id="<?php echo $t_lembur_list->PageObjName . "_row_" . $t_lembur_list->RowCnt ?>"></a></td>
 	<?php } ?>
+<?php if ($t_lembur->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="x<?php echo $t_lembur_list->RowIndex ?>_lembur_id" id="x<?php echo $t_lembur_list->RowIndex ?>_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->CurrentValue) ?>">
+<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="o<?php echo $t_lembur_list->RowIndex ?>_lembur_id" id="o<?php echo $t_lembur_list->RowIndex ?>_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->OldValue) ?>">
+<?php } ?>
+<?php if ($t_lembur->RowType == EW_ROWTYPE_EDIT || $t_lembur->CurrentMode == "edit") { ?>
+<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="x<?php echo $t_lembur_list->RowIndex ?>_lembur_id" id="x<?php echo $t_lembur_list->RowIndex ?>_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->CurrentValue) ?>">
+<?php } ?>
 	<?php if ($t_lembur->tgl_mulai->Visible) { // tgl_mulai ?>
 		<td data-name="tgl_mulai"<?php echo $t_lembur->tgl_mulai->CellAttributes() ?>>
 <?php if ($t_lembur->RowType == EW_ROWTYPE_ADD) { // Add record ?>
@@ -3628,13 +3793,15 @@ ft_lemburlist.UpdateOpts(<?php echo $t_lembur_list->RowIndex ?>);
 // Render list options (body, left)
 $t_lembur_list->ListOptions->Render("body", "left", $t_lembur_list->RowIndex);
 ?>
-	<?php if ($t_lembur->lembur_id->Visible) { // lembur_id ?>
-		<td data-name="lembur_id">
-<input type="hidden" data-table="t_lembur" data-field="x_lembur_id" name="o<?php echo $t_lembur_list->RowIndex ?>_lembur_id" id="o<?php echo $t_lembur_list->RowIndex ?>_lembur_id" value="<?php echo ew_HtmlEncode($t_lembur->lembur_id->OldValue) ?>">
-</td>
-	<?php } ?>
 	<?php if ($t_lembur->pegawai_id->Visible) { // pegawai_id ?>
 		<td data-name="pegawai_id">
+<?php if ($t_lembur->pegawai_id->getSessionValue() <> "") { ?>
+<span id="el$rowindex$_t_lembur_pegawai_id" class="form-group t_lembur_pegawai_id">
+<span<?php echo $t_lembur->pegawai_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_lembur->pegawai_id->ViewValue ?></p></span>
+</span>
+<input type="hidden" id="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" name="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_lembur->pegawai_id->CurrentValue) ?>">
+<?php } else { ?>
 <span id="el$rowindex$_t_lembur_pegawai_id" class="form-group t_lembur_pegawai_id">
 <span class="ewLookupList">
 	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id"><?php echo (strval($t_lembur->pegawai_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_lembur->pegawai_id->ViewValue); ?></span>
@@ -3643,6 +3810,7 @@ $t_lembur_list->ListOptions->Render("body", "left", $t_lembur_list->RowIndex);
 <input type="hidden" data-table="t_lembur" data-field="x_pegawai_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_lembur->pegawai_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo $t_lembur->pegawai_id->CurrentValue ?>"<?php echo $t_lembur->pegawai_id->EditAttributes() ?>>
 <input type="hidden" name="s_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="s_x<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo $t_lembur->pegawai_id->LookupFilterQuery() ?>">
 </span>
+<?php } ?>
 <input type="hidden" data-table="t_lembur" data-field="x_pegawai_id" name="o<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" id="o<?php echo $t_lembur_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_lembur->pegawai_id->OldValue) ?>">
 </td>
 	<?php } ?>

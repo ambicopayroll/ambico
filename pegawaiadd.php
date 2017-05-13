@@ -11,6 +11,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "t_rumus2_peggridcls.php" ?>
 <?php include_once "t_rumus_peggridcls.php" ?>
 <?php include_once "t_pengecualian_peggridcls.php" ?>
+<?php include_once "t_lemburgridcls.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -342,6 +343,14 @@ class cpegawai_add extends cpegawai {
 			if (@$_POST["grid"] == "ft_pengecualian_peggrid") {
 				if (!isset($GLOBALS["t_pengecualian_peg_grid"])) $GLOBALS["t_pengecualian_peg_grid"] = new ct_pengecualian_peg_grid;
 				$GLOBALS["t_pengecualian_peg_grid"]->Page_Init();
+				$this->Page_Terminate();
+				exit();
+			}
+
+			// Process auto fill for detail table 't_lembur'
+			if (@$_POST["grid"] == "ft_lemburgrid") {
+				if (!isset($GLOBALS["t_lembur_grid"])) $GLOBALS["t_lembur_grid"] = new ct_lembur_grid;
+				$GLOBALS["t_lembur_grid"]->Page_Init();
 				$this->Page_Terminate();
 				exit();
 			}
@@ -960,6 +969,10 @@ class cpegawai_add extends cpegawai {
 			if (!isset($GLOBALS["t_pengecualian_peg_grid"])) $GLOBALS["t_pengecualian_peg_grid"] = new ct_pengecualian_peg_grid(); // get detail page object
 			$GLOBALS["t_pengecualian_peg_grid"]->ValidateGridForm();
 		}
+		if (in_array("t_lembur", $DetailTblVar) && $GLOBALS["t_lembur"]->DetailAdd) {
+			if (!isset($GLOBALS["t_lembur_grid"])) $GLOBALS["t_lembur_grid"] = new ct_lembur_grid(); // get detail page object
+			$GLOBALS["t_lembur_grid"]->ValidateGridForm();
+		}
 
 		// Return validate result
 		$ValidateForm = ($gsFormError == "");
@@ -1075,6 +1088,15 @@ class cpegawai_add extends cpegawai {
 				if (!$AddRow)
 					$GLOBALS["t_pengecualian_peg"]->pegawai_id->setSessionValue(""); // Clear master key if insert failed
 			}
+			if (in_array("t_lembur", $DetailTblVar) && $GLOBALS["t_lembur"]->DetailAdd) {
+				$GLOBALS["t_lembur"]->pegawai_id->setSessionValue($this->pegawai_id->CurrentValue); // Set master key
+				if (!isset($GLOBALS["t_lembur_grid"])) $GLOBALS["t_lembur_grid"] = new ct_lembur_grid(); // Get detail page object
+				$Security->LoadCurrentUserLevel($this->ProjectID . "t_lembur"); // Load user level of detail table
+				$AddRow = $GLOBALS["t_lembur_grid"]->GridInsert();
+				$Security->LoadCurrentUserLevel($this->ProjectID . $this->TableName); // Restore user level of master table
+				if (!$AddRow)
+					$GLOBALS["t_lembur"]->pegawai_id->setSessionValue(""); // Clear master key if insert failed
+			}
 		}
 
 		// Commit/Rollback transaction
@@ -1178,6 +1200,24 @@ class cpegawai_add extends cpegawai {
 					$GLOBALS["t_pengecualian_peg_grid"]->pegawai_id->setSessionValue($GLOBALS["t_pengecualian_peg_grid"]->pegawai_id->CurrentValue);
 				}
 			}
+			if (in_array("t_lembur", $DetailTblVar)) {
+				if (!isset($GLOBALS["t_lembur_grid"]))
+					$GLOBALS["t_lembur_grid"] = new ct_lembur_grid;
+				if ($GLOBALS["t_lembur_grid"]->DetailAdd) {
+					if ($this->CopyRecord)
+						$GLOBALS["t_lembur_grid"]->CurrentMode = "copy";
+					else
+						$GLOBALS["t_lembur_grid"]->CurrentMode = "add";
+					$GLOBALS["t_lembur_grid"]->CurrentAction = "gridadd";
+
+					// Save current master table to detail table
+					$GLOBALS["t_lembur_grid"]->setCurrentMasterTable($this->TableVar);
+					$GLOBALS["t_lembur_grid"]->setStartRecordNumber(1);
+					$GLOBALS["t_lembur_grid"]->pegawai_id->FldIsDetailKey = TRUE;
+					$GLOBALS["t_lembur_grid"]->pegawai_id->CurrentValue = $this->pegawai_id->CurrentValue;
+					$GLOBALS["t_lembur_grid"]->pegawai_id->setSessionValue($GLOBALS["t_lembur_grid"]->pegawai_id->CurrentValue);
+				}
+			}
 		}
 	}
 
@@ -1199,6 +1239,7 @@ class cpegawai_add extends cpegawai {
 		$pages->Add('t_rumus2_peg');
 		$pages->Add('t_rumus_peg');
 		$pages->Add('t_pengecualian_peg');
+		$pages->Add('t_lembur');
 		$this->DetailPages = $pages;
 	}
 
@@ -1528,6 +1569,16 @@ $pegawai_add->ShowMessage();
 <?php
 	}
 ?>
+<?php
+	if (in_array("t_lembur", explode(",", $pegawai->getCurrentDetailTable())) && $t_lembur->DetailAdd) {
+		if ($FirstActiveDetailTable == "" || $FirstActiveDetailTable == "t_lembur") {
+			$FirstActiveDetailTable = "t_lembur";
+		}
+?>
+		<li<?php echo $pegawai_add->DetailPages->TabStyle("t_lembur") ?>><a href="#tab_t_lembur" data-toggle="tab"><?php echo $Language->TablePhrase("t_lembur", "TblCaption") ?></a></li>
+<?php
+	}
+?>
 	</ul>
 	<div class="tab-content">
 <?php
@@ -1568,6 +1619,16 @@ $pegawai_add->ShowMessage();
 ?>
 		<div class="tab-pane<?php echo $pegawai_add->DetailPages->PageStyle("t_pengecualian_peg") ?>" id="tab_t_pengecualian_peg">
 <?php include_once "t_pengecualian_peggrid.php" ?>
+		</div>
+<?php } ?>
+<?php
+	if (in_array("t_lembur", explode(",", $pegawai->getCurrentDetailTable())) && $t_lembur->DetailAdd) {
+		if ($FirstActiveDetailTable == "" || $FirstActiveDetailTable == "t_lembur") {
+			$FirstActiveDetailTable = "t_lembur";
+		}
+?>
+		<div class="tab-pane<?php echo $pegawai_add->DetailPages->PageStyle("t_lembur") ?>" id="tab_t_lembur">
+<?php include_once "t_lemburgrid.php" ?>
 		</div>
 <?php } ?>
 	</div>

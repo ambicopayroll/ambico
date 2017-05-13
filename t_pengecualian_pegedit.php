@@ -1151,6 +1151,28 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 			// pegawai_id3
 			$this->pegawai_id3->SetDbValueDef($rsnew, $this->pegawai_id3->CurrentValue, NULL, $this->pegawai_id3->ReadOnly);
 
+			// Check referential integrity for master table 'pegawai'
+			$bValidMasterRecord = TRUE;
+			$sMasterFilter = $this->SqlMasterFilter_pegawai();
+			$KeyValue = isset($rsnew['pegawai_id']) ? $rsnew['pegawai_id'] : $rsold['pegawai_id'];
+			if (strval($KeyValue) <> "") {
+				$sMasterFilter = str_replace("@pegawai_id@", ew_AdjustSql($KeyValue), $sMasterFilter);
+			} else {
+				$bValidMasterRecord = FALSE;
+			}
+			if ($bValidMasterRecord) {
+				if (!isset($GLOBALS["pegawai"])) $GLOBALS["pegawai"] = new cpegawai();
+				$rsmaster = $GLOBALS["pegawai"]->LoadRs($sMasterFilter);
+				$bValidMasterRecord = ($rsmaster && !$rsmaster->EOF);
+				$rsmaster->Close();
+			}
+			if (!$bValidMasterRecord) {
+				$sRelatedRecordMsg = str_replace("%t", "pegawai", $Language->Phrase("RelatedRecordRequired"));
+				$this->setFailureMessage($sRelatedRecordMsg);
+				$rs->Close();
+				return FALSE;
+			}
+
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
 			if ($bUpdateRow) {

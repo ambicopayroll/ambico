@@ -11,6 +11,7 @@ ob_start(); // Turn on output buffering
 <?php include_once "t_rumus2_peggridcls.php" ?>
 <?php include_once "t_rumus_peggridcls.php" ?>
 <?php include_once "t_pengecualian_peggridcls.php" ?>
+<?php include_once "t_lemburgridcls.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -467,6 +468,14 @@ class cpegawai_list extends cpegawai {
 			if (@$_POST["grid"] == "ft_pengecualian_peggrid") {
 				if (!isset($GLOBALS["t_pengecualian_peg_grid"])) $GLOBALS["t_pengecualian_peg_grid"] = new ct_pengecualian_peg_grid;
 				$GLOBALS["t_pengecualian_peg_grid"]->Page_Init();
+				$this->Page_Terminate();
+				exit();
+			}
+
+			// Process auto fill for detail table 't_lembur'
+			if (@$_POST["grid"] == "ft_lemburgrid") {
+				if (!isset($GLOBALS["t_lembur_grid"])) $GLOBALS["t_lembur_grid"] = new ct_lembur_grid;
+				$GLOBALS["t_lembur_grid"]->Page_Init();
 				$this->Page_Terminate();
 				exit();
 			}
@@ -1830,6 +1839,14 @@ class cpegawai_list extends cpegawai {
 		$item->ShowInButtonGroup = FALSE;
 		if (!isset($GLOBALS["t_pengecualian_peg_grid"])) $GLOBALS["t_pengecualian_peg_grid"] = new ct_pengecualian_peg_grid;
 
+		// "detail_t_lembur"
+		$item = &$this->ListOptions->Add("detail_t_lembur");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->AllowList(CurrentProjectID() . 't_lembur') && !$this->ShowMultipleDetails;
+		$item->OnLeft = TRUE;
+		$item->ShowInButtonGroup = FALSE;
+		if (!isset($GLOBALS["t_lembur_grid"])) $GLOBALS["t_lembur_grid"] = new ct_lembur_grid;
+
 		// Multiple details
 		if ($this->ShowMultipleDetails) {
 			$item = &$this->ListOptions->Add("details");
@@ -1845,6 +1862,7 @@ class cpegawai_list extends cpegawai {
 		$pages->Add("t_rumus2_peg");
 		$pages->Add("t_rumus_peg");
 		$pages->Add("t_pengecualian_peg");
+		$pages->Add("t_lembur");
 		$this->DetailPages = $pages;
 
 		// List actions
@@ -2134,6 +2152,36 @@ class cpegawai_list extends cpegawai {
 			$oListOpt->Body = $body;
 			if ($this->ShowMultipleDetails) $oListOpt->Visible = FALSE;
 		}
+
+		// "detail_t_lembur"
+		$oListOpt = &$this->ListOptions->Items["detail_t_lembur"];
+		if ($Security->AllowList(CurrentProjectID() . 't_lembur')) {
+			$body = $Language->Phrase("DetailLink") . $Language->TablePhrase("t_lembur", "TblCaption");
+			$body = "<a class=\"btn btn-default btn-sm ewRowLink ewDetail\" data-action=\"list\" href=\"" . ew_HtmlEncode("t_lemburlist.php?" . EW_TABLE_SHOW_MASTER . "=pegawai&fk_pegawai_id=" . urlencode(strval($this->pegawai_id->CurrentValue)) . "") . "\">" . $body . "</a>";
+			$links = "";
+			if ($GLOBALS["t_lembur_grid"]->DetailView && $Security->CanView() && $Security->AllowView(CurrentProjectID() . 't_lembur')) {
+				$links .= "<li><a class=\"ewRowLink ewDetailView\" data-action=\"view\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailViewLink")) . "\" href=\"" . ew_HtmlEncode($this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=t_lembur")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailViewLink")) . "</a></li>";
+				if ($DetailViewTblVar <> "") $DetailViewTblVar .= ",";
+				$DetailViewTblVar .= "t_lembur";
+			}
+			if ($GLOBALS["t_lembur_grid"]->DetailEdit && $Security->CanEdit() && $Security->AllowEdit(CurrentProjectID() . 't_lembur')) {
+				$links .= "<li><a class=\"ewRowLink ewDetailEdit\" data-action=\"edit\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailEditLink")) . "\" href=\"" . ew_HtmlEncode($this->GetEditUrl(EW_TABLE_SHOW_DETAIL . "=t_lembur")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailEditLink")) . "</a></li>";
+				if ($DetailEditTblVar <> "") $DetailEditTblVar .= ",";
+				$DetailEditTblVar .= "t_lembur";
+			}
+			if ($GLOBALS["t_lembur_grid"]->DetailAdd && $Security->CanAdd() && $Security->AllowAdd(CurrentProjectID() . 't_lembur')) {
+				$links .= "<li><a class=\"ewRowLink ewDetailCopy\" data-action=\"add\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("MasterDetailCopyLink")) . "\" href=\"" . ew_HtmlEncode($this->GetCopyUrl(EW_TABLE_SHOW_DETAIL . "=t_lembur")) . "\">" . ew_HtmlImageAndText($Language->Phrase("MasterDetailCopyLink")) . "</a></li>";
+				if ($DetailCopyTblVar <> "") $DetailCopyTblVar .= ",";
+				$DetailCopyTblVar .= "t_lembur";
+			}
+			if ($links <> "") {
+				$body .= "<button class=\"dropdown-toggle btn btn-default btn-sm ewDetail\" data-toggle=\"dropdown\"><b class=\"caret\"></b></button>";
+				$body .= "<ul class=\"dropdown-menu\">". $links . "</ul>";
+			}
+			$body = "<div class=\"btn-group\">" . $body . "</div>";
+			$oListOpt->Body = $body;
+			if ($this->ShowMultipleDetails) $oListOpt->Visible = FALSE;
+		}
 		if ($this->ShowMultipleDetails) {
 			$body = $Language->Phrase("MultipleMasterDetails");
 			$body = "<div class=\"btn-group\">";
@@ -2226,6 +2274,15 @@ class cpegawai_list extends cpegawai {
 		if ($item->Visible) {
 			if ($DetailTableLink <> "") $DetailTableLink .= ",";
 			$DetailTableLink .= "t_pengecualian_peg";
+		}
+		$item = &$option->Add("detailadd_t_lembur");
+		$url = $this->GetAddUrl(EW_TABLE_SHOW_DETAIL . "=t_lembur");
+		$caption = $Language->Phrase("Add") . "&nbsp;" . $this->TableCaption() . "/" . $GLOBALS["t_lembur"]->TableCaption();
+		$item->Body = "<a class=\"ewDetailAddGroup ewDetailAdd\" title=\"" . ew_HtmlTitle($caption) . "\" data-caption=\"" . ew_HtmlTitle($caption) . "\" href=\"" . ew_HtmlEncode($url) . "\">" . $caption . "</a>";
+		$item->Visible = ($GLOBALS["t_lembur"]->DetailAdd && $Security->AllowAdd(CurrentProjectID() . 't_lembur') && $Security->CanAdd());
+		if ($item->Visible) {
+			if ($DetailTableLink <> "") $DetailTableLink .= ",";
+			$DetailTableLink .= "t_lembur";
 		}
 
 		// Add multiple details
