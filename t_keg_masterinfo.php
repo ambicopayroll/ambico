@@ -64,7 +64,7 @@ class ct_keg_master extends cTable {
 		$this->fields['keg_id'] = &$this->keg_id;
 
 		// tgl
-		$this->tgl = new cField('t_keg_master', 't_keg_master', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, 0, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl = new cField('t_keg_master', 't_keg_master', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, -1, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->tgl->Sortable = TRUE; // Allow sort
 		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
 		$this->fields['tgl'] = &$this->tgl;
@@ -739,7 +739,7 @@ class ct_keg_master extends cTable {
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// shift
@@ -805,7 +805,7 @@ class ct_keg_master extends cTable {
 		// tgl
 		$this->tgl->EditAttrs["class"] = "form-control";
 		$this->tgl->EditCustomAttributes = "";
-		$this->tgl->EditValue = ew_FormatDateTime($this->tgl->CurrentValue, 8);
+		$this->tgl->EditValue = $this->tgl->CurrentValue;
 		$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 		// shift

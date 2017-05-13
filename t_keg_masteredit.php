@@ -719,7 +719,7 @@ class ct_keg_master_edit extends ct_keg_master {
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// shift
@@ -785,7 +785,7 @@ class ct_keg_master_edit extends ct_keg_master {
 			// tgl
 			$this->tgl->EditAttrs["class"] = "form-control";
 			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->tgl->CurrentValue, 8));
+			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
 			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
 			// shift
@@ -906,7 +906,7 @@ class ct_keg_master_edit extends ct_keg_master {
 			$this->keg_id->SetDbValueDef($rsnew, $this->keg_id->CurrentValue, 0, $this->keg_id->ReadOnly);
 
 			// tgl
-			$this->tgl->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->tgl->CurrentValue, 0), ew_CurrentDate(), $this->tgl->ReadOnly);
+			$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), $this->tgl->ReadOnly);
 
 			// shift
 			$this->shift->SetDbValueDef($rsnew, $this->shift->CurrentValue, 0, $this->shift->ReadOnly);

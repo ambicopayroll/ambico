@@ -534,7 +534,7 @@ class ct_keg_master_delete extends ct_keg_master {
 
 		// tgl
 		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = ew_FormatDateTime($this->tgl->ViewValue, 0);
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
 		$this->tgl->ViewCustomAttributes = "";
 
 		// shift
