@@ -551,11 +551,11 @@ class ct_keg_detail_edit extends ct_keg_detail {
 		}
 		if (!$this->scan_masuk->FldIsDetailKey) {
 			$this->scan_masuk->setFormValue($objForm->GetValue("x_scan_masuk"));
-			$this->scan_masuk->CurrentValue = ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 0);
+			$this->scan_masuk->CurrentValue = ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 17);
 		}
 		if (!$this->scan_keluar->FldIsDetailKey) {
 			$this->scan_keluar->setFormValue($objForm->GetValue("x_scan_keluar"));
-			$this->scan_keluar->CurrentValue = ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 0);
+			$this->scan_keluar->CurrentValue = ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 17);
 		}
 		if (!$this->kegd_id->FldIsDetailKey)
 			$this->kegd_id->setFormValue($objForm->GetValue("x_kegd_id"));
@@ -568,9 +568,9 @@ class ct_keg_detail_edit extends ct_keg_detail {
 		$this->kegd_id->CurrentValue = $this->kegd_id->FormValue;
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
 		$this->scan_masuk->CurrentValue = $this->scan_masuk->FormValue;
-		$this->scan_masuk->CurrentValue = ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 0);
+		$this->scan_masuk->CurrentValue = ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 17);
 		$this->scan_keluar->CurrentValue = $this->scan_keluar->FormValue;
-		$this->scan_keluar->CurrentValue = ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 0);
+		$this->scan_keluar->CurrentValue = ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 17);
 	}
 
 	// Load recordset
@@ -706,12 +706,12 @@ class ct_keg_detail_edit extends ct_keg_detail {
 
 		// scan_masuk
 		$this->scan_masuk->ViewValue = $this->scan_masuk->CurrentValue;
-		$this->scan_masuk->ViewValue = ew_FormatDateTime($this->scan_masuk->ViewValue, 0);
+		$this->scan_masuk->ViewValue = ew_FormatDateTime($this->scan_masuk->ViewValue, 17);
 		$this->scan_masuk->ViewCustomAttributes = "";
 
 		// scan_keluar
 		$this->scan_keluar->ViewValue = $this->scan_keluar->CurrentValue;
-		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 0);
+		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 17);
 		$this->scan_keluar->ViewCustomAttributes = "";
 
 			// pegawai_id
@@ -758,13 +758,13 @@ class ct_keg_detail_edit extends ct_keg_detail {
 			// scan_masuk
 			$this->scan_masuk->EditAttrs["class"] = "form-control";
 			$this->scan_masuk->EditCustomAttributes = "";
-			$this->scan_masuk->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->scan_masuk->CurrentValue, 8));
+			$this->scan_masuk->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->scan_masuk->CurrentValue, 17));
 			$this->scan_masuk->PlaceHolder = ew_RemoveHtml($this->scan_masuk->FldCaption());
 
 			// scan_keluar
 			$this->scan_keluar->EditAttrs["class"] = "form-control";
 			$this->scan_keluar->EditCustomAttributes = "";
-			$this->scan_keluar->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->scan_keluar->CurrentValue, 8));
+			$this->scan_keluar->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->scan_keluar->CurrentValue, 17));
 			$this->scan_keluar->PlaceHolder = ew_RemoveHtml($this->scan_keluar->FldCaption());
 
 			// Edit refer script
@@ -805,10 +805,10 @@ class ct_keg_detail_edit extends ct_keg_detail {
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
 		}
-		if (!ew_CheckDateDef($this->scan_masuk->FormValue)) {
+		if (!ew_CheckShortEuroDate($this->scan_masuk->FormValue)) {
 			ew_AddMessage($gsFormError, $this->scan_masuk->FldErrMsg());
 		}
-		if (!ew_CheckDateDef($this->scan_keluar->FormValue)) {
+		if (!ew_CheckShortEuroDate($this->scan_keluar->FormValue)) {
 			ew_AddMessage($gsFormError, $this->scan_keluar->FldErrMsg());
 		}
 
@@ -851,10 +851,10 @@ class ct_keg_detail_edit extends ct_keg_detail {
 			$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, $this->pegawai_id->ReadOnly);
 
 			// scan_masuk
-			$this->scan_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 0), NULL, $this->scan_masuk->ReadOnly);
+			$this->scan_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->scan_masuk->CurrentValue, 17), NULL, $this->scan_masuk->ReadOnly);
 
 			// scan_keluar
-			$this->scan_keluar->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 0), NULL, $this->scan_keluar->ReadOnly);
+			$this->scan_keluar->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->scan_keluar->CurrentValue, 17), NULL, $this->scan_keluar->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -1099,10 +1099,10 @@ ft_keg_detailedit.Validate = function() {
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detail->pegawai_id->FldCaption(), $t_keg_detail->pegawai_id->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_scan_masuk");
-			if (elm && !ew_CheckDateDef(elm.value))
+			if (elm && !ew_CheckShortEuroDate(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detail->scan_masuk->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_scan_keluar");
-			if (elm && !ew_CheckDateDef(elm.value))
+			if (elm && !ew_CheckShortEuroDate(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detail->scan_keluar->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
@@ -1235,7 +1235,7 @@ $t_keg_detail_edit->ShowMessage();
 		<label id="elh_t_keg_detail_scan_masuk" for="x_scan_masuk" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_detail->scan_masuk->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $t_keg_detail->scan_masuk->CellAttributes() ?>>
 <span id="el_t_keg_detail_scan_masuk">
-<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" name="x_scan_masuk" id="x_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
+<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" data-format="17" name="x_scan_masuk" id="x_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
 </span>
 <?php echo $t_keg_detail->scan_masuk->CustomMsg ?></div></div>
 	</div>
@@ -1245,7 +1245,7 @@ $t_keg_detail_edit->ShowMessage();
 		<label id="elh_t_keg_detail_scan_keluar" for="x_scan_keluar" class="col-sm-2 control-label ewLabel"><?php echo $t_keg_detail->scan_keluar->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $t_keg_detail->scan_keluar->CellAttributes() ?>>
 <span id="el_t_keg_detail_scan_keluar">
-<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" name="x_scan_keluar" id="x_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
+<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" data-format="17" name="x_scan_keluar" id="x_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
 </span>
 <?php echo $t_keg_detail->scan_keluar->CustomMsg ?></div></div>
 	</div>

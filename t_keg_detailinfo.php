@@ -70,15 +70,15 @@ class ct_keg_detail extends cTable {
 		$this->fields['kegm_id'] = &$this->kegm_id;
 
 		// scan_masuk
-		$this->scan_masuk = new cField('t_keg_detail', 't_keg_detail', 'x_scan_masuk', 'scan_masuk', '`scan_masuk`', ew_CastDateFieldForLike('`scan_masuk`', 0, "DB"), 135, 0, FALSE, '`scan_masuk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->scan_masuk = new cField('t_keg_detail', 't_keg_detail', 'x_scan_masuk', 'scan_masuk', '`scan_masuk`', ew_CastDateFieldForLike('`scan_masuk`', 17, "DB"), 135, 17, FALSE, '`scan_masuk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->scan_masuk->Sortable = TRUE; // Allow sort
-		$this->scan_masuk->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->scan_masuk->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectShortDateDMY"));
 		$this->fields['scan_masuk'] = &$this->scan_masuk;
 
 		// scan_keluar
-		$this->scan_keluar = new cField('t_keg_detail', 't_keg_detail', 'x_scan_keluar', 'scan_keluar', '`scan_keluar`', ew_CastDateFieldForLike('`scan_keluar`', 0, "DB"), 135, 0, FALSE, '`scan_keluar`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->scan_keluar = new cField('t_keg_detail', 't_keg_detail', 'x_scan_keluar', 'scan_keluar', '`scan_keluar`', ew_CastDateFieldForLike('`scan_keluar`', 17, "DB"), 135, 17, FALSE, '`scan_keluar`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
 		$this->scan_keluar->Sortable = TRUE; // Allow sort
-		$this->scan_keluar->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->scan_keluar->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectShortDateDMY"));
 		$this->fields['scan_keluar'] = &$this->scan_keluar;
 	}
 
@@ -763,12 +763,12 @@ class ct_keg_detail extends cTable {
 
 		// scan_masuk
 		$this->scan_masuk->ViewValue = $this->scan_masuk->CurrentValue;
-		$this->scan_masuk->ViewValue = ew_FormatDateTime($this->scan_masuk->ViewValue, 0);
+		$this->scan_masuk->ViewValue = ew_FormatDateTime($this->scan_masuk->ViewValue, 17);
 		$this->scan_masuk->ViewCustomAttributes = "";
 
 		// scan_keluar
 		$this->scan_keluar->ViewValue = $this->scan_keluar->CurrentValue;
-		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 0);
+		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 17);
 		$this->scan_keluar->ViewCustomAttributes = "";
 
 		// kegd_id
@@ -832,13 +832,13 @@ class ct_keg_detail extends cTable {
 		// scan_masuk
 		$this->scan_masuk->EditAttrs["class"] = "form-control";
 		$this->scan_masuk->EditCustomAttributes = "";
-		$this->scan_masuk->EditValue = ew_FormatDateTime($this->scan_masuk->CurrentValue, 8);
+		$this->scan_masuk->EditValue = ew_FormatDateTime($this->scan_masuk->CurrentValue, 17);
 		$this->scan_masuk->PlaceHolder = ew_RemoveHtml($this->scan_masuk->FldCaption());
 
 		// scan_keluar
 		$this->scan_keluar->EditAttrs["class"] = "form-control";
 		$this->scan_keluar->EditCustomAttributes = "";
-		$this->scan_keluar->EditValue = ew_FormatDateTime($this->scan_keluar->CurrentValue, 8);
+		$this->scan_keluar->EditValue = ew_FormatDateTime($this->scan_keluar->CurrentValue, 17);
 		$this->scan_keluar->PlaceHolder = ew_RemoveHtml($this->scan_keluar->FldCaption());
 
 		// Call Row Rendered event

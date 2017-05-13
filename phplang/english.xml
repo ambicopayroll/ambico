@@ -3186,10 +3186,10 @@
         <phrase id="fldcaption" value="Master" />
       </field>
       <field id="scan_masuk">
-        <phrase id="fldcaption" value="scan masuk" />
+        <phrase id="fldcaption" value="Scan Masuk" />
       </field>
       <field id="scan_keluar">
-        <phrase id="fldcaption" value="scan keluar" />
+        <phrase id="fldcaption" value="Scan Keluar" />
       </field>
     </table>
     <table id="t_keg_master">

@@ -544,14 +544,12 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 		$this->tgl->SetVisibility();
 		$this->hk_def->SetVisibility();
 		$this->jk_kd->SetVisibility();
-		$this->pegawai_pin->SetVisibility();
-		$this->lapgroup_nama->SetVisibility();
 
 		// Aggregate variables
 		// 1st dimension = no of groups (level 0 used for grand total)
 		// 2nd dimension = no of fields
 
-		$nDtls = 9;
+		$nDtls = 7;
 		$nGrps = 1;
 		$this->Val = &ewr_InitArray($nDtls, 0);
 		$this->Cnt = &ewr_Init2DArray($nGrps, $nDtls, 0);
@@ -564,7 +562,7 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 		$this->GrandMx = &ewr_InitArray($nDtls, NULL);
 
 		// Set up array if accumulation required: array(Accum, SkipNullOrZero)
-		$this->Col = array(array(FALSE, FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE));
+		$this->Col = array(array(FALSE, FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE));
 
 		// Set up groups per page dynamically
 		$this->SetUpDisplayGrps();
@@ -821,8 +819,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$this->Val[4] = $this->tgl->CurrentValue;
 			$this->Val[5] = $this->hk_def->CurrentValue;
 			$this->Val[6] = $this->jk_kd->CurrentValue;
-			$this->Val[7] = $this->pegawai_pin->CurrentValue;
-			$this->Val[8] = $this->lapgroup_nama->CurrentValue;
 		} else {
 			$this->pembagian2_nama->setDbValue("");
 			$this->pegawai_nip->setDbValue("");
@@ -1088,12 +1084,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 
 			// jk_kd
 			$this->jk_kd->HrefValue = "";
-
-			// pegawai_pin
-			$this->pegawai_pin->HrefValue = "";
-
-			// lapgroup_nama
-			$this->lapgroup_nama->HrefValue = "";
 		} else {
 			if ($this->RowTotalType == EWR_ROWTOTAL_GROUP && $this->RowTotalSubType == EWR_ROWTOTAL_HEADER) {
 			} else {
@@ -1124,14 +1114,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$this->jk_kd->ViewValue = $this->jk_kd->CurrentValue;
 			$this->jk_kd->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
 
-			// pegawai_pin
-			$this->pegawai_pin->ViewValue = $this->pegawai_pin->CurrentValue;
-			$this->pegawai_pin->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
-
-			// lapgroup_nama
-			$this->lapgroup_nama->ViewValue = $this->lapgroup_nama->CurrentValue;
-			$this->lapgroup_nama->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
-
 			// pembagian2_nama
 			$this->pembagian2_nama->HrefValue = "";
 
@@ -1149,12 +1131,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 
 			// jk_kd
 			$this->jk_kd->HrefValue = "";
-
-			// pegawai_pin
-			$this->pegawai_pin->HrefValue = "";
-
-			// lapgroup_nama
-			$this->lapgroup_nama->HrefValue = "";
 		}
 
 		// Call Cell_Rendered event
@@ -1214,24 +1190,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$HrefValue = &$this->jk_kd->HrefValue;
 			$LinkAttrs = &$this->jk_kd->LinkAttrs;
 			$this->Cell_Rendered($this->jk_kd, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
-
-			// pegawai_pin
-			$CurrentValue = $this->pegawai_pin->CurrentValue;
-			$ViewValue = &$this->pegawai_pin->ViewValue;
-			$ViewAttrs = &$this->pegawai_pin->ViewAttrs;
-			$CellAttrs = &$this->pegawai_pin->CellAttrs;
-			$HrefValue = &$this->pegawai_pin->HrefValue;
-			$LinkAttrs = &$this->pegawai_pin->LinkAttrs;
-			$this->Cell_Rendered($this->pegawai_pin, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
-
-			// lapgroup_nama
-			$CurrentValue = $this->lapgroup_nama->CurrentValue;
-			$ViewValue = &$this->lapgroup_nama->ViewValue;
-			$ViewAttrs = &$this->lapgroup_nama->ViewAttrs;
-			$CellAttrs = &$this->lapgroup_nama->CellAttrs;
-			$HrefValue = &$this->lapgroup_nama->HrefValue;
-			$LinkAttrs = &$this->lapgroup_nama->LinkAttrs;
-			$this->Cell_Rendered($this->lapgroup_nama, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
 		}
 
 		// Call Row_Rendered event
@@ -1250,8 +1208,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 		if ($this->tgl->Visible) $this->DtlColumnCount += 1;
 		if ($this->hk_def->Visible) $this->DtlColumnCount += 1;
 		if ($this->jk_kd->Visible) $this->DtlColumnCount += 1;
-		if ($this->pegawai_pin->Visible) $this->DtlColumnCount += 1;
-		if ($this->lapgroup_nama->Visible) $this->DtlColumnCount += 1;
 	}
 
 	// Set up Breadcrumb
@@ -1953,8 +1909,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$this->tgl->setSort("");
 			$this->hk_def->setSort("");
 			$this->jk_kd->setSort("");
-			$this->pegawai_pin->setSort("");
-			$this->lapgroup_nama->setSort("");
 
 		// Check for an Order parameter
 		} elseif ($orderBy <> "") {
@@ -1966,8 +1920,6 @@ class crr_jdw_krj_def_summary extends crr_jdw_krj_def {
 			$this->UpdateSort($this->tgl, $bCtrl); // tgl
 			$this->UpdateSort($this->hk_def, $bCtrl); // hk_def
 			$this->UpdateSort($this->jk_kd, $bCtrl); // jk_kd
-			$this->UpdateSort($this->pegawai_pin, $bCtrl); // pegawai_pin
-			$this->UpdateSort($this->lapgroup_nama, $bCtrl); // lapgroup_nama
 			$sSortSql = $this->SortSql();
 			$this->setOrderBy($sSortSql);
 			$this->setStartGroup(1);
@@ -2612,42 +2564,6 @@ while ($rs && !$rs->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page->ShowH
 	</td>
 <?php } ?>
 <?php } ?>
-<?php if ($Page->pegawai_pin->Visible) { ?>
-<?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="pegawai_pin"><div class="r_jdw_krj_def_pegawai_pin"><span class="ewTableHeaderCaption"><?php echo $Page->pegawai_pin->FldCaption() ?></span></div></td>
-<?php } else { ?>
-	<td data-field="pegawai_pin">
-<?php if ($Page->SortUrl($Page->pegawai_pin) == "") { ?>
-		<div class="ewTableHeaderBtn r_jdw_krj_def_pegawai_pin">
-			<span class="ewTableHeaderCaption"><?php echo $Page->pegawai_pin->FldCaption() ?></span>
-		</div>
-<?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_jdw_krj_def_pegawai_pin" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->pegawai_pin) ?>',2);">
-			<span class="ewTableHeaderCaption"><?php echo $Page->pegawai_pin->FldCaption() ?></span>
-			<span class="ewTableHeaderSort"><?php if ($Page->pegawai_pin->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->pegawai_pin->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
-		</div>
-<?php } ?>
-	</td>
-<?php } ?>
-<?php } ?>
-<?php if ($Page->lapgroup_nama->Visible) { ?>
-<?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="lapgroup_nama"><div class="r_jdw_krj_def_lapgroup_nama"><span class="ewTableHeaderCaption"><?php echo $Page->lapgroup_nama->FldCaption() ?></span></div></td>
-<?php } else { ?>
-	<td data-field="lapgroup_nama">
-<?php if ($Page->SortUrl($Page->lapgroup_nama) == "") { ?>
-		<div class="ewTableHeaderBtn r_jdw_krj_def_lapgroup_nama">
-			<span class="ewTableHeaderCaption"><?php echo $Page->lapgroup_nama->FldCaption() ?></span>
-		</div>
-<?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_jdw_krj_def_lapgroup_nama" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->lapgroup_nama) ?>',2);">
-			<span class="ewTableHeaderCaption"><?php echo $Page->lapgroup_nama->FldCaption() ?></span>
-			<span class="ewTableHeaderSort"><?php if ($Page->lapgroup_nama->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->lapgroup_nama->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
-		</div>
-<?php } ?>
-	</td>
-<?php } ?>
-<?php } ?>
 	</tr>
 </thead>
 <tbody>
@@ -2689,14 +2605,6 @@ while ($rs && !$rs->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page->ShowH
 <?php if ($Page->jk_kd->Visible) { ?>
 		<td data-field="jk_kd"<?php echo $Page->jk_kd->CellAttributes() ?>>
 <span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_jdw_krj_def_jk_kd"<?php echo $Page->jk_kd->ViewAttributes() ?>><?php echo $Page->jk_kd->ListViewValue() ?></span></td>
-<?php } ?>
-<?php if ($Page->pegawai_pin->Visible) { ?>
-		<td data-field="pegawai_pin"<?php echo $Page->pegawai_pin->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_jdw_krj_def_pegawai_pin"<?php echo $Page->pegawai_pin->ViewAttributes() ?>><?php echo $Page->pegawai_pin->ListViewValue() ?></span></td>
-<?php } ?>
-<?php if ($Page->lapgroup_nama->Visible) { ?>
-		<td data-field="lapgroup_nama"<?php echo $Page->lapgroup_nama->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->RecCount ?>_r_jdw_krj_def_lapgroup_nama"<?php echo $Page->lapgroup_nama->ViewAttributes() ?>><?php echo $Page->lapgroup_nama->ListViewValue() ?></span></td>
 <?php } ?>
 	</tr>
 <?php

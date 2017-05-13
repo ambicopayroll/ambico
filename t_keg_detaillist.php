@@ -1324,12 +1324,12 @@ class ct_keg_detail_list extends ct_keg_detail {
 
 		// scan_masuk
 		$this->scan_masuk->ViewValue = $this->scan_masuk->CurrentValue;
-		$this->scan_masuk->ViewValue = ew_FormatDateTime($this->scan_masuk->ViewValue, 0);
+		$this->scan_masuk->ViewValue = ew_FormatDateTime($this->scan_masuk->ViewValue, 17);
 		$this->scan_masuk->ViewCustomAttributes = "";
 
 		// scan_keluar
 		$this->scan_keluar->ViewValue = $this->scan_keluar->CurrentValue;
-		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 0);
+		$this->scan_keluar->ViewValue = ew_FormatDateTime($this->scan_keluar->ViewValue, 17);
 		$this->scan_keluar->ViewCustomAttributes = "";
 
 			// pegawai_id

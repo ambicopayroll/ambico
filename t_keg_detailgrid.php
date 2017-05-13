@@ -45,10 +45,10 @@ ft_keg_detailgrid.Validate = function() {
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_keg_detail->pegawai_id->FldCaption(), $t_keg_detail->pegawai_id->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_scan_masuk");
-			if (elm && !ew_CheckDateDef(elm.value))
+			if (elm && !ew_CheckShortEuroDate(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detail->scan_masuk->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_scan_keluar");
-			if (elm && !ew_CheckDateDef(elm.value))
+			if (elm && !ew_CheckShortEuroDate(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_keg_detail->scan_keluar->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
@@ -352,13 +352,13 @@ $t_keg_detail_grid->ListOptions->Render("body", "left", $t_keg_detail_grid->RowC
 		<td data-name="scan_masuk"<?php echo $t_keg_detail->scan_masuk->CellAttributes() ?>>
 <?php if ($t_keg_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_masuk" class="form-group t_keg_detail_scan_masuk">
-<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
+<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" data-format="17" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
 </span>
 <input type="hidden" data-table="t_keg_detail" data-field="x_scan_masuk" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->OldValue) ?>">
 <?php } ?>
 <?php if ($t_keg_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_masuk" class="form-group t_keg_detail_scan_masuk">
-<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
+<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" data-format="17" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
 </span>
 <?php } ?>
 <?php if ($t_keg_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
@@ -380,13 +380,13 @@ $t_keg_detail_grid->ListOptions->Render("body", "left", $t_keg_detail_grid->RowC
 		<td data-name="scan_keluar"<?php echo $t_keg_detail->scan_keluar->CellAttributes() ?>>
 <?php if ($t_keg_detail->RowType == EW_ROWTYPE_ADD) { // Add record ?>
 <span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_keluar" class="form-group t_keg_detail_scan_keluar">
-<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
+<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" data-format="17" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
 </span>
 <input type="hidden" data-table="t_keg_detail" data-field="x_scan_keluar" name="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="o<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" value="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->OldValue) ?>">
 <?php } ?>
 <?php if ($t_keg_detail->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
 <span id="el<?php echo $t_keg_detail_grid->RowCnt ?>_t_keg_detail_scan_keluar" class="form-group t_keg_detail_scan_keluar">
-<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
+<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" data-format="17" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
 </span>
 <?php } ?>
 <?php if ($t_keg_detail->RowType == EW_ROWTYPE_VIEW) { // View record ?>
@@ -471,7 +471,7 @@ $t_keg_detail_grid->ListOptions->Render("body", "left", $t_keg_detail_grid->RowI
 		<td data-name="scan_masuk">
 <?php if ($t_keg_detail->CurrentAction <> "F") { ?>
 <span id="el$rowindex$_t_keg_detail_scan_masuk" class="form-group t_keg_detail_scan_masuk">
-<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
+<input type="text" data-table="t_keg_detail" data-field="x_scan_masuk" data-format="17" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_masuk" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_masuk->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_masuk->EditValue ?>"<?php echo $t_keg_detail->scan_masuk->EditAttributes() ?>>
 </span>
 <?php } else { ?>
 <span id="el$rowindex$_t_keg_detail_scan_masuk" class="form-group t_keg_detail_scan_masuk">
@@ -487,7 +487,7 @@ $t_keg_detail_grid->ListOptions->Render("body", "left", $t_keg_detail_grid->RowI
 		<td data-name="scan_keluar">
 <?php if ($t_keg_detail->CurrentAction <> "F") { ?>
 <span id="el$rowindex$_t_keg_detail_scan_keluar" class="form-group t_keg_detail_scan_keluar">
-<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
+<input type="text" data-table="t_keg_detail" data-field="x_scan_keluar" data-format="17" name="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" id="x<?php echo $t_keg_detail_grid->RowIndex ?>_scan_keluar" placeholder="<?php echo ew_HtmlEncode($t_keg_detail->scan_keluar->getPlaceHolder()) ?>" value="<?php echo $t_keg_detail->scan_keluar->EditValue ?>"<?php echo $t_keg_detail->scan_keluar->EditAttributes() ?>>
 </span>
 <?php } else { ?>
 <span id="el$rowindex$_t_keg_detail_scan_keluar" class="form-group t_keg_detail_scan_keluar">
