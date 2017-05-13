@@ -76,6 +76,8 @@ ft_pengecualian_peggrid.EmptyRow = function(infix) {
 	if (ew_ValueChanged(fobj, infix, "jns_id", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "jam_masuk", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "jam_keluar", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "pegawai_id2", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "pegawai_id3", false)) return false;
 	return true;
 }
 
@@ -97,6 +99,8 @@ ft_pengecualian_peggrid.ValidateRequired = false;
 // Dynamic selection lists
 ft_pengecualian_peggrid.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
 ft_pengecualian_peggrid.Lists["x_jns_id"] = {"LinkField":"x_jns_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_kode","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_jns_pengecualian"};
+ft_pengecualian_peggrid.Lists["x_pegawai_id2"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
+ft_pengecualian_peggrid.Lists["x_pegawai_id3"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
 
 // Form object for search
 </script>
@@ -221,6 +225,24 @@ $t_pengecualian_peg_grid->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<th data-name="jam_keluar"><div><div id="elh_t_pengecualian_peg_jam_keluar" class="t_pengecualian_peg_jam_keluar">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->jam_keluar->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_pengecualian_peg->jam_keluar->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_pengecualian_peg->jam_keluar->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($t_pengecualian_peg->pegawai_id2->Visible) { // pegawai_id2 ?>
+	<?php if ($t_pengecualian_peg->SortUrl($t_pengecualian_peg->pegawai_id2) == "") { ?>
+		<th data-name="pegawai_id2"><div id="elh_t_pengecualian_peg_pegawai_id2" class="t_pengecualian_peg_pegawai_id2"><div class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->pegawai_id2->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="pegawai_id2"><div><div id="elh_t_pengecualian_peg_pegawai_id2" class="t_pengecualian_peg_pegawai_id2">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->pegawai_id2->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_pengecualian_peg->pegawai_id2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_pengecualian_peg->pegawai_id2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($t_pengecualian_peg->pegawai_id3->Visible) { // pegawai_id3 ?>
+	<?php if ($t_pengecualian_peg->SortUrl($t_pengecualian_peg->pegawai_id3) == "") { ?>
+		<th data-name="pegawai_id3"><div id="elh_t_pengecualian_peg_pegawai_id3" class="t_pengecualian_peg_pegawai_id3"><div class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->pegawai_id3->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="pegawai_id3"><div><div id="elh_t_pengecualian_peg_pegawai_id3" class="t_pengecualian_peg_pegawai_id3">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->pegawai_id3->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_pengecualian_peg->pegawai_id3->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_pengecualian_peg->pegawai_id3->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -526,6 +548,82 @@ ew_CreateCalendar("ft_pengecualian_peggrid", "x<?php echo $t_pengecualian_peg_gr
 <?php } ?>
 </td>
 	<?php } ?>
+	<?php if ($t_pengecualian_peg->pegawai_id2->Visible) { // pegawai_id2 ?>
+		<td data-name="pegawai_id2"<?php echo $t_pengecualian_peg->pegawai_id2->CellAttributes() ?>>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $t_pengecualian_peg_grid->RowCnt ?>_t_pengecualian_peg_pegawai_id2" class="form-group t_pengecualian_peg_pegawai_id2">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2"><?php echo (strval($t_pengecualian_peg->pegawai_id2->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->pegawai_id2->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->pegawai_id2->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->pegawai_id2->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo $t_pengecualian_peg->pegawai_id2->CurrentValue ?>"<?php echo $t_pengecualian_peg->pegawai_id2->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo $t_pengecualian_peg->pegawai_id2->LookupFilterQuery() ?>">
+</span>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" name="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id2->OldValue) ?>">
+<?php } ?>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $t_pengecualian_peg_grid->RowCnt ?>_t_pengecualian_peg_pegawai_id2" class="form-group t_pengecualian_peg_pegawai_id2">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2"><?php echo (strval($t_pengecualian_peg->pegawai_id2->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->pegawai_id2->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->pegawai_id2->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->pegawai_id2->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo $t_pengecualian_peg->pegawai_id2->CurrentValue ?>"<?php echo $t_pengecualian_peg->pegawai_id2->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo $t_pengecualian_peg->pegawai_id2->LookupFilterQuery() ?>">
+</span>
+<?php } ?>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $t_pengecualian_peg_grid->RowCnt ?>_t_pengecualian_peg_pegawai_id2" class="t_pengecualian_peg_pegawai_id2">
+<span<?php echo $t_pengecualian_peg->pegawai_id2->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->pegawai_id2->ListViewValue() ?></span>
+</span>
+<?php if ($t_pengecualian_peg->CurrentAction <> "F") { ?>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id2->FormValue) ?>">
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" name="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id2->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" name="ft_pengecualian_peggrid$x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="ft_pengecualian_peggrid$x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id2->FormValue) ?>">
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" name="ft_pengecualian_peggrid$o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="ft_pengecualian_peggrid$o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id2->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+	<?php } ?>
+	<?php if ($t_pengecualian_peg->pegawai_id3->Visible) { // pegawai_id3 ?>
+		<td data-name="pegawai_id3"<?php echo $t_pengecualian_peg->pegawai_id3->CellAttributes() ?>>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $t_pengecualian_peg_grid->RowCnt ?>_t_pengecualian_peg_pegawai_id3" class="form-group t_pengecualian_peg_pegawai_id3">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3"><?php echo (strval($t_pengecualian_peg->pegawai_id3->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->pegawai_id3->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->pegawai_id3->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->pegawai_id3->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo $t_pengecualian_peg->pegawai_id3->CurrentValue ?>"<?php echo $t_pengecualian_peg->pegawai_id3->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo $t_pengecualian_peg->pegawai_id3->LookupFilterQuery() ?>">
+</span>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" name="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id3->OldValue) ?>">
+<?php } ?>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $t_pengecualian_peg_grid->RowCnt ?>_t_pengecualian_peg_pegawai_id3" class="form-group t_pengecualian_peg_pegawai_id3">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3"><?php echo (strval($t_pengecualian_peg->pegawai_id3->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->pegawai_id3->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->pegawai_id3->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->pegawai_id3->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo $t_pengecualian_peg->pegawai_id3->CurrentValue ?>"<?php echo $t_pengecualian_peg->pegawai_id3->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo $t_pengecualian_peg->pegawai_id3->LookupFilterQuery() ?>">
+</span>
+<?php } ?>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $t_pengecualian_peg_grid->RowCnt ?>_t_pengecualian_peg_pegawai_id3" class="t_pengecualian_peg_pegawai_id3">
+<span<?php echo $t_pengecualian_peg->pegawai_id3->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->pegawai_id3->ListViewValue() ?></span>
+</span>
+<?php if ($t_pengecualian_peg->CurrentAction <> "F") { ?>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id3->FormValue) ?>">
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" name="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id3->OldValue) ?>">
+<?php } else { ?>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" name="ft_pengecualian_peggrid$x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="ft_pengecualian_peggrid$x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id3->FormValue) ?>">
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" name="ft_pengecualian_peggrid$o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="ft_pengecualian_peggrid$o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id3->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+	<?php } ?>
 <?php
 
 // Render list options (body, right)
@@ -669,6 +767,48 @@ ew_CreateCalendar("ft_pengecualian_peggrid", "x<?php echo $t_pengecualian_peg_gr
 <input type="hidden" data-table="t_pengecualian_peg" data-field="x_jam_keluar" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_jam_keluar" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_jam_keluar" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->jam_keluar->FormValue) ?>">
 <?php } ?>
 <input type="hidden" data-table="t_pengecualian_peg" data-field="x_jam_keluar" name="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_jam_keluar" id="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_jam_keluar" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->jam_keluar->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($t_pengecualian_peg->pegawai_id2->Visible) { // pegawai_id2 ?>
+		<td data-name="pegawai_id2">
+<?php if ($t_pengecualian_peg->CurrentAction <> "F") { ?>
+<span id="el$rowindex$_t_pengecualian_peg_pegawai_id2" class="form-group t_pengecualian_peg_pegawai_id2">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2"><?php echo (strval($t_pengecualian_peg->pegawai_id2->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->pegawai_id2->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->pegawai_id2->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->pegawai_id2->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo $t_pengecualian_peg->pegawai_id2->CurrentValue ?>"<?php echo $t_pengecualian_peg->pegawai_id2->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo $t_pengecualian_peg->pegawai_id2->LookupFilterQuery() ?>">
+</span>
+<?php } else { ?>
+<span id="el$rowindex$_t_pengecualian_peg_pegawai_id2" class="form-group t_pengecualian_peg_pegawai_id2">
+<span<?php echo $t_pengecualian_peg->pegawai_id2->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_pengecualian_peg->pegawai_id2->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id2->FormValue) ?>">
+<?php } ?>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id2" name="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" id="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id2->OldValue) ?>">
+</td>
+	<?php } ?>
+	<?php if ($t_pengecualian_peg->pegawai_id3->Visible) { // pegawai_id3 ?>
+		<td data-name="pegawai_id3">
+<?php if ($t_pengecualian_peg->CurrentAction <> "F") { ?>
+<span id="el$rowindex$_t_pengecualian_peg_pegawai_id3" class="form-group t_pengecualian_peg_pegawai_id3">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3"><?php echo (strval($t_pengecualian_peg->pegawai_id3->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->pegawai_id3->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->pegawai_id3->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->pegawai_id3->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo $t_pengecualian_peg->pegawai_id3->CurrentValue ?>"<?php echo $t_pengecualian_peg->pegawai_id3->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="s_x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo $t_pengecualian_peg->pegawai_id3->LookupFilterQuery() ?>">
+</span>
+<?php } else { ?>
+<span id="el$rowindex$_t_pengecualian_peg_pegawai_id3" class="form-group t_pengecualian_peg_pegawai_id3">
+<span<?php echo $t_pengecualian_peg->pegawai_id3->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_pengecualian_peg->pegawai_id3->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" name="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="x<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id3->FormValue) ?>">
+<?php } ?>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id3" name="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" id="o<?php echo $t_pengecualian_peg_grid->RowIndex ?>_pegawai_id3" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id3->OldValue) ?>">
 </td>
 	<?php } ?>
 <?php

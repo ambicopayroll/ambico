@@ -291,6 +291,8 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		$this->jns_id->SetVisibility();
 		$this->jam_masuk->SetVisibility();
 		$this->jam_keluar->SetVisibility();
+		$this->pegawai_id2->SetVisibility();
+		$this->pegawai_id3->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -484,6 +486,18 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		}
 		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
 		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
+		$this->pegawai_id2->setDbValue($rs->fields('pegawai_id2'));
+		if (array_key_exists('EV__pegawai_id2', $rs->fields)) {
+			$this->pegawai_id2->VirtualValue = $rs->fields('EV__pegawai_id2'); // Set up virtual field value
+		} else {
+			$this->pegawai_id2->VirtualValue = ""; // Clear value
+		}
+		$this->pegawai_id3->setDbValue($rs->fields('pegawai_id3'));
+		if (array_key_exists('EV__pegawai_id3', $rs->fields)) {
+			$this->pegawai_id3->VirtualValue = $rs->fields('EV__pegawai_id3'); // Set up virtual field value
+		} else {
+			$this->pegawai_id3->VirtualValue = ""; // Clear value
+		}
 	}
 
 	// Load DbValue from recordset
@@ -496,6 +510,8 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		$this->jns_id->DbValue = $row['jns_id'];
 		$this->jam_masuk->DbValue = $row['jam_masuk'];
 		$this->jam_keluar->DbValue = $row['jam_keluar'];
+		$this->pegawai_id2->DbValue = $row['pegawai_id2'];
+		$this->pegawai_id3->DbValue = $row['pegawai_id3'];
 	}
 
 	// Render row values based on field settings
@@ -514,6 +530,8 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		// jns_id
 		// jam_masuk
 		// jam_keluar
+		// pegawai_id2
+		// pegawai_id3
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -590,6 +608,60 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 		$this->jam_keluar->ViewValue = ew_FormatDateTime($this->jam_keluar->ViewValue, 9);
 		$this->jam_keluar->ViewCustomAttributes = "";
 
+		// pegawai_id2
+		if ($this->pegawai_id2->VirtualValue <> "") {
+			$this->pegawai_id2->ViewValue = $this->pegawai_id2->VirtualValue;
+		} else {
+		if (strval($this->pegawai_id2->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id2->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id2->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id2, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id2->ViewValue = $this->pegawai_id2->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id2->ViewValue = $this->pegawai_id2->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id2->ViewValue = NULL;
+		}
+		}
+		$this->pegawai_id2->ViewCustomAttributes = "";
+
+		// pegawai_id3
+		if ($this->pegawai_id3->VirtualValue <> "") {
+			$this->pegawai_id3->ViewValue = $this->pegawai_id3->VirtualValue;
+		} else {
+		if (strval($this->pegawai_id3->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id3->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id3->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id3, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id3->ViewValue = $this->pegawai_id3->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id3->ViewValue = $this->pegawai_id3->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id3->ViewValue = NULL;
+		}
+		}
+		$this->pegawai_id3->ViewCustomAttributes = "";
+
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
@@ -614,6 +686,16 @@ class ct_pengecualian_peg_delete extends ct_pengecualian_peg {
 			$this->jam_keluar->LinkCustomAttributes = "";
 			$this->jam_keluar->HrefValue = "";
 			$this->jam_keluar->TooltipValue = "";
+
+			// pegawai_id2
+			$this->pegawai_id2->LinkCustomAttributes = "";
+			$this->pegawai_id2->HrefValue = "";
+			$this->pegawai_id2->TooltipValue = "";
+
+			// pegawai_id3
+			$this->pegawai_id3->LinkCustomAttributes = "";
+			$this->pegawai_id3->HrefValue = "";
+			$this->pegawai_id3->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -897,6 +979,8 @@ ft_pengecualian_pegdelete.ValidateRequired = false;
 // Dynamic selection lists
 ft_pengecualian_pegdelete.Lists["x_pegawai_id"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
 ft_pengecualian_pegdelete.Lists["x_jns_id"] = {"LinkField":"x_jns_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_kode","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_jns_pengecualian"};
+ft_pengecualian_pegdelete.Lists["x_pegawai_id2"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
+ft_pengecualian_pegdelete.Lists["x_pegawai_id3"] = {"LinkField":"x_pegawai_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_pegawai_nama","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"pegawai"};
 
 // Form object for search
 </script>
@@ -943,6 +1027,12 @@ $t_pengecualian_peg_delete->ShowMessage();
 <?php } ?>
 <?php if ($t_pengecualian_peg->jam_keluar->Visible) { // jam_keluar ?>
 		<th><span id="elh_t_pengecualian_peg_jam_keluar" class="t_pengecualian_peg_jam_keluar"><?php echo $t_pengecualian_peg->jam_keluar->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($t_pengecualian_peg->pegawai_id2->Visible) { // pegawai_id2 ?>
+		<th><span id="elh_t_pengecualian_peg_pegawai_id2" class="t_pengecualian_peg_pegawai_id2"><?php echo $t_pengecualian_peg->pegawai_id2->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($t_pengecualian_peg->pegawai_id3->Visible) { // pegawai_id3 ?>
+		<th><span id="elh_t_pengecualian_peg_pegawai_id3" class="t_pengecualian_peg_pegawai_id3"><?php echo $t_pengecualian_peg->pegawai_id3->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -1002,6 +1092,22 @@ while (!$t_pengecualian_peg_delete->Recordset->EOF) {
 <span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_jam_keluar" class="t_pengecualian_peg_jam_keluar">
 <span<?php echo $t_pengecualian_peg->jam_keluar->ViewAttributes() ?>>
 <?php echo $t_pengecualian_peg->jam_keluar->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($t_pengecualian_peg->pegawai_id2->Visible) { // pegawai_id2 ?>
+		<td<?php echo $t_pengecualian_peg->pegawai_id2->CellAttributes() ?>>
+<span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_pegawai_id2" class="t_pengecualian_peg_pegawai_id2">
+<span<?php echo $t_pengecualian_peg->pegawai_id2->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->pegawai_id2->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($t_pengecualian_peg->pegawai_id3->Visible) { // pegawai_id3 ?>
+		<td<?php echo $t_pengecualian_peg->pegawai_id3->CellAttributes() ?>>
+<span id="el<?php echo $t_pengecualian_peg_delete->RowCnt ?>_t_pengecualian_peg_pegawai_id3" class="t_pengecualian_peg_pegawai_id3">
+<span<?php echo $t_pengecualian_peg->pegawai_id3->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->pegawai_id3->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

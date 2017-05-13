@@ -19,6 +19,8 @@ class ct_pengecualian_peg extends cTable {
 	var $jns_id;
 	var $jam_masuk;
 	var $jam_keluar;
+	var $pegawai_id2;
+	var $pegawai_id3;
 
 	//
 	// Table class constructor
@@ -89,6 +91,22 @@ class ct_pengecualian_peg extends cTable {
 		$this->jam_keluar->Sortable = TRUE; // Allow sort
 		$this->jam_keluar->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_SEPARATOR"], $Language->Phrase("IncorrectDateYMD"));
 		$this->fields['jam_keluar'] = &$this->jam_keluar;
+
+		// pegawai_id2
+		$this->pegawai_id2 = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_pegawai_id2', 'pegawai_id2', '`pegawai_id2`', '`pegawai_id2`', 3, -1, FALSE, '`EV__pegawai_id2`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
+		$this->pegawai_id2->Sortable = TRUE; // Allow sort
+		$this->pegawai_id2->UsePleaseSelect = TRUE; // Use PleaseSelect by default
+		$this->pegawai_id2->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
+		$this->pegawai_id2->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['pegawai_id2'] = &$this->pegawai_id2;
+
+		// pegawai_id3
+		$this->pegawai_id3 = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_pegawai_id3', 'pegawai_id3', '`pegawai_id3`', '`pegawai_id3`', 3, -1, FALSE, '`EV__pegawai_id3`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
+		$this->pegawai_id3->Sortable = TRUE; // Allow sort
+		$this->pegawai_id3->UsePleaseSelect = TRUE; // Use PleaseSelect by default
+		$this->pegawai_id3->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
+		$this->pegawai_id3->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['pegawai_id3'] = &$this->pegawai_id3;
 	}
 
 	// Set Field Visibility
@@ -226,7 +244,7 @@ class ct_pengecualian_peg extends cTable {
 	function getSqlSelectList() { // Select for List page
 		$select = "";
 		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT `pegawai_nama` FROM `pegawai` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`pegawai_id` = `t_pengecualian_peg`.`pegawai_id` LIMIT 1) AS `EV__pegawai_id`, (SELECT `kode` FROM `t_jns_pengecualian` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`jns_id` = `t_pengecualian_peg`.`jns_id` LIMIT 1) AS `EV__jns_id` FROM `t_pengecualian_peg`" .
+			"SELECT *, (SELECT `pegawai_nama` FROM `pegawai` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`pegawai_id` = `t_pengecualian_peg`.`pegawai_id` LIMIT 1) AS `EV__pegawai_id`, (SELECT `kode` FROM `t_jns_pengecualian` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`jns_id` = `t_pengecualian_peg`.`jns_id` LIMIT 1) AS `EV__jns_id`, (SELECT `pegawai_nama` FROM `pegawai` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`pegawai_id` = `t_pengecualian_peg`.`pegawai_id2` LIMIT 1) AS `EV__pegawai_id2`, (SELECT `pegawai_nama` FROM `pegawai` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`pegawai_id` = `t_pengecualian_peg`.`pegawai_id3` LIMIT 1) AS `EV__pegawai_id3` FROM `t_pengecualian_peg`" .
 			") `EW_TMP_TABLE`";
 		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
 	}
@@ -385,6 +403,18 @@ class ct_pengecualian_peg extends cTable {
 			strpos($sWhere, " " . $this->jns_id->FldVirtualExpression . " ") !== FALSE)
 			return TRUE;
 		if (strpos($sOrderBy, " " . $this->jns_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if ($this->pegawai_id2->AdvancedSearch->SearchValue <> "" ||
+			$this->pegawai_id2->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->pegawai_id2->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if (strpos($sOrderBy, " " . $this->pegawai_id2->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if ($this->pegawai_id3->AdvancedSearch->SearchValue <> "" ||
+			$this->pegawai_id3->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->pegawai_id3->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if (strpos($sOrderBy, " " . $this->pegawai_id3->FldVirtualExpression . " ") !== FALSE)
 			return TRUE;
 		return FALSE;
 	}
@@ -726,6 +756,8 @@ class ct_pengecualian_peg extends cTable {
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
 		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
 		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
+		$this->pegawai_id2->setDbValue($rs->fields('pegawai_id2'));
+		$this->pegawai_id3->setDbValue($rs->fields('pegawai_id3'));
 	}
 
 	// Render list row values
@@ -742,6 +774,8 @@ class ct_pengecualian_peg extends cTable {
 		// jns_id
 		// jam_masuk
 		// jam_keluar
+		// pegawai_id2
+		// pegawai_id3
 		// pengecualian_id
 
 		$this->pengecualian_id->ViewValue = $this->pengecualian_id->CurrentValue;
@@ -816,6 +850,60 @@ class ct_pengecualian_peg extends cTable {
 		$this->jam_keluar->ViewValue = ew_FormatDateTime($this->jam_keluar->ViewValue, 9);
 		$this->jam_keluar->ViewCustomAttributes = "";
 
+		// pegawai_id2
+		if ($this->pegawai_id2->VirtualValue <> "") {
+			$this->pegawai_id2->ViewValue = $this->pegawai_id2->VirtualValue;
+		} else {
+		if (strval($this->pegawai_id2->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id2->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id2->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id2, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id2->ViewValue = $this->pegawai_id2->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id2->ViewValue = $this->pegawai_id2->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id2->ViewValue = NULL;
+		}
+		}
+		$this->pegawai_id2->ViewCustomAttributes = "";
+
+		// pegawai_id3
+		if ($this->pegawai_id3->VirtualValue <> "") {
+			$this->pegawai_id3->ViewValue = $this->pegawai_id3->VirtualValue;
+		} else {
+		if (strval($this->pegawai_id3->CurrentValue) <> "") {
+			$sFilterWrk = "`pegawai_id`" . ew_SearchString("=", $this->pegawai_id3->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `pegawai_id`, `pegawai_nama` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `pegawai`";
+		$sWhereWrk = "";
+		$this->pegawai_id3->LookupFilters = array("dx1" => '`pegawai_nama`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->pegawai_id3, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$this->pegawai_id3->ViewValue = $this->pegawai_id3->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->pegawai_id3->ViewValue = $this->pegawai_id3->CurrentValue;
+			}
+		} else {
+			$this->pegawai_id3->ViewValue = NULL;
+		}
+		}
+		$this->pegawai_id3->ViewCustomAttributes = "";
+
 		// pengecualian_id
 		$this->pengecualian_id->LinkCustomAttributes = "";
 		$this->pengecualian_id->HrefValue = "";
@@ -845,6 +933,16 @@ class ct_pengecualian_peg extends cTable {
 		$this->jam_keluar->LinkCustomAttributes = "";
 		$this->jam_keluar->HrefValue = "";
 		$this->jam_keluar->TooltipValue = "";
+
+		// pegawai_id2
+		$this->pegawai_id2->LinkCustomAttributes = "";
+		$this->pegawai_id2->HrefValue = "";
+		$this->pegawai_id2->TooltipValue = "";
+
+		// pegawai_id3
+		$this->pegawai_id3->LinkCustomAttributes = "";
+		$this->pegawai_id3->HrefValue = "";
+		$this->pegawai_id3->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -918,6 +1016,14 @@ class ct_pengecualian_peg extends cTable {
 		$this->jam_keluar->EditValue = ew_FormatDateTime($this->jam_keluar->CurrentValue, 9);
 		$this->jam_keluar->PlaceHolder = ew_RemoveHtml($this->jam_keluar->FldCaption());
 
+		// pegawai_id2
+		$this->pegawai_id2->EditAttrs["class"] = "form-control";
+		$this->pegawai_id2->EditCustomAttributes = "";
+
+		// pegawai_id3
+		$this->pegawai_id3->EditAttrs["class"] = "form-control";
+		$this->pegawai_id3->EditCustomAttributes = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -950,6 +1056,8 @@ class ct_pengecualian_peg extends cTable {
 					if ($this->jns_id->Exportable) $Doc->ExportCaption($this->jns_id);
 					if ($this->jam_masuk->Exportable) $Doc->ExportCaption($this->jam_masuk);
 					if ($this->jam_keluar->Exportable) $Doc->ExportCaption($this->jam_keluar);
+					if ($this->pegawai_id2->Exportable) $Doc->ExportCaption($this->pegawai_id2);
+					if ($this->pegawai_id3->Exportable) $Doc->ExportCaption($this->pegawai_id3);
 				} else {
 					if ($this->pengecualian_id->Exportable) $Doc->ExportCaption($this->pengecualian_id);
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
@@ -957,6 +1065,8 @@ class ct_pengecualian_peg extends cTable {
 					if ($this->jns_id->Exportable) $Doc->ExportCaption($this->jns_id);
 					if ($this->jam_masuk->Exportable) $Doc->ExportCaption($this->jam_masuk);
 					if ($this->jam_keluar->Exportable) $Doc->ExportCaption($this->jam_keluar);
+					if ($this->pegawai_id2->Exportable) $Doc->ExportCaption($this->pegawai_id2);
+					if ($this->pegawai_id3->Exportable) $Doc->ExportCaption($this->pegawai_id3);
 				}
 				$Doc->EndExportRow();
 			}
@@ -993,6 +1103,8 @@ class ct_pengecualian_peg extends cTable {
 						if ($this->jns_id->Exportable) $Doc->ExportField($this->jns_id);
 						if ($this->jam_masuk->Exportable) $Doc->ExportField($this->jam_masuk);
 						if ($this->jam_keluar->Exportable) $Doc->ExportField($this->jam_keluar);
+						if ($this->pegawai_id2->Exportable) $Doc->ExportField($this->pegawai_id2);
+						if ($this->pegawai_id3->Exportable) $Doc->ExportField($this->pegawai_id3);
 					} else {
 						if ($this->pengecualian_id->Exportable) $Doc->ExportField($this->pengecualian_id);
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
@@ -1000,6 +1112,8 @@ class ct_pengecualian_peg extends cTable {
 						if ($this->jns_id->Exportable) $Doc->ExportField($this->jns_id);
 						if ($this->jam_masuk->Exportable) $Doc->ExportField($this->jam_masuk);
 						if ($this->jam_keluar->Exportable) $Doc->ExportField($this->jam_keluar);
+						if ($this->pegawai_id2->Exportable) $Doc->ExportField($this->pegawai_id2);
+						if ($this->pegawai_id3->Exportable) $Doc->ExportField($this->pegawai_id3);
 					}
 					$Doc->EndExportRow();
 				}
@@ -1216,6 +1330,27 @@ class ct_pengecualian_peg extends cTable {
 	function Row_Inserted($rsold, &$rsnew) {
 
 		//echo "Row Inserted"
+		//$tot_det = ew_ExecuteScalar("SELECT SUM(Value) FROM category_detail WHERE Cat_ID = ".$rsnew["Cat_ID"]."");
+		//ew_Execute("UPDATE categories SET Cat_Total = ".$tot_det." WHERE Cat_ID = ".$rsnew["Cat_ID"]."");
+		// cari jenis pengecualian
+
+		$query = "select kode from t_jns_pengecualian where jns_id = ".$rsnew["jns_id"]."";
+		$kode = ew_ExecuteScalar($query);
+
+		// jika kode TS dan field pegawai_id3 (digantikan oleh == null)
+		if ($kode == "TS" and $rsnew["pegawai_id3"] == null) {
+			$query = "insert into t_pengecualian_peg values (
+				null
+				, ".$rsnew["pegawai_id2"]."
+				, '".$rsnew["tgl"]."'
+				, ".$rsnew["jns_id"]."
+				, null
+				, null
+				, null
+				, ".$rsnew["pegawai_id"]."
+				)";
+			ew_Execute($query);
+		}
 	}
 
 	// Row Updating event
@@ -1231,6 +1366,38 @@ class ct_pengecualian_peg extends cTable {
 	function Row_Updated($rsold, &$rsnew) {
 
 		//echo "Row Updated";
+		//$tot_det = ew_ExecuteScalar("SELECT SUM(Value) FROM category_detail WHERE Cat_ID = ".$rsold["Cat_ID"]."");
+		//ew_Execute("UPDATE categories SET Cat_Total = ".$tot_det." WHERE Cat_ID = ".$rsold["Cat_ID"]."");
+		// cari jenis pengecualian
+
+		$query = "select kode from t_jns_pengecualian where jns_id = ".$rsold["jns_id"]."";
+		$kode = ew_ExecuteScalar($query);
+
+		// jika kode TS dan field pegawai_id3 (digantikan oleh == null)
+		if ($kode == "TS" and $rsold["pegawai_id3"] == null) {
+
+			// hapus data lama
+			$query = "
+				delete from t_pengecualian_peg where
+				tgl = '".$rsold["tgl"]."'
+				and pegawai_id = ".$rsold["pegawai_id2"]."
+				and jns_id = ".$rsold["jns_id"]."
+				";
+			ew_Execute($query);
+
+			// insert data baru
+			$query = "insert into t_pengecualian_peg values (
+				null
+				, ".$rsnew["pegawai_id2"]."
+				, '".$rsnew["tgl"]."'
+				, ".$rsnew["jns_id"]."
+				, null
+				, null
+				, null
+				, ".$rsnew["pegawai_id"]."
+				)";
+			ew_Execute($query);
+		}
 	}
 
 	// Row Update Conflict event
@@ -1285,6 +1452,23 @@ class ct_pengecualian_peg extends cTable {
 	function Row_Deleted(&$rs) {
 
 		//echo "Row Deleted";
+		// cari jenis pengecualian
+
+		$query = "select kode from t_jns_pengecualian where jns_id = ".$rs["jns_id"]."";
+		$kode = ew_ExecuteScalar($query);
+
+		// jika kode TS dan field pegawai_id3 (digantikan oleh == null)
+		if ($kode == "TS" and $rs["pegawai_id3"] == null) {
+
+			// hapus data lama
+			$query = "
+				delete from t_pengecualian_peg where
+				tgl = '".$rs["tgl"]."'
+				and pegawai_id = ".$rs["pegawai_id2"]."
+				and jns_id = ".$rs["jns_id"]."
+				";
+			ew_Execute($query);
+		}
 	}
 
 	// Email Sending event
