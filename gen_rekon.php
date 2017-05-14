@@ -23,6 +23,7 @@ if ($_POST["bulharbor"] == 0 or $_POST["bulharbor"] == 1) {
 	header("location: ./r_rekonctb.php?cmd=search&so_pegawai_id=%3D&sv_pegawai_id=&so_tgl=BETWEEN&sv_tgl=".$_POST["start"]."&sv2_tgl=".$_POST["end"]."");
 }
 else {
-	header("location: ./r_rekon_brnganctb.php?cmd=search&so_tgl=BETWEEN&sv_tgl=".$_POST["start"]."&sv2_tgl=".$_POST["end"]."&so_pegawai_nama=LIKE&sv_pegawai_nama=");
+	header("location: ./r_rekon_brngan2ctb.php?cmd=search&sv_pegawai_nama=&so_tgl=BETWEEN&sv_tgl=".$_POST["start"]."&sv2_tgl=".$_POST["end"]."");
+	//                  r_rekon_brngan2ctb.php?cmd=search&sv_pegawai_nama=&so_tgl=BETWEEN&sv_tgl=2017-05-04&sv2_tgl=2017-05-10
 }
 ?>

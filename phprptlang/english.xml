@@ -350,6 +350,12 @@
   <project>
     <phrase id="bodytitle" value="AMBICO" />
     <phrase id="footertext" value="&amp;copy;2017 AMBICO. All rights reserved." />
+    <menu id="98">
+      <phrase id="menutext" value="v rekon brngan" />
+    </menu>
+    <menu id="99">
+      <phrase id="menutext" value="Rekonsiliasi (Borongan)" />
+    </menu>
     <menu id="96">
       <phrase id="menutext" value="t gjbrngan" />
     </menu>
@@ -3063,6 +3069,42 @@
       </field>
       <field id="end">
         <phrase id="fldcaption" value="end" />
+      </field>
+    </table>
+    <table id="v_rekon_brngan">
+      <phrase id="tblcaption" value="v rekon brngan" />
+      <field id="pegawai_nama">
+        <phrase id="fldcaption" value="pegawai nama" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="tgl" />
+      </field>
+      <field id="scan_masuk">
+        <phrase id="fldcaption" value="min (a.scan date)" />
+      </field>
+      <field id="scan_keluar">
+        <phrase id="fldcaption" value="max (a.scan date)" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
+      </field>
+    </table>
+    <table id="r_rekon_brngan2">
+      <phrase id="tblcaption" value="Rekonsiliasi (Borongan)" />
+      <field id="pegawai_nama">
+        <phrase id="fldcaption" value="Nama Pegawai" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="Tanggal" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
+      </field>
+      <field id="scan_masuk">
+        <phrase id="fldcaption" value="Scan Masuk" />
+      </field>
+      <field id="scan_keluar">
+        <phrase id="fldcaption" value="Scan Keluar" />
       </field>
     </table>
   </project>
