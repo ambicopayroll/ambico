@@ -1,122 +1,75 @@
 <?php
 
 // Global variable for table object
-$r_att_log = NULL;
+$r_lapgjbrngan = NULL;
 
 //
-// Table class for r_att_log
+// Table class for r_lapgjbrngan
 //
-class crr_att_log extends crTableBase {
+class crr_lapgjbrngan extends crTableBase {
 	var $ShowGroupHeaderAsRow = FALSE;
 	var $ShowCompactSummaryFooter = TRUE;
-	var $sn;
-	var $att_id;
-	var $pin;
-	var $pegawai_nip;
-	var $pegawai_nama;
-	var $scan_date_tgl;
-	var $scan_date_tgl_jam;
-	var $scan_date;
+	var $gjbrngan_id;
+	var $nama;
+	var $upah;
+	var $start;
+	var $end;
 
 	//
 	// Table class constructor
 	//
 	function __construct() {
 		global $ReportLanguage, $gsLanguage;
-		$this->TableVar = 'r_att_log';
-		$this->TableName = 'r_att_log';
+		$this->TableVar = 'r_lapgjbrngan';
+		$this->TableName = 'r_lapgjbrngan';
 		$this->TableType = 'REPORT';
 		$this->DBID = 'DB';
 		$this->ExportAll = FALSE;
 		$this->ExportPageBreakCount = 0;
 
-		// sn
-		$this->sn = new crField('r_att_log', 'r_att_log', 'x_sn', 'sn', '`sn`', 200, EWR_DATATYPE_STRING, -1);
-		$this->sn->Sortable = TRUE; // Allow sort
-		$this->fields['sn'] = &$this->sn;
-		$this->sn->DateFilter = "";
-		$this->sn->SqlSelect = "";
-		$this->sn->SqlOrderBy = "";
+		// gjbrngan_id
+		$this->gjbrngan_id = new crField('r_lapgjbrngan', 'r_lapgjbrngan', 'x_gjbrngan_id', 'gjbrngan_id', '`gjbrngan_id`', 3, EWR_DATATYPE_NUMBER, -1);
+		$this->gjbrngan_id->Sortable = TRUE; // Allow sort
+		$this->gjbrngan_id->FldDefaultErrMsg = $ReportLanguage->Phrase("IncorrectInteger");
+		$this->fields['gjbrngan_id'] = &$this->gjbrngan_id;
+		$this->gjbrngan_id->DateFilter = "";
+		$this->gjbrngan_id->SqlSelect = "";
+		$this->gjbrngan_id->SqlOrderBy = "";
 
-		// att_id
-		$this->att_id = new crField('r_att_log', 'r_att_log', 'x_att_id', 'att_id', '`att_id`', 200, EWR_DATATYPE_STRING, -1);
-		$this->att_id->Sortable = TRUE; // Allow sort
-		$this->fields['att_id'] = &$this->att_id;
-		$this->att_id->DateFilter = "";
-		$this->att_id->SqlSelect = "";
-		$this->att_id->SqlOrderBy = "";
+		// nama
+		$this->nama = new crField('r_lapgjbrngan', 'r_lapgjbrngan', 'x_nama', 'nama', '`nama`', 200, EWR_DATATYPE_STRING, -1);
+		$this->nama->Sortable = TRUE; // Allow sort
+		$this->fields['nama'] = &$this->nama;
+		$this->nama->DateFilter = "";
+		$this->nama->SqlSelect = "";
+		$this->nama->SqlOrderBy = "";
 
-		// pin
-		$this->pin = new crField('r_att_log', 'r_att_log', 'x_pin', 'pin', '`pin`', 200, EWR_DATATYPE_STRING, -1);
-		$this->pin->Sortable = TRUE; // Allow sort
-		$this->fields['pin'] = &$this->pin;
-		$this->pin->DateFilter = "";
-		$this->pin->SqlSelect = "";
-		$this->pin->SqlOrderBy = "";
+		// upah
+		$this->upah = new crField('r_lapgjbrngan', 'r_lapgjbrngan', 'x_upah', 'upah', '`upah`', 4, EWR_DATATYPE_NUMBER, -1);
+		$this->upah->Sortable = TRUE; // Allow sort
+		$this->upah->FldDefaultErrMsg = $ReportLanguage->Phrase("IncorrectFloat");
+		$this->fields['upah'] = &$this->upah;
+		$this->upah->DateFilter = "";
+		$this->upah->SqlSelect = "";
+		$this->upah->SqlOrderBy = "";
 
-		// pegawai_nip
-		$this->pegawai_nip = new crField('r_att_log', 'r_att_log', 'x_pegawai_nip', 'pegawai_nip', '`pegawai_nip`', 200, EWR_DATATYPE_STRING, -1);
-		$this->pegawai_nip->Sortable = TRUE; // Allow sort
-		$this->fields['pegawai_nip'] = &$this->pegawai_nip;
-		$this->pegawai_nip->DateFilter = "";
-		$this->pegawai_nip->SqlSelect = "";
-		$this->pegawai_nip->SqlOrderBy = "";
+		// start
+		$this->start = new crField('r_lapgjbrngan', 'r_lapgjbrngan', 'x_start', 'start', '`start`', 133, EWR_DATATYPE_DATE, 0);
+		$this->start->Sortable = TRUE; // Allow sort
+		$this->start->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EWR_DATE_FORMAT"], $ReportLanguage->Phrase("IncorrectDate"));
+		$this->fields['start'] = &$this->start;
+		$this->start->DateFilter = "";
+		$this->start->SqlSelect = "";
+		$this->start->SqlOrderBy = "";
 
-		// pegawai_nama
-		$this->pegawai_nama = new crField('r_att_log', 'r_att_log', 'x_pegawai_nama', 'pegawai_nama', '`pegawai_nama`', 200, EWR_DATATYPE_STRING, -1);
-		$this->pegawai_nama->Sortable = TRUE; // Allow sort
-		$this->fields['pegawai_nama'] = &$this->pegawai_nama;
-		$this->pegawai_nama->DateFilter = "";
-		$this->pegawai_nama->SqlSelect = "";
-		$this->pegawai_nama->SqlOrderBy = "";
-
-		// scan_date_tgl
-		$this->scan_date_tgl = new crField('r_att_log', 'r_att_log', 'x_scan_date_tgl', 'scan_date_tgl', '`scan_date_tgl`', 133, EWR_DATATYPE_DATE, -1);
-		$this->scan_date_tgl->Sortable = TRUE; // Allow sort
-		$this->scan_date_tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EWR_DATE_FORMAT"], $ReportLanguage->Phrase("IncorrectDate"));
-		$this->fields['scan_date_tgl'] = &$this->scan_date_tgl;
-		$this->scan_date_tgl->DateFilter = "";
-		$this->scan_date_tgl->SqlSelect = "SELECT DISTINCT `scan_date_tgl`, `scan_date_tgl` AS `DispFld` FROM " . $this->getSqlFrom();
-		$this->scan_date_tgl->SqlOrderBy = "`scan_date_tgl`";
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Past", $ReportLanguage->Phrase("Past"), "ewr_IsPast");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Future", $ReportLanguage->Phrase("Future"), "ewr_IsFuture");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Last30Days", $ReportLanguage->Phrase("Last30Days"), "ewr_IsLast30Days");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Last14Days", $ReportLanguage->Phrase("Last14Days"), "ewr_IsLast14Days");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Last7Days", $ReportLanguage->Phrase("Last7Days"), "ewr_IsLast7Days");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Next7Days", $ReportLanguage->Phrase("Next7Days"), "ewr_IsNext7Days");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Next14Days", $ReportLanguage->Phrase("Next14Days"), "ewr_IsNext14Days");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Next30Days", $ReportLanguage->Phrase("Next30Days"), "ewr_IsNext30Days");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Yesterday", $ReportLanguage->Phrase("Yesterday"), "ewr_IsYesterday");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Today", $ReportLanguage->Phrase("Today"), "ewr_IsToday");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@Tomorrow", $ReportLanguage->Phrase("Tomorrow"), "ewr_IsTomorrow");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@LastMonth", $ReportLanguage->Phrase("LastMonth"), "ewr_IsLastMonth");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisMonth", $ReportLanguage->Phrase("ThisMonth"), "ewr_IsThisMonth");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@NextMonth", $ReportLanguage->Phrase("NextMonth"), "ewr_IsNextMonth");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@LastTwoWeeks", $ReportLanguage->Phrase("LastTwoWeeks"), "ewr_IsLast2Weeks");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@LastWeek", $ReportLanguage->Phrase("LastWeek"), "ewr_IsLastWeek");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisWeek", $ReportLanguage->Phrase("ThisWeek"), "ewr_IsThisWeek");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@NextWeek", $ReportLanguage->Phrase("NextWeek"), "ewr_IsNextWeek");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@NextTwoWeeks", $ReportLanguage->Phrase("NextTwoWeeks"), "ewr_IsNext2Weeks");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@LastYear", $ReportLanguage->Phrase("LastYear"), "ewr_IsLastYear");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@ThisYear", $ReportLanguage->Phrase("ThisYear"), "ewr_IsThisYear");
-		ewr_RegisterFilter($this->scan_date_tgl, "@@NextYear", $ReportLanguage->Phrase("NextYear"), "ewr_IsNextYear");
-
-		// scan_date_tgl_jam
-		$this->scan_date_tgl_jam = new crField('r_att_log', 'r_att_log', 'x_scan_date_tgl_jam', 'scan_date_tgl_jam', '`scan_date_tgl_jam`', 200, EWR_DATATYPE_STRING, -1);
-		$this->scan_date_tgl_jam->Sortable = TRUE; // Allow sort
-		$this->fields['scan_date_tgl_jam'] = &$this->scan_date_tgl_jam;
-		$this->scan_date_tgl_jam->DateFilter = "";
-		$this->scan_date_tgl_jam->SqlSelect = "";
-		$this->scan_date_tgl_jam->SqlOrderBy = "";
-
-		// scan_date
-		$this->scan_date = new crField('r_att_log', 'r_att_log', 'x_scan_date', 'scan_date', '`scan_date`', 135, EWR_DATATYPE_DATE, 9);
-		$this->scan_date->Sortable = TRUE; // Allow sort
-		$this->scan_date->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EWR_DATE_SEPARATOR"], $ReportLanguage->Phrase("IncorrectDateYMD"));
-		$this->fields['scan_date'] = &$this->scan_date;
-		$this->scan_date->DateFilter = "";
-		$this->scan_date->SqlSelect = "";
-		$this->scan_date->SqlOrderBy = "";
+		// end
+		$this->end = new crField('r_lapgjbrngan', 'r_lapgjbrngan', 'x_end', 'end', '`end`', 133, EWR_DATATYPE_DATE, 0);
+		$this->end->Sortable = TRUE; // Allow sort
+		$this->end->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EWR_DATE_FORMAT"], $ReportLanguage->Phrase("IncorrectDate"));
+		$this->fields['end'] = &$this->end;
+		$this->end->DateFilter = "";
+		$this->end->SqlSelect = "";
+		$this->end->SqlOrderBy = "";
 	}
 
 	// Set Field Visibility
@@ -188,7 +141,7 @@ class crr_att_log extends crTableBase {
 	var $_SqlFrom = "";
 
 	function getSqlFrom() {
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`v_att_log`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`t_gjbrngan`";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -326,7 +279,7 @@ class crr_att_log extends crTableBase {
 	var $_SqlSelectAgg = "";
 
 	function getSqlSelectAgg() {
-		return ($this->_SqlSelectAgg <> "") ? $this->_SqlSelectAgg : "SELECT * FROM " . $this->getSqlFrom();
+		return ($this->_SqlSelectAgg <> "") ? $this->_SqlSelectAgg : "SELECT SUM(`upah`) AS `sum_upah` FROM " . $this->getSqlFrom();
 	}
 
 	function SqlSelectAgg() { // For backward compatibility
@@ -401,32 +354,6 @@ class crr_att_log extends crTableBase {
 	function SetupLookupFilters($fld) {
 		global $gsLanguage;
 		switch ($fld->FldVar) {
-		case "x_pegawai_nip":
-			$sSqlWrk = "";
-		$sSqlWrk = "SELECT DISTINCT `pegawai_nip`, `pegawai_nip` AS `DispFld`, '' AS `DispFld2`, '' AS `DispFld3`, '' AS `DispFld4` FROM `v_att_log`";
-		$sWhereWrk = "{filter}";
-		$this->pegawai_nip->LookupFilters = array("dx1" => '`pegawai_nip`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "DB", "f0" => '`pegawai_nip` = {filter_value}', "t0" => "200", "fn0" => "", "dlm" => ewr_Encrypt($fld->FldDelimiter));
-			$sSqlWrk = "";
-		$this->Lookup_Selecting($this->pegawai_nip, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `pegawai_nip` ASC";
-			if ($sSqlWrk <> "")
-				$fld->LookupFilters["s"] .= $sSqlWrk;
-			break;
-		case "x_pegawai_nama":
-			$sSqlWrk = "";
-		$sSqlWrk = "SELECT DISTINCT `pegawai_nama`, `pegawai_nama` AS `DispFld`, '' AS `DispFld2`, '' AS `DispFld3`, '' AS `DispFld4` FROM `v_att_log`";
-		$sWhereWrk = "{filter}";
-		$this->pegawai_nama->LookupFilters = array("dx1" => '`pegawai_nama`');
-			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "DB", "f0" => '`pegawai_nama` = {filter_value}', "t0" => "200", "fn0" => "", "dlm" => ewr_Encrypt($fld->FldDelimiter));
-			$sSqlWrk = "";
-		$this->Lookup_Selecting($this->pegawai_nama, $sWhereWrk); // Call Lookup selecting
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `pegawai_nama` ASC";
-			if ($sSqlWrk <> "")
-				$fld->LookupFilters["s"] .= $sSqlWrk;
-			break;
 		}
 	}
 
