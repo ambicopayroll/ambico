@@ -1,14 +1,14 @@
 create view v_att_log as
-SELECT att_log.sn AS sn,
-  att_log.scan_date AS scan_date,
-  att_log.pin AS pin,
-  att_log.att_id AS att_id,
-  CAST(Date_Format(att_log.scan_date, '%Y-%m-%d') AS date) AS scan_date_tgl,
-  Date_Format(att_log.scan_date, '%d-%m-%Y %H:%i:%s') AS scan_date_tgl_jam,
-  pegawai.pegawai_nip AS pegawai_nip,
-  pegawai.pegawai_nama AS pegawai_nama
-FROM att_log
-  LEFT JOIN pegawai ON att_log.pin = pegawai.pegawai_pin;
+Select att_log.sn As sn,
+  att_log.scan_date As scan_date,
+  att_log.pin As pin,
+  att_log.att_id As att_id,
+  Cast(Date_Format(att_log.scan_date, '%Y-%m-%d') As date) As scan_date_tgl,
+  Date_Format(att_log.scan_date, '%d-%m-%Y %H:%i:%s') As scan_date_tgl_jam,
+  pegawai.pegawai_nip As pegawai_nip,
+  pegawai.pegawai_nama As pegawai_nama
+From att_log
+  Left Join pegawai On att_log.pin = pegawai.pegawai_pin;
 
 create view v_jdw_krj_def as
 Select t_jdw_krj_def.pegawai_id As pegawai_id,
@@ -33,48 +33,48 @@ From ((((t_jdw_krj_def
   Join t_lapgroup On t_lapsubgroup.lapgroup_id = t_lapgroup.lapgroup_id;
 
 create view v_lapgjhrn as  
-SELECT e.lapgroup_id AS lapgroup_id,
-  e.lapgroup_nama AS lapgroup_nama,
-  e.lapgroup_index AS lapgroup_index,
-  d.lapsubgroup_index AS lapsubgroup_index,
-  a.pegawai_id AS pegawai_id,
-  a.tgl AS tgl,
-  a.jk_id AS jk_id,
-  a.scan_masuk AS scan_masuk,
-  a.scan_keluar AS scan_keluar,
-  a.hk_def AS hk_def,
-  a.pegawai_nip AS pegawai_nip,
-  a.pegawai_nama AS pegawai_nama,
-  a.jk_kd AS jk_kd,
-  a.pembagian2_nama AS pembagian2_nama,
-  a.pembagian2_id AS pembagian2_id,
-  c.rumus_id AS rumus_id,
-  c.rumus_nama AS rumus_nama,
-  c.hk_gol AS hk_gol,
-  c.umr AS umr,
-  c.hk_jml AS hk_jml,
-  c.upah AS upah,
-  c.premi_hadir AS premi_hadir,
-  c.premi_malam AS premi_malam,
-  c.pot_absen AS pot_absen,
-  c.lembur AS lembur,
-  (CASE WHEN (isnull(a.scan_masuk) AND isnull(a.scan_keluar)) THEN 0 ELSE c.upah
-  END) AS upah2,
-  (CASE WHEN (Right(a.jk_kd, 2) = 'S3') THEN c.premi_malam ELSE 0
-  END) AS premi_malam2,
-  (CASE
-    WHEN (Count((isnull(a.scan_masuk) AND isnull(a.scan_keluar) AND
-    (Right(a.jk_kd, 1) <> 'L'))) > 1) THEN 0 ELSE c.premi_hadir
-  END) AS premi_hadir2
-FROM (((v_jdw_krj_def a
-  LEFT JOIN t_rumus_peg b ON a.pegawai_id = b.pegawai_id)
-  LEFT JOIN t_rumus c ON b.rumus_id = c.rumus_id)
-  LEFT JOIN t_lapsubgroup d ON a.pembagian2_id = d.pembagian2_id)
-  LEFT JOIN t_lapgroup e ON d.lapgroup_id = e.lapgroup_id
-WHERE (c.hk_gol = a.hk_def) AND
-  NOT (a.pegawai_id IN (SELECT t_rumus2_peg.pegawai_id AS pegawai_id
-  FROM t_rumus2_peg))
-ORDER BY lapgroup_index,
+Select e.lapgroup_id As lapgroup_id,
+  e.lapgroup_nama As lapgroup_nama,
+  e.lapgroup_index As lapgroup_index,
+  d.lapsubgroup_index As lapsubgroup_index,
+  a.pegawai_id As pegawai_id,
+  a.tgl As tgl,
+  a.jk_id As jk_id,
+  a.scan_masuk As scan_masuk,
+  a.scan_keluar As scan_keluar,
+  a.hk_def As hk_def,
+  a.pegawai_nip As pegawai_nip,
+  a.pegawai_nama As pegawai_nama,
+  a.jk_kd As jk_kd,
+  a.pembagian2_nama As pembagian2_nama,
+  a.pembagian2_id As pembagian2_id,
+  c.rumus_id As rumus_id,
+  c.rumus_nama As rumus_nama,
+  c.hk_gol As hk_gol,
+  c.umr As umr,
+  c.hk_jml As hk_jml,
+  c.upah As upah,
+  c.premi_hadir As premi_hadir,
+  c.premi_malam As premi_malam,
+  c.pot_absen As pot_absen,
+  c.lembur As lembur,
+  (Case When (isnull(a.scan_masuk) And isnull(a.scan_keluar)) Then 0 Else c.upah
+  End) As upah2,
+  (Case When (Right(a.jk_kd, 2) = 'S3') Then c.premi_malam Else 0
+  End) As premi_malam2,
+  (Case
+    When (Count((isnull(a.scan_masuk) And isnull(a.scan_keluar) And
+    (Right(a.jk_kd, 1) <> 'L'))) > 1) Then 0 Else c.premi_hadir
+  End) As premi_hadir2
+From (((v_jdw_krj_def a
+  Left Join t_rumus_peg b On a.pegawai_id = b.pegawai_id)
+  Left Join t_rumus c On b.rumus_id = c.rumus_id)
+  Left Join t_lapsubgroup d On a.pembagian2_id = d.pembagian2_id)
+  Left Join t_lapgroup e On d.lapgroup_id = e.lapgroup_id
+Where (c.hk_gol = a.hk_def) And
+  Not (a.pegawai_id In (Select t_rumus2_peg.pegawai_id As pegawai_id
+  From t_rumus2_peg))
+Order By lapgroup_index,
   lapsubgroup_index,
   pegawai_id,
   tgl;
@@ -90,3 +90,15 @@ Select a.pegawai_id As pegawai_id,
 From (t_keg_detail a
   Left Join t_keg_master b On a.kegm_id = b.kegm_id)
   Left Join pegawai c On a.pegawai_id = c.pegawai_id;
+
+create view v_rekon_brngan as
+Select b.pegawai_nama As pegawai_nama,
+  Cast(a.scan_date As date) As tgl,
+  Min(a.scan_date) As scan_masuk,
+  Max(a.scan_date) As scan_keluar,
+  b.pegawai_id As pegawai_id
+From att_log a
+  Left Join pegawai b On a.pin = b.pegawai_pin
+Where b.pegawai_id In (Select t_keg_detail.pegawai_id As pegawai_id
+  From t_keg_detail)
+Group By Concat(Cast(a.scan_date As date), b.pegawai_id);

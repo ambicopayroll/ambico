@@ -1,11 +1,3 @@
-
-CREATE FUNCTION `f_cari_pengecualian`(p_pegawai_id int, p_tgl date) RETURNS int(11)
-BEGIN
-declare ada int;
-select count(*) into ada from t_pengecualian_peg where pegawai_id = p_pegawai_id and tgl = p_tgl;
-RETURN ada;
-END//
-
 DROP FUNCTION `f_carikodepengecualian`//
 CREATE DEFINER=`root`@`localhost` FUNCTION `f_carikodepengecualian`(p_pegawai_id int, p_tgl date) RETURNS varchar(10) CHARSET latin1
 BEGIN
@@ -13,9 +5,19 @@ declare r_kode varchar(10);
 select b.kode into r_kode from t_pengecualian_peg a left join t_jns_pengecualian b on a.jns_id = b.jns_id
 where pegawai_id = p_pegawai_id and tgl = p_tgl;
 RETURN r_kode;
-END//
+END
 
-CREATE PROCEDURE `p_gen_rekon`(in mstart date, in mend date)
+DROP FUNCTION `f_cari_pengecualian`//
+CREATE DEFINER=`root`@`localhost` FUNCTION `f_cari_pengecualian`(p_pegawai_id int, p_tgl date) RETURNS varchar(10) CHARSET latin1
+BEGIN
+declare r_kode varchar(10);
+-- select jns_id into ada from t_pengecualian_peg where pegawai_id = p_pegawai_id and tgl = p_tgl;
+select b.kode into r_kode from t_pengecualian_peg a left join t_jns_pengecualian b on a.jns_id = b.jns_id where pegawai_id = p_pegawai_id and tgl = p_tgl;
+RETURN r_kode;
+END
+
+DROP PROCEDURE `p_gen_rekon`//
+CREATE DEFINER=`root`@`localhost` PROCEDURE `p_gen_rekon`(in mstart date, in mend date)
 BEGIN
 
 update
@@ -49,4 +51,64 @@ set
 where
     a.tgl between mstart and mend;
 
-END//
+END
+
+DROP PROCEDURE `p_gen_rekon_brngan`//
+CREATE DEFINER=`root`@`localhost` PROCEDURE `p_gen_rekon_brngan`(in mstart date, in mend date)
+BEGIN
+update
+	t_keg_detail a
+    left join
+		(
+        select
+			pegawai_id,
+			min(scan_date) as min_scan_date
+		from
+			(
+			select
+				a.pegawai_id
+				, d.scan_date
+			from
+				t_keg_detail a
+				left join t_keg_master b on a.kegm_id = b.kegm_id
+				left join pegawai c on a.pegawai_id = c.pegawai_id
+				left join att_log d on
+					c.pegawai_pin = d.pin
+					and cast(d.scan_date as date) = cast(b.tgl as date)
+			where
+				b.tgl between mstart and mend
+			) a
+		group by
+			pegawai_id
+		) b on a.pegawai_id = b.pegawai_id
+set
+	a.scan_masuk = b.min_scan_date;
+
+update
+	t_keg_detail a
+    left join
+		(
+        select
+			pegawai_id,
+			max(scan_date) as max_scan_date
+		from
+			(
+			select
+				a.pegawai_id
+				, d.scan_date
+			from
+				t_keg_detail a
+				left join t_keg_master b on a.kegm_id = b.kegm_id
+				left join pegawai c on a.pegawai_id = c.pegawai_id
+				left join att_log d on
+					c.pegawai_pin = d.pin
+					and cast(d.scan_date as date) = cast(b.tgl as date)
+			where
+				b.tgl between mstart and mend
+			) a
+		group by
+			pegawai_id
+		) b on a.pegawai_id = b.pegawai_id
+set
+	a.scan_keluar = b.max_scan_date;
+END

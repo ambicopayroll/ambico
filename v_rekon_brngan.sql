@@ -1,0 +1,1 @@
+Select b.pegawai_nama As pegawai_nama, Cast(a.scan_date As date) As tgl, Min(a.scan_date) As scan_masuk, Max(a.scan_date) As scan_keluar, b.pegawai_id As pegawai_id From att_log a Left Join pegawai b On a.pin = b.pegawai_pin Where b.pegawai_id In (Select t_keg_detail.pegawai_id As pegawai_id From t_keg_detail) Group By Concat(Cast(a.scan_date As date), b.pegawai_id)
