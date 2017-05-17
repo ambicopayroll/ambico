@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/5/14" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/17" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -583,6 +583,9 @@
   <project>
     <phrase id="bodytitle" value="AMBICO" />
     <phrase id="footertext" value="&amp;copy;2017 AMBICO. All rights reserved." />
+    <menu id="10416">
+      <phrase id="menutext" value="v rekon brngan" />
+    </menu>
     <menu id="10414">
       <phrase id="menutext" value="v lapgjhrn" />
     </menu>
@@ -3388,6 +3391,24 @@
       </field>
       <field id="end">
         <phrase id="fldcaption" value="end" />
+      </field>
+    </table>
+    <table id="v_rekon_brngan">
+      <phrase id="tblcaption" value="v rekon brngan" />
+      <field id="pegawai_nama">
+        <phrase id="fldcaption" value="pegawai nama" />
+      </field>
+      <field id="tgl">
+        <phrase id="fldcaption" value="tgl" />
+      </field>
+      <field id="scan_masuk">
+        <phrase id="fldcaption" value="min (a.scan date)" />
+      </field>
+      <field id="scan_keluar">
+        <phrase id="fldcaption" value="max (a.scan date)" />
+      </field>
+      <field id="pegawai_id">
+        <phrase id="fldcaption" value="pegawai id" />
       </field>
     </table>
   </project>
