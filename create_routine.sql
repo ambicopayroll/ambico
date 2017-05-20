@@ -1,25 +1,21 @@
-DROP FUNCTION `f_carikodepengecualian`//
-CREATE DEFINER=`root`@`localhost` FUNCTION `f_carikodepengecualian`(p_pegawai_id int, p_tgl date) RETURNS varchar(10) CHARSET latin1
+CREATE FUNCTION `f_carikodepengecualian`(p_pegawai_id int, p_tgl date) RETURNS varchar(10) CHARSET latin1
 BEGIN
 declare r_kode varchar(10);
 select b.kode into r_kode from t_pengecualian_peg a left join t_jns_pengecualian b on a.jns_id = b.jns_id
 where pegawai_id = p_pegawai_id and tgl = p_tgl;
 RETURN r_kode;
-END
+END//
 
-DROP FUNCTION `f_cari_pengecualian`//
-CREATE DEFINER=`root`@`localhost` FUNCTION `f_cari_pengecualian`(p_pegawai_id int, p_tgl date) RETURNS varchar(10) CHARSET latin1
+CREATE FUNCTION `f_cari_pengecualian`(p_pegawai_id int, p_tgl date) RETURNS varchar(10) CHARSET latin1
 BEGIN
 declare r_kode varchar(10);
 -- select jns_id into ada from t_pengecualian_peg where pegawai_id = p_pegawai_id and tgl = p_tgl;
 select b.kode into r_kode from t_pengecualian_peg a left join t_jns_pengecualian b on a.jns_id = b.jns_id where pegawai_id = p_pegawai_id and tgl = p_tgl;
 RETURN r_kode;
-END
+END//
 
-DROP PROCEDURE `p_gen_rekon`//
-CREATE DEFINER=`root`@`localhost` PROCEDURE `p_gen_rekon`(in mstart date, in mend date)
+CREATE PROCEDURE `p_gen_rekon`(in mstart date, in mend date)
 BEGIN
-
 update
 	t_jdw_krj_def a
 	left join pegawai b on a.pegawai_id = b.pegawai_id
@@ -32,7 +28,6 @@ set
 	scan_masuk = d.scan_date
 where
     a.tgl between mstart and mend;
-    
 update
 	t_jdw_krj_def a
 	left join pegawai b on a.pegawai_id = b.pegawai_id
@@ -50,11 +45,9 @@ set
 	scan_keluar = e.scan_date
 where
     a.tgl between mstart and mend;
+END//
 
-END
-
-DROP PROCEDURE `p_gen_rekon_brngan`//
-CREATE DEFINER=`root`@`localhost` PROCEDURE `p_gen_rekon_brngan`(in mstart date, in mend date)
+CREATE PROCEDURE `p_gen_rekon_brngan`(in mstart date, in mend date)
 BEGIN
 update
 	t_keg_detail a
@@ -83,7 +76,6 @@ update
 		) b on a.pegawai_id = b.pegawai_id
 set
 	a.scan_masuk = b.min_scan_date;
-
 update
 	t_keg_detail a
     left join
@@ -111,4 +103,4 @@ update
 		) b on a.pegawai_id = b.pegawai_id
 set
 	a.scan_keluar = b.max_scan_date;
-END
+END//
