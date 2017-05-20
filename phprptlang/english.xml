@@ -354,7 +354,7 @@
       <phrase id="menutext" value="t laplembur" />
     </menu>
     <menu id="101">
-      <phrase id="menutext" value="Lembur" />
+      <phrase id="menutext" value="Lembur (Bulanan)" />
     </menu>
     <menu id="98">
       <phrase id="menutext" value="v rekon brngan" />
@@ -3150,7 +3150,7 @@
       </field>
     </table>
     <table id="r_laplembur">
-      <phrase id="tblcaption" value="Lembur" />
+      <phrase id="tblcaption" value="Lembur (Bulanan)" />
       <field id="laplembur_id">
         <phrase id="fldcaption" value="laplembur id" />
       </field>
