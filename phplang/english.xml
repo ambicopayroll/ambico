@@ -667,9 +667,6 @@
     <menu id="10083">
       <phrase id="menutext" value="Rekonsiliasi" />
     </menu>
-    <menu id="10099">
-      <phrase id="menutext" value="Rekonsiliasi (Borongan)" />
-    </menu>
     <menu id="10229">
       <phrase id="menutext" value="Gaji (Bulanan)" />
     </menu>
@@ -680,25 +677,13 @@
       <phrase id="menutext" value="Gaji (Borongan)" />
     </menu>
     <menu id="10417">
-      <phrase id="menutext" value="Lembur" />
+      <phrase id="menutext" value="Lembur (Bulanan)" />
     </menu>
     <menu id="10412">
       <phrase id="menutext" value="v jdw krj brngan" />
     </menu>
-    <menu id="10095">
-      <phrase id="menutext" value="Rekonsiliasi (Borongan)" />
-    </menu>
-    <menu id="10087">
-      <phrase id="menutext" value="Gaji (Bulanan)" />
-    </menu>
     <menu id="10240">
       <phrase id="menutext" value="Detail" />
-    </menu>
-    <menu id="10097">
-      <phrase id="menutext" value="Gaji (Borongan)" />
-    </menu>
-    <menu id="10085">
-      <phrase id="menutext" value="Gaji (Harian)" />
     </menu>
     <menu id="10234">
       <phrase id="menutext" value="t gjhrn" />
@@ -895,11 +880,23 @@
     <menu id="76">
       <phrase id="menutext" value="audittrail" />
     </menu>
+    <menu id="10100">
+      <phrase id="menutext" value="t laplembur" />
+    </menu>
+    <menu id="10101">
+      <phrase id="menutext" value="Lembur" />
+    </menu>
     <menu id="10098">
       <phrase id="menutext" value="v rekon brngan" />
     </menu>
+    <menu id="10099">
+      <phrase id="menutext" value="Rekonsiliasi (Borongan)" />
+    </menu>
     <menu id="10096">
       <phrase id="menutext" value="t gjbrngan" />
+    </menu>
+    <menu id="10097">
+      <phrase id="menutext" value="Gaji (Borongan)" />
     </menu>
     <menu id="10088">
       <phrase id="menutext" value="v jdw krj brngan" />
@@ -922,11 +919,20 @@
     <menu id="10094">
       <phrase id="menutext" value="t kegiatan" />
     </menu>
+    <menu id="10095">
+      <phrase id="menutext" value="Rekonsiliasi (Borongan)" />
+    </menu>
     <menu id="10086">
       <phrase id="menutext" value="t gjbln" />
     </menu>
+    <menu id="10087">
+      <phrase id="menutext" value="Gaji (Bulanan)" />
+    </menu>
     <menu id="10084">
       <phrase id="menutext" value="t gjhrn" />
+    </menu>
+    <menu id="10085">
+      <phrase id="menutext" value="Gaji (Harian)" />
     </menu>
     <menu id="10081">
       <phrase id="menutext" value="t pengecualian" />
