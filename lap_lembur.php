@@ -86,7 +86,7 @@ function f_hitungjamlembur($p_conn, $p_pegawai_id) {
 	return $mlama_lembur;
 }
 
-$msql = "delete from t_gjbln";
+$msql = "delete from t_laplembur";
 $conn->Execute($msql);
 
 $msql = "
@@ -98,6 +98,7 @@ $msql = "
 		, d.pembagian2_nama
 		, e.lapsubgroup_index
 		, c.pegawai_nama
+		, c.pegawai_nip
 		, a.*
 		, b.*
 	from
@@ -113,6 +114,8 @@ $msql = "
 	"; //echo $msql; exit;
 $rs = $conn->Execute($msql);
 
+$mno = 1;
+
 while (!$rs->EOF) {
 	$mlapgroup_id = $rs->fields["lapgroup_id"];
 	$mlapgroup_nama = $rs->fields["lapgroup_nama"];
@@ -122,33 +125,47 @@ while (!$rs->EOF) {
 		while ($rs->fields["pembagian2_id"] == $mpembagian2_id and !$rs->EOF) {
 			
 			// prepare data
-			$pegawai_id = $rs->fields["pegawai_id"];
-			$gp         = $rs->fields["gp"]; // gaji pokok
-			$t_jbtn     = $rs->fields["tj"]; // tunjangan jabatan
-			$t_hadir    = $rs->fields["premi_hadir"]; // tunjangan hadir
-			$t_malam    = $rs->fields["premi_malam"]; // tunjangan malam
-			$t_um       = $rs->fields["lp"]; // tunjangan uang makan
-			$t_fork     = $rs->fields["forklift"]; // tunjangan forklift
-			$t_lembur   = $rs->fields["lembur"]; // tunjangan lembur
-			$p_absen5   = $gp / 25; // potongan absen 5 hk
-			$p_absen6   = $gp / 30; // potongan absen 6 hk
-			$p_aspen    = $gp * $rs->fields["pot_aspen"]; // potongan astek & pensiun
-			$p_bpjs     = ($rs->fields["pot_bpjs"] < 1 ? $gp * $rs->fields["pot_bpjs"] : $rs->fields["pot_bpjs"]); // potongan bpjs
+			$pegawai_id   = $rs->fields["pegawai_id"];
+			$gp           = $rs->fields["gp"]; // gaji pokok
+			$t_jbtn       = $rs->fields["tj"]; // tunjangan jabatan
+			$t_hadir      = $rs->fields["premi_hadir"]; // tunjangan hadir
+			$t_malam      = $rs->fields["premi_malam"]; // tunjangan malam
+			$t_um         = $rs->fields["lp"]; // tunjangan uang makan
+			$t_fork       = $rs->fields["forklift"]; // tunjangan forklift
+			//$t_lembur     = $rs->fields["lembur"]; // tunjangan lembur
+			$t_lembur     = ($rs->fields["lembur"] < 500 ? $gp / $rs->fields["lembur"] : $rs->fields["lembur"]); // tunjangan lembur
+			$p_absen5     = $gp / 25; // potongan absen 5 hk
+			$p_absen6     = $gp / 30; // potongan absen 6 hk
+			$p_aspen      = $gp * $rs->fields["pot_aspen"]; // potongan astek & pensiun
+			$p_bpjs       = ($rs->fields["pot_bpjs"] < 1 ? $gp * $rs->fields["pot_bpjs"] : $rs->fields["pot_bpjs"]); // potongan bpjs
+			$pegawai_nama = $rs->fields["pegawai_nama"];
+			$pegawai_nip  = $rs->fields["pegawai_nip"];
 			
-			$msql = "
+			/*$msql = "
 				select * from v_jdw_krj_def
 				where
 					pegawai_id = ".$pegawai_id."
 					and tgl between '".$_POST['start']."' and '".$_POST['end']."'
 				order by
 					tgl
-				"; //echo $msql; exit;
-			$rs2 = $conn->Execute($msql);
+				"; //echo $msql; exit;*/
+			$query = "
+				select
+					*
+				from
+					t_lembur
+				where
+					pegawai_id = ".$pegawai_id."
+					and tgl_mulai between '' and ''
+				order by
+					tgl_mulai
+				";
+			$rs2 = $conn->Execute($query);
 			
-			$bagian       = $rs2->fields["pembagian2_nama"];
-			$pegawai_nama = $rs2->fields["pegawai_nama"];
-			$pegawai_nip  = $rs2->fields["pegawai_nip"];
-			$pegawai_pin  = $rs2->fields["pegawai_pin"];
+			//$bagian       = $rs2->fields["pembagian2_nama"];
+			//$pegawai_nama = $rs2->fields["pegawai_nama"];
+			//$pegawai_nip  = $rs2->fields["pegawai_nip"];
+			//$pegawai_pin  = $rs2->fields["pegawai_pin"];
 			
 			$mp_absen   = 0;
 			$mt_malam   = 0;
@@ -158,84 +175,21 @@ while (!$rs->EOF) {
 			$mabsen     = 0;
 			$mterlambat = 0;			
 			
-			while (!$rs2->EOF) {
-				
-				$tgl    = $rs2->fields["tgl"];
-				$hk_def = $rs2->fields["hk_def"];
-				$jk_kd  = $rs2->fields["jk_kd"];
-
-				// check data valid (jam masuk ada dan jam keluar ada)
-				$mdata_valid = f_data_valid($rs2->fields["scan_masuk"], $rs2->fields["scan_keluar"]);
-				if ($mdata_valid != 0) {
-					// data tidak valid
-					
-					// cari di tabel pengecualian
-					$kode_pengecualian = f_carikodepengecualian($pegawai_id, $tgl, $conn);
-					if ($kode_pengecualian == null) {
-						// tidak ada data pengecualian
-						
-						// check hari libur
-						if (substr($jk_kd, -1) == "L") {
-						}
-						else {
-							$mabsen = 1; // untuk acuan perhitungan tunjangan hadir
-							$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6);
-						}
-					}
-					else {
-						$mdata_valid = 0;
-						// ada data pengecualian
-						// S1 => tidak diproses; tidak ada potongan absen;
-						// P4 => tidak diproses; tidak ada potongan absen;
-						// IS => tidak diproses; tidak ada potongan absen; invalid scan;
-						// TS => tidak diproses; tidak ada potongan absen; tukar shift;
-						// LB => tidak diproses; tidak ada potongan absen; lembur;
-
-						// TL
-						if ($kode_pengecualian == "TL") {
-							$mterlambat = 1; // untuk acuan perhitungan tunjangan hadir
-						}
-
-						// HD
-						if ($kode_pengecualian == "HD") {
-							$lama_kerja = f_carilamakerja($pegawai_id, $tgl, $conn);
-							if ($lama_kerja != null and $lama_kerja >= 3) {
-								$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6) / 2;
-							}
-							else {
-								$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6);
-							}
-						}
-					}
-				}
-				
-				if ($mdata_valid == 0) {
-					// data valid
-					
-					// hitung tunjangan malam
-					if (substr($jk_kd, 0, 2) == "S3") {
-						$mt_malam += $t_malam;
-					}
-					
-					// hitung tunjangan uang makan
-					$mt_um += $t_um;
-					
-					// hitung tunjangan forklift
-					$mt_fork += $t_fork;
-					
-				}
-				
-				$rs2->MoveNext(); // go to next record on data rekonsiliasi
-			}
-			
 			// hitung lembur
-			$mt_lembur += f_hitungjamlembur($conn, $pegawai_id) * $t_lembur;
+			$mjml_jam = f_hitungjamlembur($conn, $pegawai_id);
+			if ($mjml_jam > 1) {
+				$mjml_lembur = (1.5 * $t_lembur) + (($mjml_jam - 1) * 2 * $t_lembur);
+			}
+			else {
+				$mjml_lembur = (1.5 * $t_lembur);
+			}
+			//$mt_lembur += f_hitungjamlembur($conn, $pegawai_id) * $t_lembur;
 			
-			if ($mabsen == 1 or $mterlambat == 1) $t_hadir = 0;
-			$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $mt_lembur + $t_hadir + $mt_um; //+ $mt_fork;
-			$netto = $bruto - $p_aspen - $p_bpjs;
+			//if ($mabsen == 1 or $mterlambat == 1) $t_hadir = 0;
+			//$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $mt_lembur + $t_hadir + $mt_um; //+ $mt_fork;
+			//$netto = $bruto - $p_aspen - $p_bpjs;
 			
-			$msql = "
+			/*$msql = "
 				insert into t_gjbln values (null, 
 				'".$mlapgroup_nama."'
 				, '".$mpembagian2_nama."'
@@ -255,13 +209,32 @@ while (!$rs->EOF) {
 				, '".$_POST["start"]."'
 				, '".$_POST["end"]."'
 				)
-				"; //echo $msql; exit;
-			$conn->Execute($msql);
+				"; //echo $msql; exit;*/
+			
+			if ($mjml_jam <> 0) {
+				$query = "
+					insert into t_laplembur values (null
+					, ".$mno."
+					, '".$mlapgroup_nama."'
+					, '".$mpembagian2_nama."'
+					, '".$pegawai_nama."'
+					, '".$pegawai_nip."'
+					, ".$mjml_jam."
+					, ".$t_lembur."
+					, ".$mjml_lembur."
+					, '".$_POST["start"]."'
+					, '".$_POST["end"]."'
+					)
+					";
+				$conn->Execute($query);
+				
+				$mno++;
+			}
 			
 			$rs->MoveNext();
 		}
 	}
 }
 $rs->Close();
-header("location: r_lapgjblnsmry.php");
+header("location: r_laplembursmry.php");
 ?>
