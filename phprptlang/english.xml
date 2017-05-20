@@ -3142,6 +3142,12 @@
       <field id="total_lembur">
         <phrase id="fldcaption" value="total lembur" />
       </field>
+      <field id="start">
+        <phrase id="fldcaption" value="start" />
+      </field>
+      <field id="end">
+        <phrase id="fldcaption" value="end" />
+      </field>
     </table>
     <table id="r_laplembur">
       <phrase id="tblcaption" value="Lembur" />
@@ -3171,6 +3177,12 @@
       </field>
       <field id="total_lembur">
         <phrase id="fldcaption" value="Total Terima" />
+      </field>
+      <field id="start">
+        <phrase id="fldcaption" value="start" />
+      </field>
+      <field id="end">
+        <phrase id="fldcaption" value="end" />
       </field>
     </table>
   </project>

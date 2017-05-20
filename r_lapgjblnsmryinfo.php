@@ -422,7 +422,7 @@ class crr_lapgjbln extends crTableBase {
 	var $_SqlSelectAgg = "";
 
 	function getSqlSelectAgg() {
-		return ($this->_SqlSelectAgg <> "") ? $this->_SqlSelectAgg : "SELECT SUM(`gp`) AS `sum_gp`, SUM(`t_jbtn`) AS `sum_t_jbtn`, SUM(`p_absen`) AS `sum_p_absen`, SUM(`t_malam`) AS `sum_t_malam`, SUM(`t_lembur`) AS `sum_t_lembur`, SUM(`t_hadir`) AS `sum_t_hadir`, SUM(`t_um`) AS `sum_t_um`, SUM(`j_bruto`) AS `sum_j_bruto`, SUM(`p_aspen`) AS `sum_p_aspen`, SUM(`p_bpjs`) AS `sum_p_bpjs`, SUM(`j_netto`) AS `sum_j_netto` FROM " . $this->getSqlFrom();
+		return ($this->_SqlSelectAgg <> "") ? $this->_SqlSelectAgg : "SELECT SUM(`gp`) AS `sum_gp`, SUM(`t_jbtn`) AS `sum_t_jbtn`, SUM(`p_absen`) AS `sum_p_absen`, SUM(`t_malam`) AS `sum_t_malam`, SUM(`t_hadir`) AS `sum_t_hadir`, SUM(`t_um`) AS `sum_t_um`, SUM(`j_bruto`) AS `sum_j_bruto`, SUM(`p_aspen`) AS `sum_p_aspen`, SUM(`p_bpjs`) AS `sum_p_bpjs`, SUM(`j_netto`) AS `sum_j_netto` FROM " . $this->getSqlFrom();
 	}
 
 	function SqlSelectAgg() { // For backward compatibility

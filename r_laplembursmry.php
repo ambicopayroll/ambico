@@ -543,12 +543,14 @@ class crr_laplembur_summary extends crr_laplembur {
 		$this->jml_jam->SetVisibility();
 		$this->tarif->SetVisibility();
 		$this->total_lembur->SetVisibility();
+		$this->start->SetVisibility();
+		$this->end->SetVisibility();
 
 		// Aggregate variables
 		// 1st dimension = no of groups (level 0 used for grand total)
 		// 2nd dimension = no of fields
 
-		$nDtls = 7;
+		$nDtls = 9;
 		$nGrps = 3;
 		$this->Val = &ewr_InitArray($nDtls, 0);
 		$this->Cnt = &ewr_Init2DArray($nGrps, $nDtls, 0);
@@ -561,7 +563,7 @@ class crr_laplembur_summary extends crr_laplembur {
 		$this->GrandMx = &ewr_InitArray($nDtls, NULL);
 
 		// Set up array if accumulation required: array(Accum, SkipNullOrZero)
-		$this->Col = array(array(FALSE, FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(TRUE,FALSE));
+		$this->Col = array(array(FALSE, FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE), array(TRUE,FALSE), array(FALSE,FALSE), array(FALSE,FALSE));
 
 		// Set up groups per page dynamically
 		$this->SetUpDisplayGrps();
@@ -853,6 +855,8 @@ class crr_laplembur_summary extends crr_laplembur {
 				$this->FirstRowData['jml_jam'] = ewr_Conv($rs->fields('jml_jam'), 4);
 				$this->FirstRowData['tarif'] = ewr_Conv($rs->fields('tarif'), 4);
 				$this->FirstRowData['total_lembur'] = ewr_Conv($rs->fields('total_lembur'), 4);
+				$this->FirstRowData['start'] = ewr_Conv($rs->fields('start'), 133);
+				$this->FirstRowData['end'] = ewr_Conv($rs->fields('end'), 133);
 			}
 		} else { // Get next row
 			$rs->MoveNext();
@@ -872,12 +876,16 @@ class crr_laplembur_summary extends crr_laplembur {
 			$this->jml_jam->setDbValue($rs->fields('jml_jam'));
 			$this->tarif->setDbValue($rs->fields('tarif'));
 			$this->total_lembur->setDbValue($rs->fields('total_lembur'));
+			$this->start->setDbValue($rs->fields('start'));
+			$this->end->setDbValue($rs->fields('end'));
 			$this->Val[1] = $this->no->CurrentValue;
 			$this->Val[2] = $this->nama->CurrentValue;
 			$this->Val[3] = $this->nip->CurrentValue;
 			$this->Val[4] = $this->jml_jam->CurrentValue;
 			$this->Val[5] = $this->tarif->CurrentValue;
 			$this->Val[6] = $this->total_lembur->CurrentValue;
+			$this->Val[7] = $this->start->CurrentValue;
+			$this->Val[8] = $this->end->CurrentValue;
 		} else {
 			$this->laplembur_id->setDbValue("");
 			$this->no->setDbValue("");
@@ -888,6 +896,8 @@ class crr_laplembur_summary extends crr_laplembur {
 			$this->jml_jam->setDbValue("");
 			$this->tarif->setDbValue("");
 			$this->total_lembur->setDbValue("");
+			$this->start->setDbValue("");
+			$this->end->setDbValue("");
 		}
 	}
 
@@ -1060,6 +1070,8 @@ class crr_laplembur_summary extends crr_laplembur {
 				$this->GrandCnt[5] = $this->TotCount;
 				$this->GrandCnt[6] = $this->TotCount;
 				$this->GrandSmry[6] = $rsagg->fields("sum_total_lembur");
+				$this->GrandCnt[7] = $this->TotCount;
+				$this->GrandCnt[8] = $this->TotCount;
 				$rsagg->Close();
 				$bGotSummary = TRUE;
 			}
@@ -1137,6 +1149,12 @@ class crr_laplembur_summary extends crr_laplembur {
 
 			// total_lembur
 			$this->total_lembur->HrefValue = "";
+
+			// start
+			$this->start->HrefValue = "";
+
+			// end
+			$this->end->HrefValue = "";
 		} else {
 			if ($this->RowTotalType == EWR_ROWTOTAL_GROUP && $this->RowTotalSubType == EWR_ROWTOTAL_HEADER) {
 			$this->RowAttrs["data-group"] = $this->bagian->GroupValue(); // Set up group attribute
@@ -1190,6 +1208,16 @@ class crr_laplembur_summary extends crr_laplembur {
 			$this->total_lembur->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
 			$this->total_lembur->CellAttrs["style"] = "text-align:right;";
 
+			// start
+			$this->start->ViewValue = $this->start->CurrentValue;
+			$this->start->ViewValue = ewr_FormatDateTime($this->start->ViewValue, 0);
+			$this->start->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
+
+			// end
+			$this->end->ViewValue = $this->end->CurrentValue;
+			$this->end->ViewValue = ewr_FormatDateTime($this->end->ViewValue, 0);
+			$this->end->CellAttrs["class"] = ($this->RecCount % 2 <> 1) ? "ewTableAltRow" : "ewTableRow";
+
 			// bagian
 			$this->bagian->HrefValue = "";
 
@@ -1213,6 +1241,12 @@ class crr_laplembur_summary extends crr_laplembur {
 
 			// total_lembur
 			$this->total_lembur->HrefValue = "";
+
+			// start
+			$this->start->HrefValue = "";
+
+			// end
+			$this->end->HrefValue = "";
 		}
 
 		// Call Cell_Rendered event
@@ -1317,6 +1351,24 @@ class crr_laplembur_summary extends crr_laplembur {
 			$HrefValue = &$this->total_lembur->HrefValue;
 			$LinkAttrs = &$this->total_lembur->LinkAttrs;
 			$this->Cell_Rendered($this->total_lembur, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
+
+			// start
+			$CurrentValue = $this->start->CurrentValue;
+			$ViewValue = &$this->start->ViewValue;
+			$ViewAttrs = &$this->start->ViewAttrs;
+			$CellAttrs = &$this->start->CellAttrs;
+			$HrefValue = &$this->start->HrefValue;
+			$LinkAttrs = &$this->start->LinkAttrs;
+			$this->Cell_Rendered($this->start, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
+
+			// end
+			$CurrentValue = $this->end->CurrentValue;
+			$ViewValue = &$this->end->ViewValue;
+			$ViewAttrs = &$this->end->ViewAttrs;
+			$CellAttrs = &$this->end->CellAttrs;
+			$HrefValue = &$this->end->HrefValue;
+			$LinkAttrs = &$this->end->LinkAttrs;
+			$this->Cell_Rendered($this->end, $CurrentValue, $ViewValue, $ViewAttrs, $CellAttrs, $HrefValue, $LinkAttrs);
 		}
 
 		// Call Row_Rendered event
@@ -1337,6 +1389,8 @@ class crr_laplembur_summary extends crr_laplembur {
 		if ($this->jml_jam->Visible) $this->DtlColumnCount += 1;
 		if ($this->tarif->Visible) $this->DtlColumnCount += 1;
 		if ($this->total_lembur->Visible) $this->DtlColumnCount += 1;
+		if ($this->start->Visible) $this->DtlColumnCount += 1;
+		if ($this->end->Visible) $this->DtlColumnCount += 1;
 	}
 
 	// Set up Breadcrumb
@@ -1395,6 +1449,8 @@ class crr_laplembur_summary extends crr_laplembur {
 			$this->jml_jam->setSort("");
 			$this->tarif->setSort("");
 			$this->total_lembur->setSort("");
+			$this->start->setSort("");
+			$this->end->setSort("");
 
 		// Check for an Order parameter
 		} elseif ($orderBy <> "") {
@@ -1408,6 +1464,8 @@ class crr_laplembur_summary extends crr_laplembur {
 			$this->UpdateSort($this->jml_jam, $bCtrl); // jml_jam
 			$this->UpdateSort($this->tarif, $bCtrl); // tarif
 			$this->UpdateSort($this->total_lembur, $bCtrl); // total_lembur
+			$this->UpdateSort($this->start, $bCtrl); // start
+			$this->UpdateSort($this->end, $bCtrl); // end
 			$sSortSql = $this->SortSql();
 			$this->setOrderBy($sSortSql);
 			$this->setStartGroup(1);
@@ -2004,6 +2062,42 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 	</td>
 <?php } ?>
 <?php } ?>
+<?php if ($Page->start->Visible) { ?>
+<?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
+	<td data-field="start"><div class="r_laplembur_start"><span class="ewTableHeaderCaption"><?php echo $Page->start->FldCaption() ?></span></div></td>
+<?php } else { ?>
+	<td data-field="start">
+<?php if ($Page->SortUrl($Page->start) == "") { ?>
+		<div class="ewTableHeaderBtn r_laplembur_start">
+			<span class="ewTableHeaderCaption"><?php echo $Page->start->FldCaption() ?></span>
+		</div>
+<?php } else { ?>
+		<div class="ewTableHeaderBtn ewPointer r_laplembur_start" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->start) ?>',2);">
+			<span class="ewTableHeaderCaption"><?php echo $Page->start->FldCaption() ?></span>
+			<span class="ewTableHeaderSort"><?php if ($Page->start->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->start->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
+		</div>
+<?php } ?>
+	</td>
+<?php } ?>
+<?php } ?>
+<?php if ($Page->end->Visible) { ?>
+<?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
+	<td data-field="end"><div class="r_laplembur_end"><span class="ewTableHeaderCaption"><?php echo $Page->end->FldCaption() ?></span></div></td>
+<?php } else { ?>
+	<td data-field="end">
+<?php if ($Page->SortUrl($Page->end) == "") { ?>
+		<div class="ewTableHeaderBtn r_laplembur_end">
+			<span class="ewTableHeaderCaption"><?php echo $Page->end->FldCaption() ?></span>
+		</div>
+<?php } else { ?>
+		<div class="ewTableHeaderBtn ewPointer r_laplembur_end" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->end) ?>',2);">
+			<span class="ewTableHeaderCaption"><?php echo $Page->end->FldCaption() ?></span>
+			<span class="ewTableHeaderSort"><?php if ($Page->end->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->end->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
+		</div>
+<?php } ?>
+	</td>
+<?php } ?>
+<?php } ?>
 	</tr>
 </thead>
 <tbody>
@@ -2153,6 +2247,14 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>>
 <span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->ListViewValue() ?></span></td>
 <?php } ?>
+<?php if ($Page->start->Visible) { ?>
+		<td data-field="start"<?php echo $Page->start->CellAttributes() ?>>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_start"<?php echo $Page->start->ViewAttributes() ?>><?php echo $Page->start->ListViewValue() ?></span></td>
+<?php } ?>
+<?php if ($Page->end->Visible) { ?>
+		<td data-field="end"<?php echo $Page->end->CellAttributes() ?>>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_end"<?php echo $Page->end->ViewAttributes() ?>><?php echo $Page->end->ListViewValue() ?></span></td>
+<?php } ?>
 	</tr>
 <?php
 
@@ -2225,6 +2327,12 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php if ($Page->total_lembur->Visible) { ?>
 		<td data-field="total_lembur"<?php echo $Page->divisi->CellAttributes() ?>><span class="ewAggregateCaption"><?php echo $ReportLanguage->Phrase("RptSum") ?></span><?php echo $ReportLanguage->Phrase("AggregateEqual") ?><span class="ewAggregateValue"><span data-class="tpgs<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></span></td>
 <?php } ?>
+<?php if ($Page->start->Visible) { ?>
+		<td data-field="start"<?php echo $Page->divisi->CellAttributes() ?>></td>
+<?php } ?>
+<?php if ($Page->end->Visible) { ?>
+		<td data-field="end"<?php echo $Page->divisi->CellAttributes() ?>></td>
+<?php } ?>
 	</tr>
 <?php } else { ?>
 	<tr<?php echo $Page->RowAttributes(); ?>>
@@ -2232,7 +2340,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="bagian"<?php echo $Page->bagian->CellAttributes() ?>>&nbsp;</td>
 <?php } ?>
 <?php if ($Page->SubGrpColumnCount + $Page->DtlColumnCount > 0) { ?>
-		<td colspan="<?php echo ($Page->SubGrpColumnCount + $Page->DtlColumnCount) ?>"<?php echo $Page->total_lembur->CellAttributes() ?>><?php echo str_replace(array("%v", "%c"), array($Page->divisi->GroupViewValue, $Page->divisi->FldCaption()), $ReportLanguage->Phrase("RptSumHead")) ?> <span class="ewDirLtr">(<?php echo ewr_FormatNumber($Page->Cnt[2][0],0,-2,-2,-2) ?><?php echo $ReportLanguage->Phrase("RptDtlRec") ?>)</span></td>
+		<td colspan="<?php echo ($Page->SubGrpColumnCount + $Page->DtlColumnCount) ?>"<?php echo $Page->end->CellAttributes() ?>><?php echo str_replace(array("%v", "%c"), array($Page->divisi->GroupViewValue, $Page->divisi->FldCaption()), $ReportLanguage->Phrase("RptSumHead")) ?> <span class="ewDirLtr">(<?php echo ewr_FormatNumber($Page->Cnt[2][0],0,-2,-2,-2) ?><?php echo $ReportLanguage->Phrase("RptDtlRec") ?>)</span></td>
 <?php } ?>
 	</tr>
 	<tr<?php echo $Page->RowAttributes(); ?>>
@@ -2258,8 +2366,14 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="tarif"<?php echo $Page->divisi->CellAttributes() ?>>&nbsp;</td>
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
-		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>>
+		<td data-field="total_lembur"<?php echo $Page->end->CellAttributes() ?>>
 <span data-class="tpgs<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
+<?php } ?>
+<?php if ($Page->start->Visible) { ?>
+		<td data-field="start"<?php echo $Page->divisi->CellAttributes() ?>>&nbsp;</td>
+<?php } ?>
+<?php if ($Page->end->Visible) { ?>
+		<td data-field="end"<?php echo $Page->divisi->CellAttributes() ?>>&nbsp;</td>
 <?php } ?>
 	</tr>
 <?php } ?>
@@ -2332,11 +2446,17 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php if ($Page->total_lembur->Visible) { ?>
 		<td data-field="total_lembur"<?php echo $Page->bagian->CellAttributes() ?>><span class="ewAggregateCaption"><?php echo $ReportLanguage->Phrase("RptSum") ?></span><?php echo $ReportLanguage->Phrase("AggregateEqual") ?><span class="ewAggregateValue"><span data-class="tpgs<?php echo $Page->GrpCount ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></span></td>
 <?php } ?>
+<?php if ($Page->start->Visible) { ?>
+		<td data-field="start"<?php echo $Page->bagian->CellAttributes() ?>></td>
+<?php } ?>
+<?php if ($Page->end->Visible) { ?>
+		<td data-field="end"<?php echo $Page->bagian->CellAttributes() ?>></td>
+<?php } ?>
 	</tr>
 <?php } else { ?>
 	<tr<?php echo $Page->RowAttributes(); ?>>
 <?php if ($Page->GrpColumnCount + $Page->DtlColumnCount > 0) { ?>
-		<td colspan="<?php echo ($Page->GrpColumnCount + $Page->DtlColumnCount) ?>"<?php echo $Page->total_lembur->CellAttributes() ?>><?php echo str_replace(array("%v", "%c"), array($Page->bagian->GroupViewValue, $Page->bagian->FldCaption()), $ReportLanguage->Phrase("RptSumHead")) ?> <span class="ewDirLtr">(<?php echo ewr_FormatNumber($Page->Cnt[1][0],0,-2,-2,-2) ?><?php echo $ReportLanguage->Phrase("RptDtlRec") ?>)</span></td>
+		<td colspan="<?php echo ($Page->GrpColumnCount + $Page->DtlColumnCount) ?>"<?php echo $Page->end->CellAttributes() ?>><?php echo str_replace(array("%v", "%c"), array($Page->bagian->GroupViewValue, $Page->bagian->FldCaption()), $ReportLanguage->Phrase("RptSumHead")) ?> <span class="ewDirLtr">(<?php echo ewr_FormatNumber($Page->Cnt[1][0],0,-2,-2,-2) ?><?php echo $ReportLanguage->Phrase("RptDtlRec") ?>)</span></td>
 <?php } ?>
 	</tr>
 	<tr<?php echo $Page->RowAttributes(); ?>>
@@ -2359,8 +2479,14 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="tarif"<?php echo $Page->bagian->CellAttributes() ?>>&nbsp;</td>
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
-		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>>
+		<td data-field="total_lembur"<?php echo $Page->end->CellAttributes() ?>>
 <span data-class="tpgs<?php echo $Page->GrpCount ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
+<?php } ?>
+<?php if ($Page->start->Visible) { ?>
+		<td data-field="start"<?php echo $Page->bagian->CellAttributes() ?>>&nbsp;</td>
+<?php } ?>
+<?php if ($Page->end->Visible) { ?>
+		<td data-field="end"<?php echo $Page->bagian->CellAttributes() ?>>&nbsp;</td>
 <?php } ?>
 	</tr>
 <?php } ?>
@@ -2427,6 +2553,12 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php if ($Page->total_lembur->Visible) { ?>
 		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>><?php echo $ReportLanguage->Phrase("RptSum") ?>=<span data-class="tpts_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
 <?php } ?>
+<?php if ($Page->start->Visible) { ?>
+		<td data-field="start"<?php echo $Page->start->CellAttributes() ?>></td>
+<?php } ?>
+<?php if ($Page->end->Visible) { ?>
+		<td data-field="end"<?php echo $Page->end->CellAttributes() ?>></td>
+<?php } ?>
 	</tr>
 <?php } else { ?>
 	<tr<?php echo $Page->RowAttributes() ?>><td colspan="<?php echo ($Page->GrpColumnCount + $Page->DtlColumnCount) ?>"><?php echo $ReportLanguage->Phrase("RptGrandSummary") ?> <span class="ewDirLtr">(<?php echo ewr_FormatNumber($Page->TotCount,0,-2,-2,-2); ?><?php echo $ReportLanguage->Phrase("RptDtlRec") ?>)</span></td></tr>
@@ -2452,6 +2584,12 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php if ($Page->total_lembur->Visible) { ?>
 		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>>
 <span data-class="tpts_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
+<?php } ?>
+<?php if ($Page->start->Visible) { ?>
+		<td data-field="start"<?php echo $Page->start->CellAttributes() ?>>&nbsp;</td>
+<?php } ?>
+<?php if ($Page->end->Visible) { ?>
+		<td data-field="end"<?php echo $Page->end->CellAttributes() ?>>&nbsp;</td>
 <?php } ?>
 	</tr>
 <?php } ?>

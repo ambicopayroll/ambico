@@ -229,10 +229,12 @@ while (!$rs->EOF) {
 			}
 			
 			// hitung lembur
-			$mt_lembur += f_hitungjamlembur($conn, $pegawai_id) * $t_lembur;
+			//$mt_lembur += f_hitungjamlembur($conn, $pegawai_id) * $t_lembur;
+			$mt_lembur = 0;
 			
 			if ($mabsen == 1 or $mterlambat == 1) $t_hadir = 0;
-			$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $mt_lembur + $t_hadir + $mt_um; //+ $mt_fork;
+			//$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $mt_lembur + $t_hadir + $mt_um; //+ $mt_fork;
+			$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $t_hadir + $mt_um; //+ $mt_fork;
 			$netto = $bruto - $p_aspen - $p_bpjs;
 			
 			$msql = "
