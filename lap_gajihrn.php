@@ -20,6 +20,7 @@ $msql = "
 		, d.lapsubgroup_index
 		, a.*
 		, c.*
+		, b.t_jabatan
 	from
 		v_jdw_krj_def a
 		left join t_rumus_peg b on a.pegawai_id = b.pegawai_id
@@ -38,22 +39,23 @@ $msql = "
 	"; //echo $msql; exit;
 $rs = $conn->Execute($msql);
 while (!$rs->EOF) {
-	$mlapgroup_id = $rs->fields["lapgroup_id"];
+	$mlapgroup_id   = $rs->fields["lapgroup_id"];
 	$mlapgroup_nama = $rs->fields["lapgroup_nama"];
 	$mtotal1 = 0;
 	while ($rs->fields["lapgroup_id"] == $mlapgroup_id and !$rs->EOF) {
-		$mpembagian2_id = $rs->fields["pembagian2_id"];
+		$mpembagian2_id   = $rs->fields["pembagian2_id"];
 		$mpembagian2_nama = $rs->fields["pembagian2_nama"];
 		$mtotal2 = 0;
 		while ($rs->fields["pembagian2_id"] == $mpembagian2_id and !$rs->EOF) {
-			$mpegawai_id = $rs->fields["pegawai_id"];
-			$mpegawai_nama = $rs->fields["pegawai_nama"];
-			$mpegawai_nip = $rs->fields["pegawai_nip"];
-			$mupah = 0;
-			$mpremi_malam = 0;
-			$mpremi_hadir = 0;
-			$mtidak_masuk = 0;
-			$mpot_absen = 0;
+			$mpegawai_id      = $rs->fields["pegawai_id"];
+			$mpegawai_nama    = $rs->fields["pegawai_nama"];
+			$mpegawai_nip     = $rs->fields["pegawai_nip"];
+			$mt_jabatan       = $rs->fields["t_jabatan"];
+			$mupah            = 0;
+			$mpremi_malam     = 0;
+			$mpremi_hadir     = 0;
+			$mtidak_masuk     = 0;
+			$mpot_absen       = 0;
 			$mjml_premi_malam = 0;
 			while ($mpegawai_id == $rs->fields["pegawai_id"] and !$rs->EOF) {
 				
@@ -85,6 +87,9 @@ while (!$rs->EOF) {
 				}
 				
 				$rs->MoveNext();
+			}
+			if ($_POST["radio_proses"]) {
+				$mupah += $mt_jabatan;
 			}
 			$mtotal = $mupah + $mpremi_malam + $mpremi_hadir - $mpot_absen;
 			$msql = "
