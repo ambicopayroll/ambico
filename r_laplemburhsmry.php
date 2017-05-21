@@ -6,16 +6,16 @@ ob_start();
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "phprptinc/ewmysql.php") ?>
 <?php include_once "phprptinc/ewrfn10.php" ?>
 <?php include_once "phprptinc/ewrusrfn10.php" ?>
-<?php include_once "r_laplembursmryinfo.php" ?>
+<?php include_once "r_laplemburhsmryinfo.php" ?>
 <?php
 
 //
 // Page class
 //
 
-$r_laplembur_summary = NULL; // Initialize page object first
+$r_laplemburh_summary = NULL; // Initialize page object first
 
-class crr_laplembur_summary extends crr_laplembur {
+class crr_laplemburh_summary extends crr_laplemburh {
 
 	// Page ID
 	var $PageID = 'summary';
@@ -24,7 +24,7 @@ class crr_laplembur_summary extends crr_laplembur {
 	var $ProjectID = "{6A79AFFA-AA3A-4CBB-8572-5F6C56B1E5B1}";
 
 	// Page object name
-	var $PageObjName = 'r_laplembur_summary';
+	var $PageObjName = 'r_laplemburh_summary';
 
 	// Page name
 	function PageName() {
@@ -203,10 +203,10 @@ class crr_laplembur_summary extends crr_laplembur {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (r_laplembur)
-		if (!isset($GLOBALS["r_laplembur"])) {
-			$GLOBALS["r_laplembur"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["r_laplembur"];
+		// Table object (r_laplemburh)
+		if (!isset($GLOBALS["r_laplemburh"])) {
+			$GLOBALS["r_laplemburh"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["r_laplemburh"];
 		}
 
 		// Initialize URLs
@@ -221,7 +221,7 @@ class crr_laplembur_summary extends crr_laplembur {
 
 		// Table name (for backward compatibility)
 		if (!defined("EWR_TABLE_NAME"))
-			define("EWR_TABLE_NAME", 'r_laplembur', TRUE);
+			define("EWR_TABLE_NAME", 'r_laplemburh', TRUE);
 
 		// Start timer
 		$GLOBALS["gsTimer"] = new crTimer();
@@ -248,7 +248,7 @@ class crr_laplembur_summary extends crr_laplembur {
 		// Filter options
 		$this->FilterOptions = new crListOptions();
 		$this->FilterOptions->Tag = "div";
-		$this->FilterOptions->TagClassName = "ewFilterOption fr_laplembursummary";
+		$this->FilterOptions->TagClassName = "ewFilterOption fr_laplemburhsummary";
 
 		// Generate report options
 		$this->GenerateOptions = new crListOptions();
@@ -267,7 +267,7 @@ class crr_laplembur_summary extends crr_laplembur {
 		$Security = new crAdvancedSecurity();
 		if (!$Security->IsLoggedIn()) $Security->AutoLogin(); // Auto login
 		$Security->TablePermission_Loading();
-		$Security->LoadCurrentUserLevel($this->ProjectID . 'r_laplembur');
+		$Security->LoadCurrentUserLevel($this->ProjectID . 'r_laplemburh');
 		$Security->TablePermission_Loaded();
 		if (!$Security->CanList()) {
 			$Security->SaveLastUrl();
@@ -353,7 +353,7 @@ class crr_laplembur_summary extends crr_laplembur {
 		// Export to Email
 		$item = &$this->ExportOptions->Add("email");
 		$url = $this->PageUrl() . "export=email";
-		$item->Body = "<a title=\"" . ewr_HtmlEncode($ReportLanguage->Phrase("ExportToEmail", TRUE)) . "\" data-caption=\"" . ewr_HtmlEncode($ReportLanguage->Phrase("ExportToEmail", TRUE)) . "\" id=\"emf_r_laplembur\" href=\"javascript:void(0);\" onclick=\"ewr_EmailDialogShow({lnk:'emf_r_laplembur',hdr:ewLanguage.Phrase('ExportToEmail'),url:'$url',exportid:'$exportid',el:this});\">" . $ReportLanguage->Phrase("ExportToEmail") . "</a>";
+		$item->Body = "<a title=\"" . ewr_HtmlEncode($ReportLanguage->Phrase("ExportToEmail", TRUE)) . "\" data-caption=\"" . ewr_HtmlEncode($ReportLanguage->Phrase("ExportToEmail", TRUE)) . "\" id=\"emf_r_laplemburh\" href=\"javascript:void(0);\" onclick=\"ewr_EmailDialogShow({lnk:'emf_r_laplemburh',hdr:ewLanguage.Phrase('ExportToEmail'),url:'$url',exportid:'$exportid',el:this});\">" . $ReportLanguage->Phrase("ExportToEmail") . "</a>";
 		$item->Visible = TRUE;
 		$ReportTypes["email"] = $item->Visible ? $ReportLanguage->Phrase("ReportFormEmail") : "";
 		$ReportOptions["ReportTypes"] = $ReportTypes;
@@ -371,10 +371,10 @@ class crr_laplembur_summary extends crr_laplembur {
 
 		// Filter button
 		$item = &$this->FilterOptions->Add("savecurrentfilter");
-		$item->Body = "<a class=\"ewSaveFilter\" data-form=\"fr_laplembursummary\" href=\"#\">" . $ReportLanguage->Phrase("SaveCurrentFilter") . "</a>";
+		$item->Body = "<a class=\"ewSaveFilter\" data-form=\"fr_laplemburhsummary\" href=\"#\">" . $ReportLanguage->Phrase("SaveCurrentFilter") . "</a>";
 		$item->Visible = TRUE;
 		$item = &$this->FilterOptions->Add("deletefilter");
-		$item->Body = "<a class=\"ewDeleteFilter\" data-form=\"fr_laplembursummary\" href=\"#\">" . $ReportLanguage->Phrase("DeleteFilter") . "</a>";
+		$item->Body = "<a class=\"ewDeleteFilter\" data-form=\"fr_laplemburhsummary\" href=\"#\">" . $ReportLanguage->Phrase("DeleteFilter") . "</a>";
 		$item->Visible = TRUE;
 		$this->FilterOptions->UseDropDownButton = TRUE;
 		$this->FilterOptions->UseButtonGroup = !$this->FilterOptions->UseDropDownButton; // v8
@@ -408,7 +408,7 @@ class crr_laplembur_summary extends crr_laplembur {
 		// Filter panel button
 		$item = &$this->SearchOptions->Add("searchtoggle");
 		$SearchToggleClass = $this->FilterApplied ? " active" : " active";
-		$item->Body = "<button type=\"button\" class=\"btn btn-default ewSearchToggle" . $SearchToggleClass . "\" title=\"" . $ReportLanguage->Phrase("SearchBtn", TRUE) . "\" data-caption=\"" . $ReportLanguage->Phrase("SearchBtn", TRUE) . "\" data-toggle=\"button\" data-form=\"fr_laplembursummary\">" . $ReportLanguage->Phrase("SearchBtn") . "</button>";
+		$item->Body = "<button type=\"button\" class=\"btn btn-default ewSearchToggle" . $SearchToggleClass . "\" title=\"" . $ReportLanguage->Phrase("SearchBtn", TRUE) . "\" data-caption=\"" . $ReportLanguage->Phrase("SearchBtn", TRUE) . "\" data-toggle=\"button\" data-form=\"fr_laplemburhsummary\">" . $ReportLanguage->Phrase("SearchBtn") . "</button>";
 		$item->Visible = FALSE;
 
 		// Reset filter
@@ -1666,8 +1666,8 @@ class crr_laplembur_summary extends crr_laplembur {
 		// Example:
 		//$header = "your header";
 
-		$MyRow = ewr_ExecuteRow("SELECT start, end FROM t_laplembur limit 1");
-		$header = "Laporan Lembur Bulanan<br>Periode ".tgl_indo_header($MyRow["start"])." s.d. ".tgl_indo_header($MyRow["end"])."<br>&nbsp;";
+		$MyRow = ewr_ExecuteRow("SELECT start, end FROM t_laplemburh limit 1");
+		$header = "Laporan Lembur (Harian)<br>Periode ".tgl_indo_header($MyRow["start"])." s.d. ".tgl_indo_header($MyRow["end"])."<br>&nbsp;";
 	}
 
 	// Page Data Rendered event
@@ -1690,9 +1690,9 @@ class crr_laplembur_summary extends crr_laplembur {
 <?php
 
 // Create page object
-if (!isset($r_laplembur_summary)) $r_laplembur_summary = new crr_laplembur_summary();
+if (!isset($r_laplemburh_summary)) $r_laplemburh_summary = new crr_laplemburh_summary();
 if (isset($Page)) $OldPage = $Page;
-$Page = &$r_laplembur_summary;
+$Page = &$r_laplemburh_summary;
 
 // Page init
 $Page->Page_Init();
@@ -1712,21 +1712,21 @@ $Page->Page_Render();
 <script type="text/javascript">
 
 // Create page object
-var r_laplembur_summary = new ewr_Page("r_laplembur_summary");
+var r_laplemburh_summary = new ewr_Page("r_laplemburh_summary");
 
 // Page properties
-r_laplembur_summary.PageID = "summary"; // Page ID
-var EWR_PAGE_ID = r_laplembur_summary.PageID;
+r_laplemburh_summary.PageID = "summary"; // Page ID
+var EWR_PAGE_ID = r_laplemburh_summary.PageID;
 
 // Extend page with Chart_Rendering function
-r_laplembur_summary.Chart_Rendering = 
+r_laplemburh_summary.Chart_Rendering = 
  function(chart, chartid) { // DO NOT CHANGE THIS LINE!
 
  	//alert(chartid);
  }
 
 // Extend page with Chart_Rendered function
-r_laplembur_summary.Chart_Rendered = 
+r_laplemburh_summary.Chart_Rendered = 
  function(chart, chartid) { // DO NOT CHANGE THIS LINE!
 
  	//alert(chartid);
@@ -1827,7 +1827,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php if ($Page->TotalGrps > 0) { ?>
 <?php if ($Page->Export == "" && !($Page->DrillDown && $Page->TotalGrps > 0)) { ?>
 <div class="panel-footer ewGridLowerPanel">
-<?php include "r_laplembursmrypager.php" ?>
+<?php include "r_laplemburhsmrypager.php" ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
@@ -1835,7 +1835,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php if ($Page->Export <> "pdf") { ?>
 </div>
 <?php } ?>
-<span data-class="tpb<?php echo $Page->GrpCount-1 ?>_r_laplembur"><?php echo $Page->PageBreakContent ?></span>
+<span data-class="tpb<?php echo $Page->GrpCount-1 ?>_r_laplemburh"><?php echo $Page->PageBreakContent ?></span>
 <?php } ?>
 <?php if ($Page->Export <> "pdf") { ?>
 <?php if ($Page->Export == "word" || $Page->Export == "excel") { ?>
@@ -1846,7 +1846,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->Export == "" && !($Page->DrillDown && $Page->TotalGrps > 0)) { ?>
 <div class="panel-heading ewGridUpperPanel">
-<?php include "r_laplembursmrypager.php" ?>
+<?php include "r_laplemburhsmrypager.php" ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
@@ -1863,15 +1863,15 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 	<td data-field="bagian">&nbsp;</td>
 	<?php } else { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="bagian"><div class="r_laplembur_bagian"><span class="ewTableHeaderCaption"><?php echo $Page->bagian->FldCaption() ?></span></div></td>
+	<td data-field="bagian"><div class="r_laplemburh_bagian"><span class="ewTableHeaderCaption"><?php echo $Page->bagian->FldCaption() ?></span></div></td>
 <?php } else { ?>
 	<td data-field="bagian">
 <?php if ($Page->SortUrl($Page->bagian) == "") { ?>
-		<div class="ewTableHeaderBtn r_laplembur_bagian">
+		<div class="ewTableHeaderBtn r_laplemburh_bagian">
 			<span class="ewTableHeaderCaption"><?php echo $Page->bagian->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_laplembur_bagian" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->bagian) ?>',2);">
+		<div class="ewTableHeaderBtn ewPointer r_laplemburh_bagian" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->bagian) ?>',2);">
 			<span class="ewTableHeaderCaption"><?php echo $Page->bagian->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->bagian->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->bagian->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
@@ -1885,15 +1885,15 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 	<td data-field="divisi">&nbsp;</td>
 	<?php } else { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="divisi"><div class="r_laplembur_divisi"><span class="ewTableHeaderCaption"><?php echo $Page->divisi->FldCaption() ?></span></div></td>
+	<td data-field="divisi"><div class="r_laplemburh_divisi"><span class="ewTableHeaderCaption"><?php echo $Page->divisi->FldCaption() ?></span></div></td>
 <?php } else { ?>
 	<td data-field="divisi">
 <?php if ($Page->SortUrl($Page->divisi) == "") { ?>
-		<div class="ewTableHeaderBtn r_laplembur_divisi">
+		<div class="ewTableHeaderBtn r_laplemburh_divisi">
 			<span class="ewTableHeaderCaption"><?php echo $Page->divisi->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_laplembur_divisi" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->divisi) ?>',2);">
+		<div class="ewTableHeaderBtn ewPointer r_laplemburh_divisi" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->divisi) ?>',2);">
 			<span class="ewTableHeaderCaption"><?php echo $Page->divisi->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->divisi->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->divisi->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
@@ -1904,15 +1904,15 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->no->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="no"><div class="r_laplembur_no"><span class="ewTableHeaderCaption"><?php echo $Page->no->FldCaption() ?></span></div></td>
+	<td data-field="no"><div class="r_laplemburh_no"><span class="ewTableHeaderCaption"><?php echo $Page->no->FldCaption() ?></span></div></td>
 <?php } else { ?>
 	<td data-field="no">
 <?php if ($Page->SortUrl($Page->no) == "") { ?>
-		<div class="ewTableHeaderBtn r_laplembur_no">
+		<div class="ewTableHeaderBtn r_laplemburh_no">
 			<span class="ewTableHeaderCaption"><?php echo $Page->no->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_laplembur_no" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->no) ?>',2);">
+		<div class="ewTableHeaderBtn ewPointer r_laplemburh_no" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->no) ?>',2);">
 			<span class="ewTableHeaderCaption"><?php echo $Page->no->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->no->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->no->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
@@ -1922,15 +1922,15 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->nama->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="nama"><div class="r_laplembur_nama"><span class="ewTableHeaderCaption"><?php echo $Page->nama->FldCaption() ?></span></div></td>
+	<td data-field="nama"><div class="r_laplemburh_nama"><span class="ewTableHeaderCaption"><?php echo $Page->nama->FldCaption() ?></span></div></td>
 <?php } else { ?>
 	<td data-field="nama">
 <?php if ($Page->SortUrl($Page->nama) == "") { ?>
-		<div class="ewTableHeaderBtn r_laplembur_nama">
+		<div class="ewTableHeaderBtn r_laplemburh_nama">
 			<span class="ewTableHeaderCaption"><?php echo $Page->nama->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_laplembur_nama" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->nama) ?>',2);">
+		<div class="ewTableHeaderBtn ewPointer r_laplemburh_nama" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->nama) ?>',2);">
 			<span class="ewTableHeaderCaption"><?php echo $Page->nama->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->nama->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->nama->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
@@ -1940,15 +1940,15 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->nip->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="nip"><div class="r_laplembur_nip"><span class="ewTableHeaderCaption"><?php echo $Page->nip->FldCaption() ?></span></div></td>
+	<td data-field="nip"><div class="r_laplemburh_nip"><span class="ewTableHeaderCaption"><?php echo $Page->nip->FldCaption() ?></span></div></td>
 <?php } else { ?>
 	<td data-field="nip">
 <?php if ($Page->SortUrl($Page->nip) == "") { ?>
-		<div class="ewTableHeaderBtn r_laplembur_nip">
+		<div class="ewTableHeaderBtn r_laplemburh_nip">
 			<span class="ewTableHeaderCaption"><?php echo $Page->nip->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_laplembur_nip" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->nip) ?>',2);">
+		<div class="ewTableHeaderBtn ewPointer r_laplemburh_nip" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->nip) ?>',2);">
 			<span class="ewTableHeaderCaption"><?php echo $Page->nip->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->nip->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->nip->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
@@ -1958,15 +1958,15 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->jml_jam->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="jml_jam"><div class="r_laplembur_jml_jam" style="text-align: right;"><span class="ewTableHeaderCaption"><?php echo $Page->jml_jam->FldCaption() ?></span></div></td>
+	<td data-field="jml_jam"><div class="r_laplemburh_jml_jam" style="text-align: right;"><span class="ewTableHeaderCaption"><?php echo $Page->jml_jam->FldCaption() ?></span></div></td>
 <?php } else { ?>
 	<td data-field="jml_jam">
 <?php if ($Page->SortUrl($Page->jml_jam) == "") { ?>
-		<div class="ewTableHeaderBtn r_laplembur_jml_jam" style="text-align: right;">
+		<div class="ewTableHeaderBtn r_laplemburh_jml_jam" style="text-align: right;">
 			<span class="ewTableHeaderCaption"><?php echo $Page->jml_jam->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_laplembur_jml_jam" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->jml_jam) ?>',2);" style="text-align: right;">
+		<div class="ewTableHeaderBtn ewPointer r_laplemburh_jml_jam" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->jml_jam) ?>',2);" style="text-align: right;">
 			<span class="ewTableHeaderCaption"><?php echo $Page->jml_jam->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->jml_jam->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->jml_jam->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
@@ -1976,15 +1976,15 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->tarif->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="tarif"><div class="r_laplembur_tarif" style="text-align: right;"><span class="ewTableHeaderCaption"><?php echo $Page->tarif->FldCaption() ?></span></div></td>
+	<td data-field="tarif"><div class="r_laplemburh_tarif" style="text-align: right;"><span class="ewTableHeaderCaption"><?php echo $Page->tarif->FldCaption() ?></span></div></td>
 <?php } else { ?>
 	<td data-field="tarif">
 <?php if ($Page->SortUrl($Page->tarif) == "") { ?>
-		<div class="ewTableHeaderBtn r_laplembur_tarif" style="text-align: right;">
+		<div class="ewTableHeaderBtn r_laplemburh_tarif" style="text-align: right;">
 			<span class="ewTableHeaderCaption"><?php echo $Page->tarif->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_laplembur_tarif" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->tarif) ?>',2);" style="text-align: right;">
+		<div class="ewTableHeaderBtn ewPointer r_laplemburh_tarif" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->tarif) ?>',2);" style="text-align: right;">
 			<span class="ewTableHeaderCaption"><?php echo $Page->tarif->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->tarif->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->tarif->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
@@ -1994,15 +1994,15 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-	<td data-field="total_lembur"><div class="r_laplembur_total_lembur" style="text-align: right;"><span class="ewTableHeaderCaption"><?php echo $Page->total_lembur->FldCaption() ?></span></div></td>
+	<td data-field="total_lembur"><div class="r_laplemburh_total_lembur" style="text-align: right;"><span class="ewTableHeaderCaption"><?php echo $Page->total_lembur->FldCaption() ?></span></div></td>
 <?php } else { ?>
 	<td data-field="total_lembur">
 <?php if ($Page->SortUrl($Page->total_lembur) == "") { ?>
-		<div class="ewTableHeaderBtn r_laplembur_total_lembur" style="text-align: right;">
+		<div class="ewTableHeaderBtn r_laplemburh_total_lembur" style="text-align: right;">
 			<span class="ewTableHeaderCaption"><?php echo $Page->total_lembur->FldCaption() ?></span>
 		</div>
 <?php } else { ?>
-		<div class="ewTableHeaderBtn ewPointer r_laplembur_total_lembur" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->total_lembur) ?>',2);" style="text-align: right;">
+		<div class="ewTableHeaderBtn ewPointer r_laplemburh_total_lembur" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->total_lembur) ?>',2);" style="text-align: right;">
 			<span class="ewTableHeaderCaption"><?php echo $Page->total_lembur->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->total_lembur->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->total_lembur->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</div>
@@ -2052,21 +2052,21 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 		<td data-field="bagian" colspan="<?php echo ($Page->GrpColumnCount + $Page->DtlColumnCount - 1) ?>"<?php echo $Page->bagian->CellAttributes() ?>>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-		<span class="ewSummaryCaption r_laplembur_bagian"><span class="ewTableHeaderCaption"><?php echo $Page->bagian->FldCaption() ?></span></span>
+		<span class="ewSummaryCaption r_laplemburh_bagian"><span class="ewTableHeaderCaption"><?php echo $Page->bagian->FldCaption() ?></span></span>
 <?php } else { ?>
 	<?php if ($Page->SortUrl($Page->bagian) == "") { ?>
-		<span class="ewSummaryCaption r_laplembur_bagian">
+		<span class="ewSummaryCaption r_laplemburh_bagian">
 			<span class="ewTableHeaderCaption"><?php echo $Page->bagian->FldCaption() ?></span>
 		</span>
 	<?php } else { ?>
-		<span class="ewTableHeaderBtn ewPointer ewSummaryCaption r_laplembur_bagian" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->bagian) ?>',2);">
+		<span class="ewTableHeaderBtn ewPointer ewSummaryCaption r_laplemburh_bagian" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->bagian) ?>',2);">
 			<span class="ewTableHeaderCaption"><?php echo $Page->bagian->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->bagian->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->bagian->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</span>
 	<?php } ?>
 <?php } ?>
 		<?php echo $ReportLanguage->Phrase("SummaryColon") ?>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_r_laplembur_bagian"<?php echo $Page->bagian->ViewAttributes() ?>><?php echo $Page->bagian->GroupViewValue ?></span>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_r_laplemburh_bagian"<?php echo $Page->bagian->ViewAttributes() ?>><?php echo $Page->bagian->GroupViewValue ?></span>
 		<span class="ewSummaryCount">(<span class="ewAggregateCaption"><?php echo $ReportLanguage->Phrase("RptCnt") ?></span><?php echo $ReportLanguage->Phrase("AggregateEqual") ?><span class="ewAggregateValue"><?php echo ewr_FormatNumber($Page->bagian->Count,0,-2,-2,-2) ?></span>)</span>
 		</td>
 	</tr>
@@ -2092,21 +2092,21 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 		<td data-field="divisi" colspan="<?php echo ($Page->GrpColumnCount + $Page->DtlColumnCount - 2) ?>"<?php echo $Page->divisi->CellAttributes() ?>>
 <?php if ($Page->Export <> "" || $Page->DrillDown) { ?>
-		<span class="ewSummaryCaption r_laplembur_divisi"><span class="ewTableHeaderCaption"><?php echo $Page->divisi->FldCaption() ?></span></span>
+		<span class="ewSummaryCaption r_laplemburh_divisi"><span class="ewTableHeaderCaption"><?php echo $Page->divisi->FldCaption() ?></span></span>
 <?php } else { ?>
 	<?php if ($Page->SortUrl($Page->divisi) == "") { ?>
-		<span class="ewSummaryCaption r_laplembur_divisi">
+		<span class="ewSummaryCaption r_laplemburh_divisi">
 			<span class="ewTableHeaderCaption"><?php echo $Page->divisi->FldCaption() ?></span>
 		</span>
 	<?php } else { ?>
-		<span class="ewTableHeaderBtn ewPointer ewSummaryCaption r_laplembur_divisi" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->divisi) ?>',2);">
+		<span class="ewTableHeaderBtn ewPointer ewSummaryCaption r_laplemburh_divisi" onclick="ewr_Sort(event,'<?php echo $Page->SortUrl($Page->divisi) ?>',2);">
 			<span class="ewTableHeaderCaption"><?php echo $Page->divisi->FldCaption() ?></span>
 			<span class="ewTableHeaderSort"><?php if ($Page->divisi->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($Page->divisi->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span>
 		</span>
 	<?php } ?>
 <?php } ?>
 		<?php echo $ReportLanguage->Phrase("SummaryColon") ?>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplembur_divisi"<?php echo $Page->divisi->ViewAttributes() ?>><?php echo $Page->divisi->GroupViewValue ?></span>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplemburh_divisi"<?php echo $Page->divisi->ViewAttributes() ?>><?php echo $Page->divisi->GroupViewValue ?></span>
 		<span class="ewSummaryCount">(<span class="ewAggregateCaption"><?php echo $ReportLanguage->Phrase("RptCnt") ?></span><?php echo $ReportLanguage->Phrase("AggregateEqual") ?><span class="ewAggregateValue"><?php echo ewr_FormatNumber($Page->divisi->Count,0,-2,-2,-2) ?></span>)</span>
 		</td>
 	</tr>
@@ -2124,7 +2124,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="bagian"<?php echo $Page->bagian->CellAttributes(); ?>>&nbsp;</td>
 	<?php } else { ?>
 		<td data-field="bagian"<?php echo $Page->bagian->CellAttributes(); ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_r_laplembur_bagian"<?php echo $Page->bagian->ViewAttributes() ?>><?php echo $Page->bagian->GroupViewValue ?></span></td>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_r_laplemburh_bagian"<?php echo $Page->bagian->ViewAttributes() ?>><?php echo $Page->bagian->GroupViewValue ?></span></td>
 	<?php } ?>
 <?php } ?>
 <?php if ($Page->divisi->Visible) { ?>
@@ -2132,32 +2132,32 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="divisi"<?php echo $Page->divisi->CellAttributes(); ?>>&nbsp;</td>
 	<?php } else { ?>
 		<td data-field="divisi"<?php echo $Page->divisi->CellAttributes(); ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplembur_divisi"<?php echo $Page->divisi->ViewAttributes() ?>><?php echo $Page->divisi->GroupViewValue ?></span></td>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplemburh_divisi"<?php echo $Page->divisi->ViewAttributes() ?>><?php echo $Page->divisi->GroupViewValue ?></span></td>
 	<?php } ?>
 <?php } ?>
 <?php if ($Page->no->Visible) { ?>
 		<td data-field="no"<?php echo $Page->no->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_no"<?php echo $Page->no->ViewAttributes() ?>><?php echo $Page->no->ListViewValue() ?></span></td>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplemburh_no"<?php echo $Page->no->ViewAttributes() ?>><?php echo $Page->no->ListViewValue() ?></span></td>
 <?php } ?>
 <?php if ($Page->nama->Visible) { ?>
 		<td data-field="nama"<?php echo $Page->nama->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_nama"<?php echo $Page->nama->ViewAttributes() ?>><?php echo $Page->nama->ListViewValue() ?></span></td>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplemburh_nama"<?php echo $Page->nama->ViewAttributes() ?>><?php echo $Page->nama->ListViewValue() ?></span></td>
 <?php } ?>
 <?php if ($Page->nip->Visible) { ?>
 		<td data-field="nip"<?php echo $Page->nip->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_nip"<?php echo $Page->nip->ViewAttributes() ?>><?php echo $Page->nip->ListViewValue() ?></span></td>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplemburh_nip"<?php echo $Page->nip->ViewAttributes() ?>><?php echo $Page->nip->ListViewValue() ?></span></td>
 <?php } ?>
 <?php if ($Page->jml_jam->Visible) { ?>
 		<td data-field="jml_jam"<?php echo $Page->jml_jam->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_jml_jam"<?php echo $Page->jml_jam->ViewAttributes() ?>><?php echo $Page->jml_jam->ListViewValue() ?></span></td>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplemburh_jml_jam"<?php echo $Page->jml_jam->ViewAttributes() ?>><?php echo $Page->jml_jam->ListViewValue() ?></span></td>
 <?php } ?>
 <?php if ($Page->tarif->Visible) { ?>
 		<td data-field="tarif"<?php echo $Page->tarif->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_tarif"<?php echo $Page->tarif->ViewAttributes() ?>><?php echo $Page->tarif->ListViewValue() ?></span></td>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplemburh_tarif"<?php echo $Page->tarif->ViewAttributes() ?>><?php echo $Page->tarif->ListViewValue() ?></span></td>
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
 		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>>
-<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->ListViewValue() ?></span></td>
+<span data-class="tpx<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_<?php echo $Page->RecCount ?>_r_laplemburh_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->ListViewValue() ?></span></td>
 <?php } ?>
 	</tr>
 <?php
@@ -2229,7 +2229,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="tarif"<?php echo $Page->divisi->CellAttributes() ?>></td>
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
-		<td data-field="total_lembur"<?php echo $Page->divisi->CellAttributes() ?>><span class="ewAggregateCaption"><?php echo $ReportLanguage->Phrase("RptSum") ?></span><?php echo $ReportLanguage->Phrase("AggregateEqual") ?><span class="ewAggregateValue"><span data-class="tpgs<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></span></td>
+		<td data-field="total_lembur"<?php echo $Page->divisi->CellAttributes() ?>><span class="ewAggregateCaption"><?php echo $ReportLanguage->Phrase("RptSum") ?></span><?php echo $ReportLanguage->Phrase("AggregateEqual") ?><span class="ewAggregateValue"><span data-class="tpgs<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplemburh_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></span></td>
 <?php } ?>
 	</tr>
 <?php } else { ?>
@@ -2265,7 +2265,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
 		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>>
-<span data-class="tpgs<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
+<span data-class="tpgs<?php echo $Page->GrpCount ?>_<?php echo $Page->GrpCounter[0] ?>_r_laplemburh_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
 <?php } ?>
 	</tr>
 <?php } ?>
@@ -2336,7 +2336,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="tarif"<?php echo $Page->bagian->CellAttributes() ?>></td>
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
-		<td data-field="total_lembur"<?php echo $Page->bagian->CellAttributes() ?>><span class="ewAggregateCaption"><?php echo $ReportLanguage->Phrase("RptSum") ?></span><?php echo $ReportLanguage->Phrase("AggregateEqual") ?><span class="ewAggregateValue"><span data-class="tpgs<?php echo $Page->GrpCount ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></span></td>
+		<td data-field="total_lembur"<?php echo $Page->bagian->CellAttributes() ?>><span class="ewAggregateCaption"><?php echo $ReportLanguage->Phrase("RptSum") ?></span><?php echo $ReportLanguage->Phrase("AggregateEqual") ?><span class="ewAggregateValue"><span data-class="tpgs<?php echo $Page->GrpCount ?>_r_laplemburh_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></span></td>
 <?php } ?>
 	</tr>
 <?php } else { ?>
@@ -2366,7 +2366,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
 		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>>
-<span data-class="tpgs<?php echo $Page->GrpCount ?>_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
+<span data-class="tpgs<?php echo $Page->GrpCount ?>_r_laplemburh_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
 <?php } ?>
 	</tr>
 <?php } ?>
@@ -2431,7 +2431,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 		<td data-field="tarif"<?php echo $Page->tarif->CellAttributes() ?>></td>
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
-		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>><?php echo $ReportLanguage->Phrase("RptSum") ?>=<span data-class="tpts_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
+		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>><?php echo $ReportLanguage->Phrase("RptSum") ?>=<span data-class="tpts_r_laplemburh_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
 <?php } ?>
 	</tr>
 <?php } else { ?>
@@ -2457,7 +2457,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->total_lembur->Visible) { ?>
 		<td data-field="total_lembur"<?php echo $Page->total_lembur->CellAttributes() ?>>
-<span data-class="tpts_r_laplembur_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
+<span data-class="tpts_r_laplemburh_total_lembur"<?php echo $Page->total_lembur->ViewAttributes() ?>><?php echo $Page->total_lembur->SumViewValue ?></span></td>
 <?php } ?>
 	</tr>
 <?php } ?>
@@ -2472,7 +2472,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php } ?>
 <?php if ($Page->Export == "" && !($Page->DrillDown && $Page->TotalGrps > 0)) { ?>
 <div class="panel-heading ewGridUpperPanel">
-<?php include "r_laplembursmrypager.php" ?>
+<?php include "r_laplemburhsmrypager.php" ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
@@ -2490,7 +2490,7 @@ while ($rsgrp && !$rsgrp->EOF && $Page->GrpCount <= $Page->DisplayGrps || $Page-
 <?php if ($Page->TotalGrps > 0) { ?>
 <?php if ($Page->Export == "" && !($Page->DrillDown && $Page->TotalGrps > 0)) { ?>
 <div class="panel-footer ewGridLowerPanel">
-<?php include "r_laplembursmrypager.php" ?>
+<?php include "r_laplemburhsmrypager.php" ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>

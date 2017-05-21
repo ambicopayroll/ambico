@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<configuration date="2017/05/20" author="e.World Technology Ltd.">
-  <project id="{9712DCF3-D9FD-406D-93E5-FEA5020667C8}" file="D:\xampp\htdocs\ambico\ambico.pmp" name="ambico" product="PHPMaker" version="13.0" datetime="2017/05/20 21:16:12" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+<configuration date="2017/05/21" author="e.World Technology Ltd.">
+  <project id="{9712DCF3-D9FD-406D-93E5-FEA5020667C8}" file="D:\xampp\htdocs\ambico\ambico.pmp" name="ambico" product="PHPMaker" version="13.0" datetime="2017/05/21 13:16:08" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
     <table id="att_log" name="att_log" caption="att log" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="cuti_normatif" name="cuti_normatif" caption="cuti normatif" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="dev_type" name="dev_type" caption="dev type" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
@@ -95,5 +95,6 @@
     <table id="v_rekon_brngan" name="v_rekon_brngan" caption="v rekon brngan" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="lap_lembur__php" name="lap_lembur_.php" caption="Lembur (Bulanan)" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="t_laplembur" name="t_laplembur" caption="t laplembur" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="lap_lemburh__php" name="lap_lemburh_.php" caption="Lembur (Harian)" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
   </project>
 </configuration>

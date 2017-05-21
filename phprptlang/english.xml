@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/5/20" version="10.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/21" version="10.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -350,6 +350,12 @@
   <project>
     <phrase id="bodytitle" value="AMBICO" />
     <phrase id="footertext" value="&amp;copy;2017 AMBICO. All rights reserved." />
+    <menu id="102">
+      <phrase id="menutext" value="t laplemburh" />
+    </menu>
+    <menu id="103">
+      <phrase id="menutext" value="Lembur (Harian)" />
+    </menu>
     <menu id="100">
       <phrase id="menutext" value="t laplembur" />
     </menu>
@@ -3170,10 +3176,82 @@
         <phrase id="fldcaption" value="NIP" />
       </field>
       <field id="jml_jam">
-        <phrase id="fldcaption" value="Jumlah Jam Lembur" />
+        <phrase id="fldcaption" value="Jml. Jam Lembur" />
       </field>
       <field id="tarif">
-        <phrase id="fldcaption" value="Tarif Lembur" />
+        <phrase id="fldcaption" value="Tarif Lembur /Jam" />
+      </field>
+      <field id="total_lembur">
+        <phrase id="fldcaption" value="Total Terima" />
+      </field>
+      <field id="start">
+        <phrase id="fldcaption" value="start" />
+      </field>
+      <field id="end">
+        <phrase id="fldcaption" value="end" />
+      </field>
+    </table>
+    <table id="t_laplemburh">
+      <phrase id="tblcaption" value="t laplemburh" />
+      <field id="laplembur_id">
+        <phrase id="fldcaption" value="laplembur id" />
+      </field>
+      <field id="no">
+        <phrase id="fldcaption" value="no" />
+      </field>
+      <field id="bagian">
+        <phrase id="fldcaption" value="bagian" />
+      </field>
+      <field id="divisi">
+        <phrase id="fldcaption" value="divisi" />
+      </field>
+      <field id="nama">
+        <phrase id="fldcaption" value="nama" />
+      </field>
+      <field id="nip">
+        <phrase id="fldcaption" value="nip" />
+      </field>
+      <field id="jml_jam">
+        <phrase id="fldcaption" value="jml jam" />
+      </field>
+      <field id="tarif">
+        <phrase id="fldcaption" value="tarif" />
+      </field>
+      <field id="total_lembur">
+        <phrase id="fldcaption" value="total lembur" />
+      </field>
+      <field id="start">
+        <phrase id="fldcaption" value="start" />
+      </field>
+      <field id="end">
+        <phrase id="fldcaption" value="end" />
+      </field>
+    </table>
+    <table id="r_laplemburh">
+      <phrase id="tblcaption" value="Lembur (Harian)" />
+      <field id="laplembur_id">
+        <phrase id="fldcaption" value="laplembur id" />
+      </field>
+      <field id="no">
+        <phrase id="fldcaption" value="No." />
+      </field>
+      <field id="bagian">
+        <phrase id="fldcaption" value="Bagian" />
+      </field>
+      <field id="divisi">
+        <phrase id="fldcaption" value="Divisi" />
+      </field>
+      <field id="nama">
+        <phrase id="fldcaption" value="Nama" />
+      </field>
+      <field id="nip">
+        <phrase id="fldcaption" value="NIP" />
+      </field>
+      <field id="jml_jam">
+        <phrase id="fldcaption" value="Jml. Jam Lembur" />
+      </field>
+      <field id="tarif">
+        <phrase id="fldcaption" value="Tarif Lembur /Jam" />
       </field>
       <field id="total_lembur">
         <phrase id="fldcaption" value="Total Terima" />
