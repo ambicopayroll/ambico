@@ -145,10 +145,10 @@ while (!$rs->EOF) {
 				"; //echo $msql; exit;
 			$rs2 = $conn->Execute($msql);
 			
-			$bagian       = $rs2->fields["pembagian2_nama"];
-			$pegawai_nama = $rs2->fields["pegawai_nama"];
-			$pegawai_nip  = $rs2->fields["pegawai_nip"];
-			$pegawai_pin  = $rs2->fields["pegawai_pin"];
+			$bagian          = $rs2->fields["pembagian2_nama"];
+			$pegawai_nama    = $rs2->fields["pegawai_nama"];
+			$pegawai_nip     = $rs2->fields["pegawai_nip"];
+			$pegawai_pin     = $rs2->fields["pegawai_pin"];
 			
 			$mp_absen   = 0;
 			$mt_malam   = 0;
@@ -166,6 +166,7 @@ while (!$rs->EOF) {
 
 				// check data valid (jam masuk ada dan jam keluar ada)
 				$mdata_valid = f_data_valid($rs2->fields["scan_masuk"], $rs2->fields["scan_keluar"]);
+				
 				if ($mdata_valid != 0) {
 					// data tidak valid
 					
@@ -176,6 +177,9 @@ while (!$rs->EOF) {
 						
 						// check hari libur
 						if (substr($jk_kd, -1) == "L") {
+							if ($bagian == "KEAMANAN" or $bagian == "KENDARAAN") {
+								$mt_um += $t_um;
+							}
 						}
 						else {
 							$mabsen = 1; // untuk acuan perhitungan tunjangan hadir
