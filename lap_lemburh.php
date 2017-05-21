@@ -100,32 +100,6 @@ function f_hitungjamlembur($p_conn, $p_pegawai_id) {
 $msql = "delete from t_laplemburh";
 $conn->Execute($msql);
 
-$msql = "
-	select
-		e.lapgroup_id
-		, e.lapgroup_nama
-		, e.lapgroup_index
-		, d.lapsubgroup_index
-		, a.*
-		, c.*
-	from
-		v_jdw_krj_def a
-		left join t_rumus_peg b on a.pegawai_id = b.pegawai_id
-		left join t_rumus c on b.rumus_id = c.rumus_id
-		left join t_lapsubgroup d on a.pembagian2_id = d.pembagian2_id
-		left join t_lapgroup e on d.lapgroup_id = e.lapgroup_id
-	where
-		tgl between '".$_POST['start']."' and '".$_POST['end']."'
-		and c.hk_gol = a.hk_def
-		and a.pegawai_id not in (select pegawai_id from t_rumus2_peg)
-	order by
-		e.lapgroup_index
-		, d.lapsubgroup_index
-		, a.pegawai_id
-		, a.tgl
-	"; //echo $msql; exit;
-//$rs = $conn->Execute($msql);
-
 $mno = 1;
 
 $query = "
@@ -163,17 +137,8 @@ while (!$rs->EOF) {
 			$mt_lembur = $rs->fields["lembur"];
 
 			// hitung lembur
-			//$mjml_jam = f_hitungjamlembur($conn, $mpegawai_id);
-			$ajml_jam = f_hitungjamlembur($conn, $mpegawai_id);
-			$mjml_jam = 0;
-			if ($ajml_jam[0] <> 0) {
-				$mjml_jam += $ajml_jam[0];
-				$mjml_lembur += (1.5 * $ajml_jam[0] * $mt_lembur);
-			}
-			if ($ajml_jam[1] <> 0) {
-				$mjml_jam += $ajml_jam[1];
-				$mjml_lembur += (2 * $ajml_jam[1] * $mt_lembur);
-			}
+			$mjml_jam = f_hitungjamlembur($conn, $mpegawai_id);
+			$mjml_lembur = $mjml_jam * $mt_lembur;
 			
 			if ($mjml_jam <> 0) {
 				$query = "
