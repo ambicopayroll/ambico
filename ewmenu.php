@@ -31,6 +31,7 @@ $RootMenu->AddMenuItem(10228, "mi_lap_gaji__php", $Language->MenuPhrase("10228",
 $RootMenu->AddMenuItem(10413, "mi_lap_gaji3__php", $Language->MenuPhrase("10413", "MenuText"), "lap_gaji3_.php", 10077, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}lap_gaji3_.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(10417, "mi_lap_lembur__php", $Language->MenuPhrase("10417", "MenuText"), "lap_lembur_.php", 10077, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}lap_lembur_.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(10419, "mi_lap_lemburh__php", $Language->MenuPhrase("10419", "MenuText"), "lap_lemburh_.php", 10077, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}lap_lemburh_.php'), FALSE, TRUE);
+$RootMenu->AddMenuItem(10420, "mi_slip_bln__php", $Language->MenuPhrase("10420", "MenuText"), "slip_bln_.php", 10077, "", AllowListMenu('{9712DCF3-D9FD-406D-93E5-FEA5020667C8}slip_bln_.php'), FALSE, TRUE);
 $RootMenu->AddMenuItem(-2, "mi_changepwd", $Language->Phrase("ChangePwd"), "changepwd.php", -1, "", IsLoggedIn() && !IsSysAdmin());
 $RootMenu->AddMenuItem(-1, "mi_logout", $Language->Phrase("Logout"), "logout.php", -1, "", IsLoggedIn());
 $RootMenu->AddMenuItem(-1, "mi_login", $Language->Phrase("Login"), "login.php", -1, "", !IsLoggedIn() && substr(@$_SERVER["URL"], -1 * strlen("login.php")) <> "login.php");

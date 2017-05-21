@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2017/5/21" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2017/5/22" version="13.0.0" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!-- 
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -589,9 +589,6 @@
     <menu id="77">
       <phrase id="menutext" value="Home" />
     </menu>
-    <menu id="10416">
-      <phrase id="menutext" value="v rekon brngan" />
-    </menu>
     <menu id="78">
       <phrase id="menutext" value="Setup" />
     </menu>
@@ -640,14 +637,14 @@
     <menu id="10230">
       <phrase id="menutext" value="Pengecualian" />
     </menu>
+    <menu id="10416">
+      <phrase id="menutext" value="v rekon brngan" />
+    </menu>
     <menu id="10411">
       <phrase id="menutext" value="Input" />
     </menu>
     <menu id="10239">
       <phrase id="menutext" value="Kegiatan (Borongan)" />
-    </menu>
-    <menu id="10414">
-      <phrase id="menutext" value="v lapgjhrn" />
     </menu>
     <menu id="10224">
       <phrase id="menutext" value="Proses" />
@@ -681,6 +678,12 @@
     </menu>
     <menu id="10419">
       <phrase id="menutext" value="Lembur (Harian)" />
+    </menu>
+    <menu id="10420">
+      <phrase id="menutext" value="Slip Gaji (Bulanan)" />
+    </menu>
+    <menu id="10414">
+      <phrase id="menutext" value="v lapgjhrn" />
     </menu>
     <menu id="10415">
       <phrase id="menutext" value="t gjbrngan" />
@@ -3470,6 +3473,9 @@
     </table>
     <table id="lap_lemburh__php">
       <phrase id="tblcaption" value="Lembur (Harian)" />
+    </table>
+    <table id="slip_bln__php">
+      <phrase id="tblcaption" value="Slip Gaji (Bulanan)" />
     </table>
   </project>
 </ew-language>
