@@ -2306,28 +2306,28 @@
         <phrase id="fldtagcaption2" value="6 HK" />
       </field>
       <field id="premi_hadir">
-        <phrase id="fldcaption" value="Premi Hadir" />
+        <phrase id="fldcaption" value="T. Hadir" />
       </field>
       <field id="premi_malam">
-        <phrase id="fldcaption" value="Premi Malam" />
+        <phrase id="fldcaption" value="T. Malam" />
       </field>
       <field id="lp">
-        <phrase id="fldcaption" value="Tunj. LP" />
+        <phrase id="fldcaption" value="T. Lauk Pauk" />
       </field>
       <field id="forklift">
-        <phrase id="fldcaption" value="Tunj. Forklift" />
+        <phrase id="fldcaption" value="T. Forklift" />
       </field>
       <field id="lembur">
-        <phrase id="fldcaption" value="Lembur" />
+        <phrase id="fldcaption" value="T. Lembur" />
       </field>
       <field id="pot_aspen">
-        <phrase id="fldcaption" value="Pot. Astek &amp; Pensiun" />
+        <phrase id="fldcaption" value="P. AS. &amp; PEN." />
       </field>
       <field id="pot_absen">
-        <phrase id="fldcaption" value="Pot. Absen" />
+        <phrase id="fldcaption" value="P. Absen" />
       </field>
       <field id="pot_bpjs">
-        <phrase id="fldcaption" value="Pot. BPJS" />
+        <phrase id="fldcaption" value="P. BPJS" />
       </field>
     </table>
     <table id="t_rumus2_peg">
