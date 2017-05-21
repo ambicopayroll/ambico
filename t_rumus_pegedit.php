@@ -291,6 +291,7 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->pegawai_id->SetVisibility();
 		$this->rumus_id->SetVisibility();
+		$this->t_jabatan->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -551,6 +552,9 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 		if (!$this->rumus_id->FldIsDetailKey) {
 			$this->rumus_id->setFormValue($objForm->GetValue("x_rumus_id"));
 		}
+		if (!$this->t_jabatan->FldIsDetailKey) {
+			$this->t_jabatan->setFormValue($objForm->GetValue("x_t_jabatan"));
+		}
 		if (!$this->rumus_peg_id->FldIsDetailKey)
 			$this->rumus_peg_id->setFormValue($objForm->GetValue("x_rumus_peg_id"));
 	}
@@ -562,6 +566,7 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 		$this->rumus_peg_id->CurrentValue = $this->rumus_peg_id->FormValue;
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
 		$this->rumus_id->CurrentValue = $this->rumus_id->FormValue;
+		$this->t_jabatan->CurrentValue = $this->t_jabatan->FormValue;
 	}
 
 	// Load recordset
@@ -627,6 +632,7 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 		} else {
 			$this->rumus_id->VirtualValue = ""; // Clear value
 		}
+		$this->t_jabatan->setDbValue($rs->fields('t_jabatan'));
 	}
 
 	// Load DbValue from recordset
@@ -636,6 +642,7 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 		$this->rumus_peg_id->DbValue = $row['rumus_peg_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
 		$this->rumus_id->DbValue = $row['rumus_id'];
+		$this->t_jabatan->DbValue = $row['t_jabatan'];
 	}
 
 	// Render row values based on field settings
@@ -643,14 +650,19 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 		global $Security, $Language, $gsLanguage;
 
 		// Initialize URLs
-		// Call Row_Rendering event
+		// Convert decimal values if posted back
 
+		if ($this->t_jabatan->FormValue == $this->t_jabatan->CurrentValue && is_numeric(ew_StrToFloat($this->t_jabatan->CurrentValue)))
+			$this->t_jabatan->CurrentValue = ew_StrToFloat($this->t_jabatan->CurrentValue);
+
+		// Call Row_Rendering event
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
 		// rumus_peg_id
 		// pegawai_id
 		// rumus_id
+		// t_jabatan
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -689,6 +701,12 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 		}
 		$this->rumus_id->ViewCustomAttributes = "";
 
+		// t_jabatan
+		$this->t_jabatan->ViewValue = $this->t_jabatan->CurrentValue;
+		$this->t_jabatan->ViewValue = ew_FormatNumber($this->t_jabatan->ViewValue, 0, -2, -2, -2);
+		$this->t_jabatan->CellCssStyle .= "text-align: right;";
+		$this->t_jabatan->ViewCustomAttributes = "";
+
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
@@ -698,6 +716,11 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 			$this->rumus_id->LinkCustomAttributes = "";
 			$this->rumus_id->HrefValue = "";
 			$this->rumus_id->TooltipValue = "";
+
+			// t_jabatan
+			$this->t_jabatan->LinkCustomAttributes = "";
+			$this->t_jabatan->HrefValue = "";
+			$this->t_jabatan->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// pegawai_id
@@ -737,6 +760,13 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 			if ($rswrk) $rswrk->Close();
 			$this->rumus_id->EditValue = $arwrk;
 
+			// t_jabatan
+			$this->t_jabatan->EditAttrs["class"] = "form-control";
+			$this->t_jabatan->EditCustomAttributes = "";
+			$this->t_jabatan->EditValue = ew_HtmlEncode($this->t_jabatan->CurrentValue);
+			$this->t_jabatan->PlaceHolder = ew_RemoveHtml($this->t_jabatan->FldCaption());
+			if (strval($this->t_jabatan->EditValue) <> "" && is_numeric($this->t_jabatan->EditValue)) $this->t_jabatan->EditValue = ew_FormatNumber($this->t_jabatan->EditValue, -2, -2, -2, -2);
+
 			// Edit refer script
 			// pegawai_id
 
@@ -746,6 +776,10 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 			// rumus_id
 			$this->rumus_id->LinkCustomAttributes = "";
 			$this->rumus_id->HrefValue = "";
+
+			// t_jabatan
+			$this->t_jabatan->LinkCustomAttributes = "";
+			$this->t_jabatan->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -776,6 +810,9 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 		}
 		if (!$this->rumus_id->FldIsDetailKey && !is_null($this->rumus_id->FormValue) && $this->rumus_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->rumus_id->FldCaption(), $this->rumus_id->ReqErrMsg));
+		}
+		if (!ew_CheckNumber($this->t_jabatan->FormValue)) {
+			ew_AddMessage($gsFormError, $this->t_jabatan->FldErrMsg());
 		}
 
 		// Return validate result
@@ -818,6 +855,9 @@ class ct_rumus_peg_edit extends ct_rumus_peg {
 
 			// rumus_id
 			$this->rumus_id->SetDbValueDef($rsnew, $this->rumus_id->CurrentValue, 0, $this->rumus_id->ReadOnly);
+
+			// t_jabatan
+			$this->t_jabatan->SetDbValueDef($rsnew, $this->t_jabatan->CurrentValue, 0, $this->t_jabatan->ReadOnly);
 
 			// Check referential integrity for master table 'pegawai'
 			$bValidMasterRecord = TRUE;
@@ -1089,6 +1129,9 @@ ft_rumus_pegedit.Validate = function() {
 			elm = this.GetElements("x" + infix + "_rumus_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_rumus_peg->rumus_id->FldCaption(), $t_rumus_peg->rumus_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_t_jabatan");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_rumus_peg->t_jabatan->FldErrMsg()) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -1231,6 +1274,16 @@ $t_rumus_peg_edit->ShowMessage();
 <input type="hidden" name="s_x_rumus_id" id="s_x_rumus_id" value="<?php echo $t_rumus_peg->rumus_id->LookupFilterQuery() ?>">
 </span>
 <?php echo $t_rumus_peg->rumus_id->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($t_rumus_peg->t_jabatan->Visible) { // t_jabatan ?>
+	<div id="r_t_jabatan" class="form-group">
+		<label id="elh_t_rumus_peg_t_jabatan" for="x_t_jabatan" class="col-sm-2 control-label ewLabel"><?php echo $t_rumus_peg->t_jabatan->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $t_rumus_peg->t_jabatan->CellAttributes() ?>>
+<span id="el_t_rumus_peg_t_jabatan">
+<input type="text" data-table="t_rumus_peg" data-field="x_t_jabatan" name="x_t_jabatan" id="x_t_jabatan" size="30" placeholder="<?php echo ew_HtmlEncode($t_rumus_peg->t_jabatan->getPlaceHolder()) ?>" value="<?php echo $t_rumus_peg->t_jabatan->EditValue ?>"<?php echo $t_rumus_peg->t_jabatan->EditAttributes() ?>>
+</span>
+<?php echo $t_rumus_peg->t_jabatan->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>

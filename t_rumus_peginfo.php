@@ -16,6 +16,7 @@ class ct_rumus_peg extends cTable {
 	var $rumus_peg_id;
 	var $pegawai_id;
 	var $rumus_id;
+	var $t_jabatan;
 
 	//
 	// Table class constructor
@@ -66,6 +67,12 @@ class ct_rumus_peg extends cTable {
 		$this->rumus_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
 		$this->rumus_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['rumus_id'] = &$this->rumus_id;
+
+		// t_jabatan
+		$this->t_jabatan = new cField('t_rumus_peg', 't_rumus_peg', 'x_t_jabatan', 't_jabatan', '`t_jabatan`', '`t_jabatan`', 4, -1, FALSE, '`t_jabatan`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->t_jabatan->Sortable = TRUE; // Allow sort
+		$this->t_jabatan->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
+		$this->fields['t_jabatan'] = &$this->t_jabatan;
 	}
 
 	// Set Field Visibility
@@ -694,6 +701,7 @@ class ct_rumus_peg extends cTable {
 		$this->rumus_peg_id->setDbValue($rs->fields('rumus_peg_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
 		$this->rumus_id->setDbValue($rs->fields('rumus_id'));
+		$this->t_jabatan->setDbValue($rs->fields('t_jabatan'));
 	}
 
 	// Render list row values
@@ -707,6 +715,7 @@ class ct_rumus_peg extends cTable {
 		// rumus_peg_id
 		// pegawai_id
 		// rumus_id
+		// t_jabatan
 		// rumus_peg_id
 
 		$this->rumus_peg_id->ViewValue = $this->rumus_peg_id->CurrentValue;
@@ -743,6 +752,12 @@ class ct_rumus_peg extends cTable {
 		}
 		$this->rumus_id->ViewCustomAttributes = "";
 
+		// t_jabatan
+		$this->t_jabatan->ViewValue = $this->t_jabatan->CurrentValue;
+		$this->t_jabatan->ViewValue = ew_FormatNumber($this->t_jabatan->ViewValue, 0, -2, -2, -2);
+		$this->t_jabatan->CellCssStyle .= "text-align: right;";
+		$this->t_jabatan->ViewCustomAttributes = "";
+
 		// rumus_peg_id
 		$this->rumus_peg_id->LinkCustomAttributes = "";
 		$this->rumus_peg_id->HrefValue = "";
@@ -757,6 +772,11 @@ class ct_rumus_peg extends cTable {
 		$this->rumus_id->LinkCustomAttributes = "";
 		$this->rumus_id->HrefValue = "";
 		$this->rumus_id->TooltipValue = "";
+
+		// t_jabatan
+		$this->t_jabatan->LinkCustomAttributes = "";
+		$this->t_jabatan->HrefValue = "";
+		$this->t_jabatan->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -791,6 +811,13 @@ class ct_rumus_peg extends cTable {
 		$this->rumus_id->EditAttrs["class"] = "form-control";
 		$this->rumus_id->EditCustomAttributes = "";
 
+		// t_jabatan
+		$this->t_jabatan->EditAttrs["class"] = "form-control";
+		$this->t_jabatan->EditCustomAttributes = "";
+		$this->t_jabatan->EditValue = $this->t_jabatan->CurrentValue;
+		$this->t_jabatan->PlaceHolder = ew_RemoveHtml($this->t_jabatan->FldCaption());
+		if (strval($this->t_jabatan->EditValue) <> "" && is_numeric($this->t_jabatan->EditValue)) $this->t_jabatan->EditValue = ew_FormatNumber($this->t_jabatan->EditValue, -2, -2, -2, -2);
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -820,10 +847,12 @@ class ct_rumus_peg extends cTable {
 				if ($ExportPageType == "view") {
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
 					if ($this->rumus_id->Exportable) $Doc->ExportCaption($this->rumus_id);
+					if ($this->t_jabatan->Exportable) $Doc->ExportCaption($this->t_jabatan);
 				} else {
 					if ($this->rumus_peg_id->Exportable) $Doc->ExportCaption($this->rumus_peg_id);
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
 					if ($this->rumus_id->Exportable) $Doc->ExportCaption($this->rumus_id);
+					if ($this->t_jabatan->Exportable) $Doc->ExportCaption($this->t_jabatan);
 				}
 				$Doc->EndExportRow();
 			}
@@ -857,10 +886,12 @@ class ct_rumus_peg extends cTable {
 					if ($ExportPageType == "view") {
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
 						if ($this->rumus_id->Exportable) $Doc->ExportField($this->rumus_id);
+						if ($this->t_jabatan->Exportable) $Doc->ExportField($this->t_jabatan);
 					} else {
 						if ($this->rumus_peg_id->Exportable) $Doc->ExportField($this->rumus_peg_id);
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
 						if ($this->rumus_id->Exportable) $Doc->ExportField($this->rumus_id);
+						if ($this->t_jabatan->Exportable) $Doc->ExportField($this->t_jabatan);
 					}
 					$Doc->EndExportRow();
 				}

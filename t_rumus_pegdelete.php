@@ -288,6 +288,7 @@ class ct_rumus_peg_delete extends ct_rumus_peg {
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->pegawai_id->SetVisibility();
 		$this->rumus_id->SetVisibility();
+		$this->t_jabatan->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -473,6 +474,7 @@ class ct_rumus_peg_delete extends ct_rumus_peg {
 		} else {
 			$this->rumus_id->VirtualValue = ""; // Clear value
 		}
+		$this->t_jabatan->setDbValue($rs->fields('t_jabatan'));
 	}
 
 	// Load DbValue from recordset
@@ -482,6 +484,7 @@ class ct_rumus_peg_delete extends ct_rumus_peg {
 		$this->rumus_peg_id->DbValue = $row['rumus_peg_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
 		$this->rumus_id->DbValue = $row['rumus_id'];
+		$this->t_jabatan->DbValue = $row['t_jabatan'];
 	}
 
 	// Render row values based on field settings
@@ -489,14 +492,19 @@ class ct_rumus_peg_delete extends ct_rumus_peg {
 		global $Security, $Language, $gsLanguage;
 
 		// Initialize URLs
-		// Call Row_Rendering event
+		// Convert decimal values if posted back
 
+		if ($this->t_jabatan->FormValue == $this->t_jabatan->CurrentValue && is_numeric(ew_StrToFloat($this->t_jabatan->CurrentValue)))
+			$this->t_jabatan->CurrentValue = ew_StrToFloat($this->t_jabatan->CurrentValue);
+
+		// Call Row_Rendering event
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
 		// rumus_peg_id
 		// pegawai_id
 		// rumus_id
+		// t_jabatan
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -535,6 +543,12 @@ class ct_rumus_peg_delete extends ct_rumus_peg {
 		}
 		$this->rumus_id->ViewCustomAttributes = "";
 
+		// t_jabatan
+		$this->t_jabatan->ViewValue = $this->t_jabatan->CurrentValue;
+		$this->t_jabatan->ViewValue = ew_FormatNumber($this->t_jabatan->ViewValue, 0, -2, -2, -2);
+		$this->t_jabatan->CellCssStyle .= "text-align: right;";
+		$this->t_jabatan->ViewCustomAttributes = "";
+
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
@@ -544,6 +558,11 @@ class ct_rumus_peg_delete extends ct_rumus_peg {
 			$this->rumus_id->LinkCustomAttributes = "";
 			$this->rumus_id->HrefValue = "";
 			$this->rumus_id->TooltipValue = "";
+
+			// t_jabatan
+			$this->t_jabatan->LinkCustomAttributes = "";
+			$this->t_jabatan->HrefValue = "";
+			$this->t_jabatan->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -864,6 +883,9 @@ $t_rumus_peg_delete->ShowMessage();
 <?php if ($t_rumus_peg->rumus_id->Visible) { // rumus_id ?>
 		<th><span id="elh_t_rumus_peg_rumus_id" class="t_rumus_peg_rumus_id"><?php echo $t_rumus_peg->rumus_id->FldCaption() ?></span></th>
 <?php } ?>
+<?php if ($t_rumus_peg->t_jabatan->Visible) { // t_jabatan ?>
+		<th><span id="elh_t_rumus_peg_t_jabatan" class="t_rumus_peg_t_jabatan"><?php echo $t_rumus_peg->t_jabatan->FldCaption() ?></span></th>
+<?php } ?>
 	</tr>
 	</thead>
 	<tbody>
@@ -898,6 +920,14 @@ while (!$t_rumus_peg_delete->Recordset->EOF) {
 <span id="el<?php echo $t_rumus_peg_delete->RowCnt ?>_t_rumus_peg_rumus_id" class="t_rumus_peg_rumus_id">
 <span<?php echo $t_rumus_peg->rumus_id->ViewAttributes() ?>>
 <?php echo $t_rumus_peg->rumus_id->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($t_rumus_peg->t_jabatan->Visible) { // t_jabatan ?>
+		<td<?php echo $t_rumus_peg->t_jabatan->CellAttributes() ?>>
+<span id="el<?php echo $t_rumus_peg_delete->RowCnt ?>_t_rumus_peg_t_jabatan" class="t_rumus_peg_t_jabatan">
+<span<?php echo $t_rumus_peg->t_jabatan->ViewAttributes() ?>>
+<?php echo $t_rumus_peg->t_jabatan->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

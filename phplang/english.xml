@@ -2359,6 +2359,9 @@
       <field id="rumus_id">
         <phrase id="fldcaption" value="Gol. Gaji" />
       </field>
+      <field id="t_jabatan">
+        <phrase id="fldcaption" value="T. Jabatan" />
+      </field>
     </table>
     <table id="t_user">
       <phrase id="tblcaption" value="User" />

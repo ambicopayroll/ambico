@@ -389,6 +389,7 @@ class ct_rumus_peg_view extends ct_rumus_peg {
 		$this->SetupExportOptions();
 		$this->pegawai_id->SetVisibility();
 		$this->rumus_id->SetVisibility();
+		$this->t_jabatan->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -716,6 +717,7 @@ class ct_rumus_peg_view extends ct_rumus_peg {
 		} else {
 			$this->rumus_id->VirtualValue = ""; // Clear value
 		}
+		$this->t_jabatan->setDbValue($rs->fields('t_jabatan'));
 	}
 
 	// Load DbValue from recordset
@@ -725,6 +727,7 @@ class ct_rumus_peg_view extends ct_rumus_peg {
 		$this->rumus_peg_id->DbValue = $row['rumus_peg_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
 		$this->rumus_id->DbValue = $row['rumus_id'];
+		$this->t_jabatan->DbValue = $row['t_jabatan'];
 	}
 
 	// Render row values based on field settings
@@ -739,6 +742,10 @@ class ct_rumus_peg_view extends ct_rumus_peg {
 		$this->ListUrl = $this->GetListUrl();
 		$this->SetupOtherOptions();
 
+		// Convert decimal values if posted back
+		if ($this->t_jabatan->FormValue == $this->t_jabatan->CurrentValue && is_numeric(ew_StrToFloat($this->t_jabatan->CurrentValue)))
+			$this->t_jabatan->CurrentValue = ew_StrToFloat($this->t_jabatan->CurrentValue);
+
 		// Call Row_Rendering event
 		$this->Row_Rendering();
 
@@ -746,6 +753,7 @@ class ct_rumus_peg_view extends ct_rumus_peg {
 		// rumus_peg_id
 		// pegawai_id
 		// rumus_id
+		// t_jabatan
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -784,6 +792,12 @@ class ct_rumus_peg_view extends ct_rumus_peg {
 		}
 		$this->rumus_id->ViewCustomAttributes = "";
 
+		// t_jabatan
+		$this->t_jabatan->ViewValue = $this->t_jabatan->CurrentValue;
+		$this->t_jabatan->ViewValue = ew_FormatNumber($this->t_jabatan->ViewValue, 0, -2, -2, -2);
+		$this->t_jabatan->CellCssStyle .= "text-align: right;";
+		$this->t_jabatan->ViewCustomAttributes = "";
+
 			// pegawai_id
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
@@ -793,6 +807,11 @@ class ct_rumus_peg_view extends ct_rumus_peg {
 			$this->rumus_id->LinkCustomAttributes = "";
 			$this->rumus_id->HrefValue = "";
 			$this->rumus_id->TooltipValue = "";
+
+			// t_jabatan
+			$this->t_jabatan->LinkCustomAttributes = "";
+			$this->t_jabatan->HrefValue = "";
+			$this->t_jabatan->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1370,6 +1389,17 @@ $t_rumus_peg_view->ShowMessage();
 <span id="el_t_rumus_peg_rumus_id">
 <span<?php echo $t_rumus_peg->rumus_id->ViewAttributes() ?>>
 <?php echo $t_rumus_peg->rumus_id->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
+<?php if ($t_rumus_peg->t_jabatan->Visible) { // t_jabatan ?>
+	<tr id="r_t_jabatan">
+		<td><span id="elh_t_rumus_peg_t_jabatan"><?php echo $t_rumus_peg->t_jabatan->FldCaption() ?></span></td>
+		<td data-name="t_jabatan"<?php echo $t_rumus_peg->t_jabatan->CellAttributes() ?>>
+<span id="el_t_rumus_peg_t_jabatan">
+<span<?php echo $t_rumus_peg->t_jabatan->ViewAttributes() ?>>
+<?php echo $t_rumus_peg->t_jabatan->ViewValue ?></span>
 </span>
 </td>
 	</tr>
