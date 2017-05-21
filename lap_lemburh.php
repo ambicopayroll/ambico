@@ -9,6 +9,60 @@ else {
 	$conn =& DbHelper();
 }
 
+function f_hitungjamlembur_staf($p_conn, $p_pegawai_id) {
+	$query = "select * from t_lembur where pegawai_id = ".$p_pegawai_id." order by tgl_mulai";
+	$rs = $p_conn->Execute($query);
+	//$mlama_lembur = 0;
+	$mlama_lembur1_5 = 0;
+	$mlama_lembur2_0 = 0;
+	while (!$rs->EOF) {
+		$mtgl_mulai = $rs->fields["tgl_mulai"];
+		$mtgl_selesai = $rs->fields["tgl_selesai"];
+		
+		// cek apakah hanya lembur 1 hari
+		if ($mtgl_mulai == $mtgl_selesai) {
+			
+			// cek apakah hari lembur masuk dalam range input laporan gaji
+			if ($mtgl_mulai >= $_POST["start"] and $mtgl_mulai <= $_POST["end"]) {
+				// hitung jam lembur
+				$lama_lembur = strtotime($rs->fields["jam_selesai"]) - strtotime($rs->fields["jam_mulai"]);
+				//$mlama_lembur += floor($lama_lembur / (60 * 60));
+				$lama_lembur = floor($lama_lembur / (60 * 60));
+				if ($lama_lembur == 1) {
+					$mlama_lembur1_5 += 1;
+					$mlama_lembur2_0 += 0;
+				}
+				elseif ($lama_lembur > 1) {
+					$mlama_lembur1_5 += 1;
+					$mlama_lembur2_0 += ($lama_lembur - 1);
+				}
+			}
+			
+		}
+		// hari lembur lebih dari 1 hari
+		else {
+			while (strtotime($mtgl_mulai) <= strtotime($mtgl_selesai)) {
+				if ($mtgl_mulai >= $_POST["start"] and $mtgl_mulai <= $_POST["end"]) {
+					// hitung jam lembur
+					$lama_lembur = strtotime($rs->fields["jam_selesai"]) - strtotime($rs->fields["jam_mulai"]);
+					$lama_lembur = floor($lama_lembur / (60 * 60));
+					if ($lama_lembur == 1) {
+						$mlama_lembur1_5 += 1;
+						$mlama_lembur2_0 += 0;
+					}
+					elseif ($lama_lembur > 1) {
+						$mlama_lembur1_5 += 1;
+						$mlama_lembur2_0 += ($lama_lembur - 1);
+					}
+				}
+				$mtgl_mulai = date("Y-m-d", strtotime("+1 day", strtotime($mtgl_mulai)));
+			}
+		}
+		$rs->MoveNext();
+	}
+	return array($mlama_lembur1_5, $mlama_lembur2_0);
+}
+
 function f_hitungjamlembur($p_conn, $p_pegawai_id) {
 	$query = "select * from t_lembur where pegawai_id = ".$p_pegawai_id." order by tgl_mulai";
 	$rs = $p_conn->Execute($query);
@@ -109,12 +163,16 @@ while (!$rs->EOF) {
 			$mt_lembur = $rs->fields["lembur"];
 
 			// hitung lembur
-			$mjml_jam = f_hitungjamlembur($conn, $mpegawai_id);
-			if ($mjml_jam > 1) {
-				$mjml_lembur = (1.5 * $mt_lembur) + (($mjml_jam - 1) * 2 * $mt_lembur);
+			//$mjml_jam = f_hitungjamlembur($conn, $mpegawai_id);
+			$ajml_jam = f_hitungjamlembur($conn, $mpegawai_id);
+			$mjml_jam = 0;
+			if ($ajml_jam[0] <> 0) {
+				$mjml_jam += $ajml_jam[0];
+				$mjml_lembur += (1.5 * $ajml_jam[0] * $mt_lembur);
 			}
-			else {
-				$mjml_lembur = (1.5 * $mt_lembur);
+			if ($ajml_jam[1] <> 0) {
+				$mjml_jam += $ajml_jam[1];
+				$mjml_lembur += (2 * $ajml_jam[1] * $mt_lembur);
 			}
 			
 			if ($mjml_jam <> 0) {
