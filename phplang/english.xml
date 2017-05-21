@@ -595,6 +595,9 @@
     <menu id="78">
       <phrase id="menutext" value="Setup" />
     </menu>
+    <menu id="30">
+      <phrase id="menutext" value="Pegawai" />
+    </menu>
     <menu id="32">
       <phrase id="menutext" value="Jabatan" />
     </menu>
@@ -621,9 +624,6 @@
     </menu>
     <menu id="46">
       <phrase id="menutext" value="Gol. Gaji Harian" />
-    </menu>
-    <menu id="30">
-      <phrase id="menutext" value="Pegawai" />
     </menu>
     <menu id="41">
       <phrase id="menutext" value="Jadwal Kerja (Perincian)" />
