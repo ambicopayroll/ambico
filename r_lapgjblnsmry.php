@@ -2005,8 +2005,9 @@ class crr_lapgjbln_summary extends crr_lapgjbln {
 		// Example:
 		//$footer = "your footer";
 		//include "slip_bln.php";
+		//echo "<p><a href='slip_bln_xls.php'><button>Cetak Slip Gaji</button></a></p>";
 
-		echo "<p><a href='slip_bln_xls.php'><button>Cetak Slip Gaji</button></a></p>";
+		echo "<p><a href='slip_bln.php'><button>Cetak Slip Gaji</button></a></p>";
 	}
 
 	// Form Custom Validate event
