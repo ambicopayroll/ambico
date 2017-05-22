@@ -1420,9 +1420,14 @@ function Page_DataRendered(&$footer) {
 function Page_DataRendered(&$footer) {
 	// Example:
 	//$footer = "your footer";
-	//include "slip_bln.php";
-	//echo "<p><a href='slip_bln_xls.php'><button>Cetak Slip Gaji</button></a></p>";
-	echo "<p><a href='slip_bln.php'><button>Cetak Slip Gaji</button></a></p>";
+	echo "<p><a href='slip_hrn.php'><button>Cetak Slip Gaji</button></a></p>";
+}
+]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendered" ScriptCtrlID="summary" ScriptL1Key="r_lapgjhrn" ScriptL2Key=""><![CDATA[// Page Data Rendered event
+function Page_DataRendered(&$footer) {
+	// Example:
+	//$footer = "your footer";
+	echo "<p><a href='slip_hrn.php'><button>Cetak Slip Gaji</button></a></p>";
 }
 ]]></CustomScript>
   <Menu MenuID="102" MenuText="t laplemburh" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="t_laplemburh" MenuType="Table" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="-1" />

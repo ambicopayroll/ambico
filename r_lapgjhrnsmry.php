@@ -1740,6 +1740,7 @@ class crr_lapgjhrn_summary extends crr_lapgjhrn {
 		// Example:
 		//$footer = "your footer";
 
+		echo "<p><a href='slip_hrn.php'><button>Cetak Slip Gaji</button></a></p>";
 	}
 
 	// Form Custom Validate event

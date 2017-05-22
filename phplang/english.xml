@@ -583,6 +583,9 @@
   <project>
     <phrase id="bodytitle" value="AMBICO" />
     <phrase id="footertext" value="&amp;copy;2017 AMBICO. All rights reserved." />
+    <menu id="10421">
+      <phrase id="menutext" value="t laplemburh" />
+    </menu>
     <menu id="10418">
       <phrase id="menutext" value="t laplembur" />
     </menu>
@@ -678,9 +681,6 @@
     </menu>
     <menu id="10419">
       <phrase id="menutext" value="Lembur (Harian)" />
-    </menu>
-    <menu id="10420">
-      <phrase id="menutext" value="Slip Gaji (Bulanan)" />
     </menu>
     <menu id="10414">
       <phrase id="menutext" value="v lapgjhrn" />
@@ -3474,8 +3474,41 @@
     <table id="lap_lemburh__php">
       <phrase id="tblcaption" value="Lembur (Harian)" />
     </table>
-    <table id="slip_bln__php">
-      <phrase id="tblcaption" value="Slip Gaji (Bulanan)" />
+    <table id="t_laplemburh">
+      <phrase id="tblcaption" value="t laplemburh" />
+      <field id="laplembur_id">
+        <phrase id="fldcaption" value="laplembur id" />
+      </field>
+      <field id="no">
+        <phrase id="fldcaption" value="no" />
+      </field>
+      <field id="bagian">
+        <phrase id="fldcaption" value="bagian" />
+      </field>
+      <field id="divisi">
+        <phrase id="fldcaption" value="divisi" />
+      </field>
+      <field id="nama">
+        <phrase id="fldcaption" value="nama" />
+      </field>
+      <field id="nip">
+        <phrase id="fldcaption" value="nip" />
+      </field>
+      <field id="jml_jam">
+        <phrase id="fldcaption" value="jml jam" />
+      </field>
+      <field id="tarif">
+        <phrase id="fldcaption" value="tarif" />
+      </field>
+      <field id="total_lembur">
+        <phrase id="fldcaption" value="total lembur" />
+      </field>
+      <field id="start">
+        <phrase id="fldcaption" value="start" />
+      </field>
+      <field id="end">
+        <phrase id="fldcaption" value="end" />
+      </field>
     </table>
   </project>
 </ew-language>
