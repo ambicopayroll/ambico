@@ -404,7 +404,141 @@ while (!$rs->EOF) {
 	
 	if ($i % 3 == 2) {
 		
+		$baris++;
+		$mawal_kotak = $baris;
+		
+		$baris++;
+		
+		// $baris = 2
+		$excelku->getActiveSheet()->mergeCells('b'.$baris.':f'.$baris); $excelku->getActiveSheet()->mergeCells('i'.$baris.':m'.$baris);
+		$excelku->getActiveSheet()->getStyle("B".$baris)->getFont()->setUnderline(true); $excelku->getActiveSheet()->getStyle("B".$baris)->getFont()->setBold(true); $SI->setCellValue("B".$baris, "PT. AMBICO"); $excelku->getActiveSheet()->getStyle('B'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle("I".$baris)->getFont()->setUnderline(true); $excelku->getActiveSheet()->getStyle("I".$baris)->getFont()->setBold(true); $SI->setCellValue("I".$baris, "PT. AMBICO"); $excelku->getActiveSheet()->getStyle('I'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 3
+		$SI->setCellValue("B".$baris, "NAMA"); $SI->setCellValue("C".$baris, ":"); $SI->setCellValue("D".$baris, $a[0][$i-2]);
+		$SI->setCellValue("I".$baris, "NAMA"); $SI->setCellValue("J".$baris, ":"); $SI->setCellValue("K".$baris, $a[0][$i-1]);
+		$excelku->getActiveSheet()->getStyle('C'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('J'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 4
+		$SI->setCellValue("B".$baris, "NIP"); $SI->setCellValue("C".$baris, ":"); $SI->setCellValue("D".$baris, $a[1][$i-2]);
+		$SI->setCellValue("I".$baris, "NIP"); $SI->setCellValue("J".$baris, ":"); $SI->setCellValue("K".$baris, $a[1][$i-1]);
+		$excelku->getActiveSheet()->getStyle('C'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('J'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
+		$baris++; // $baris = 5
+		$SI->setCellValue("B".$baris, "BAGIAN"); $SI->setCellValue("C".$baris, ":"); $SI->setCellValue("D".$baris, $a[2][$i-2]);
+		$SI->setCellValue("I".$baris, "BAGIAN"); $SI->setCellValue("J".$baris, ":"); $SI->setCellValue("K".$baris, $a[2][$i-1]);
+		$excelku->getActiveSheet()->getStyle('C'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('J'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 6
+		$SI->setCellValue("B".$baris, "STATUS"); $SI->setCellValue("C".$baris, ":"); $SI->setCellValue("D".$baris, $a[3][$i-2]);
+		$SI->setCellValue("I".$baris, "STATUS"); $SI->setCellValue("J".$baris, ":"); $SI->setCellValue("K".$baris, $a[3][$i-1]);
+		$excelku->getActiveSheet()->getStyle('C'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('J'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 7
+		$SI->setCellValue("B".$baris, "PERIODE"); $SI->setCellValue("C".$baris, ":"); $SI->setCellValue("D".$baris, $a[4][$i-2]);
+		$SI->setCellValue("I".$baris, "PERIODE"); $SI->setCellValue("J".$baris, ":"); $SI->setCellValue("K".$baris, $a[4][$i-1]);
+		$excelku->getActiveSheet()->getStyle('C'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('J'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		//garis
+		$excelku->getActiveSheet()->getStyle("b".$baris.":f".$baris)->applyFromArray($styleArray);
+		$excelku->getActiveSheet()->getStyle("i".$baris.":m".$baris)->applyFromArray($styleArray);
+		
+		$baris++; // $baris = 8
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "GAJI"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[5][$i-2]);
+		$SI->setCellValue("I".$baris, "GAJI"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[5][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 9
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "TUNJANGAN"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[6][$i-2]);
+		$SI->setCellValue("I".$baris, "TUNJANGAN"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[6][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 10
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "PREMI HADIR"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[7][$i-2]);
+		$SI->setCellValue("I".$baris, "PREMI HADIR"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[7][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 11
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "PREMI MALAM"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[8][$i-2]);
+		$SI->setCellValue("I".$baris, "PREMI MALAM"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[8][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 12
+		
+		$baris++; // $baris = 13
+		$excelku->getActiveSheet()->mergeCells('b'.$baris.':d'.$baris); $excelku->getActiveSheet()->mergeCells('i'.$baris.':k'.$baris);
+		$SI->setCellValue("B".$baris, "POTONGAN"); $excelku->getActiveSheet()->getStyle('B'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$SI->setCellValue("I".$baris, "POTONGAN"); $excelku->getActiveSheet()->getStyle('I'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+		//$baris++; // $baris = 14
+		
+		$baris++; // $baris = 14
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "ABSENSI"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[9][$i-2]);
+		$SI->setCellValue("I".$baris, "ABSENSI"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[9][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 15
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "ASTEK"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[10][$i-2]);
+		$SI->setCellValue("I".$baris, "ASTEK"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[10][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 16
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "BPJS"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[11][$i-2]);
+		$SI->setCellValue("I".$baris, "BPJS"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[11][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		//garis
+		$excelku->getActiveSheet()->getStyle("b".$baris.":f".$baris)->applyFromArray($styleArray);
+		$excelku->getActiveSheet()->getStyle("i".$baris.":m".$baris)->applyFromArray($styleArray);
+		
+		$baris++; // $baris = 17
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "JML POTONGAN"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[12][$i-2]);
+		$SI->setCellValue("I".$baris, "JML POTONGAN"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[12][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 18
+		$excelku->getActiveSheet()->getStyle('f'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$excelku->getActiveSheet()->getStyle('m'.$baris)->getNumberFormat()->setFormatCode('_("Rp"* #,##0_);_("Rp"* \(#,##0\);_("Rp"* "-"??_);_(@_)');
+		$SI->setCellValue("B".$baris, "JML TERIMA"); $SI->setCellValue("e".$baris, ":"); $SI->setCellValue("f".$baris, $a[13][$i-2]);
+		$SI->setCellValue("I".$baris, "JML TERIMA"); $SI->setCellValue("l".$baris, ":"); $SI->setCellValue("m".$baris, $a[13][$i-1]);
+		$excelku->getActiveSheet()->getStyle('e'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$excelku->getActiveSheet()->getStyle('l'.$baris)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$baris++; // $baris = 19
+		
+		$makhir_kotak = $baris;
+		
+		$excelku->getActiveSheet()->getStyle("a".$mawal_kotak.":g".$makhir_kotak)->applyFromArray($outline);
+		$excelku->getActiveSheet()->getStyle("h".$mawal_kotak.":n".$makhir_kotak)->applyFromArray($outline);
 		
 	}
 
