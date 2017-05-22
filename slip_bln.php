@@ -404,24 +404,7 @@ while (!$rs->EOF) {
 	
 	if ($i % 3 == 2) {
 		
-		echo f_kosong();
-		echo f_2kolom_judul("<b>PT. AMBICO</b>");
-		echo f_2kolom("Nama"         , $a[ 0], $i);
-		echo f_2kolom("NIP"          , $a[ 1], $i);
-		echo f_2kolom("Bagian"       , $a[ 2], $i);
-		echo f_2kolom("Status"       , $a[ 3], $i);
-		echo f_2kolom("Periode"      , $a[ 4], $i);
-		echo f_2kolom("Gaji"         , $a[ 5], $i);
-		echo f_2kolom("Tunjangan"    , $a[ 6], $i);
-		echo f_2kolom("Premi Hadir"  , $a[ 7], $i);
-		echo f_2kolom("Premi Malam"  , $a[ 8], $i);
-		echo f_kosong();
-		echo f_2kolom_judul("<b>Potongan</b>");
-		echo f_2kolom("Absensi"      , $a[ 9], $i);
-		echo f_2kolom("ASTEK"        , $a[10], $i);
-		echo f_2kolom("BPJS"         , $a[11], $i);
-		echo f_2kolom("Jml. Potongan", $a[12], $i);
-		echo f_2kolom("Jml. Terima"  , $a[13], $i);
+
 		
 	}
 
