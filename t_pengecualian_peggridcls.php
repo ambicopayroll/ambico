@@ -313,8 +313,9 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		// Set up list options
 		$this->SetupListOptions();
 		$this->pegawai_id->SetVisibility();
-		$this->tgl->SetVisibility();
 		$this->jns_id->SetVisibility();
+		$this->tgl->SetVisibility();
+		$this->tgl2->SetVisibility();
 		$this->jam_masuk->SetVisibility();
 		$this->jam_keluar->SetVisibility();
 		$this->pegawai_id2->SetVisibility();
@@ -807,9 +808,11 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		global $objForm;
 		if ($objForm->HasValue("x_pegawai_id") && $objForm->HasValue("o_pegawai_id") && $this->pegawai_id->CurrentValue <> $this->pegawai_id->OldValue)
 			return FALSE;
+		if ($objForm->HasValue("x_jns_id") && $objForm->HasValue("o_jns_id") && $this->jns_id->CurrentValue <> $this->jns_id->OldValue)
+			return FALSE;
 		if ($objForm->HasValue("x_tgl") && $objForm->HasValue("o_tgl") && $this->tgl->CurrentValue <> $this->tgl->OldValue)
 			return FALSE;
-		if ($objForm->HasValue("x_jns_id") && $objForm->HasValue("o_jns_id") && $this->jns_id->CurrentValue <> $this->jns_id->OldValue)
+		if ($objForm->HasValue("x_tgl2") && $objForm->HasValue("o_tgl2") && $this->tgl2->CurrentValue <> $this->tgl2->OldValue)
 			return FALSE;
 		if ($objForm->HasValue("x_jam_masuk") && $objForm->HasValue("o_jam_masuk") && $this->jam_masuk->CurrentValue <> $this->jam_masuk->OldValue)
 			return FALSE;
@@ -1178,10 +1181,12 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 	function LoadDefaultValues() {
 		$this->pegawai_id->CurrentValue = NULL;
 		$this->pegawai_id->OldValue = $this->pegawai_id->CurrentValue;
-		$this->tgl->CurrentValue = NULL;
-		$this->tgl->OldValue = $this->tgl->CurrentValue;
 		$this->jns_id->CurrentValue = NULL;
 		$this->jns_id->OldValue = $this->jns_id->CurrentValue;
+		$this->tgl->CurrentValue = NULL;
+		$this->tgl->OldValue = $this->tgl->CurrentValue;
+		$this->tgl2->CurrentValue = NULL;
+		$this->tgl2->OldValue = $this->tgl2->CurrentValue;
 		$this->jam_masuk->CurrentValue = NULL;
 		$this->jam_masuk->OldValue = $this->jam_masuk->CurrentValue;
 		$this->jam_keluar->CurrentValue = NULL;
@@ -1202,15 +1207,20 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
 		$this->pegawai_id->setOldValue($objForm->GetValue("o_pegawai_id"));
+		if (!$this->jns_id->FldIsDetailKey) {
+			$this->jns_id->setFormValue($objForm->GetValue("x_jns_id"));
+		}
+		$this->jns_id->setOldValue($objForm->GetValue("o_jns_id"));
 		if (!$this->tgl->FldIsDetailKey) {
 			$this->tgl->setFormValue($objForm->GetValue("x_tgl"));
 			$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
 		}
 		$this->tgl->setOldValue($objForm->GetValue("o_tgl"));
-		if (!$this->jns_id->FldIsDetailKey) {
-			$this->jns_id->setFormValue($objForm->GetValue("x_jns_id"));
+		if (!$this->tgl2->FldIsDetailKey) {
+			$this->tgl2->setFormValue($objForm->GetValue("x_tgl2"));
+			$this->tgl2->CurrentValue = ew_UnFormatDateTime($this->tgl2->CurrentValue, 0);
 		}
-		$this->jns_id->setOldValue($objForm->GetValue("o_jns_id"));
+		$this->tgl2->setOldValue($objForm->GetValue("o_tgl2"));
 		if (!$this->jam_masuk->FldIsDetailKey) {
 			$this->jam_masuk->setFormValue($objForm->GetValue("x_jam_masuk"));
 			$this->jam_masuk->CurrentValue = ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9);
@@ -1239,9 +1249,11 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		if ($this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
 			$this->pengecualian_id->CurrentValue = $this->pengecualian_id->FormValue;
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
+		$this->jns_id->CurrentValue = $this->jns_id->FormValue;
 		$this->tgl->CurrentValue = $this->tgl->FormValue;
 		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
-		$this->jns_id->CurrentValue = $this->jns_id->FormValue;
+		$this->tgl2->CurrentValue = $this->tgl2->FormValue;
+		$this->tgl2->CurrentValue = ew_UnFormatDateTime($this->tgl2->CurrentValue, 0);
 		$this->jam_masuk->CurrentValue = $this->jam_masuk->FormValue;
 		$this->jam_masuk->CurrentValue = ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9);
 		$this->jam_keluar->CurrentValue = $this->jam_keluar->FormValue;
@@ -1312,13 +1324,14 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		} else {
 			$this->pegawai_id->VirtualValue = ""; // Clear value
 		}
-		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
 		if (array_key_exists('EV__jns_id', $rs->fields)) {
 			$this->jns_id->VirtualValue = $rs->fields('EV__jns_id'); // Set up virtual field value
 		} else {
 			$this->jns_id->VirtualValue = ""; // Clear value
 		}
+		$this->tgl->setDbValue($rs->fields('tgl'));
+		$this->tgl2->setDbValue($rs->fields('tgl2'));
 		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
 		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
 		$this->pegawai_id2->setDbValue($rs->fields('pegawai_id2'));
@@ -1341,8 +1354,9 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->pengecualian_id->DbValue = $row['pengecualian_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
-		$this->tgl->DbValue = $row['tgl'];
 		$this->jns_id->DbValue = $row['jns_id'];
+		$this->tgl->DbValue = $row['tgl'];
+		$this->tgl2->DbValue = $row['tgl2'];
 		$this->jam_masuk->DbValue = $row['jam_masuk'];
 		$this->jam_keluar->DbValue = $row['jam_keluar'];
 		$this->pegawai_id2->DbValue = $row['pegawai_id2'];
@@ -1394,8 +1408,9 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		// Common render codes for all row types
 		// pengecualian_id
 		// pegawai_id
-		// tgl
 		// jns_id
+		// tgl
+		// tgl2
 		// jam_masuk
 		// jam_keluar
 		// pegawai_id2
@@ -1434,11 +1449,6 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
-		// tgl
-		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
-		$this->tgl->ViewCustomAttributes = "";
-
 		// jns_id
 		if ($this->jns_id->VirtualValue <> "") {
 			$this->jns_id->ViewValue = $this->jns_id->VirtualValue;
@@ -1465,6 +1475,16 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		}
 		}
 		$this->jns_id->ViewCustomAttributes = "";
+
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewCustomAttributes = "";
+
+		// tgl2
+		$this->tgl2->ViewValue = $this->tgl2->CurrentValue;
+		$this->tgl2->ViewValue = tgl_indo($this->tgl2->ViewValue);
+		$this->tgl2->ViewCustomAttributes = "";
 
 		// jam_masuk
 		$this->jam_masuk->ViewValue = $this->jam_masuk->CurrentValue;
@@ -1535,15 +1555,20 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+			$this->jns_id->TooltipValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 			$this->tgl->TooltipValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
-			$this->jns_id->TooltipValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
+			$this->tgl2->TooltipValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -1621,12 +1646,6 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			$this->pegawai_id->EditValue = $arwrk;
 			}
 
-			// tgl
-			$this->tgl->EditAttrs["class"] = "form-control";
-			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
-			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
-
 			// jns_id
 			$this->jns_id->EditCustomAttributes = "";
 			if (trim(strval($this->jns_id->CurrentValue)) == "") {
@@ -1651,6 +1670,18 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			$this->jns_id->EditValue = $arwrk;
+
+			// tgl
+			$this->tgl->EditAttrs["class"] = "form-control";
+			$this->tgl->EditCustomAttributes = "";
+			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
+			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
+
+			// tgl2
+			$this->tgl2->EditAttrs["class"] = "form-control";
+			$this->tgl2->EditCustomAttributes = "";
+			$this->tgl2->EditValue = ew_HtmlEncode($this->tgl2->CurrentValue);
+			$this->tgl2->PlaceHolder = ew_RemoveHtml($this->tgl2->FldCaption());
 
 			// jam_masuk
 			$this->jam_masuk->EditAttrs["class"] = "form-control";
@@ -1720,13 +1751,17 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -1800,12 +1835,6 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			$this->pegawai_id->EditValue = $arwrk;
 			}
 
-			// tgl
-			$this->tgl->EditAttrs["class"] = "form-control";
-			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
-			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
-
 			// jns_id
 			$this->jns_id->EditCustomAttributes = "";
 			if (trim(strval($this->jns_id->CurrentValue)) == "") {
@@ -1830,6 +1859,18 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			$this->jns_id->EditValue = $arwrk;
+
+			// tgl
+			$this->tgl->EditAttrs["class"] = "form-control";
+			$this->tgl->EditCustomAttributes = "";
+			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
+			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
+
+			// tgl2
+			$this->tgl2->EditAttrs["class"] = "form-control";
+			$this->tgl2->EditCustomAttributes = "";
+			$this->tgl2->EditValue = ew_HtmlEncode($this->tgl2->CurrentValue);
+			$this->tgl2->PlaceHolder = ew_RemoveHtml($this->tgl2->FldCaption());
 
 			// jam_masuk
 			$this->jam_masuk->EditAttrs["class"] = "form-control";
@@ -1899,13 +1940,17 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -1944,14 +1989,20 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
 		}
+		if (!$this->jns_id->FldIsDetailKey && !is_null($this->jns_id->FormValue) && $this->jns_id->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->jns_id->FldCaption(), $this->jns_id->ReqErrMsg));
+		}
 		if (!$this->tgl->FldIsDetailKey && !is_null($this->tgl->FormValue) && $this->tgl->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl->FldCaption(), $this->tgl->ReqErrMsg));
 		}
 		if (!ew_CheckDateDef($this->tgl->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl->FldErrMsg());
 		}
-		if (!$this->jns_id->FldIsDetailKey && !is_null($this->jns_id->FormValue) && $this->jns_id->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->jns_id->FldCaption(), $this->jns_id->ReqErrMsg));
+		if (!$this->tgl2->FldIsDetailKey && !is_null($this->tgl2->FormValue) && $this->tgl2->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl2->FldCaption(), $this->tgl2->ReqErrMsg));
+		}
+		if (!ew_CheckDateDef($this->tgl2->FormValue)) {
+			ew_AddMessage($gsFormError, $this->tgl2->FldErrMsg());
 		}
 		if (!ew_CheckDate($this->jam_masuk->FormValue)) {
 			ew_AddMessage($gsFormError, $this->jam_masuk->FldErrMsg());
@@ -2080,11 +2131,14 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 			// pegawai_id
 			$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, $this->pegawai_id->ReadOnly);
 
+			// jns_id
+			$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, $this->jns_id->ReadOnly);
+
 			// tgl
 			$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), $this->tgl->ReadOnly);
 
-			// jns_id
-			$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, $this->jns_id->ReadOnly);
+			// tgl2
+			$this->tgl2->SetDbValueDef($rsnew, $this->tgl2->CurrentValue, ew_CurrentDate(), $this->tgl2->ReadOnly);
 
 			// jam_masuk
 			$this->jam_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9), NULL, $this->jam_masuk->ReadOnly);
@@ -2191,11 +2245,14 @@ class ct_pengecualian_peg_grid extends ct_pengecualian_peg {
 		// pegawai_id
 		$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, FALSE);
 
+		// jns_id
+		$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, FALSE);
+
 		// tgl
 		$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), FALSE);
 
-		// jns_id
-		$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, FALSE);
+		// tgl2
+		$this->tgl2->SetDbValueDef($rsnew, $this->tgl2->CurrentValue, ew_CurrentDate(), FALSE);
 
 		// jam_masuk
 		$this->jam_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9), NULL, FALSE);

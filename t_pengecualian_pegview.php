@@ -388,8 +388,9 @@ class ct_pengecualian_peg_view extends ct_pengecualian_peg {
 		// Setup export options
 		$this->SetupExportOptions();
 		$this->pegawai_id->SetVisibility();
-		$this->tgl->SetVisibility();
 		$this->jns_id->SetVisibility();
+		$this->tgl->SetVisibility();
+		$this->tgl2->SetVisibility();
 		$this->jam_masuk->SetVisibility();
 		$this->jam_keluar->SetVisibility();
 		$this->pegawai_id2->SetVisibility();
@@ -720,13 +721,14 @@ class ct_pengecualian_peg_view extends ct_pengecualian_peg {
 		} else {
 			$this->pegawai_id->VirtualValue = ""; // Clear value
 		}
-		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
 		if (array_key_exists('EV__jns_id', $rs->fields)) {
 			$this->jns_id->VirtualValue = $rs->fields('EV__jns_id'); // Set up virtual field value
 		} else {
 			$this->jns_id->VirtualValue = ""; // Clear value
 		}
+		$this->tgl->setDbValue($rs->fields('tgl'));
+		$this->tgl2->setDbValue($rs->fields('tgl2'));
 		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
 		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
 		$this->pegawai_id2->setDbValue($rs->fields('pegawai_id2'));
@@ -749,8 +751,9 @@ class ct_pengecualian_peg_view extends ct_pengecualian_peg {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->pengecualian_id->DbValue = $row['pengecualian_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
-		$this->tgl->DbValue = $row['tgl'];
 		$this->jns_id->DbValue = $row['jns_id'];
+		$this->tgl->DbValue = $row['tgl'];
+		$this->tgl2->DbValue = $row['tgl2'];
 		$this->jam_masuk->DbValue = $row['jam_masuk'];
 		$this->jam_keluar->DbValue = $row['jam_keluar'];
 		$this->pegawai_id2->DbValue = $row['pegawai_id2'];
@@ -775,8 +778,9 @@ class ct_pengecualian_peg_view extends ct_pengecualian_peg {
 		// Common render codes for all row types
 		// pengecualian_id
 		// pegawai_id
-		// tgl
 		// jns_id
+		// tgl
+		// tgl2
 		// jam_masuk
 		// jam_keluar
 		// pegawai_id2
@@ -815,11 +819,6 @@ class ct_pengecualian_peg_view extends ct_pengecualian_peg {
 		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
-		// tgl
-		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
-		$this->tgl->ViewCustomAttributes = "";
-
 		// jns_id
 		if ($this->jns_id->VirtualValue <> "") {
 			$this->jns_id->ViewValue = $this->jns_id->VirtualValue;
@@ -846,6 +845,16 @@ class ct_pengecualian_peg_view extends ct_pengecualian_peg {
 		}
 		}
 		$this->jns_id->ViewCustomAttributes = "";
+
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewCustomAttributes = "";
+
+		// tgl2
+		$this->tgl2->ViewValue = $this->tgl2->CurrentValue;
+		$this->tgl2->ViewValue = tgl_indo($this->tgl2->ViewValue);
+		$this->tgl2->ViewCustomAttributes = "";
 
 		// jam_masuk
 		$this->jam_masuk->ViewValue = $this->jam_masuk->CurrentValue;
@@ -916,15 +925,20 @@ class ct_pengecualian_peg_view extends ct_pengecualian_peg {
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+			$this->jns_id->TooltipValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 			$this->tgl->TooltipValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
-			$this->jns_id->TooltipValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
+			$this->tgl2->TooltipValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -1518,6 +1532,17 @@ $t_pengecualian_peg_view->ShowMessage();
 </td>
 	</tr>
 <?php } ?>
+<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
+	<tr id="r_jns_id">
+		<td><span id="elh_t_pengecualian_peg_jns_id"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></span></td>
+		<td data-name="jns_id"<?php echo $t_pengecualian_peg->jns_id->CellAttributes() ?>>
+<span id="el_t_pengecualian_peg_jns_id">
+<span<?php echo $t_pengecualian_peg->jns_id->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->jns_id->ViewValue ?></span>
+</span>
+</td>
+	</tr>
+<?php } ?>
 <?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
 	<tr id="r_tgl">
 		<td><span id="elh_t_pengecualian_peg_tgl"><?php echo $t_pengecualian_peg->tgl->FldCaption() ?></span></td>
@@ -1529,13 +1554,13 @@ $t_pengecualian_peg_view->ShowMessage();
 </td>
 	</tr>
 <?php } ?>
-<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-	<tr id="r_jns_id">
-		<td><span id="elh_t_pengecualian_peg_jns_id"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></span></td>
-		<td data-name="jns_id"<?php echo $t_pengecualian_peg->jns_id->CellAttributes() ?>>
-<span id="el_t_pengecualian_peg_jns_id">
-<span<?php echo $t_pengecualian_peg->jns_id->ViewAttributes() ?>>
-<?php echo $t_pengecualian_peg->jns_id->ViewValue ?></span>
+<?php if ($t_pengecualian_peg->tgl2->Visible) { // tgl2 ?>
+	<tr id="r_tgl2">
+		<td><span id="elh_t_pengecualian_peg_tgl2"><?php echo $t_pengecualian_peg->tgl2->FldCaption() ?></span></td>
+		<td data-name="tgl2"<?php echo $t_pengecualian_peg->tgl2->CellAttributes() ?>>
+<span id="el_t_pengecualian_peg_tgl2">
+<span<?php echo $t_pengecualian_peg->tgl2->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->tgl2->ViewValue ?></span>
 </span>
 </td>
 	</tr>

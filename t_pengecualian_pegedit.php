@@ -290,8 +290,9 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->pegawai_id->SetVisibility();
-		$this->tgl->SetVisibility();
 		$this->jns_id->SetVisibility();
+		$this->tgl->SetVisibility();
+		$this->tgl2->SetVisibility();
 		$this->jam_masuk->SetVisibility();
 		$this->jam_keluar->SetVisibility();
 		$this->pegawai_id2->SetVisibility();
@@ -553,12 +554,16 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		if (!$this->pegawai_id->FldIsDetailKey) {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
+		if (!$this->jns_id->FldIsDetailKey) {
+			$this->jns_id->setFormValue($objForm->GetValue("x_jns_id"));
+		}
 		if (!$this->tgl->FldIsDetailKey) {
 			$this->tgl->setFormValue($objForm->GetValue("x_tgl"));
 			$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
 		}
-		if (!$this->jns_id->FldIsDetailKey) {
-			$this->jns_id->setFormValue($objForm->GetValue("x_jns_id"));
+		if (!$this->tgl2->FldIsDetailKey) {
+			$this->tgl2->setFormValue($objForm->GetValue("x_tgl2"));
+			$this->tgl2->CurrentValue = ew_UnFormatDateTime($this->tgl2->CurrentValue, 0);
 		}
 		if (!$this->jam_masuk->FldIsDetailKey) {
 			$this->jam_masuk->setFormValue($objForm->GetValue("x_jam_masuk"));
@@ -584,9 +589,11 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		$this->LoadRow();
 		$this->pengecualian_id->CurrentValue = $this->pengecualian_id->FormValue;
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
+		$this->jns_id->CurrentValue = $this->jns_id->FormValue;
 		$this->tgl->CurrentValue = $this->tgl->FormValue;
 		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
-		$this->jns_id->CurrentValue = $this->jns_id->FormValue;
+		$this->tgl2->CurrentValue = $this->tgl2->FormValue;
+		$this->tgl2->CurrentValue = ew_UnFormatDateTime($this->tgl2->CurrentValue, 0);
 		$this->jam_masuk->CurrentValue = $this->jam_masuk->FormValue;
 		$this->jam_masuk->CurrentValue = ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9);
 		$this->jam_keluar->CurrentValue = $this->jam_keluar->FormValue;
@@ -657,13 +664,14 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		} else {
 			$this->pegawai_id->VirtualValue = ""; // Clear value
 		}
-		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
 		if (array_key_exists('EV__jns_id', $rs->fields)) {
 			$this->jns_id->VirtualValue = $rs->fields('EV__jns_id'); // Set up virtual field value
 		} else {
 			$this->jns_id->VirtualValue = ""; // Clear value
 		}
+		$this->tgl->setDbValue($rs->fields('tgl'));
+		$this->tgl2->setDbValue($rs->fields('tgl2'));
 		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
 		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
 		$this->pegawai_id2->setDbValue($rs->fields('pegawai_id2'));
@@ -686,8 +694,9 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->pengecualian_id->DbValue = $row['pengecualian_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
-		$this->tgl->DbValue = $row['tgl'];
 		$this->jns_id->DbValue = $row['jns_id'];
+		$this->tgl->DbValue = $row['tgl'];
+		$this->tgl2->DbValue = $row['tgl2'];
 		$this->jam_masuk->DbValue = $row['jam_masuk'];
 		$this->jam_keluar->DbValue = $row['jam_keluar'];
 		$this->pegawai_id2->DbValue = $row['pegawai_id2'];
@@ -706,8 +715,9 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		// Common render codes for all row types
 		// pengecualian_id
 		// pegawai_id
-		// tgl
 		// jns_id
+		// tgl
+		// tgl2
 		// jam_masuk
 		// jam_keluar
 		// pegawai_id2
@@ -746,11 +756,6 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
-		// tgl
-		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
-		$this->tgl->ViewCustomAttributes = "";
-
 		// jns_id
 		if ($this->jns_id->VirtualValue <> "") {
 			$this->jns_id->ViewValue = $this->jns_id->VirtualValue;
@@ -777,6 +782,16 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		}
 		}
 		$this->jns_id->ViewCustomAttributes = "";
+
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewCustomAttributes = "";
+
+		// tgl2
+		$this->tgl2->ViewValue = $this->tgl2->CurrentValue;
+		$this->tgl2->ViewValue = tgl_indo($this->tgl2->ViewValue);
+		$this->tgl2->ViewCustomAttributes = "";
 
 		// jam_masuk
 		$this->jam_masuk->ViewValue = $this->jam_masuk->CurrentValue;
@@ -847,15 +862,20 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+			$this->jns_id->TooltipValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 			$this->tgl->TooltipValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
-			$this->jns_id->TooltipValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
+			$this->tgl2->TooltipValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -932,12 +952,6 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 			$this->pegawai_id->EditValue = $arwrk;
 			}
 
-			// tgl
-			$this->tgl->EditAttrs["class"] = "form-control";
-			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
-			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
-
 			// jns_id
 			$this->jns_id->EditCustomAttributes = "";
 			if (trim(strval($this->jns_id->CurrentValue)) == "") {
@@ -962,6 +976,18 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			$this->jns_id->EditValue = $arwrk;
+
+			// tgl
+			$this->tgl->EditAttrs["class"] = "form-control";
+			$this->tgl->EditCustomAttributes = "";
+			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
+			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
+
+			// tgl2
+			$this->tgl2->EditAttrs["class"] = "form-control";
+			$this->tgl2->EditCustomAttributes = "";
+			$this->tgl2->EditValue = ew_HtmlEncode($this->tgl2->CurrentValue);
+			$this->tgl2->PlaceHolder = ew_RemoveHtml($this->tgl2->FldCaption());
 
 			// jam_masuk
 			$this->jam_masuk->EditAttrs["class"] = "form-control";
@@ -1031,13 +1057,17 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -1079,14 +1109,20 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
 		}
+		if (!$this->jns_id->FldIsDetailKey && !is_null($this->jns_id->FormValue) && $this->jns_id->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->jns_id->FldCaption(), $this->jns_id->ReqErrMsg));
+		}
 		if (!$this->tgl->FldIsDetailKey && !is_null($this->tgl->FormValue) && $this->tgl->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl->FldCaption(), $this->tgl->ReqErrMsg));
 		}
 		if (!ew_CheckDateDef($this->tgl->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl->FldErrMsg());
 		}
-		if (!$this->jns_id->FldIsDetailKey && !is_null($this->jns_id->FormValue) && $this->jns_id->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->jns_id->FldCaption(), $this->jns_id->ReqErrMsg));
+		if (!$this->tgl2->FldIsDetailKey && !is_null($this->tgl2->FormValue) && $this->tgl2->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl2->FldCaption(), $this->tgl2->ReqErrMsg));
+		}
+		if (!ew_CheckDateDef($this->tgl2->FormValue)) {
+			ew_AddMessage($gsFormError, $this->tgl2->FldErrMsg());
 		}
 		if (!ew_CheckDate($this->jam_masuk->FormValue)) {
 			ew_AddMessage($gsFormError, $this->jam_masuk->FldErrMsg());
@@ -1133,11 +1169,14 @@ class ct_pengecualian_peg_edit extends ct_pengecualian_peg {
 			// pegawai_id
 			$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, $this->pegawai_id->ReadOnly);
 
+			// jns_id
+			$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, $this->jns_id->ReadOnly);
+
 			// tgl
 			$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), $this->tgl->ReadOnly);
 
-			// jns_id
-			$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, $this->jns_id->ReadOnly);
+			// tgl2
+			$this->tgl2->SetDbValueDef($rsnew, $this->tgl2->CurrentValue, ew_CurrentDate(), $this->tgl2->ReadOnly);
 
 			// jam_masuk
 			$this->jam_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9), NULL, $this->jam_masuk->ReadOnly);
@@ -1451,15 +1490,21 @@ ft_pengecualian_pegedit.Validate = function() {
 			elm = this.GetElements("x" + infix + "_pegawai_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->pegawai_id->FldCaption(), $t_pengecualian_peg->pegawai_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_jns_id");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->jns_id->FldCaption(), $t_pengecualian_peg->jns_id->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_tgl");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->tgl->FldCaption(), $t_pengecualian_peg->tgl->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_tgl");
 			if (elm && !ew_CheckDateDef(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_pengecualian_peg->tgl->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_jns_id");
+			elm = this.GetElements("x" + infix + "_tgl2");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->jns_id->FldCaption(), $t_pengecualian_peg->jns_id->ReqErrMsg)) ?>");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->tgl2->FldCaption(), $t_pengecualian_peg->tgl2->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_tgl2");
+			if (elm && !ew_CheckDateDef(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_pengecualian_peg->tgl2->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_jam_masuk");
 			if (elm && !ew_CheckDate(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_pengecualian_peg->jam_masuk->FldErrMsg()) ?>");
@@ -1603,6 +1648,21 @@ $t_pengecualian_peg_edit->ShowMessage();
 <?php echo $t_pengecualian_peg->pegawai_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
+	<div id="r_jns_id" class="form-group">
+		<label id="elh_t_pengecualian_peg_jns_id" for="x_jns_id" class="col-sm-2 control-label ewLabel"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_pengecualian_peg->jns_id->CellAttributes() ?>>
+<span id="el_t_pengecualian_peg_jns_id">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x_jns_id" id="x_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_jns_id" id="s_x_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
+</span>
+<?php echo $t_pengecualian_peg->jns_id->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
 <?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
 	<div id="r_tgl" class="form-group">
 		<label id="elh_t_pengecualian_peg_tgl" for="x_tgl" class="col-sm-2 control-label ewLabel"><?php echo $t_pengecualian_peg->tgl->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
@@ -1618,19 +1678,19 @@ ew_CreateCalendar("ft_pengecualian_pegedit", "x_tgl", 0);
 <?php echo $t_pengecualian_peg->tgl->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-	<div id="r_jns_id" class="form-group">
-		<label id="elh_t_pengecualian_peg_jns_id" for="x_jns_id" class="col-sm-2 control-label ewLabel"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_pengecualian_peg->jns_id->CellAttributes() ?>>
-<span id="el_t_pengecualian_peg_jns_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+<?php if ($t_pengecualian_peg->tgl2->Visible) { // tgl2 ?>
+	<div id="r_tgl2" class="form-group">
+		<label id="elh_t_pengecualian_peg_tgl2" for="x_tgl2" class="col-sm-2 control-label ewLabel"><?php echo $t_pengecualian_peg->tgl2->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_pengecualian_peg->tgl2->CellAttributes() ?>>
+<span id="el_t_pengecualian_peg_tgl2">
+<input type="text" data-table="t_pengecualian_peg" data-field="x_tgl2" name="x_tgl2" id="x_tgl2" placeholder="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_pengecualian_peg->tgl2->EditValue ?>"<?php echo $t_pengecualian_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_pengecualian_peg->tgl2->ReadOnly && !$t_pengecualian_peg->tgl2->Disabled && !isset($t_pengecualian_peg->tgl2->EditAttrs["readonly"]) && !isset($t_pengecualian_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_pengecualian_pegedit", "x_tgl2", 0);
+</script>
+<?php } ?>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x_jns_id" id="x_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
-<input type="hidden" name="s_x_jns_id" id="s_x_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
-</span>
-<?php echo $t_pengecualian_peg->jns_id->CustomMsg ?></div></div>
+<?php echo $t_pengecualian_peg->tgl2->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($t_pengecualian_peg->jam_masuk->Visible) { // jam_masuk ?>

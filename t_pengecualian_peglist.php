@@ -418,8 +418,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		// Setup export options
 		$this->SetupExportOptions();
 		$this->pegawai_id->SetVisibility();
-		$this->tgl->SetVisibility();
 		$this->jns_id->SetVisibility();
+		$this->tgl->SetVisibility();
+		$this->tgl2->SetVisibility();
 		$this->jam_masuk->SetVisibility();
 		$this->jam_keluar->SetVisibility();
 		$this->pegawai_id2->SetVisibility();
@@ -1185,9 +1186,11 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		global $objForm;
 		if ($objForm->HasValue("x_pegawai_id") && $objForm->HasValue("o_pegawai_id") && $this->pegawai_id->CurrentValue <> $this->pegawai_id->OldValue)
 			return FALSE;
+		if ($objForm->HasValue("x_jns_id") && $objForm->HasValue("o_jns_id") && $this->jns_id->CurrentValue <> $this->jns_id->OldValue)
+			return FALSE;
 		if ($objForm->HasValue("x_tgl") && $objForm->HasValue("o_tgl") && $this->tgl->CurrentValue <> $this->tgl->OldValue)
 			return FALSE;
-		if ($objForm->HasValue("x_jns_id") && $objForm->HasValue("o_jns_id") && $this->jns_id->CurrentValue <> $this->jns_id->OldValue)
+		if ($objForm->HasValue("x_tgl2") && $objForm->HasValue("o_tgl2") && $this->tgl2->CurrentValue <> $this->tgl2->OldValue)
 			return FALSE;
 		if ($objForm->HasValue("x_jam_masuk") && $objForm->HasValue("o_jam_masuk") && $this->jam_masuk->CurrentValue <> $this->jam_masuk->OldValue)
 			return FALSE;
@@ -1283,8 +1286,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		$sFilterList = "";
 		$sFilterList = ew_Concat($sFilterList, $this->pengecualian_id->AdvancedSearch->ToJSON(), ","); // Field pengecualian_id
 		$sFilterList = ew_Concat($sFilterList, $this->pegawai_id->AdvancedSearch->ToJSON(), ","); // Field pegawai_id
-		$sFilterList = ew_Concat($sFilterList, $this->tgl->AdvancedSearch->ToJSON(), ","); // Field tgl
 		$sFilterList = ew_Concat($sFilterList, $this->jns_id->AdvancedSearch->ToJSON(), ","); // Field jns_id
+		$sFilterList = ew_Concat($sFilterList, $this->tgl->AdvancedSearch->ToJSON(), ","); // Field tgl
+		$sFilterList = ew_Concat($sFilterList, $this->tgl2->AdvancedSearch->ToJSON(), ","); // Field tgl2
 		$sFilterList = ew_Concat($sFilterList, $this->jam_masuk->AdvancedSearch->ToJSON(), ","); // Field jam_masuk
 		$sFilterList = ew_Concat($sFilterList, $this->jam_keluar->AdvancedSearch->ToJSON(), ","); // Field jam_keluar
 		$sFilterList = ew_Concat($sFilterList, $this->pegawai_id2->AdvancedSearch->ToJSON(), ","); // Field pegawai_id2
@@ -1345,6 +1349,14 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		$this->pegawai_id->AdvancedSearch->SearchOperator2 = @$filter["w_pegawai_id"];
 		$this->pegawai_id->AdvancedSearch->Save();
 
+		// Field jns_id
+		$this->jns_id->AdvancedSearch->SearchValue = @$filter["x_jns_id"];
+		$this->jns_id->AdvancedSearch->SearchOperator = @$filter["z_jns_id"];
+		$this->jns_id->AdvancedSearch->SearchCondition = @$filter["v_jns_id"];
+		$this->jns_id->AdvancedSearch->SearchValue2 = @$filter["y_jns_id"];
+		$this->jns_id->AdvancedSearch->SearchOperator2 = @$filter["w_jns_id"];
+		$this->jns_id->AdvancedSearch->Save();
+
 		// Field tgl
 		$this->tgl->AdvancedSearch->SearchValue = @$filter["x_tgl"];
 		$this->tgl->AdvancedSearch->SearchOperator = @$filter["z_tgl"];
@@ -1353,13 +1365,13 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		$this->tgl->AdvancedSearch->SearchOperator2 = @$filter["w_tgl"];
 		$this->tgl->AdvancedSearch->Save();
 
-		// Field jns_id
-		$this->jns_id->AdvancedSearch->SearchValue = @$filter["x_jns_id"];
-		$this->jns_id->AdvancedSearch->SearchOperator = @$filter["z_jns_id"];
-		$this->jns_id->AdvancedSearch->SearchCondition = @$filter["v_jns_id"];
-		$this->jns_id->AdvancedSearch->SearchValue2 = @$filter["y_jns_id"];
-		$this->jns_id->AdvancedSearch->SearchOperator2 = @$filter["w_jns_id"];
-		$this->jns_id->AdvancedSearch->Save();
+		// Field tgl2
+		$this->tgl2->AdvancedSearch->SearchValue = @$filter["x_tgl2"];
+		$this->tgl2->AdvancedSearch->SearchOperator = @$filter["z_tgl2"];
+		$this->tgl2->AdvancedSearch->SearchCondition = @$filter["v_tgl2"];
+		$this->tgl2->AdvancedSearch->SearchValue2 = @$filter["y_tgl2"];
+		$this->tgl2->AdvancedSearch->SearchOperator2 = @$filter["w_tgl2"];
+		$this->tgl2->AdvancedSearch->Save();
 
 		// Field jam_masuk
 		$this->jam_masuk->AdvancedSearch->SearchValue = @$filter["x_jam_masuk"];
@@ -1401,8 +1413,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		if (!$Security->CanSearch()) return "";
 		$this->BuildSearchSql($sWhere, $this->pengecualian_id, $Default, FALSE); // pengecualian_id
 		$this->BuildSearchSql($sWhere, $this->pegawai_id, $Default, FALSE); // pegawai_id
-		$this->BuildSearchSql($sWhere, $this->tgl, $Default, FALSE); // tgl
 		$this->BuildSearchSql($sWhere, $this->jns_id, $Default, FALSE); // jns_id
+		$this->BuildSearchSql($sWhere, $this->tgl, $Default, FALSE); // tgl
+		$this->BuildSearchSql($sWhere, $this->tgl2, $Default, FALSE); // tgl2
 		$this->BuildSearchSql($sWhere, $this->jam_masuk, $Default, FALSE); // jam_masuk
 		$this->BuildSearchSql($sWhere, $this->jam_keluar, $Default, FALSE); // jam_keluar
 		$this->BuildSearchSql($sWhere, $this->pegawai_id2, $Default, FALSE); // pegawai_id2
@@ -1415,8 +1428,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		if (!$Default && $this->Command == "search") {
 			$this->pengecualian_id->AdvancedSearch->Save(); // pengecualian_id
 			$this->pegawai_id->AdvancedSearch->Save(); // pegawai_id
-			$this->tgl->AdvancedSearch->Save(); // tgl
 			$this->jns_id->AdvancedSearch->Save(); // jns_id
+			$this->tgl->AdvancedSearch->Save(); // tgl
+			$this->tgl2->AdvancedSearch->Save(); // tgl2
 			$this->jam_masuk->AdvancedSearch->Save(); // jam_masuk
 			$this->jam_keluar->AdvancedSearch->Save(); // jam_keluar
 			$this->pegawai_id2->AdvancedSearch->Save(); // pegawai_id2
@@ -1479,9 +1493,11 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			return TRUE;
 		if ($this->pegawai_id->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->jns_id->AdvancedSearch->IssetSession())
+			return TRUE;
 		if ($this->tgl->AdvancedSearch->IssetSession())
 			return TRUE;
-		if ($this->jns_id->AdvancedSearch->IssetSession())
+		if ($this->tgl2->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->jam_masuk->AdvancedSearch->IssetSession())
 			return TRUE;
@@ -1514,8 +1530,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 	function ResetAdvancedSearchParms() {
 		$this->pengecualian_id->AdvancedSearch->UnsetSession();
 		$this->pegawai_id->AdvancedSearch->UnsetSession();
-		$this->tgl->AdvancedSearch->UnsetSession();
 		$this->jns_id->AdvancedSearch->UnsetSession();
+		$this->tgl->AdvancedSearch->UnsetSession();
+		$this->tgl2->AdvancedSearch->UnsetSession();
 		$this->jam_masuk->AdvancedSearch->UnsetSession();
 		$this->jam_keluar->AdvancedSearch->UnsetSession();
 		$this->pegawai_id2->AdvancedSearch->UnsetSession();
@@ -1529,8 +1546,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		// Restore advanced search values
 		$this->pengecualian_id->AdvancedSearch->Load();
 		$this->pegawai_id->AdvancedSearch->Load();
-		$this->tgl->AdvancedSearch->Load();
 		$this->jns_id->AdvancedSearch->Load();
+		$this->tgl->AdvancedSearch->Load();
+		$this->tgl2->AdvancedSearch->Load();
 		$this->jam_masuk->AdvancedSearch->Load();
 		$this->jam_keluar->AdvancedSearch->Load();
 		$this->pegawai_id2->AdvancedSearch->Load();
@@ -1548,8 +1566,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
 			$this->UpdateSort($this->pegawai_id, $bCtrl); // pegawai_id
-			$this->UpdateSort($this->tgl, $bCtrl); // tgl
 			$this->UpdateSort($this->jns_id, $bCtrl); // jns_id
+			$this->UpdateSort($this->tgl, $bCtrl); // tgl
+			$this->UpdateSort($this->tgl2, $bCtrl); // tgl2
 			$this->UpdateSort($this->jam_masuk, $bCtrl); // jam_masuk
 			$this->UpdateSort($this->jam_keluar, $bCtrl); // jam_keluar
 			$this->UpdateSort($this->pegawai_id2, $bCtrl); // pegawai_id2
@@ -1596,8 +1615,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 				$this->setSessionOrderBy($sOrderBy);
 				$this->setSessionOrderByList($sOrderBy);
 				$this->pegawai_id->setSort("");
-				$this->tgl->setSort("");
 				$this->jns_id->setSort("");
+				$this->tgl->setSort("");
+				$this->tgl2->setSort("");
 				$this->jam_masuk->setSort("");
 				$this->jam_keluar->setSort("");
 				$this->pegawai_id2->setSort("");
@@ -2130,10 +2150,12 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 	function LoadDefaultValues() {
 		$this->pegawai_id->CurrentValue = NULL;
 		$this->pegawai_id->OldValue = $this->pegawai_id->CurrentValue;
-		$this->tgl->CurrentValue = NULL;
-		$this->tgl->OldValue = $this->tgl->CurrentValue;
 		$this->jns_id->CurrentValue = NULL;
 		$this->jns_id->OldValue = $this->jns_id->CurrentValue;
+		$this->tgl->CurrentValue = NULL;
+		$this->tgl->OldValue = $this->tgl->CurrentValue;
+		$this->tgl2->CurrentValue = NULL;
+		$this->tgl2->OldValue = $this->tgl2->CurrentValue;
 		$this->jam_masuk->CurrentValue = NULL;
 		$this->jam_masuk->OldValue = $this->jam_masuk->CurrentValue;
 		$this->jam_keluar->CurrentValue = NULL;
@@ -2160,6 +2182,11 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		if ($this->pegawai_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->pegawai_id->AdvancedSearch->SearchOperator = @$_GET["z_pegawai_id"];
 
+		// jns_id
+		$this->jns_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_jns_id"]);
+		if ($this->jns_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->jns_id->AdvancedSearch->SearchOperator = @$_GET["z_jns_id"];
+
 		// tgl
 		$this->tgl->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_tgl"]);
 		if ($this->tgl->AdvancedSearch->SearchValue <> "") $this->Command = "search";
@@ -2169,10 +2196,10 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		if ($this->tgl->AdvancedSearch->SearchValue2 <> "") $this->Command = "search";
 		$this->tgl->AdvancedSearch->SearchOperator2 = @$_GET["w_tgl"];
 
-		// jns_id
-		$this->jns_id->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_jns_id"]);
-		if ($this->jns_id->AdvancedSearch->SearchValue <> "") $this->Command = "search";
-		$this->jns_id->AdvancedSearch->SearchOperator = @$_GET["z_jns_id"];
+		// tgl2
+		$this->tgl2->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_tgl2"]);
+		if ($this->tgl2->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->tgl2->AdvancedSearch->SearchOperator = @$_GET["z_tgl2"];
 
 		// jam_masuk
 		$this->jam_masuk->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_jam_masuk"]);
@@ -2204,15 +2231,20 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->pegawai_id->setFormValue($objForm->GetValue("x_pegawai_id"));
 		}
 		$this->pegawai_id->setOldValue($objForm->GetValue("o_pegawai_id"));
+		if (!$this->jns_id->FldIsDetailKey) {
+			$this->jns_id->setFormValue($objForm->GetValue("x_jns_id"));
+		}
+		$this->jns_id->setOldValue($objForm->GetValue("o_jns_id"));
 		if (!$this->tgl->FldIsDetailKey) {
 			$this->tgl->setFormValue($objForm->GetValue("x_tgl"));
 			$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
 		}
 		$this->tgl->setOldValue($objForm->GetValue("o_tgl"));
-		if (!$this->jns_id->FldIsDetailKey) {
-			$this->jns_id->setFormValue($objForm->GetValue("x_jns_id"));
+		if (!$this->tgl2->FldIsDetailKey) {
+			$this->tgl2->setFormValue($objForm->GetValue("x_tgl2"));
+			$this->tgl2->CurrentValue = ew_UnFormatDateTime($this->tgl2->CurrentValue, 0);
 		}
-		$this->jns_id->setOldValue($objForm->GetValue("o_jns_id"));
+		$this->tgl2->setOldValue($objForm->GetValue("o_tgl2"));
 		if (!$this->jam_masuk->FldIsDetailKey) {
 			$this->jam_masuk->setFormValue($objForm->GetValue("x_jam_masuk"));
 			$this->jam_masuk->CurrentValue = ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9);
@@ -2241,9 +2273,11 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		if ($this->CurrentAction <> "gridadd" && $this->CurrentAction <> "add")
 			$this->pengecualian_id->CurrentValue = $this->pengecualian_id->FormValue;
 		$this->pegawai_id->CurrentValue = $this->pegawai_id->FormValue;
+		$this->jns_id->CurrentValue = $this->jns_id->FormValue;
 		$this->tgl->CurrentValue = $this->tgl->FormValue;
 		$this->tgl->CurrentValue = ew_UnFormatDateTime($this->tgl->CurrentValue, 0);
-		$this->jns_id->CurrentValue = $this->jns_id->FormValue;
+		$this->tgl2->CurrentValue = $this->tgl2->FormValue;
+		$this->tgl2->CurrentValue = ew_UnFormatDateTime($this->tgl2->CurrentValue, 0);
 		$this->jam_masuk->CurrentValue = $this->jam_masuk->FormValue;
 		$this->jam_masuk->CurrentValue = ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9);
 		$this->jam_keluar->CurrentValue = $this->jam_keluar->FormValue;
@@ -2314,13 +2348,14 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		} else {
 			$this->pegawai_id->VirtualValue = ""; // Clear value
 		}
-		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
 		if (array_key_exists('EV__jns_id', $rs->fields)) {
 			$this->jns_id->VirtualValue = $rs->fields('EV__jns_id'); // Set up virtual field value
 		} else {
 			$this->jns_id->VirtualValue = ""; // Clear value
 		}
+		$this->tgl->setDbValue($rs->fields('tgl'));
+		$this->tgl2->setDbValue($rs->fields('tgl2'));
 		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
 		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
 		$this->pegawai_id2->setDbValue($rs->fields('pegawai_id2'));
@@ -2343,8 +2378,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->pengecualian_id->DbValue = $row['pengecualian_id'];
 		$this->pegawai_id->DbValue = $row['pegawai_id'];
-		$this->tgl->DbValue = $row['tgl'];
 		$this->jns_id->DbValue = $row['jns_id'];
+		$this->tgl->DbValue = $row['tgl'];
+		$this->tgl2->DbValue = $row['tgl2'];
 		$this->jam_masuk->DbValue = $row['jam_masuk'];
 		$this->jam_keluar->DbValue = $row['jam_keluar'];
 		$this->pegawai_id2->DbValue = $row['pegawai_id2'];
@@ -2392,8 +2428,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		// Common render codes for all row types
 		// pengecualian_id
 		// pegawai_id
-		// tgl
 		// jns_id
+		// tgl
+		// tgl2
 		// jam_masuk
 		// jam_keluar
 		// pegawai_id2
@@ -2432,11 +2469,6 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
-		// tgl
-		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
-		$this->tgl->ViewCustomAttributes = "";
-
 		// jns_id
 		if ($this->jns_id->VirtualValue <> "") {
 			$this->jns_id->ViewValue = $this->jns_id->VirtualValue;
@@ -2463,6 +2495,16 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		}
 		}
 		$this->jns_id->ViewCustomAttributes = "";
+
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewCustomAttributes = "";
+
+		// tgl2
+		$this->tgl2->ViewValue = $this->tgl2->CurrentValue;
+		$this->tgl2->ViewValue = tgl_indo($this->tgl2->ViewValue);
+		$this->tgl2->ViewCustomAttributes = "";
 
 		// jam_masuk
 		$this->jam_masuk->ViewValue = $this->jam_masuk->CurrentValue;
@@ -2533,15 +2575,20 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->pegawai_id->HrefValue = "";
 			$this->pegawai_id->TooltipValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+			$this->jns_id->TooltipValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 			$this->tgl->TooltipValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
-			$this->jns_id->TooltipValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
+			$this->tgl2->TooltipValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -2619,12 +2666,6 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->pegawai_id->EditValue = $arwrk;
 			}
 
-			// tgl
-			$this->tgl->EditAttrs["class"] = "form-control";
-			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
-			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
-
 			// jns_id
 			$this->jns_id->EditCustomAttributes = "";
 			if (trim(strval($this->jns_id->CurrentValue)) == "") {
@@ -2649,6 +2690,18 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			$this->jns_id->EditValue = $arwrk;
+
+			// tgl
+			$this->tgl->EditAttrs["class"] = "form-control";
+			$this->tgl->EditCustomAttributes = "";
+			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
+			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
+
+			// tgl2
+			$this->tgl2->EditAttrs["class"] = "form-control";
+			$this->tgl2->EditCustomAttributes = "";
+			$this->tgl2->EditValue = ew_HtmlEncode($this->tgl2->CurrentValue);
+			$this->tgl2->PlaceHolder = ew_RemoveHtml($this->tgl2->FldCaption());
 
 			// jam_masuk
 			$this->jam_masuk->EditAttrs["class"] = "form-control";
@@ -2718,13 +2771,17 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -2798,12 +2855,6 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->pegawai_id->EditValue = $arwrk;
 			}
 
-			// tgl
-			$this->tgl->EditAttrs["class"] = "form-control";
-			$this->tgl->EditCustomAttributes = "";
-			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
-			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
-
 			// jns_id
 			$this->jns_id->EditCustomAttributes = "";
 			if (trim(strval($this->jns_id->CurrentValue)) == "") {
@@ -2828,6 +2879,18 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			$this->jns_id->EditValue = $arwrk;
+
+			// tgl
+			$this->tgl->EditAttrs["class"] = "form-control";
+			$this->tgl->EditCustomAttributes = "";
+			$this->tgl->EditValue = ew_HtmlEncode($this->tgl->CurrentValue);
+			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
+
+			// tgl2
+			$this->tgl2->EditAttrs["class"] = "form-control";
+			$this->tgl2->EditCustomAttributes = "";
+			$this->tgl2->EditValue = ew_HtmlEncode($this->tgl2->CurrentValue);
+			$this->tgl2->PlaceHolder = ew_RemoveHtml($this->tgl2->FldCaption());
 
 			// jam_masuk
 			$this->jam_masuk->EditAttrs["class"] = "form-control";
@@ -2897,13 +2960,17 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->pegawai_id->LinkCustomAttributes = "";
 			$this->pegawai_id->HrefValue = "";
 
+			// jns_id
+			$this->jns_id->LinkCustomAttributes = "";
+			$this->jns_id->HrefValue = "";
+
 			// tgl
 			$this->tgl->LinkCustomAttributes = "";
 			$this->tgl->HrefValue = "";
 
-			// jns_id
-			$this->jns_id->LinkCustomAttributes = "";
-			$this->jns_id->HrefValue = "";
+			// tgl2
+			$this->tgl2->LinkCustomAttributes = "";
+			$this->tgl2->HrefValue = "";
 
 			// jam_masuk
 			$this->jam_masuk->LinkCustomAttributes = "";
@@ -2928,6 +2995,12 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->pegawai_id->EditValue = ew_HtmlEncode($this->pegawai_id->AdvancedSearch->SearchValue);
 			$this->pegawai_id->PlaceHolder = ew_RemoveHtml($this->pegawai_id->FldCaption());
 
+			// jns_id
+			$this->jns_id->EditAttrs["class"] = "form-control";
+			$this->jns_id->EditCustomAttributes = "";
+			$this->jns_id->EditValue = ew_HtmlEncode($this->jns_id->AdvancedSearch->SearchValue);
+			$this->jns_id->PlaceHolder = ew_RemoveHtml($this->jns_id->FldCaption());
+
 			// tgl
 			$this->tgl->EditAttrs["class"] = "form-control";
 			$this->tgl->EditCustomAttributes = "";
@@ -2938,11 +3011,11 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			$this->tgl->EditValue2 = ew_HtmlEncode(ew_UnFormatDateTime($this->tgl->AdvancedSearch->SearchValue2, 0));
 			$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
-			// jns_id
-			$this->jns_id->EditAttrs["class"] = "form-control";
-			$this->jns_id->EditCustomAttributes = "";
-			$this->jns_id->EditValue = ew_HtmlEncode($this->jns_id->AdvancedSearch->SearchValue);
-			$this->jns_id->PlaceHolder = ew_RemoveHtml($this->jns_id->FldCaption());
+			// tgl2
+			$this->tgl2->EditAttrs["class"] = "form-control";
+			$this->tgl2->EditCustomAttributes = "";
+			$this->tgl2->EditValue = ew_HtmlEncode(ew_UnFormatDateTime($this->tgl2->AdvancedSearch->SearchValue, 0));
+			$this->tgl2->PlaceHolder = ew_RemoveHtml($this->tgl2->FldCaption());
 
 			// jam_masuk
 			$this->jam_masuk->EditAttrs["class"] = "form-control";
@@ -3021,14 +3094,20 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		if (!$this->pegawai_id->FldIsDetailKey && !is_null($this->pegawai_id->FormValue) && $this->pegawai_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->pegawai_id->FldCaption(), $this->pegawai_id->ReqErrMsg));
 		}
+		if (!$this->jns_id->FldIsDetailKey && !is_null($this->jns_id->FormValue) && $this->jns_id->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->jns_id->FldCaption(), $this->jns_id->ReqErrMsg));
+		}
 		if (!$this->tgl->FldIsDetailKey && !is_null($this->tgl->FormValue) && $this->tgl->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl->FldCaption(), $this->tgl->ReqErrMsg));
 		}
 		if (!ew_CheckDateDef($this->tgl->FormValue)) {
 			ew_AddMessage($gsFormError, $this->tgl->FldErrMsg());
 		}
-		if (!$this->jns_id->FldIsDetailKey && !is_null($this->jns_id->FormValue) && $this->jns_id->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->jns_id->FldCaption(), $this->jns_id->ReqErrMsg));
+		if (!$this->tgl2->FldIsDetailKey && !is_null($this->tgl2->FormValue) && $this->tgl2->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->tgl2->FldCaption(), $this->tgl2->ReqErrMsg));
+		}
+		if (!ew_CheckDateDef($this->tgl2->FormValue)) {
+			ew_AddMessage($gsFormError, $this->tgl2->FldErrMsg());
 		}
 		if (!ew_CheckDate($this->jam_masuk->FormValue)) {
 			ew_AddMessage($gsFormError, $this->jam_masuk->FldErrMsg());
@@ -3157,11 +3236,14 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 			// pegawai_id
 			$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, $this->pegawai_id->ReadOnly);
 
+			// jns_id
+			$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, $this->jns_id->ReadOnly);
+
 			// tgl
 			$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), $this->tgl->ReadOnly);
 
-			// jns_id
-			$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, $this->jns_id->ReadOnly);
+			// tgl2
+			$this->tgl2->SetDbValueDef($rsnew, $this->tgl2->CurrentValue, ew_CurrentDate(), $this->tgl2->ReadOnly);
 
 			// jam_masuk
 			$this->jam_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9), NULL, $this->jam_masuk->ReadOnly);
@@ -3263,11 +3345,14 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		// pegawai_id
 		$this->pegawai_id->SetDbValueDef($rsnew, $this->pegawai_id->CurrentValue, 0, FALSE);
 
+		// jns_id
+		$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, FALSE);
+
 		// tgl
 		$this->tgl->SetDbValueDef($rsnew, $this->tgl->CurrentValue, ew_CurrentDate(), FALSE);
 
-		// jns_id
-		$this->jns_id->SetDbValueDef($rsnew, $this->jns_id->CurrentValue, 0, FALSE);
+		// tgl2
+		$this->tgl2->SetDbValueDef($rsnew, $this->tgl2->CurrentValue, ew_CurrentDate(), FALSE);
 
 		// jam_masuk
 		$this->jam_masuk->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->jam_masuk->CurrentValue, 9), NULL, FALSE);
@@ -3315,8 +3400,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 	function LoadAdvancedSearch() {
 		$this->pengecualian_id->AdvancedSearch->Load();
 		$this->pegawai_id->AdvancedSearch->Load();
-		$this->tgl->AdvancedSearch->Load();
 		$this->jns_id->AdvancedSearch->Load();
+		$this->tgl->AdvancedSearch->Load();
+		$this->tgl2->AdvancedSearch->Load();
 		$this->jam_masuk->AdvancedSearch->Load();
 		$this->jam_keluar->AdvancedSearch->Load();
 		$this->pegawai_id2->AdvancedSearch->Load();
@@ -3593,8 +3679,9 @@ class ct_pengecualian_peg_list extends ct_pengecualian_peg {
 		// Build QueryString for search
 		$this->AddSearchQueryString($sQry, $this->pengecualian_id); // pengecualian_id
 		$this->AddSearchQueryString($sQry, $this->pegawai_id); // pegawai_id
-		$this->AddSearchQueryString($sQry, $this->tgl); // tgl
 		$this->AddSearchQueryString($sQry, $this->jns_id); // jns_id
+		$this->AddSearchQueryString($sQry, $this->tgl); // tgl
+		$this->AddSearchQueryString($sQry, $this->tgl2); // tgl2
 		$this->AddSearchQueryString($sQry, $this->jam_masuk); // jam_masuk
 		$this->AddSearchQueryString($sQry, $this->jam_keluar); // jam_keluar
 		$this->AddSearchQueryString($sQry, $this->pegawai_id2); // pegawai_id2
@@ -3962,15 +4049,21 @@ ft_pengecualian_peglist.Validate = function() {
 			elm = this.GetElements("x" + infix + "_pegawai_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->pegawai_id->FldCaption(), $t_pengecualian_peg->pegawai_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_jns_id");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->jns_id->FldCaption(), $t_pengecualian_peg->jns_id->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_tgl");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->tgl->FldCaption(), $t_pengecualian_peg->tgl->ReqErrMsg)) ?>");
 			elm = this.GetElements("x" + infix + "_tgl");
 			if (elm && !ew_CheckDateDef(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_pengecualian_peg->tgl->FldErrMsg()) ?>");
-			elm = this.GetElements("x" + infix + "_jns_id");
+			elm = this.GetElements("x" + infix + "_tgl2");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->jns_id->FldCaption(), $t_pengecualian_peg->jns_id->ReqErrMsg)) ?>");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_pengecualian_peg->tgl2->FldCaption(), $t_pengecualian_peg->tgl2->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_tgl2");
+			if (elm && !ew_CheckDateDef(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($t_pengecualian_peg->tgl2->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_jam_masuk");
 			if (elm && !ew_CheckDate(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($t_pengecualian_peg->jam_masuk->FldErrMsg()) ?>");
@@ -3994,8 +4087,9 @@ ft_pengecualian_peglist.Validate = function() {
 ft_pengecualian_peglist.EmptyRow = function(infix) {
 	var fobj = this.Form;
 	if (ew_ValueChanged(fobj, infix, "pegawai_id", false)) return false;
-	if (ew_ValueChanged(fobj, infix, "tgl", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "jns_id", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "tgl", false)) return false;
+	if (ew_ValueChanged(fobj, infix, "tgl2", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "jam_masuk", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "jam_keluar", false)) return false;
 	if (ew_ValueChanged(fobj, infix, "pegawai_id2", false)) return false;
@@ -4172,6 +4266,17 @@ $t_pengecualian_peg_list->RenderRow();
 <?php } ?>
 </div>
 <div id="xsr_2" class="ewRow">
+<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
+	<div id="xsc_jns_id" class="ewCell form-group">
+		<label for="x_jns_id" class="ewSearchCaption ewLabel"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_jns_id" id="z_jns_id" value="="></span>
+		<span class="ewSearchField">
+<input type="text" data-table="t_pengecualian_peg" data-field="x_jns_id" name="x_jns_id" id="x_jns_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_pengecualian_peg->jns_id->getPlaceHolder()) ?>" value="<?php echo $t_pengecualian_peg->jns_id->EditValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
+</span>
+	</div>
+<?php } ?>
+</div>
+<div id="xsr_3" class="ewRow">
 <?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
 	<div id="xsc_tgl" class="ewCell form-group">
 		<label for="x_tgl" class="ewSearchCaption ewLabel"><?php echo $t_pengecualian_peg->tgl->FldCaption() ?></label>
@@ -4192,17 +4297,6 @@ ew_CreateCalendar("ft_pengecualian_peglistsrch", "x_tgl", 0);
 ew_CreateCalendar("ft_pengecualian_peglistsrch", "y_tgl", 0);
 </script>
 <?php } ?>
-</span>
-	</div>
-<?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
-<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-	<div id="xsc_jns_id" class="ewCell form-group">
-		<label for="x_jns_id" class="ewSearchCaption ewLabel"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_jns_id" id="z_jns_id" value="="></span>
-		<span class="ewSearchField">
-<input type="text" data-table="t_pengecualian_peg" data-field="x_jns_id" name="x_jns_id" id="x_jns_id" size="30" placeholder="<?php echo ew_HtmlEncode($t_pengecualian_peg->jns_id->getPlaceHolder()) ?>" value="<?php echo $t_pengecualian_peg->jns_id->EditValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
 </span>
 	</div>
 <?php } ?>
@@ -4327,6 +4421,15 @@ $t_pengecualian_peg_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
+	<?php if ($t_pengecualian_peg->SortUrl($t_pengecualian_peg->jns_id) == "") { ?>
+		<th data-name="jns_id"><div id="elh_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id"><div class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="jns_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_pengecualian_peg->SortUrl($t_pengecualian_peg->jns_id) ?>',2);"><div id="elh_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_pengecualian_peg->jns_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_pengecualian_peg->jns_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
 	<?php if ($t_pengecualian_peg->SortUrl($t_pengecualian_peg->tgl) == "") { ?>
 		<th data-name="tgl"><div id="elh_t_pengecualian_peg_tgl" class="t_pengecualian_peg_tgl"><div class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->tgl->FldCaption() ?></div></div></th>
@@ -4336,12 +4439,12 @@ $t_pengecualian_peg_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-	<?php if ($t_pengecualian_peg->SortUrl($t_pengecualian_peg->jns_id) == "") { ?>
-		<th data-name="jns_id"><div id="elh_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id"><div class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></div></div></th>
+<?php if ($t_pengecualian_peg->tgl2->Visible) { // tgl2 ?>
+	<?php if ($t_pengecualian_peg->SortUrl($t_pengecualian_peg->tgl2) == "") { ?>
+		<th data-name="tgl2"><div id="elh_t_pengecualian_peg_tgl2" class="t_pengecualian_peg_tgl2"><div class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->tgl2->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="jns_id"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_pengecualian_peg->SortUrl($t_pengecualian_peg->jns_id) ?>',2);"><div id="elh_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->jns_id->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_pengecualian_peg->jns_id->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_pengecualian_peg->jns_id->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="tgl2"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $t_pengecualian_peg->SortUrl($t_pengecualian_peg->tgl2) ?>',2);"><div id="elh_t_pengecualian_peg_tgl2" class="t_pengecualian_peg_tgl2">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $t_pengecualian_peg->tgl2->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($t_pengecualian_peg->tgl2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($t_pengecualian_peg->tgl2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -4439,6 +4542,19 @@ $t_pengecualian_peg_list->ListOptions->Render("body", "left", $t_pengecualian_pe
 <input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_pegawai_id" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id->OldValue) ?>">
 </td>
 	<?php } ?>
+	<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
+		<td data-name="jns_id">
+<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_jns_id" class="form-group t_pengecualian_peg_jns_id">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
+</span>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->jns_id->OldValue) ?>">
+</td>
+	<?php } ?>
 	<?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
 		<td data-name="tgl">
 <span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_tgl" class="form-group t_pengecualian_peg_tgl">
@@ -4452,17 +4568,17 @@ ew_CreateCalendar("ft_pengecualian_peglist", "x<?php echo $t_pengecualian_peg_li
 <input type="hidden" data-table="t_pengecualian_peg" data-field="x_tgl" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-		<td data-name="jns_id">
-<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_jns_id" class="form-group t_pengecualian_peg_jns_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+	<?php if ($t_pengecualian_peg->tgl2->Visible) { // tgl2 ?>
+		<td data-name="tgl2">
+<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_tgl2" class="form-group t_pengecualian_peg_tgl2">
+<input type="text" data-table="t_pengecualian_peg" data-field="x_tgl2" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" placeholder="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_pengecualian_peg->tgl2->EditValue ?>"<?php echo $t_pengecualian_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_pengecualian_peg->tgl2->ReadOnly && !$t_pengecualian_peg->tgl2->Disabled && !isset($t_pengecualian_peg->tgl2->EditAttrs["readonly"]) && !isset($t_pengecualian_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_pengecualian_peglist", "x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2", 0);
+</script>
+<?php } ?>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
-</span>
-<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->jns_id->OldValue) ?>">
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_tgl2" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl2->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($t_pengecualian_peg->jam_masuk->Visible) { // jam_masuk ?>
@@ -4686,6 +4802,37 @@ $t_pengecualian_peg_list->ListOptions->Render("body", "left", $t_pengecualian_pe
 <?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_EDIT || $t_pengecualian_peg->CurrentMode == "edit") { ?>
 <input type="hidden" data-table="t_pengecualian_peg" data-field="x_pengecualian_id" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_pengecualian_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_pengecualian_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pengecualian_id->CurrentValue) ?>">
 <?php } ?>
+	<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
+		<td data-name="jns_id"<?php echo $t_pengecualian_peg->jns_id->CellAttributes() ?>>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_ADD) { // Add record ?>
+<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_jns_id" class="form-group t_pengecualian_peg_jns_id">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
+</span>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->jns_id->OldValue) ?>">
+<?php } ?>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
+<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_jns_id" class="form-group t_pengecualian_peg_jns_id">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
+</span>
+<?php } ?>
+<?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_VIEW) { // View record ?>
+<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id">
+<span<?php echo $t_pengecualian_peg->jns_id->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->jns_id->ListViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+	<?php } ?>
 	<?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
 		<td data-name="tgl"<?php echo $t_pengecualian_peg->tgl->CellAttributes() ?>>
 <?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_ADD) { // Add record ?>
@@ -4717,33 +4864,33 @@ ew_CreateCalendar("ft_pengecualian_peglist", "x<?php echo $t_pengecualian_peg_li
 <?php } ?>
 </td>
 	<?php } ?>
-	<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-		<td data-name="jns_id"<?php echo $t_pengecualian_peg->jns_id->CellAttributes() ?>>
+	<?php if ($t_pengecualian_peg->tgl2->Visible) { // tgl2 ?>
+		<td data-name="tgl2"<?php echo $t_pengecualian_peg->tgl2->CellAttributes() ?>>
 <?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_ADD) { // Add record ?>
-<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_jns_id" class="form-group t_pengecualian_peg_jns_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_tgl2" class="form-group t_pengecualian_peg_tgl2">
+<input type="text" data-table="t_pengecualian_peg" data-field="x_tgl2" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" placeholder="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_pengecualian_peg->tgl2->EditValue ?>"<?php echo $t_pengecualian_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_pengecualian_peg->tgl2->ReadOnly && !$t_pengecualian_peg->tgl2->Disabled && !isset($t_pengecualian_peg->tgl2->EditAttrs["readonly"]) && !isset($t_pengecualian_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_pengecualian_peglist", "x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2", 0);
+</script>
+<?php } ?>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
-</span>
-<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->jns_id->OldValue) ?>">
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_tgl2" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl2->OldValue) ?>">
 <?php } ?>
 <?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_EDIT) { // Edit record ?>
-<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_jns_id" class="form-group t_pengecualian_peg_jns_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
-</span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
+<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_tgl2" class="form-group t_pengecualian_peg_tgl2">
+<input type="text" data-table="t_pengecualian_peg" data-field="x_tgl2" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" placeholder="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_pengecualian_peg->tgl2->EditValue ?>"<?php echo $t_pengecualian_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_pengecualian_peg->tgl2->ReadOnly && !$t_pengecualian_peg->tgl2->Disabled && !isset($t_pengecualian_peg->tgl2->EditAttrs["readonly"]) && !isset($t_pengecualian_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_pengecualian_peglist", "x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2", 0);
+</script>
+<?php } ?>
 </span>
 <?php } ?>
 <?php if ($t_pengecualian_peg->RowType == EW_ROWTYPE_VIEW) { // View record ?>
-<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_jns_id" class="t_pengecualian_peg_jns_id">
-<span<?php echo $t_pengecualian_peg->jns_id->ViewAttributes() ?>>
-<?php echo $t_pengecualian_peg->jns_id->ListViewValue() ?></span>
+<span id="el<?php echo $t_pengecualian_peg_list->RowCnt ?>_t_pengecualian_peg_tgl2" class="t_pengecualian_peg_tgl2">
+<span<?php echo $t_pengecualian_peg->tgl2->ViewAttributes() ?>>
+<?php echo $t_pengecualian_peg->tgl2->ListViewValue() ?></span>
 </span>
 <?php } ?>
 </td>
@@ -4915,6 +5062,19 @@ $t_pengecualian_peg_list->ListOptions->Render("body", "left", $t_pengecualian_pe
 <input type="hidden" data-table="t_pengecualian_peg" data-field="x_pegawai_id" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_pegawai_id" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_pegawai_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->pegawai_id->OldValue) ?>">
 </td>
 	<?php } ?>
+	<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
+		<td data-name="jns_id">
+<span id="el$rowindex$_t_pengecualian_peg_jns_id" class="form-group t_pengecualian_peg_jns_id">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
+<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
+</span>
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->jns_id->OldValue) ?>">
+</td>
+	<?php } ?>
 	<?php if ($t_pengecualian_peg->tgl->Visible) { // tgl ?>
 		<td data-name="tgl">
 <span id="el$rowindex$_t_pengecualian_peg_tgl" class="form-group t_pengecualian_peg_tgl">
@@ -4928,17 +5088,17 @@ ew_CreateCalendar("ft_pengecualian_peglist", "x<?php echo $t_pengecualian_peg_li
 <input type="hidden" data-table="t_pengecualian_peg" data-field="x_tgl" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl->OldValue) ?>">
 </td>
 	<?php } ?>
-	<?php if ($t_pengecualian_peg->jns_id->Visible) { // jns_id ?>
-		<td data-name="jns_id">
-<span id="el$rowindex$_t_pengecualian_peg_jns_id" class="form-group t_pengecualian_peg_jns_id">
-<span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id"><?php echo (strval($t_pengecualian_peg->jns_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_pengecualian_peg->jns_id->ViewValue); ?></span>
+	<?php if ($t_pengecualian_peg->tgl2->Visible) { // tgl2 ?>
+		<td data-name="tgl2">
+<span id="el$rowindex$_t_pengecualian_peg_tgl2" class="form-group t_pengecualian_peg_tgl2">
+<input type="text" data-table="t_pengecualian_peg" data-field="x_tgl2" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" placeholder="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl2->getPlaceHolder()) ?>" value="<?php echo $t_pengecualian_peg->tgl2->EditValue ?>"<?php echo $t_pengecualian_peg->tgl2->EditAttributes() ?>>
+<?php if (!$t_pengecualian_peg->tgl2->ReadOnly && !$t_pengecualian_peg->tgl2->Disabled && !isset($t_pengecualian_peg->tgl2->EditAttrs["readonly"]) && !isset($t_pengecualian_peg->tgl2->EditAttrs["disabled"])) { ?>
+<script type="text/javascript">
+ew_CreateCalendar("ft_pengecualian_peglist", "x<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2", 0);
+</script>
+<?php } ?>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_pengecualian_peg->jns_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_pengecualian_peg->jns_id->DisplayValueSeparatorAttribute() ?>" name="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->CurrentValue ?>"<?php echo $t_pengecualian_peg->jns_id->EditAttributes() ?>>
-<input type="hidden" name="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="s_x<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo $t_pengecualian_peg->jns_id->LookupFilterQuery() ?>">
-</span>
-<input type="hidden" data-table="t_pengecualian_peg" data-field="x_jns_id" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_jns_id" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->jns_id->OldValue) ?>">
+<input type="hidden" data-table="t_pengecualian_peg" data-field="x_tgl2" name="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" id="o<?php echo $t_pengecualian_peg_list->RowIndex ?>_tgl2" value="<?php echo ew_HtmlEncode($t_pengecualian_peg->tgl2->OldValue) ?>">
 </td>
 	<?php } ?>
 	<?php if ($t_pengecualian_peg->jam_masuk->Visible) { // jam_masuk ?>

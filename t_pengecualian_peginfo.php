@@ -15,8 +15,9 @@ class ct_pengecualian_peg extends cTable {
 	var $AuditTrailOnSearch = FALSE;
 	var $pengecualian_id;
 	var $pegawai_id;
-	var $tgl;
 	var $jns_id;
+	var $tgl;
+	var $tgl2;
 	var $jam_masuk;
 	var $jam_keluar;
 	var $pegawai_id2;
@@ -66,12 +67,6 @@ class ct_pengecualian_peg extends cTable {
 		$this->pegawai_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['pegawai_id'] = &$this->pegawai_id;
 
-		// tgl
-		$this->tgl = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, -1, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->tgl->Sortable = TRUE; // Allow sort
-		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
-		$this->fields['tgl'] = &$this->tgl;
-
 		// jns_id
 		$this->jns_id = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_jns_id', 'jns_id', '`jns_id`', '`jns_id`', 3, -1, FALSE, '`EV__jns_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
 		$this->jns_id->Sortable = TRUE; // Allow sort
@@ -79,6 +74,18 @@ class ct_pengecualian_peg extends cTable {
 		$this->jns_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
 		$this->jns_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['jns_id'] = &$this->jns_id;
+
+		// tgl
+		$this->tgl = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_tgl', 'tgl', '`tgl`', ew_CastDateFieldForLike('`tgl`', 0, "DB"), 133, -1, FALSE, '`tgl`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl->Sortable = TRUE; // Allow sort
+		$this->tgl->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['tgl'] = &$this->tgl;
+
+		// tgl2
+		$this->tgl2 = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_tgl2', 'tgl2', '`tgl2`', ew_CastDateFieldForLike('`tgl2`', 0, "DB"), 133, -1, FALSE, '`tgl2`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->tgl2->Sortable = TRUE; // Allow sort
+		$this->tgl2->FldDefaultErrMsg = str_replace("%s", $GLOBALS["EW_DATE_FORMAT"], $Language->Phrase("IncorrectDate"));
+		$this->fields['tgl2'] = &$this->tgl2;
 
 		// jam_masuk
 		$this->jam_masuk = new cField('t_pengecualian_peg', 't_pengecualian_peg', 'x_jam_masuk', 'jam_masuk', '`jam_masuk`', ew_CastDateFieldForLike('`jam_masuk`', 9, "DB"), 135, 9, FALSE, '`jam_masuk`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
@@ -752,8 +759,9 @@ class ct_pengecualian_peg extends cTable {
 	function LoadListRowValues(&$rs) {
 		$this->pengecualian_id->setDbValue($rs->fields('pengecualian_id'));
 		$this->pegawai_id->setDbValue($rs->fields('pegawai_id'));
-		$this->tgl->setDbValue($rs->fields('tgl'));
 		$this->jns_id->setDbValue($rs->fields('jns_id'));
+		$this->tgl->setDbValue($rs->fields('tgl'));
+		$this->tgl2->setDbValue($rs->fields('tgl2'));
 		$this->jam_masuk->setDbValue($rs->fields('jam_masuk'));
 		$this->jam_keluar->setDbValue($rs->fields('jam_keluar'));
 		$this->pegawai_id2->setDbValue($rs->fields('pegawai_id2'));
@@ -770,8 +778,9 @@ class ct_pengecualian_peg extends cTable {
    // Common render codes
 		// pengecualian_id
 		// pegawai_id
-		// tgl
 		// jns_id
+		// tgl
+		// tgl2
 		// jam_masuk
 		// jam_keluar
 		// pegawai_id2
@@ -808,11 +817,6 @@ class ct_pengecualian_peg extends cTable {
 		}
 		$this->pegawai_id->ViewCustomAttributes = "";
 
-		// tgl
-		$this->tgl->ViewValue = $this->tgl->CurrentValue;
-		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
-		$this->tgl->ViewCustomAttributes = "";
-
 		// jns_id
 		if ($this->jns_id->VirtualValue <> "") {
 			$this->jns_id->ViewValue = $this->jns_id->VirtualValue;
@@ -839,6 +843,16 @@ class ct_pengecualian_peg extends cTable {
 		}
 		}
 		$this->jns_id->ViewCustomAttributes = "";
+
+		// tgl
+		$this->tgl->ViewValue = $this->tgl->CurrentValue;
+		$this->tgl->ViewValue = tgl_indo($this->tgl->ViewValue);
+		$this->tgl->ViewCustomAttributes = "";
+
+		// tgl2
+		$this->tgl2->ViewValue = $this->tgl2->CurrentValue;
+		$this->tgl2->ViewValue = tgl_indo($this->tgl2->ViewValue);
+		$this->tgl2->ViewCustomAttributes = "";
 
 		// jam_masuk
 		$this->jam_masuk->ViewValue = $this->jam_masuk->CurrentValue;
@@ -914,15 +928,20 @@ class ct_pengecualian_peg extends cTable {
 		$this->pegawai_id->HrefValue = "";
 		$this->pegawai_id->TooltipValue = "";
 
+		// jns_id
+		$this->jns_id->LinkCustomAttributes = "";
+		$this->jns_id->HrefValue = "";
+		$this->jns_id->TooltipValue = "";
+
 		// tgl
 		$this->tgl->LinkCustomAttributes = "";
 		$this->tgl->HrefValue = "";
 		$this->tgl->TooltipValue = "";
 
-		// jns_id
-		$this->jns_id->LinkCustomAttributes = "";
-		$this->jns_id->HrefValue = "";
-		$this->jns_id->TooltipValue = "";
+		// tgl2
+		$this->tgl2->LinkCustomAttributes = "";
+		$this->tgl2->HrefValue = "";
+		$this->tgl2->TooltipValue = "";
 
 		// jam_masuk
 		$this->jam_masuk->LinkCustomAttributes = "";
@@ -994,15 +1013,21 @@ class ct_pengecualian_peg extends cTable {
 		} else {
 		}
 
+		// jns_id
+		$this->jns_id->EditAttrs["class"] = "form-control";
+		$this->jns_id->EditCustomAttributes = "";
+
 		// tgl
 		$this->tgl->EditAttrs["class"] = "form-control";
 		$this->tgl->EditCustomAttributes = "";
 		$this->tgl->EditValue = $this->tgl->CurrentValue;
 		$this->tgl->PlaceHolder = ew_RemoveHtml($this->tgl->FldCaption());
 
-		// jns_id
-		$this->jns_id->EditAttrs["class"] = "form-control";
-		$this->jns_id->EditCustomAttributes = "";
+		// tgl2
+		$this->tgl2->EditAttrs["class"] = "form-control";
+		$this->tgl2->EditCustomAttributes = "";
+		$this->tgl2->EditValue = $this->tgl2->CurrentValue;
+		$this->tgl2->PlaceHolder = ew_RemoveHtml($this->tgl2->FldCaption());
 
 		// jam_masuk
 		$this->jam_masuk->EditAttrs["class"] = "form-control";
@@ -1052,8 +1077,9 @@ class ct_pengecualian_peg extends cTable {
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
-					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->jns_id->Exportable) $Doc->ExportCaption($this->jns_id);
+					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
+					if ($this->tgl2->Exportable) $Doc->ExportCaption($this->tgl2);
 					if ($this->jam_masuk->Exportable) $Doc->ExportCaption($this->jam_masuk);
 					if ($this->jam_keluar->Exportable) $Doc->ExportCaption($this->jam_keluar);
 					if ($this->pegawai_id2->Exportable) $Doc->ExportCaption($this->pegawai_id2);
@@ -1061,8 +1087,9 @@ class ct_pengecualian_peg extends cTable {
 				} else {
 					if ($this->pengecualian_id->Exportable) $Doc->ExportCaption($this->pengecualian_id);
 					if ($this->pegawai_id->Exportable) $Doc->ExportCaption($this->pegawai_id);
-					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
 					if ($this->jns_id->Exportable) $Doc->ExportCaption($this->jns_id);
+					if ($this->tgl->Exportable) $Doc->ExportCaption($this->tgl);
+					if ($this->tgl2->Exportable) $Doc->ExportCaption($this->tgl2);
 					if ($this->jam_masuk->Exportable) $Doc->ExportCaption($this->jam_masuk);
 					if ($this->jam_keluar->Exportable) $Doc->ExportCaption($this->jam_keluar);
 					if ($this->pegawai_id2->Exportable) $Doc->ExportCaption($this->pegawai_id2);
@@ -1099,8 +1126,9 @@ class ct_pengecualian_peg extends cTable {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
-						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->jns_id->Exportable) $Doc->ExportField($this->jns_id);
+						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
+						if ($this->tgl2->Exportable) $Doc->ExportField($this->tgl2);
 						if ($this->jam_masuk->Exportable) $Doc->ExportField($this->jam_masuk);
 						if ($this->jam_keluar->Exportable) $Doc->ExportField($this->jam_keluar);
 						if ($this->pegawai_id2->Exportable) $Doc->ExportField($this->pegawai_id2);
@@ -1108,8 +1136,9 @@ class ct_pengecualian_peg extends cTable {
 					} else {
 						if ($this->pengecualian_id->Exportable) $Doc->ExportField($this->pengecualian_id);
 						if ($this->pegawai_id->Exportable) $Doc->ExportField($this->pegawai_id);
-						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
 						if ($this->jns_id->Exportable) $Doc->ExportField($this->jns_id);
+						if ($this->tgl->Exportable) $Doc->ExportField($this->tgl);
+						if ($this->tgl2->Exportable) $Doc->ExportField($this->tgl2);
 						if ($this->jam_masuk->Exportable) $Doc->ExportField($this->jam_masuk);
 						if ($this->jam_keluar->Exportable) $Doc->ExportField($this->jam_keluar);
 						if ($this->pegawai_id2->Exportable) $Doc->ExportField($this->pegawai_id2);
