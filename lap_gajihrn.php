@@ -34,6 +34,14 @@ function f_carikodepengecualian($mpegawai_id, $mtgl, $mconn) {
 	}
 }
 
+function f_harilibur($mtgl, $mconn) {
+	$msql = "select f_harilibur('".$mtgl."') as ada";
+	$rsf = $mconn->Execute($msql);
+	if (!$rsf->EOF) {
+		return $rsf->fields["ada"];
+	}
+}
+
 $msql = "delete from t_gjhrn";
 $conn->Execute($msql);
 
@@ -114,7 +122,8 @@ while (!$rs->EOF) {
 					// tidak ada data pengecualian
 					
 					// check hari libur
-					if (substr($rs->fields["jk_kd"], -1) == "L") {
+					if (substr($rs->fields["jk_kd"], -1) == "L" or f_harilibur($rs->fields["tgl"], $conn) == 1) {
+					//if (substr($rs->fields["jk_kd"], -1) == "L") {
 						/*if ($bagian == "KEAMANAN" or $bagian == "KENDARAAN") {
 							$mt_um += $t_um;
 						}*/

@@ -104,3 +104,10 @@ update
 set
 	a.scan_keluar = b.max_scan_date;
 END//
+
+CREATE FUNCTION `f_harilibur`(p_tgl date) RETURNS int(11)
+BEGIN
+declare ada integer;
+select count(*) into ada from t_harilibur where libur_tgl = p_tgl;
+RETURN ada;
+END//

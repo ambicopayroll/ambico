@@ -51,6 +51,14 @@ function f_carilamakerja($p_pegawai_id, $p_tgl, $p_conn) {
 	}
 }
 
+function f_harilibur($mtgl, $mconn) {
+	$msql = "select f_harilibur('".$mtgl."') as ada";
+	$rsf = $mconn->Execute($msql);
+	if (!$rsf->EOF) {
+		return $rsf->fields["ada"];
+	}
+}
+
 $msql = "delete from t_gjbln";
 $conn->Execute($msql);
 
@@ -140,7 +148,7 @@ while (!$rs->EOF) {
 						// tidak ada data pengecualian
 						
 						// check hari libur
-						if (substr($jk_kd, -1) == "L") {
+						if (substr($jk_kd, -1) == "L" or f_harilibur($tgl, $conn) == 1) {
 							if ($bagian == "KEAMANAN" or $bagian == "KENDARAAN") {
 								$mt_um += $t_um;
 							}
