@@ -82,6 +82,8 @@ while (!$rs->EOF) {
 			$mtidak_masuk     = 0;
 			$mpot_absen       = 0;
 			$mjml_premi_malam = 0;
+			$mabsen           = 0;
+			$mterlambat       = 0;
 			while ($mpegawai_id == $rs->fields["pegawai_id"] and !$rs->EOF) {
 				
 				// check data valid
