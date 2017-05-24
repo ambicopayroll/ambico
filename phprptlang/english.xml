@@ -2462,7 +2462,7 @@
         <phrase id="fldcaption" value="Hari, Tgl." />
       </field>
       <field id="scan_date_tgl_jam">
-        <phrase id="fldcaption" value="Tgl. &amp; Jam" />
+        <phrase id="fldcaption" value="Jam" />
       </field>
       <field id="scan_date">
         <phrase id="fldcaption" value="Raw Data" />

@@ -2,7 +2,7 @@ CREATE FUNCTION `f_carikodepengecualian`(p_pegawai_id int, p_tgl date) RETURNS v
 BEGIN
 declare r_kode varchar(10);
 select b.kode into r_kode from t_pengecualian_peg a left join t_jns_pengecualian b on a.jns_id = b.jns_id
-where pegawai_id = p_pegawai_id and tgl = p_tgl;
+where pegawai_id = p_pegawai_id and p_tgl between tgl and tgl2;
 RETURN r_kode;
 END//
 

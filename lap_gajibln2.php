@@ -48,42 +48,7 @@ function f_carilamakerja($p_pegawai_id, $p_tgl, $p_conn) {
 		$jam   = floor($diff / (60 * 60));
 		$menit = $diff - $jam * (60 * 60);
 		echo 'Waktu tinggal: ' . $jam .  ' jam, ' . floor( $menit / 60 ) . ' menit';*/
-		
 	}
-}
-
-function f_hitungjamlembur($p_conn, $p_pegawai_id) {
-	$query = "select * from t_lembur where pegawai_id = ".$p_pegawai_id." order by tgl_mulai";
-	$rs = $p_conn->Execute($query);
-	$mlama_lembur = 0;
-	while (!$rs->EOF) {
-		$mtgl_mulai = $rs->fields["tgl_mulai"];
-		$mtgl_selesai = $rs->fields["tgl_selesai"];
-		
-		// cek apakah hanya lembur 1 hari
-		if ($mtgl_mulai == $mtgl_selesai) {
-			
-			// cek apakah hari lembur masuk dalam range input laporan gaji
-			if ($mtgl_mulai >= $_POST["start"] and $mtgl_mulai <= $_POST["end"]) {
-				// hitung jam lembur
-				$lama_lembur = strtotime($rs->fields["jam_selesai"]) - strtotime($rs->fields["jam_mulai"]);
-				$mlama_lembur += floor($lama_lembur / (60 * 60));
-			}
-		}
-		// hari lembur lebih dari 1 hari
-		else {
-			while (strtotime($mtgl_mulai) <= strtotime($mtgl_selesai)) {
-				if ($mtgl_mulai >= $_POST["start"] and $mtgl_mulai <= $_POST["end"]) {
-					// hitung jam lembur
-					$lama_lembur = strtotime($rs->fields["jam_selesai"]) - strtotime($rs->fields["jam_mulai"]);
-					$mlama_lembur += floor($lama_lembur / (60 * 60));
-				}
-				$mtgl_mulai = date("Y-m-d", strtotime("+1 day", strtotime($mtgl_mulai)));
-			}
-		}
-		$rs->MoveNext();
-	}
-	return $mlama_lembur;
 }
 
 $msql = "delete from t_gjbln";
@@ -129,7 +94,6 @@ while (!$rs->EOF) {
 			$t_malam    = $rs->fields["premi_malam"]; // tunjangan malam
 			$t_um       = $rs->fields["lp"]; // tunjangan uang makan
 			$t_fork     = $rs->fields["forklift"]; // tunjangan forklift
-			$t_lembur   = $rs->fields["lembur"]; // tunjangan lembur
 			$p_absen5   = $gp / 25; // potongan absen 5 hk
 			$p_absen6   = $gp / 30; // potongan absen 6 hk
 			$p_aspen    = $gp * $rs->fields["pot_aspen"]; // potongan astek & pensiun
@@ -232,12 +196,7 @@ while (!$rs->EOF) {
 				$rs2->MoveNext(); // go to next record on data rekonsiliasi
 			}
 			
-			// hitung lembur
-			//$mt_lembur += f_hitungjamlembur($conn, $pegawai_id) * $t_lembur;
-			$mt_lembur = 0;
-			
 			if ($mabsen == 1 or $mterlambat == 1) $t_hadir = 0;
-			//$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $mt_lembur + $t_hadir + $mt_um; //+ $mt_fork;
 			$bruto = $gp + $t_jbtn - $mp_absen + $mt_malam + $t_hadir + $mt_um; //+ $mt_fork;
 			$netto = $bruto - $p_aspen - $p_bpjs;
 			
@@ -251,7 +210,7 @@ while (!$rs->EOF) {
 				, ".$t_jbtn."
 				, ".$mp_absen."
 				, ".$mt_malam."
-				, ".$mt_lembur."
+				, 0
 				, ".$t_hadir."
 				, ".$mt_um."
 				, ".$bruto."

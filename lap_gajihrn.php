@@ -9,6 +9,31 @@ else {
 	$conn =& DbHelper();
 }
 
+function f_carilamakerja($p_pegawai_id, $p_tgl, $p_conn) {
+	$query = "select * from t_pengecualian_peg where pegawai_id = ".$p_pegawai_id." and tgl = '".$p_tgl."'";
+	$rs = $p_conn->Execute($query);
+	if (!$rs->EOF) {
+		$lama_kerja = strtotime($rs->fields["jam_keluar"]) - strtotime($rs->fields["jam_masuk"]);
+		$lama_kerja = floor($lama_kerja / (60 * 60));
+		return $lama_kerja;
+		/*$awal  = strtotime('2017-08-10 10:05:25');
+		$akhir = strtotime('2017-08-11 11:07:33');
+		$diff  = $akhir - $awal;
+
+		$jam   = floor($diff / (60 * 60));
+		$menit = $diff - $jam * (60 * 60);
+		echo 'Waktu tinggal: ' . $jam .  ' jam, ' . floor( $menit / 60 ) . ' menit';*/
+	}
+}
+
+function f_carikodepengecualian($mpegawai_id, $mtgl, $mconn) {
+	$msql = "select f_carikodepengecualian(".$mpegawai_id.", '".$mtgl."') as r_kode";
+	$rsf = $mconn->Execute($msql);
+	if (!$rsf->EOF) {
+		return $rsf->fields["r_kode"];
+	}
+}
+
 $msql = "delete from t_gjhrn";
 $conn->Execute($msql);
 
@@ -60,29 +85,85 @@ while (!$rs->EOF) {
 			while ($mpegawai_id == $rs->fields["pegawai_id"] and !$rs->EOF) {
 				
 				// check data valid
-				$data_valid = false;
-				if (!is_null($rs->fields["scan_masuk"]) and !is_null($rs->fields["scan_keluar"])) {
-					$data_valid = true;
-					// upah
-					$mupah += $rs->fields["upah"];
-					// premi hadir
-					$mpremi_hadir = $rs->fields["premi_hadir"];
+				$data_valid = false; // => data belum dicheck
+				if (!is_null($rs->fields["scan_masuk"]) and !is_null($rs->fields["scan_keluar"])) { // => data sedang dicheck
+					$data_valid = true; // => data sudah dicheck dan valid
 				}
-				
-				// hitung premi malam
-				if (!$data_valid and substr($rs->fields["jk_kd"], 0, 2) == "S3") {
-					$mpremi_malam += $rs->fields["premi_malam"];
-				}
-				
+								
 				// hitung premi hadir & pot. absen
+				/*
 				if (!$data_valid and substr($rs->fields["jk_kd"], -1) != "L") {
 					$msql = "select f_cari_pengecualian(".$mpegawai_id.", '".$rs->fields["tgl"]."') as ada";
 					$rs3 = $conn->Execute($msql); // echo $msql; exit;
 					if ($rs3->fields["ada"]) {
+						
 					}
 					else {
 						$mpremi_hadir = 0;
 						$mpot_absen += $rs->fields["pot_absen"];
+					}
+				}
+				*/
+				
+				// cari data pengecualian
+				$kode_pengecualian = f_carikodepengecualian($mpegawai_id, $rs->fields["tgl"], $conn);
+
+				if (!$data_valid and $kode_pengecualian == null) {
+					// tidak ada data pengecualian
+					
+					// check hari libur
+					if (substr($rs->fields["jk_kd"], -1) == "L") {
+						/*if ($bagian == "KEAMANAN" or $bagian == "KENDARAAN") {
+							$mt_um += $t_um;
+						}*/
+					}
+					else {
+						//$mpremi_hadir = 0;
+						$mabsen = 1;
+						$mpot_absen += $rs->fields["pot_absen"];
+						//$mabsen = 1; // untuk acuan perhitungan tunjangan hadir
+						//$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6);
+					}
+				}
+				else {
+					// $mdata_valid = 0;
+					$data_valid = true;
+					// ada data pengecualian
+					// S1 => tidak diproses; tidak ada potongan absen;
+					// P4 => tidak diproses; tidak ada potongan absen;
+					// IS => tidak diproses; tidak ada potongan absen; invalid scan;
+					// TS => tidak diproses; tidak ada potongan absen; tukar shift;
+					// LB => tidak diproses; tidak ada potongan absen; lembur;
+
+					// TL => terlambat;
+					if ($kode_pengecualian == "TL") {
+						$mterlambat = 1; // untuk acuan perhitungan tunjangan hadir
+					}
+
+					// HD => half day;
+					if ($kode_pengecualian == "HD") {
+						$lama_kerja = f_carilamakerja($mpegawai_id, $rs->fields["tgl"], $conn);
+						if ($lama_kerja != null and $lama_kerja >= 3) {
+							//$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6) / 2;
+							$mpot_absen += $rs->fields["pot_absen"] / 2;
+						}
+						else {
+							$mpot_absen += $rs->fields["pot_absen"];
+							//$mp_absen += ($hk_def == 5 ? $p_absen5 : $p_absen6);
+						}
+					}
+				}
+				
+				if ($data_valid) {
+					// upah
+					$mupah += $rs->fields["upah"];
+					// premi hadir
+					$mpremi_hadir = $rs->fields["premi_hadir"];
+					
+					// hitung premi malam
+					//if (!$data_valid and substr($rs->fields["jk_kd"], 0, 2) == "S3") {
+					if (substr($rs->fields["jk_kd"], 0, 2) == "S3") {
+						$mpremi_malam += $rs->fields["premi_malam"];
 					}
 				}
 				
@@ -91,6 +172,9 @@ while (!$rs->EOF) {
 			if ($_POST["radio_proses"]) {
 				$mupah += $mt_jabatan;
 			}
+			
+			if ($mabsen == 1 or $mterlambat == 1) $mpremi_hadir = 0; //$t_hadir = 0;
+			
 			$mtotal = $mupah + $mpremi_malam + $mpremi_hadir - $mpot_absen;
 			$msql = "
 				insert into t_gjhrn values (null, 
