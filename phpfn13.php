@@ -875,7 +875,7 @@ class cExportPdf extends cExportBase {
 	function ExportHeaderAndFooter() {
 		$header = "<html><head>\r\n";
 		$header .= $this->CharsetMetaTag();
-		if (EW_EXPORT_CSS_STYLES && EW_PDF_STYLESHEET_FILENAME <> "")
+		if (EW_PDF_STYLESHEET_FILENAME <> "")
 			$header .= "<style type=\"text/css\">" . file_get_contents(EW_PDF_STYLESHEET_FILENAME) . "</style>\r\n";
 		$header .= "</" . "head>\r\n<body>\r\n";
 		$this->Text = $header . $this->Text . "</body></html>";
