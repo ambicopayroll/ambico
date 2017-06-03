@@ -64,7 +64,7 @@ while (!$rs->EOF) {
 	}
 	
 	$query = "
-		insert into t_gjbrngan values (null, '".$mpegawai_nama."', ".$mupah_peg.", '".$_POST["start"]."', '".$_POST["end"]."')
+		 insert into t_gjbrngan values (null, '".$mpegawai_nama."', ".$mupah_peg.", '".$_POST["start"]."', '".$_POST["end"]."')
 		";
 	$conn->Execute($query);
 
