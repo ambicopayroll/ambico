@@ -59,7 +59,27 @@ $query = "
 	"; 
 $query = "
 select b.* , c.pegawai_nama , d.keg_nama from t_keg_detail a left join ( select a.* , case when c.tarif_acuan = 0 then ( a.hasil * c.tarif1 ) else ( a.hasil * (case when a.hasil <= c.tarif_acuan then c.tarif1 else c.tarif2 end) ) end / sum(case when not isnull(b.scan_masuk) and not isnull(b.scan_keluar) then 1 else 0 end) as upah_peg from t_keg_master a left join t_keg_detail b on a.kegm_id = b.kegm_id left join t_kegiatan c on a.keg_id = c.keg_id where not isnull(b.scan_masuk) and not isnull(b.scan_keluar) and a.tgl between '".$_POST["start"]."' and '".$_POST["end"]."') b on a.kegm_id = b.kegm_id left join pegawai c on a.pegawai_id = c.pegawai_id left join t_kegiatan d on b.keg_id = d.keg_id where not isnull(a.scan_masuk) and not isnull(a.scan_keluar) and b.tgl between '".$_POST["start"]."' and '".$_POST["end"]."' order by c.pegawai_nama
-"; echo $query;
+"; 
+$query = "
+select
+	a.*
+    , b.*
+    , c.*
+    ,
+    (case when (c.tarif_acuan = 0) then 
+		(a.hasil * c.tarif1)
+	else
+		case when (a.hasil <= c.tarif_acuan) then c.tarif1 else c.tarif2 end * a.hasil
+	end) / d.pembagi as upah_peg
+from
+	t_keg_master a
+	left join t_keg_detail b on a.kegm_id = b.kegm_id
+    left join t_kegiatan c on a.keg_id = c.keg_id
+    left join (select kegm_id, sum(case when not isnull(scan_masuk) and not isnull(scan_keluar) then 1 else 0 end) as pembagi from t_keg_detail group by kegm_id) d on a.kegm_id = d.kegm_id
+where
+	a.tgl between '".$_POST["start"]."' and '".$_POST["end"]."'
+";
+//echo $query;
 $rs = Conn()->Execute($query);
 while (!$rs->EOF) {
 	$mpegawai_nama = $rs->fields["pegawai_nama"];
