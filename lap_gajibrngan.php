@@ -71,11 +71,13 @@ select
 	else
 		case when (a.hasil <= c.tarif_acuan) then c.tarif1 else c.tarif2 end * a.hasil
 	end) / d.pembagi as upah_peg
+	, e.pegawai_nama
 from
 	t_keg_master a
 	left join t_keg_detail b on a.kegm_id = b.kegm_id
     left join t_kegiatan c on a.keg_id = c.keg_id
     left join (select kegm_id, sum(case when not isnull(scan_masuk) and not isnull(scan_keluar) then 1 else 0 end) as pembagi from t_keg_detail group by kegm_id) d on a.kegm_id = d.kegm_id
+	left join pegawai e on e.pegawai_id = b.pegawai_id
 where
 	a.tgl between '".$_POST["start"]."' and '".$_POST["end"]."'
 ";
