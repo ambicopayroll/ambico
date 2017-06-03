@@ -39,6 +39,10 @@ $query = "
 				t_keg_master a
 				left join t_keg_detail b on a.kegm_id = b.kegm_id
 				left join t_kegiatan c on a.keg_id = c.keg_id
+			where
+				not isnull(a.scan_masuk)
+				and not isnull(a.scan_keluar)
+				and b.tgl between '".$_POST["start"]."' and '".$_POST["end"]."'
 			) b on a.kegm_id = b.kegm_id
 		left join pegawai c on a.pegawai_id = c.pegawai_id
 		left join t_kegiatan d on b.keg_id = d.keg_id
