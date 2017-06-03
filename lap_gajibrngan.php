@@ -43,8 +43,8 @@ $query = "
 		left join pegawai c on a.pegawai_id = c.pegawai_id
 		left join t_kegiatan d on b.keg_id = d.keg_id
 	where
-		a.scan_masuk is not null
-		and a.scan_keluar is not null
+		not isnull(a.scan_masuk)
+		and not isnull(a.scan_keluar)
 		and b.tgl between '".$_POST["start"]."' and '".$_POST["end"]."'
 	order by
 		c.pegawai_nama
