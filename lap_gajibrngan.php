@@ -1,5 +1,5 @@
 <?php
-
+echo "masuk";
 if ($_SERVER["HTTP_HOST"] == "ambico.nma-indonesia.com") {
 	//include "adodb5/adodb.inc.php";
 	//$conn = ADONewConnection('mysql');
