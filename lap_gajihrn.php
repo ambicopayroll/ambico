@@ -116,7 +116,7 @@ while (!$rs->EOF) {
 				*/
 				
 				// cari data pengecualian
-				$kode_pengecualian = f_carikodepengecualian($mpegawai_id, $rs->fields["tgl"], $conn);
+				$kode_pengecualian = f_carikodepengecualian($mpegawai_id, $rs->fields["tgl"], $conn); echo $rs->fields["tgl"].$kode_pengecualian;
 
 				if (!$data_valid and $kode_pengecualian == null) {
 					// tidak ada data pengecualian
