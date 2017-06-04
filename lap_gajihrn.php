@@ -116,13 +116,15 @@ while (!$rs->EOF) {
 				*/
 				
 				// cari data pengecualian
-				$kode_pengecualian = f_carikodepengecualian($mpegawai_id, $rs->fields["tgl"], $conn); echo $rs->fields["tgl"].$kode_pengecualian;
+				$kode_pengecualian = f_carikodepengecualian($mpegawai_id, $rs->fields["tgl"], $conn);
 
 				if (!$data_valid and $kode_pengecualian == null) {
+					echo $rs->fields["tgl"]." - ".f_harilibur($rs->fields["tgl"], $conn);
 					// tidak ada data pengecualian
 					
 					// check hari libur
 					if (substr($rs->fields["jk_kd"], -1) == "L" or f_harilibur($rs->fields["tgl"], $conn) == 1) {
+						
 					//if (substr($rs->fields["jk_kd"], -1) == "L") {
 						/*if ($bagian == "KEAMANAN" or $bagian == "KENDARAAN") {
 							$mt_um += $t_um;
@@ -212,5 +214,5 @@ while (!$rs->EOF) {
 }
 $rs->Close();
 //header("location: r_lapgjhrnsmry.php?start=".$_POST["start"]."&end=".$_POST["end"]."");
-header("location: r_lapgjhrnsmry.php");
+//header("location: r_lapgjhrnsmry.php");
 ?>
