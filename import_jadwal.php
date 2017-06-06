@@ -1,5 +1,4 @@
 <?php include_once "ewcfg13.php" ?>
-<?php $EW_ROOT_RELATIVE_PATH = ""; ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
 <?php include_once "userfn13.php" ?>
